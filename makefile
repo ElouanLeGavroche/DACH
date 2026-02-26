@@ -1,5 +1,5 @@
 CC=cc 
-CFLAG=-lglfw -lGL -lm -lX11 -lpthread -lXrandr -ldl -Wall
+CFLAG=-lglfw -ljson-c -lGL -lm -lX11 -lpthread -lXrandr -ldl -Wall
 INC=-I
 
 #Nom de l'executable

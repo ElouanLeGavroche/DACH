@@ -1,12 +1,12 @@
-#include "../../include/src_include/Model/model_load_game_data.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-int load_screen_data(t_loaded_windows_data *screen_data)
-{
-    // Fichier    
+#include <json-c/json.h>
+
+int main(){
     FILE *fp;
     char buffer[1024];
 
-    // Structures des différents éléments stocké dans le JSON
     struct json_object *parsed_json;
     struct json_object *size_x;
     struct json_object *size_y;
@@ -36,12 +36,7 @@ int load_screen_data(t_loaded_windows_data *screen_data)
     json_object_object_get_ex(parsed_json, "frame_rate", &frame_rate);
 
     printf("attribution des elt fait\n");
-    
 
-    screen_data->size_x = json_object_get_int(size_x);
-    screen_data->size_y = json_object_get_int(size_y);
-    screen_data->frame_rate = json_object_get_int(frame_rate);
-    
-    printf("Chargées --- \n");
-    return DONE;
+    printf("%d", json_object_get_int(size_x));
+    return EXIT_SUCCESS;
 }

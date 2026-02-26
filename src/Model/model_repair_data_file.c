@@ -17,7 +17,14 @@ int repair_window_info(){
     if (fd < 0)
     {
         printf("Erreur lors de l'ouverture du fichier\n");
-        return ERROR;
+        fd = open(PATH_LOAD_GAME_DATA, O_CREAT);
+        
+        if(fd < 0)
+        {
+            printf("Erreur lors de la création du fichier\n");
+            return ERROR;
+        }
+        
     }
 
     nb_byte_ecrit = write(fd, WIN_INF_FORMAT_WITH_DEFAULT_VALUE, sizeof(WIN_INF_FORMAT_WITH_DEFAULT_VALUE)-1);
