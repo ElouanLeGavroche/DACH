@@ -4,10 +4,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <GLFW/glfw3.h>
+#include "../../type.h"
 
-#include "controller_load_game_data.h"
+#include "../View/view_init.h" 
+#include "../Model/model_init.h"
 
-int init_game();
+int controller_get_screen_data(t_loaded_windows_data *window_data);
+int controller_init_graphic_lib();
+int controller_init_window(t_loaded_windows_data window_data);
+
+int controller_init();
 
 #endif

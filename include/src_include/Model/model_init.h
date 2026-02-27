@@ -1,5 +1,5 @@
-#ifndef MODEL_LOAD_GAME_DATA
-#define MODEL_LOAD_GAME_DATA
+#ifndef MODEL_INIT
+#define MODEL_INIT
 
 #include <stdio.h>
 #include <fcntl.h>

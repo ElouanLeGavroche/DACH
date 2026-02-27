@@ -1,7 +1,2 @@
-#include "../include/include.h"
-
-int main()
-{
-    init_game();
-    return 0;
-}
+#include "src_include/Controller/controller_init.h"
+int main() { return controller_init(); }

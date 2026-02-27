@@ -12,15 +12,17 @@ INCLUDE=include/
 INCLUDE_SRC=include/src_include/
 MODEL=$(SRC)Model/
 CONTROLLER=$(SRC)Controller/
+VIEW=$(SRC)View/
 
 all: $(SAVE_EXEC)$(EXEC)
 
 #Création de l'executable
 $(SAVE_EXEC)$(EXEC):\
 	$(SRC)main.o\
+	\
 	$(CONTROLLER)controller_init.o\
-	$(MODEL)model_load_game_data.o\
-	$(CONTROLLER)controller_load_game_data.o
+	$(MODEL)model_init.o\
+	$(VIEW)view_init.o
 	$(CC) -o $@ $^ $(CFLAG)
 
 
@@ -30,4 +32,5 @@ clean:
 	rm -rf $(SRC)*.o
 	rm -rf $(MODEL)*.o
 	rm -rf $(CONTROLLER)*.o
+	rm -rf $(VIEW)*.o
 	rm -rf *.o

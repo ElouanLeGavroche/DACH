@@ -1,4 +1,4 @@
-#include "../../include/src_include/Model/model_load_game_data.h"
+#include "../../include/src_include/Model/model_init.h"
 
 int load_screen_data(t_loaded_windows_data *screen_data)
 {
@@ -17,7 +17,7 @@ int load_screen_data(t_loaded_windows_data *screen_data)
     int size_y_value;
     int frame_rate_value;
 
-    fp = fopen("data/configuration.json", "r");
+    fp = fopen(PATH_LOAD_GAME_DATA, "r");
     if(fp == NULL){
         printf("Fichier non trouvé\n");
         return EXIT_FAILURE;
