@@ -20,8 +20,7 @@ $(SAVE_EXEC)$(EXEC):\
 	$(SRC)main.o\
 	$(CONTROLLER)controller_init.o\
 	$(MODEL)model_load_game_data.o\
-	$(CONTROLLER)controller_load_game_data.o\
-	$(MODEL)model_repair_data_file.o
+	$(CONTROLLER)controller_load_game_data.o
 	$(CC) -o $@ $^ $(CFLAG)
 
 

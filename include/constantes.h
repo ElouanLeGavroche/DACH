@@ -4,18 +4,14 @@
 #define DONE 0
 #define ERROR -1
 
-// MOTS CLES
-#define FILE_SEPARATOR ';'
-
-// Path principaux
-#define PATH_DATA "data/"
-
 // Path vers fichiers
-#define PATH_LOAD_GAME_DATA "data/window_info"
+#define PATH_LOAD_GAME_DATA "data/configuration.json"
 
 
 /** Format des fichiers data **/
 // Window Info
-#define WIN_INF_FORMAT_WITH_DEFAULT_VALUE "1280;0720;0060;"
+#define SCREEN_WITH_DEFAULT 1280
+#define SCREEN_HEIGHT_DEFAULT 720
+#define SCREEN_FRAME_RATE_DEFAUL 60
 
 #endif

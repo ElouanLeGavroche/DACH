@@ -12,8 +12,6 @@
 #include "../../type.h"
 #include "../../constantes.h"
 
-#include "model_repair_data_file.h"
-
 #define DEFAULT_READ_SIZE 1
 #define READ_SIZE 4
 #define NB_DATA_TO_LOAD_FOR_SCREEN 3
