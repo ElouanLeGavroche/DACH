@@ -4,8 +4,8 @@
 #include "../../type.h"
 #include "../../constantes.h"
 
-#include <GLFW/glfw3.h>
 #include <stdlib.h>
+#include <GLFW/glfw3.h>
 
 int init_OpenGl();
 int init_Window(t_loaded_windows_data window_data);

@@ -1,4 +1,5 @@
 #include "../../include/src_include/Controller/controller_init.h"
+#include "../../include/src_include/Controller/controller_mainloop.h"
 
 int controller_init_graphic_lib(){
     return init_OpenGl();
@@ -15,7 +16,6 @@ int controller_init_window(t_loaded_windows_data window_data){
 int controller_init(){
     // Stock les informations propre à la fenetre tel que la taille ou le frame rate dans une stucture défini dans type.h
     t_loaded_windows_data window_data;
-    GLFWwindow *window;
     /* Etape 1 : Initialiser la librairie Grapgique dans le View*/
     if(controller_init_graphic_lib() == ERROR){
         printf("Erreur lors de l'initialisation de la bibliothèque graphique.\n");
@@ -37,6 +37,8 @@ int controller_init(){
     }
 
     /* Etape 3 : Fork entre le rendu et le programe avec un système de verroux*/
+    controller_mainloop_management();
+
     return EXIT_SUCCESS;
     
 }
