@@ -1,7 +1,7 @@
-#include "../../include/src_include/Model/mainloop.h"
+#include "../../include/src_include/Model/model_mainloop.h"
 
 void gameloop(){
-    in_game = true;
+    int in_game = true;
 
     while(in_game){
         /**

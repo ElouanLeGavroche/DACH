@@ -22,7 +22,11 @@ $(SAVE_EXEC)$(EXEC):\
 	\
 	$(CONTROLLER)controller_init.o\
 	$(MODEL)model_init.o\
-	$(VIEW)view_init.o
+	$(VIEW)view_init.o\
+	\
+	$(CONTROLLER)controller_mainloop.o\
+	$(MODEL)model_mainloop.o\
+	$(VIEW)view_render_loop.o
 	$(CC) -o $@ $^ $(CFLAG)
 
 

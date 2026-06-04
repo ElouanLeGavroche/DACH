@@ -15,7 +15,7 @@ int controller_init_window(t_loaded_windows_data window_data){
 int controller_init(){
     // Stock les informations propre à la fenetre tel que la taille ou le frame rate dans une stucture défini dans type.h
     t_loaded_windows_data window_data;
-
+    GLFWwindow *window;
     /* Etape 1 : Initialiser la librairie Grapgique dans le View*/
     if(controller_init_graphic_lib() == ERROR){
         printf("Erreur lors de l'initialisation de la bibliothèque graphique.\n");
@@ -37,21 +37,6 @@ int controller_init(){
     }
 
     /* Etape 3 : Fork entre le rendu et le programe avec un système de verroux*/
-    /* Loop until the user closes the window */
-    //while (!glfwWindowShouldClose(window))
-    
-    //{
-        /* Render here */
-    //    glClear(GL_COLOR_BUFFER_BIT);
-
-        /* Swap front and back buffers */
-    //    glfwSwapBuffers(window);
-
-        /* Poll for and process events */
-    //    glfwPollEvents();
-    //}
-
-    //glfwTerminate();
 
     return EXIT_SUCCESS;
     
