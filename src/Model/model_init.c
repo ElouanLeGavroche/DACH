@@ -60,6 +60,6 @@ int load_screen_data(t_loaded_windows_data *screen_data)
     screen_data->size_x = size_x_value;
     screen_data->size_y = size_y_value;
     screen_data->frame_rate = frame_rate_value;
-    
+
     return DONE;
 }

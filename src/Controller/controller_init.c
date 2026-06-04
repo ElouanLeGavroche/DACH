@@ -37,7 +37,6 @@ int controller_init(){
     }
 
     /* Etape 3 : Fork entre le rendu et le programe avec un système de verroux*/
-
     return EXIT_SUCCESS;
     
 }
