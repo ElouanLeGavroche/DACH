@@ -6,8 +6,7 @@ void* logical_loop(void* arg){
      //Définition des variables pour accorder la clock
     struct timespec ts_start, ts_end;
     double elapsed;
-
-
+    
     // Partie Model
     while(1)
     {

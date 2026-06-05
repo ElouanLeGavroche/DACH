@@ -19,5 +19,6 @@
 #include "../Model/model_mainloop.h"
 
 void controller_mainloop_management();
+void* logical_loop(void* arg);
 
 #endif
