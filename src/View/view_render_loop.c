@@ -17,8 +17,7 @@ void view_close_window(){
 }
 
 int window_should_close(){
-    GLFWwindow *window = glfwGetCurrentContext();
-    if (glfwWindowShouldClose(window))
+    if (glfwWindowShouldClose(glfwGetCurrentContext()))
     {
         return 0;
     }
