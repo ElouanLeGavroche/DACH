@@ -4,7 +4,8 @@
 #include "../../type.h"
 #include "../../constantes.h"
 
-#include "../Controller/controller_keyboard.h"
+#include "../Controller/callback_controller.h"
+#include "../../../extern_lib/glad/glad.h"
 
 #include <stdlib.h>
 #include <GLFW/glfw3.h>

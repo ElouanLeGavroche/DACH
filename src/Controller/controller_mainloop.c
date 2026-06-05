@@ -13,8 +13,7 @@ void* logical_loop(void* arg){
         //Time au début de la boucle
         clock_gettime(CLOCK_MONOTONIC, &ts_start);
 
-        // Contenu
-        printf("Un tick passé\n");
+        // Contenu //
 
         //Time fin de boucle
         clock_gettime(CLOCK_MONOTONIC, &ts_end);
@@ -42,11 +41,9 @@ void controller_mainloop_management(){
 
         view_clear();
 
-        printf("Une image passé\n");
-
         view_swap();
 
-        // Gestion des entrée
+        // Gestion des entrées //
         glfwPollEvents();
 
         //Time fin de boucle

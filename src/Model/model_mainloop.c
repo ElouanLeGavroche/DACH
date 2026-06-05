@@ -47,7 +47,6 @@ void wait_tick(struct timespec time_a, struct timespec time_b)
      * @brief Fait une pause de quelque nano secode en cas d'avance dans les calcul
      */
 
-    // /!\ Attention : à la différence du calcul de tick, celui-ci peux rattrapper sont retard.
     //Calcul de la pause en cas d'avance.
     double elapsed = calculus_elapsed_time(time_a, time_b);
 

@@ -1,5 +1,5 @@
 CC=cc 
-CFLAG=-lglfw -ljson-c -lGL -lm -lX11 -lpthread -lXrandr -ldl -Wall
+CFLAG=-lglfw -ljson-c  -lm -lX11 -lpthread -lXrandr -ldl -Wall
 INC=-I
 
 #Nom de l'executable
@@ -21,18 +21,24 @@ MODEL_TOOL=Model/
 CONTROLLER_TOOL=Controller/
 VIEW_TOOL=View/
 
+
+#Lien vers certain .c externe comme GLAD
+EXTERN_INCLUDE=extern_lib/
+
 all: $(SAVE_EXEC)$(EXEC)
 
 #Création de l'executable
 $(SAVE_EXEC)$(EXEC):\
 	$(SRC)main.o\
 	\
+	$(EXTERN_INCLUDE)glad/glad.o\
+	\
 	$(CONTROLLER)controller_init.o\
 	$(MODEL)model_init.o\
 	$(VIEW)view_init.o\
 	\
 	$(CONTROLLER)controller_mainloop.o\
-	$(CONTROLLER)controller_keyboard.o\
+	$(CONTROLLER)callback_controller.o\
 	\
 	$(MODEL)model_mainloop.o\
 	\

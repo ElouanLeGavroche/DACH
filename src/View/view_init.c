@@ -6,6 +6,10 @@ int init_View(t_loaded_windows_data window_data)
     if (!glfwInit())
         return ERROR;
     
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
     GLFWwindow *window = glfwCreateWindow(window_data.size_x, window_data.size_y, "Douar ar c'hornôg", NULL, NULL);
     
     if (!window)
@@ -16,7 +20,15 @@ int init_View(t_loaded_windows_data window_data)
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
-    glfwSetKeyCallback(window, key_pressed);
+    // Initialisation des callbacks
+    glfwSetKeyCallback(window, pressed_key_callback);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  
+
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        printf("Failed to initialize GLAD");
+        return -1;
+    }
 
     return DONE;
 }
