@@ -1,5 +1,4 @@
 #include "../../include/src_include/Controller/controller_init.h"
-#include "../../include/src_include/Controller/controller_mainloop.h"
 
 int controller_init_graphic_lib(){
     return init_OpenGl();
@@ -36,7 +35,13 @@ int controller_init(){
         return EXIT_FAILURE;
     }
 
-    /* Etape 3 : Fork entre le rendu et le programe avec un système de verroux*/
+    /* Etape 3 : Initialiser le clavier*/
+    if(init_Keyboard() == ERROR){
+        printf("Erreur lors de l'initialisation du clavier\n");
+        return EXIT_FAILURE;
+    }
+
+    /* Etape 4 : Fork entre le rendu et le programe avec un système de verroux*/
     controller_mainloop_management();
 
     return EXIT_SUCCESS;

@@ -7,17 +7,9 @@ double calculus_elapsed_time(struct timespec time_a, struct timespec time_b)
 
 }
 
-void wait_frame(struct timespec time_a, struct timespec time_b)
-{
-    /**
-     * /!\ Attention : à la différence du calcul de tick, celui-ci peux rattrapper sont retard.
-     */
-    //Calcul de la pause en cas d'avance.
-    double elapsed = calculus_elapsed_time(time_a, time_b);
 
-    // Si on à du retard, on va alors calculer le temps que devra prendre la pause
-    if(elapsed < TIME_PER_FRAME){
-        
+void wait_time(struct timespec time_a, struct timespec time_b, double elapsed)
+{
         // Temps de pause
         double sleep_sec =  TIME_PER_FRAME - elapsed;
 
@@ -28,6 +20,19 @@ void wait_frame(struct timespec time_a, struct timespec time_b)
         
         
         nanosleep(&time_sleep, NULL);
+}
+
+void wait_frame(struct timespec time_a, struct timespec time_b)
+{
+    /**
+     * /!\ Attention : à la différence du calcul de tick, celui-ci peux rattrapper sont retard.
+     */
+    //Calcul de la pause en cas d'avance.
+    double elapsed = calculus_elapsed_time(time_a, time_b);
+
+    // Si on à du retard, on va alors calculer le temps que devra prendre la pause
+    if(elapsed < TIME_PER_FRAME){
+        wait_time(time_a, time_b, elapsed);
     }
     /*
     
@@ -48,18 +53,7 @@ void wait_tick(struct timespec time_a, struct timespec time_b)
 
     // Si on à du retard, on va alors calculer le temps que devra prendre la pause
     if(elapsed < TIME_PER_FRAME){
-        
-        // Temps de pause
-        double sleep_sec =  TIME_PER_FRAME - elapsed;
-
-        struct timespec time_sleep;
-        
-        time_sleep.tv_sec = (time_t) sleep_sec;
-        time_sleep.tv_nsec = (long) ((sleep_sec - time_sleep.tv_sec) * 1e9);
-        
-        
-        nanosleep(&time_sleep, NULL);
-
+        wait_time(time_a, time_b, elapsed);
     }
 
 }

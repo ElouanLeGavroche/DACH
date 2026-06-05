@@ -32,7 +32,10 @@ $(SAVE_EXEC)$(EXEC):\
 	$(VIEW)view_init.o\
 	\
 	$(CONTROLLER)controller_mainloop.o\
+	$(CONTROLLER)controller_keyboard.o\
+	\
 	$(MODEL)model_mainloop.o\
+	\
 	$(VIEW)view_render_loop.o
 	$(CC) -o $@ $^ $(CFLAG)
 

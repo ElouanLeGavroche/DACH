@@ -15,3 +15,14 @@ void view_swap(){
 void view_close_window(){
     glfwTerminate();
 }
+
+int window_should_close(){
+    if (glfwWindowShouldClose(glfwGetCurrentContext() ))
+    {
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
+}

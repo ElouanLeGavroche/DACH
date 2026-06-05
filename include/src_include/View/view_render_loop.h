@@ -13,5 +13,6 @@
 void view_close_window();
 void view_swap();
 void view_clear();
+int window_should_close();
 
 #endif
