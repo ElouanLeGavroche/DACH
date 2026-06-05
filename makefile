@@ -14,6 +14,13 @@ MODEL=$(SRC)Model/
 CONTROLLER=$(SRC)Controller/
 VIEW=$(SRC)View/
 
+
+#Lien vers les outils
+INCLUDE_TOOL=$(SRC)Shared_tools/
+MODEL_TOOL=Model/
+CONTROLLER_TOOL=Controller/
+VIEW_TOOL=View/
+
 all: $(SAVE_EXEC)$(EXEC)
 
 #Création de l'executable

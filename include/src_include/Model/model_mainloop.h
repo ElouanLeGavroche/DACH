@@ -4,6 +4,14 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-void gameloop();
+#include <math.h>
+#include <time.h>
+
+#include "../../constantes.h"
+
+void wait_frame(struct timespec time_a, struct timespec time_b);
+void wait_tick(struct timespec time_a, struct timespec time_b);
+
+double calculus_elapsed_time(struct timespec time_a, struct timespec time_b);
 
 #endif

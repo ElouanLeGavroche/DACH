@@ -26,3 +26,27 @@ Ma on kab skrivañ ar yezh.
 
 # Exec
 make && make clean | ./out/DACH 
+
+
+# MVC
+Le MVC Que j'utilise prend 2 formes :
+- La premieère, est la plus basique : on envoie des infos au controller, ça va dans le model, puis c'est afficher sur l'écran de la view.
+    Ex : 
+    ```c
+    void main_controller():
+        int data = calcul_model();
+        rendu_view(data);
+    ```
+- Le second sont pour les outils qui ne touchent pas à l'affichage : on envoie des infos au controller qui les envoie au model, puis à la view qui va mettre en formes ces information avant de les renvoyée à nouveau au controller qui va les retourner.
+    Ex :
+    ```c
+    void main_controller():
+        int data = calcul_model();
+        int data_en_page = rendu_view(data);
+        
+        return data_en_page;
+    ```
+
+*Note : *
+Certain outils sont suffisamment simple pour n'est présent que sous la forme d'une fonction à appeler.
+Je pense notamment à l'outil de la clock qui ne fait que retourner l'heure.
