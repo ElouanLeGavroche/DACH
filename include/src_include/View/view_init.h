@@ -9,8 +9,6 @@
 #include <stdlib.h>
 #include <GLFW/glfw3.h>
 
-int init_OpenGl();
-int init_Keyboard();
-int init_Window(t_loaded_windows_data window_data);
+int init_View(t_loaded_windows_data window_data);
 
 #endif

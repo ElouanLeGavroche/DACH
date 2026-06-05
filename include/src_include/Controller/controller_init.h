@@ -12,9 +12,6 @@
 #include "../Controller/controller_keyboard.h"
 #include "../Controller/controller_mainloop.h"
 
-int controller_get_screen_data(t_loaded_windows_data *window_data);
-int controller_init_graphic_lib();
-int controller_init_window(t_loaded_windows_data window_data);
 
 int controller_init();
 
