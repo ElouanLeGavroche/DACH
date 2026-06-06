@@ -19,9 +19,15 @@ int controller_init(){
         return EXIT_FAILURE;
     }
 
+    // -3- Mise en place des Callbacks
+    GLFWwindow *window = glfwGetCurrentContext();
+    glfwSetKeyCallback(window, pressed_key_callback);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  
+
+
     /* Etape 2 : entrer dans les mains loops */
     controller_mainloop_management();
-
+    
     return EXIT_SUCCESS;
     
 }

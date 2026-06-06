@@ -13,7 +13,7 @@
 #include <stdatomic.h>
 
 #include "../../types.h"
-#include "../../Config/constantes.h"
+#include "../Config/constantes.h"
 
 //Include du model et de la view
 #include "../View/view_render_loop.h"

@@ -20,10 +20,6 @@ int init_View(t_loaded_windows_data window_data)
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
-    // Initialisation des callbacks
-    glfwSetKeyCallback(window, pressed_key_callback);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  
-
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         printf("Failed to initialize GLAD");

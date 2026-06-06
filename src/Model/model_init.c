@@ -4,7 +4,7 @@ int load_screen_data(t_loaded_windows_data *screen_data)
 {
     // Fichier    
     FILE *fp;
-    char buffer[1024];
+    char buffer[1024] = {'\0'};
 
     // Structures des différents éléments stocké dans le JSON
     struct json_object *parsed_json;
@@ -40,6 +40,11 @@ int load_screen_data(t_loaded_windows_data *screen_data)
     size_y_value = json_object_get_int(size_y);
     frame_rate_value = json_object_get_int(frame_rate);
     
+    //Vider la mémoire
+    json_object_put(size_x);
+    json_object_put(size_y);
+    json_object_put(frame_rate);
+
     // Vérification de la cohérence des données récuperer
     if
     (

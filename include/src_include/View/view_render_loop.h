@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 #include "../../types.h"
-#include "../../Config/constantes.h"
+#include "../Config/constantes.h"
 #include "../../../extern_lib/glad/glad.h"
 
 #include <GLFW/glfw3.h>
