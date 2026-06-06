@@ -2,7 +2,7 @@
 #define VIEW_INIT
 
 #include "../../types.h"
-#include "../../constantes.h"
+#include "../../Config/constantes.h"
 
 #include "../Controller/callback_controller.h"
 #include "../../../extern_lib/glad/glad.h"

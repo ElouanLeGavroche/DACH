@@ -7,7 +7,7 @@
 #include <math.h>
 #include <time.h>
 
-#include "../../constantes.h"
+#include "../../Config/constantes.h"
 
 void wait_frame(struct timespec time_a, struct timespec time_b);
 void wait_tick(struct timespec time_a, struct timespec time_b);
