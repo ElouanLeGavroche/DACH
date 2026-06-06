@@ -1,5 +1,7 @@
 #include "../../include/src_include/View/view_init.h"
 
+//#include VIEW_PATH "view_init.h"
+
 int init_View(t_loaded_windows_data window_data)
 {
     

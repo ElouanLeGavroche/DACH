@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <stdatomic.h>
 
+//#include <GLFW/glfw3.h>
+
 // Les chaine
 typedef char letter;
 
@@ -26,27 +28,22 @@ typedef struct
 
 typedef struct
 {
-    char actual_canva;
     atomic_bool running;
     st_input input;
 }st_engine;
 
-/*
-Ceci est un essaie de structure pour hierachiser les pages
-*/
 
+// Structure de la fenêtre principale
 typedef struct
 {
-    int id;
-}st_frame;
+    //GLFWwindow window;
 
-typedef st_frame frame_list;
+    int size_x;
+    int size_y;
 
-typedef struct
-{
-    st_frame main_frame;
-    frame_list sub_frame;    
-}st_full_frame;
+    int frame_rate;
+
+}st_view;
 
 // Structure pour la taille et le frame rate du contexte OpenGL
 typedef struct {

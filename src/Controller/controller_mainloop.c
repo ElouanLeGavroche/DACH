@@ -43,14 +43,10 @@ void controller_mainloop_management(){
     // comme les graphismes
     pthread_t logical_thread;
     
-    // Strucure qui contient toute les touches utile au jeu
-    st_input *input = malloc(sizeof(st_input));
-    input->escape = false;
-
     // Structure qui contient les divers variable "Globales" du moteur
     st_engine *engine_state = malloc(sizeof(st_engine));
     engine_state->running = true;
-    
+
     engine_state->input.escape = false;
     engine_state->input.one_of_them = false;
 
@@ -93,11 +89,10 @@ void controller_mainloop_management(){
     }
 
     engine_state->running = false;
-    while ( pthread_join(logical_thread, NULL));
+    pthread_join(logical_thread, NULL);
 
     // Désalouer la mémoire avant la fermeture
     free(engine_state);
-    free(input);
 
     view_close_window();
 }

@@ -41,9 +41,7 @@ int load_screen_data(t_loaded_windows_data *screen_data)
     frame_rate_value = json_object_get_int(frame_rate);
     
     //Vider la mémoire
-    json_object_put(size_x);
-    json_object_put(size_y);
-    json_object_put(frame_rate);
+    json_object_put(parsed_json);
 
     // Vérification de la cohérence des données récuperer
     if
