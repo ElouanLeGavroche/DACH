@@ -24,6 +24,10 @@
 //Chargement des structures du jeu
 #include "../../atomic_struct.h"
 
+
+//Pages du jeu
+#include "../Model/model_main_menu.h"
+
 void controller_mainloop_management();
 void* logical_loop(void *data_engine);
 
