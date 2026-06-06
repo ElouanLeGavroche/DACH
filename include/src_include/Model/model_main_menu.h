@@ -9,8 +9,8 @@
  * @brief Ici se trouve le contexte de quelle touche fait quoi
  * @param input contient le tableau des touches préssées.
  */
-void input_context(st_engine *engine_state);
+void input_context_menu(st_engine *engine_state);
 
-void update_menu(st_engine *engine_state);
+void update_logic_main_menu(st_engine *engine_state);
 
 #endif

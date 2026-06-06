@@ -72,7 +72,8 @@ void controller_mainloop_management(){
         view_clear();
         
         //Actual context
-        update_menu(engine_state);
+        update_logic_main_menu(engine_state);
+        update_visual_main_menu();
 
         view_swap();
 

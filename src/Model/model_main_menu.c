@@ -5,9 +5,8 @@ void init_menu()
 
 }
 
-void input_context(st_engine *engine_state)
+void input_context_menu(st_engine *engine_state)
 {
-    printf("coucou ^^");
     // Système temporaire pour traiter les entrées
     if(engine_state->input.escape == true)
     {  
@@ -15,9 +14,9 @@ void input_context(st_engine *engine_state)
     }
 }
 
-void update_menu(st_engine *engine_state)
+void update_logic_main_menu(st_engine *engine_state)
 {
     if(engine_state->input.one_of_them){
-        input_context(engine_state);
+        input_context_menu(engine_state);
     }
 }

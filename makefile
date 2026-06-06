@@ -42,7 +42,9 @@ $(SAVE_EXEC)$(EXEC):\
 	$(CONTROLLER)callback_controller.o\
 	\
 	$(MODEL)model_mainloop.o\
+	\
 	$(MODEL)model_main_menu.o\
+	$(VIEW)view_main_menu.o\
 	\
 	$(VIEW)view_render_loop.o
 	$(CC) -o $@ $^ $(CFLAG)
