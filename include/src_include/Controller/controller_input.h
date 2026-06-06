@@ -12,7 +12,7 @@
 
 
 // Charger les structure du jeu
-#include "../../atomic_struct.h"
+#include "../../types.h"
 
 void process_input(st_input *input);
 

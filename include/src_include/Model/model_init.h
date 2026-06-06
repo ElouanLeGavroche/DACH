@@ -9,7 +9,7 @@
 #include <string.h>
 #include <json-c/json.h> 
 
-#include "../../type.h"
+#include "../../types.h"
 #include "../../constantes.h"
 
 #define DEFAULT_READ_SIZE 1

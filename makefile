@@ -55,4 +55,5 @@ clean:
 	rm -rf $(MODEL)*.o
 	rm -rf $(CONTROLLER)*.o
 	rm -rf $(VIEW)*.o
+	rm -rf $(TRANSFORM_TOOL)*.o
 	rm -rf *.o

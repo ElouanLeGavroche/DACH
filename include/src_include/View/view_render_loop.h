@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "../../type.h"
+#include "../../types.h"
 #include "../../constantes.h"
 #include "../../../extern_lib/glad/glad.h"
 

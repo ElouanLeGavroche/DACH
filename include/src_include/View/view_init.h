@@ -1,7 +1,7 @@
 #ifndef VIEW_INIT
 #define VIEW_INIT
 
-#include "../../type.h"
+#include "../../types.h"
 #include "../../constantes.h"
 
 #include "../Controller/callback_controller.h"

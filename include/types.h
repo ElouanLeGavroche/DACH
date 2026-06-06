@@ -1,9 +1,8 @@
-#ifndef ATOMIC_STRUCT
-#define ATOMIC_STRUCT
+#ifndef TYPE
+#define TYPE
 
 #include <stdbool.h>
 #include <stdatomic.h>
-
 
 // Les chaine
 typedef char letter;
@@ -48,5 +47,12 @@ typedef struct
     st_frame main_frame;
     frame_list sub_frame;    
 }st_full_frame;
+
+// Structure pour la taille et le frame rate du contexte OpenGL
+typedef struct {
+    int size_x;
+    int size_y;
+    float frame_rate;
+}t_loaded_windows_data;
 
 #endif

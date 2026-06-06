@@ -12,7 +12,7 @@
 #include <pthread.h>
 #include <stdatomic.h>
 
-#include "../../type.h"
+#include "../../types.h"
 #include "../../constantes.h"
 
 //Include du model et de la view
@@ -22,7 +22,7 @@
 #include "controller_input.h"
 
 //Chargement des structures du jeu
-#include "../../atomic_struct.h"
+#include "../../types.h"
 
 
 //Pages du jeu

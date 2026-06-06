@@ -1,7 +1,7 @@
 #include "../../include/src_include/Controller/controller_init.h"
 
 int controller_init(){
-    // Stock les informations propre à la fenetre tel que la taille ou le frame rate dans une stucture défini dans type.h
+    // Stock les informations propre à la fenetre tel que la taille ou le frame rate dans une stucture défini dans types.h
     t_loaded_windows_data window_data;
 
 

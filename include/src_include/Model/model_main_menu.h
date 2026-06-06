@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#include "../../atomic_struct.h"
+#include "../../types.h"
 
 /**
  * @brief Ici se trouve le contexte de quelle touche fait quoi
