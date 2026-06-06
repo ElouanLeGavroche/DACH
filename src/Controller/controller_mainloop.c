@@ -16,6 +16,7 @@ void *logical_loop(void *data_engine)
         clock_gettime(CLOCK_MONOTONIC, &ts_start);
 
         // Contenu //
+        update_logic_main_menu(engine_state);
 
         //Time fin de boucle
         clock_gettime(CLOCK_MONOTONIC, &ts_end);
@@ -26,6 +27,8 @@ void *logical_loop(void *data_engine)
 
     printf("Thread logique mené à bien\n");
 }
+
+
 
 void controller_mainloop_management(){
     printf("Entrer dans la mainloop du jeu\n");
@@ -72,7 +75,6 @@ void controller_mainloop_management(){
         view_clear();
         
         //Actual context
-        update_logic_main_menu(engine_state);
         update_visual_main_menu();
 
         view_swap();
