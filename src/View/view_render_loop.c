@@ -13,6 +13,9 @@ void view_swap(){
 }
 
 void view_close_window(){
+    GLFWwindow *window = glfwGetCurrentContext();
+    
+    glfwDestroyWindow(window);
     glfwTerminate();
 }
 

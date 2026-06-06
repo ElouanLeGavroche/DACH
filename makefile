@@ -38,6 +38,7 @@ $(SAVE_EXEC)$(EXEC):\
 	$(VIEW)view_init.o\
 	\
 	$(CONTROLLER)controller_mainloop.o\
+	$(CONTROLLER)controller_input.o\
 	$(CONTROLLER)callback_controller.o\
 	\
 	$(MODEL)model_mainloop.o\

@@ -10,6 +10,7 @@
 #include <time.h>
 
 #include <pthread.h>
+#include <stdatomic.h>
 
 #include "../../type.h"
 #include "../../constantes.h"
@@ -18,7 +19,12 @@
 #include "../View/view_render_loop.h"
 #include "../Model/model_mainloop.h"
 
+#include "controller_input.h"
+
+//Chargement des structures du jeu
+#include "../../atomic_struct.h"
+
 void controller_mainloop_management();
-void* logical_loop(void* arg);
+void* logical_loop(void *data_engine);
 
 #endif
