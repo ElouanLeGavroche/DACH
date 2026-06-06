@@ -50,7 +50,9 @@ void controller_mainloop_management(){
     // Structure qui contient les divers variable "Globales" du moteur
     st_engine *engine_state = malloc(sizeof(st_engine));
     engine_state->running = true;
-    engine_state->input = *input;
+    
+    engine_state->input.escape = false;
+    engine_state->input.one_of_them = false;
 
     // Création du thread et passage de la structure engine
     pthread_create(&logical_thread, NULL, logical_loop, engine_state);

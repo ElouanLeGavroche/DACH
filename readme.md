@@ -49,4 +49,4 @@ Le MVC Que j'utilise prend 2 formes :
 
 *Note : *
 Certain outils sont suffisamment simple pour n'est présent que sous la forme d'une fonction à appeler.
-Je pense notamment à l'outil de la clock qui ne fait que retourner l'heure.
+Je pense notamment à l'outil de couleurs.
