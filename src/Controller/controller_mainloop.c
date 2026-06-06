@@ -62,7 +62,7 @@ void controller_mainloop_management(){
     //                                        //
     ////////////////////////////////////////////
 
-    while(engine_state->running){
+    while(engine_state->running || glfwWindowShouldClose(glfwGetCurrentContext())){
         //Time au début de la boucle
         clock_gettime(CLOCK_MONOTONIC, &ts_start);
 
