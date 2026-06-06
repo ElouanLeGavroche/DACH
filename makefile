@@ -14,12 +14,9 @@ MODEL=$(SRC)Model/
 CONTROLLER=$(SRC)Controller/
 VIEW=$(SRC)View/
 
-
 #Lien vers les outils
 INCLUDE_TOOL=$(SRC)Shared_tools/
-MODEL_TOOL=Model/
-CONTROLLER_TOOL=Controller/
-VIEW_TOOL=View/
+TRANSFORM_TOOL=$(INCLUDE_TOOL)Transform_openGL_values/
 
 
 #Lien vers certain .c externe comme GLAD
@@ -32,6 +29,7 @@ $(SAVE_EXEC)$(EXEC):\
 	$(SRC)main.o\
 	\
 	$(EXTERN_INCLUDE)glad/glad.o\
+	$(TRANSFORM_TOOL)colors.o\
 	\
 	$(CONTROLLER)controller_init.o\
 	$(MODEL)model_init.o\
@@ -43,10 +41,10 @@ $(SAVE_EXEC)$(EXEC):\
 	\
 	$(MODEL)model_mainloop.o\
 	\
-	$(MODEL)model_main_menu.o\
-	$(VIEW)view_main_menu.o\
+	$(VIEW)view_render_loop.o\
 	\
-	$(VIEW)view_render_loop.o
+	$(MODEL)model_main_menu.o\
+	$(VIEW)view_main_menu.o
 	$(CC) -o $@ $^ $(CFLAG)
 
 

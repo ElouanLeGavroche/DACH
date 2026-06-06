@@ -2,6 +2,6 @@
 
 void update_visual_main_menu()
 {
-    glClearColor(0.3f, 0.3f, 1.0f, 0.9f);
+    glClearColor(num_to_01(123), num_to_01(12), num_to_01(123), 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 }
