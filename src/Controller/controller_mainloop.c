@@ -42,10 +42,10 @@ void controller_mainloop_management(st_engine *engine_state){
     // Il ne s'actualisera que 20 fois par seconde au le de 60
     // comme les graphismes
     pthread_t logical_thread;
-
-    // Affichage du premier State (TEMP Main_menu)
-    engine_state->stack_context.current_state = &main_menu_state;
     
+    // Affichage du premier State (TEMP Main_menu)
+    engine_state->context_tool.put_context(&engine_state->stack_context, &main_menu_state);
+
     // Création du thread et passage de la structure engine
     pthread_create(&logical_thread, NULL, logical_loop, engine_state);
 
@@ -64,13 +64,16 @@ void controller_mainloop_management(st_engine *engine_state){
         clock_gettime(CLOCK_MONOTONIC, &ts_start);
 
         // Mettre à jour le tableau des entrée //
-        //process_input(&engine_state->input);
-        engine_state->stack_context.current_state->input_context(engine_state);
-        
+        process_input(&engine_state->input);
+
+        // Voir à quoi peuvent servir ces entrée dans ce context (si l'une d'entre elle est appuyé)
+        if(engine_state->input.one_of_them){
+            engine_state->stack_context.current_state->input_context(engine_state);
+        }
+
         view_clear();
         
         //Actual context
-        //update_visual_main_menu();
         engine_state->stack_context.current_state->update_render_context(engine_state);
 
         view_swap();

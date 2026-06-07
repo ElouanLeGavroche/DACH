@@ -8,8 +8,8 @@
 
 #include "model_main_menu.h"
 
-void ajout_stack(stack *my_stack, st_state *my_state);
-void back_stack(stack *my_stack);
+void put_context(stack *my_stack, st_state *my_state);
+int remove_context(stack *my_stack);
 void afficher_stack(stack *my_stack);
 
 #endif

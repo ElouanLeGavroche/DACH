@@ -29,7 +29,6 @@ typedef struct st_state
     
     struct st_state *upper;
 }st_state;
-
 /**
  * @brief   Le stack permet de hierachisé l'ordre d'apparition des page.
  * 
@@ -41,12 +40,33 @@ typedef struct {
     st_state *current_state;
 }stack;
 
+/**
+ * @brief étant un outil très général au moteur et très important, je décide de l'intégré directement en-tant que structure de fonction.
+ * 
+ * En effet, vu que le changement d'écran peut-avoir lieux à autant d'endroit où l'on à l'écran, il sera plus simple d'y accédé directement
+ * via st_engin...
+ * 
+ * @param put_context fonction pour ajouter à la stack un context donnée.
+ * @param remove_context retire le dernier context ajouter (celui affiché) pour le remplacer par le précédent.
+ *         : " Il bloque la suppression s'il n'y a pas de context précédent. "
+ */
+typedef struct
+{
+    void (*put_context) (stack *my_stack, st_state *my_state);
+    int (*remove_context)(stack *my_stack);
+    int level_of_depth;
+    
+}st_context_tool;
+
 // Le bool "one of them" sert à verifier s'il y en a
 // au moins un d'actionner. Pour éviter de parcourir
 // un switch pour rien.
 typedef struct
 {
     bool escape;
+    bool up_arrow;
+    bool down_arrow;
+
     bool one_of_them;
 }st_input;
 
@@ -55,6 +75,7 @@ typedef struct st_engine
     atomic_bool running;
     st_input input;
     stack stack_context;
+    st_context_tool context_tool;
 } st_engine;
 
 

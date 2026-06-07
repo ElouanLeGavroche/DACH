@@ -26,6 +26,11 @@ int load_screen_data(st_loaded_windows_data *screen_data, st_engine *engine_stat
     engine_state->input.escape = false;
     engine_state->input.one_of_them = false;
 
+    // Initialisation des outils de context
+    engine_state->context_tool.put_context = put_context;
+    engine_state->context_tool.remove_context = remove_context;
+    engine_state->context_tool.level_of_depth = 0;
+    
     fp = fopen(PATH_LOAD_GAME_DATA, "r");
     if(fp == NULL){
         printf("Fichier non trouvé\n");

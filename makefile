@@ -29,6 +29,7 @@ $(SAVE_EXEC)$(EXEC):\
 	$(SRC)main.o\
 	\
 	$(EXTERN_INCLUDE)glad/glad.o\
+	\
 	$(TRANSFORM_TOOL)colors.o\
 	\
 	$(CONTROLLER)controller_init.o\
@@ -40,6 +41,7 @@ $(SAVE_EXEC)$(EXEC):\
 	$(CONTROLLER)callback_controller.o\
 	\
 	$(MODEL)model_mainloop.o\
+	$(MODEL)model_stack.o\
 	\
 	$(VIEW)view_render_loop.o\
 	\

@@ -18,7 +18,6 @@
 //Include du model et de la view
 #include "../View/view_render_loop.h"
 #include "../Model/model_mainloop.h"
-//#include "../Model/model_stack.h"
 
 #include "controller_input.h"
 
