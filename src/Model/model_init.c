@@ -11,11 +11,13 @@ int load_screen_data(st_loaded_windows_data *screen_data)
     struct json_object *size_x;
     struct json_object *size_y;
     struct json_object *frame_rate;
+    struct json_object *initial_context;
 
     // Variables des valeur à récuperer
     int size_x_value;
     int size_y_value;
     int frame_rate_value;
+    const char *initial_context_value = NULL;
 
     fp = fopen(PATH_LOAD_GAME_DATA, "r");
     if(fp == NULL){
@@ -35,10 +37,15 @@ int load_screen_data(st_loaded_windows_data *screen_data)
     json_object_object_get_ex(parsed_json, "size_x", &size_x);
     json_object_object_get_ex(parsed_json, "size_y", &size_y);
     json_object_object_get_ex(parsed_json, "frame_rate", &frame_rate);
+    json_object_object_get_ex(parsed_json, "initial_context", &initial_context);
 
     size_x_value = json_object_get_int(size_x);
     size_y_value = json_object_get_int(size_y);
     frame_rate_value = json_object_get_int(frame_rate);
+
+    initial_context_value = malloc(json_object_get_string_len(initial_context));
+    initial_context_value = json_object_get_string(initial_context);
+
     
     //Vider la mémoire
     json_object_put(parsed_json);
