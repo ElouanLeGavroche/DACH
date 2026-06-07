@@ -1,6 +1,6 @@
 #include "../../include/src_include/Model/model_init.h"
 
-int load_screen_data(st_loaded_windows_data *screen_data)
+int load_screen_data(st_loaded_windows_data *screen_data, st_engine *engine_state)
 {
     // Fichier    
     FILE *fp;
@@ -18,6 +18,13 @@ int load_screen_data(st_loaded_windows_data *screen_data)
     int size_y_value;
     int frame_rate_value;
     const char *initial_context_value = NULL;
+
+    // Initialisation des premières variables du moteur
+    //st_engine *engine_state = malloc(sizeof(st_engine));
+    engine_state->running = true;
+
+    engine_state->input.escape = false;
+    engine_state->input.one_of_them = false;
 
     fp = fopen(PATH_LOAD_GAME_DATA, "r");
     if(fp == NULL){
@@ -37,14 +44,10 @@ int load_screen_data(st_loaded_windows_data *screen_data)
     json_object_object_get_ex(parsed_json, "size_x", &size_x);
     json_object_object_get_ex(parsed_json, "size_y", &size_y);
     json_object_object_get_ex(parsed_json, "frame_rate", &frame_rate);
-    json_object_object_get_ex(parsed_json, "initial_context", &initial_context);
 
     size_x_value = json_object_get_int(size_x);
     size_y_value = json_object_get_int(size_y);
     frame_rate_value = json_object_get_int(frame_rate);
-
-    initial_context_value = malloc(json_object_get_string_len(initial_context));
-    initial_context_value = json_object_get_string(initial_context);
 
     
     //Vider la mémoire
@@ -61,15 +64,18 @@ int load_screen_data(st_loaded_windows_data *screen_data)
     )
     
     {
-        printf(" Valeur incohérente ! \n mise en place de valeur par défault : \n x:1280 \n y:720 \n fps:35 \n");
+        printf(" Valeur incohérente ! \n mise en place de valeur par défault : \n x:%d \n y:%d \n fps:%d \n",
+        SCREEN_WITH_DEFAULT, SCREEN_HEIGHT_DEFAULT, SCREEN_FRAME_RATE_DEFAUL);
+        
         size_x_value = SCREEN_WITH_DEFAULT;
         size_y_value = SCREEN_HEIGHT_DEFAULT;
         frame_rate_value = SCREEN_FRAME_RATE_DEFAUL;
     }
-
+    // Allocation des informations de la fenêtre
     screen_data->size_x = size_x_value;
     screen_data->size_y = size_y_value;
     screen_data->frame_rate = frame_rate_value;
+
 
     return DONE;
 }

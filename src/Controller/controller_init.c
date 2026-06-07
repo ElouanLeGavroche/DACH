@@ -2,13 +2,15 @@
 
 int controller_init(){
     // Stock les informations propre à la fenetre tel que la taille ou le frame rate dans une stucture défini dans types.h
-    st_loaded_windows_data window_data;
-    st_engine engine;
+    st_loaded_windows_data *window_data = malloc(sizeof(st_loaded_windows_data));
+
+    // Stock des informations pour le moteur
+    st_engine *engine_state = malloc(sizeof(st_engine));
 
     /* Etape 1 : Création de la fenêtre et de son context */
     
     // -1- Charger les donnée propre à la fenêtre
-    if(load_screen_data(&window_data) == ERROR){
+    if(load_screen_data(window_data, engine_state) == ERROR){
         printf("Erreur lors de la récupération des données propre au contexte OpenGl.\n");
         return EXIT_FAILURE;
     }
@@ -24,10 +26,13 @@ int controller_init(){
     glfwSetKeyCallback(window, pressed_key_callback);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  
 
-
     /* Etape 2 : entrer dans les mains loops */
-    controller_mainloop_management();
+    controller_mainloop_management(engine_state);
     
+
+    // TEMPORAIRE : Il devra être free à la fin de la boucle dans le controller mainloop lorsque que je le passerai dedans...
+    free(window_data);
+
     return EXIT_SUCCESS;
     
 }

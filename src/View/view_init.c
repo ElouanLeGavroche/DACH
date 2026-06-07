@@ -2,7 +2,7 @@
 
 //#include VIEW_PATH "view_init.h"
 
-int init_View(st_loaded_windows_data window_data)
+int init_View(st_loaded_windows_data *window_data)
 {
     
     if (!glfwInit())
@@ -12,7 +12,7 @@ int init_View(st_loaded_windows_data window_data)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow *window = glfwCreateWindow(window_data.size_x, window_data.size_y, "Douar ar c'hornôg", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(window_data->size_x, window_data->size_y, "Douar ar c'hornôg", NULL, NULL);
     
     if (!window)
     {

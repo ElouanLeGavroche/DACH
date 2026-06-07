@@ -4,18 +4,8 @@
 #include <stdbool.h>
 #include <stdatomic.h>
 
-//#include <GLFW/glfw3.h>
-
-// Les chaine
-typedef char t_letter;
-
-typedef struct
-{
-    int length;
-    int max_length;
-    t_letter l;
-    t_letter *next; 
-}st_string;
+typedef struct st_engine st_engine;
+typedef struct st_state st_state;
 
 /**
  * @brief Structure (presque class) qui contient deux catégorie d'élément
@@ -25,31 +15,30 @@ typedef struct
  * 
  * 2 - Un pointeur vers (s'il y en à un) un parent. Ex : je suis sur le menu pause, le parent est le jeu) 
  * 
- * @param state fonction qui initialisera la fenêtre
+ * @param st_state fonction qui initialisera la fenêtre
  * @param input_context fonction qui donne le context de que font tel ou tel touches
  * @param update_logic_context fonction qui déroulera à chaque tick la logique du canva
  * @param update_render_context fonction qui déroulera le rendu à chaque frame le rendu de la page
  */
-typedef struct state
+typedef struct st_state
 {
-    void (*state)();
-
-    void (*input_context)();
-    void (*update_logic_context)();
-    void (*update_render_context)();
+    void (*st_state)(st_engine *engine_state);
+    void (*input_context)(st_engine *engine_state);
+    void (*update_logic_context)(st_engine *engine_state);
+    void (*update_render_context)(st_engine *engine_state);
     
-    struct state *upper;
-}state;
+    struct st_state *upper;
+}st_state;
 
 /**
  * @brief   Le stack permet de hierachisé l'ordre d'apparition des page.
  * 
  * Si on et le jeu en pause, le canva pause prend le dessus sur le jeu, et quand on la quitte, le jeu reprend.
  * 
- * @param state Est une structure simple. Pour en savoir plus, cliquer dessus.
+ * @param st_state Est une structure simple. Pour en savoir plus, cliquer dessus.
  */
 typedef struct {
-    state *current_state;
+    st_state *current_state;
 }stack;
 
 // Le bool "one of them" sert à verifier s'il y en a
@@ -61,12 +50,12 @@ typedef struct
     bool one_of_them;
 }st_input;
 
-typedef struct
+typedef struct st_engine
 {
     atomic_bool running;
     st_input input;
     stack stack_context;
-}st_engine;
+} st_engine;
 
 
 // Structure pour la taille et le frame rate du contexte OpenGL

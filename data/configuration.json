@@ -1,6 +1,5 @@
 {
-    "size_x": 990,
+    "size_x": 1280,
     "size_y": 550,
-    "frame_rate": 60,
-    "initial_context": "MAIN_MENU"
+    "frame_rate": 60
 }

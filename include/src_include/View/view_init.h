@@ -11,6 +11,6 @@
 #include <stdio.h>
 #include <GLFW/glfw3.h>
 
-int init_View(st_loaded_windows_data window_data);
+int init_View(st_loaded_windows_data *window_data);
 
 #endif

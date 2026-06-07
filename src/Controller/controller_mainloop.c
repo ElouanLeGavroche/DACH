@@ -3,21 +3,22 @@
 void *logical_loop(void *data_engine)
 {
     // Partie Logique
+    
     st_engine *engine_state = data_engine;
     
     //Définition des variables pour accorder la clock
     struct timespec ts_start, ts_end;
     double elapsed;
-    
+    // 
     // Partie Model
     while(engine_state->running)
     {
         //Time au début de la boucle
         clock_gettime(CLOCK_MONOTONIC, &ts_start);
-
+        
         // Contenu //
-        update_logic_main_menu(engine_state);
-
+        engine_state->stack_context.current_state->update_logic_context(engine_state);
+        
         //Time fin de boucle
         clock_gettime(CLOCK_MONOTONIC, &ts_end);
 
@@ -30,8 +31,7 @@ void *logical_loop(void *data_engine)
 
 
 
-void controller_mainloop_management(){
-    printf("Entrer dans la mainloop du jeu\n");
+void controller_mainloop_management(st_engine *engine_state){
     ////////////////////////////////////////////
     //                                        //
     //  Initialisations des divers variables  //
@@ -42,14 +42,10 @@ void controller_mainloop_management(){
     // Il ne s'actualisera que 20 fois par seconde au le de 60
     // comme les graphismes
     pthread_t logical_thread;
+
+    // Affichage du premier State (TEMP Main_menu)
+    engine_state->stack_context.current_state = &main_menu_state;
     
-    // Structure qui contient les divers variable "Globales" du moteur
-    st_engine *engine_state = malloc(sizeof(st_engine));
-    engine_state->running = true;
-
-    engine_state->input.escape = false;
-    engine_state->input.one_of_them = false;
-
     // Création du thread et passage de la structure engine
     pthread_create(&logical_thread, NULL, logical_loop, engine_state);
 
@@ -68,12 +64,14 @@ void controller_mainloop_management(){
         clock_gettime(CLOCK_MONOTONIC, &ts_start);
 
         // Mettre à jour le tableau des entrée //
-        process_input(&engine_state->input);
-
+        //process_input(&engine_state->input);
+        engine_state->stack_context.current_state->input_context(engine_state);
+        
         view_clear();
         
         //Actual context
-        update_visual_main_menu();
+        //update_visual_main_menu();
+        engine_state->stack_context.current_state->update_render_context(engine_state);
 
         view_swap();
 

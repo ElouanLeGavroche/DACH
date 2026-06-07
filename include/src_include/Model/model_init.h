@@ -16,6 +16,6 @@
 #define READ_SIZE 4
 #define NB_DATA_TO_LOAD_FOR_SCREEN 3
 
-int load_screen_data(st_loaded_windows_data *screen_data);
+int load_screen_data(st_loaded_windows_data *screen_data, st_engine *engine_state);
 
 #endif
