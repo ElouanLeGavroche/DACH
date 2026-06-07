@@ -1,6 +1,6 @@
 #include "../../include/src_include/Model/model_init.h"
 
-int load_screen_data(t_loaded_windows_data *screen_data)
+int load_screen_data(st_loaded_windows_data *screen_data)
 {
     // Fichier    
     FILE *fp;

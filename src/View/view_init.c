@@ -2,7 +2,7 @@
 
 //#include VIEW_PATH "view_init.h"
 
-int init_View(t_loaded_windows_data window_data)
+int init_View(st_loaded_windows_data window_data)
 {
     
     if (!glfwInit())

@@ -7,15 +7,15 @@
 //#include <GLFW/glfw3.h>
 
 // Les chaine
-typedef char letter;
+typedef char t_letter;
 
 typedef struct
 {
     int length;
     int max_length;
-    letter l;
-    letter *next; 
-}string;
+    t_letter l;
+    t_letter *next; 
+}st_string;
 
 // Le bool "one of them" sert à verifier s'il y en a
 // au moins un d'actionner. Pour éviter de parcourir
@@ -33,23 +33,28 @@ typedef struct
 }st_engine;
 
 
-// Structure de la fenêtre principale
-typedef struct
-{
-    //GLFWwindow window;
-
-    int size_x;
-    int size_y;
-
-    int frame_rate;
-
-}st_view;
-
 // Structure pour la taille et le frame rate du contexte OpenGL
 typedef struct {
     int size_x;
     int size_y;
     float frame_rate;
-}t_loaded_windows_data;
+}st_loaded_windows_data;
+
+
+typedef struct state
+{
+    void (*state)();
+
+    void (*input_context)();
+    void (*update_logic_context)();
+    void (*update_render_context)();
+    
+    struct state *upper;
+}state;
+
+typedef struct {
+    state *current_state;
+}stack;
+
 
 #endif

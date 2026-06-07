@@ -2,7 +2,7 @@
 
 int controller_init(){
     // Stock les informations propre à la fenetre tel que la taille ou le frame rate dans une stucture défini dans types.h
-    t_loaded_windows_data window_data;
+    st_loaded_windows_data window_data;
 
 
     /* Etape 1 : Création de la fenêtre et de son context */
