@@ -4,9 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../../types.h"
-
-#include "model_main_menu.h"
+#include "../../../types.h"
 
 void put_context(stack *my_stack, st_state *my_state);
 int remove_context(stack *my_stack);

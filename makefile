@@ -17,6 +17,7 @@ VIEW=$(SRC)View/
 #Lien vers les outils
 INCLUDE_TOOL=$(SRC)Shared_tools/
 TRANSFORM_TOOL=$(INCLUDE_TOOL)Transform_openGL_values/
+CONTEXT_TOOL=$(INCLUDE_TOOL)Context_tool/
 
 
 #Lien vers certain .c externe comme GLAD
@@ -31,6 +32,7 @@ $(SAVE_EXEC)$(EXEC):\
 	$(EXTERN_INCLUDE)glad/glad.o\
 	\
 	$(TRANSFORM_TOOL)colors.o\
+	$(CONTEXT_TOOL)stack.o\
 	\
 	$(CONTROLLER)controller_init.o\
 	$(MODEL)model_init.o\
@@ -41,7 +43,6 @@ $(SAVE_EXEC)$(EXEC):\
 	$(CONTROLLER)callback_controller.o\
 	\
 	$(MODEL)model_mainloop.o\
-	$(MODEL)model_stack.o\
 	\
 	$(VIEW)view_render_loop.o\
 	\
@@ -59,4 +60,5 @@ clean:
 	rm -rf $(CONTROLLER)*.o
 	rm -rf $(VIEW)*.o
 	rm -rf $(TRANSFORM_TOOL)*.o
+	rm -rf $(CONTEXT_TOOL)*.o
 	rm -rf *.o
