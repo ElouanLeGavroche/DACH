@@ -1,10 +1,10 @@
-#ifndef controller_main_menu_context
-#define controller_main_menu_context
+#ifndef CONTROLLER_MAIN_MENU_CONTEXT
+#define CONTROLLER_MAIN_MENU_CONTEXT
 
 #include <stdio.h>
 
-#include "../Model/model_main_menu_context.h"
-#include "../View/view_main_menu_context.h"
+#include "../Model/model_game_context.h"
+#include "../View/view_game_context.h"
 
 #include "../../../types.h"
 

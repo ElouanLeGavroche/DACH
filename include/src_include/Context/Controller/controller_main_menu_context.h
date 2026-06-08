@@ -1,5 +1,5 @@
-#ifndef controller_main_menu_context
-#define controller_main_menu_context
+#ifndef CONTROLLER_MAIN_MENU_CONTEXT
+#define CONTROLLER_MAIN_MENU_CONTEXT
 
 #include <stdio.h>
 
@@ -9,6 +9,8 @@
 #include "../../../types.h"
 
 #include "../../../state.h"
+
+#include "controller_game_context.h"
 
 void controller_update_render_main_menu(st_engine *engine_state);
 void init_menu(st_engine *engine_state);
