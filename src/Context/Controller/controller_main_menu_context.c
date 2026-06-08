@@ -22,7 +22,7 @@ void input_context_main_menu(st_engine *engine_state)
     }
     else if(engine_state->input.up_arrow == true)
     {
-        engine_state->context_tool.put_context(&engine_state->stack_context, &main_menu_state);
+        engine_state->context_tool.put_context(&engine_state->stack_context, &game_state);
         engine_state->context_tool.level_of_depth ++;
         printf("%d\n", engine_state->context_tool.level_of_depth);
     }
