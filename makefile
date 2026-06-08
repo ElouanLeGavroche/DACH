@@ -67,4 +67,7 @@ clean:
 	rm -rf $(VIEW)*.o
 	rm -rf $(TRANSFORM_TOOL)*.o
 	rm -rf $(CONTEXT_TOOL)*.o
+	rm -rf $(CONTEXT_CONTROLLER)*.o
+	rm -rf $(CONTEXT_MODEL)*.o
+	rm -rf $(CONTEXT_VIEW)*.o
 	rm -rf *.o
