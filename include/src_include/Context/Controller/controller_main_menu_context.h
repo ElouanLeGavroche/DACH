@@ -1,5 +1,5 @@
-#ifndef CONTROLLER_MAIN_MENU
-#define CONTROLLER_MAIN_MENU
+#ifndef controller_main_menu_context
+#define controller_main_menu_context
 
 #include <stdio.h>
 

@@ -46,7 +46,7 @@ $(SAVE_EXEC)$(EXEC):\
 	\
 	$(VIEW)view_render_loop.o\
 	\
-	$(CONTROLLER)controller_main_menu.o\
+	$(CONTROLLER)controller_main_menu_context.o\
 	$(MODEL)model_main_menu.o\
 	$(VIEW)view_main_menu.o
 	$(CC) -o $@ $^ $(CFLAG)

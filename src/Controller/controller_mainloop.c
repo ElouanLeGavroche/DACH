@@ -3,7 +3,6 @@
 void *logical_loop(void *data_engine)
 {
     // Partie Logique
-    
     st_engine *engine_state = data_engine;
     
     //Définition des variables pour accorder la clock
@@ -46,6 +45,9 @@ void controller_mainloop_management(st_engine *engine_state){
     // Affichage du premier State (TEMP Main_menu)
     engine_state->context_tool.put_context(&engine_state->stack_context, &main_menu_state);
 
+    //Initialiser le contenu de la State
+    engine_state->stack_context.current_state->init_state(engine_state);
+    
     // Création du thread et passage de la structure engine
     pthread_create(&logical_thread, NULL, logical_loop, engine_state);
 

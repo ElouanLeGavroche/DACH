@@ -22,7 +22,7 @@ typedef struct st_state st_state;
  */
 typedef struct st_state
 {
-    void (*st_state)(st_engine *engine_state);
+    void (*init_state)(st_engine *engine_state);
     void (*input_context)(st_engine *engine_state);
     void (*update_logic_context)(st_engine *engine_state);
     void (*update_render_context)(st_engine *engine_state);
@@ -75,6 +75,7 @@ typedef struct st_engine
     atomic_bool running;
     st_input input;
     stack stack_context;
+    
     st_context_tool context_tool;
 } st_engine;
 

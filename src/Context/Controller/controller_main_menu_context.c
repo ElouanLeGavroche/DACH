@@ -1,4 +1,4 @@
-#include "../../include/src_include/Controller/controller_main_menu.h"
+#include "../../include/src_include/Controller/controller_main_menu_context.h"
 
 struct st_state main_menu_state =
 {
@@ -10,7 +10,7 @@ struct st_state main_menu_state =
 
 void init_menu(st_engine *engine_state)
 {
-
+    printf("Context menu initier\n");
 }
 
 void input_context_main_menu(st_engine *engine_state)
