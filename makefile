@@ -8,11 +8,17 @@ SAVE_EXEC=out/
 
 #Lien des dossier
 SRC=src/
+SRC_CONTEXT=$(SRC)Context/
 INCLUDE=include/
 INCLUDE_SRC=include/src_include/
+
 MODEL=$(SRC)Model/
 CONTROLLER=$(SRC)Controller/
 VIEW=$(SRC)View/
+
+CONTEXT_MODEL=$(SRC_CONTEXT)Model/
+CONTEXT_CONTROLLER=$(SRC_CONTEXT)Controller/
+CONTEXT_VIEW=$(SRC_CONTEXT)View/
 
 #Lien vers les outils
 INCLUDE_TOOL=$(SRC)Shared_tools/
@@ -46,9 +52,9 @@ $(SAVE_EXEC)$(EXEC):\
 	\
 	$(VIEW)view_render_loop.o\
 	\
-	$(CONTROLLER)controller_main_menu_context.o\
-	$(MODEL)model_main_menu.o\
-	$(VIEW)view_main_menu.o
+	$(CONTEXT_CONTROLLER)controller_main_menu_context.o\
+	$(CONTEXT_MODEL)model_main_menu_context.o\
+	$(CONTEXT_VIEW)view_main_menu_context.o
 	$(CC) -o $@ $^ $(CFLAG)
 
 
