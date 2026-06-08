@@ -10,8 +10,6 @@
 
 #include "../../../state.h"
 
-#include "controller_game_context.h"
-
 void controller_update_render_main_menu(st_engine *engine_state);
 void init_menu(st_engine *engine_state);
 void input_context_main_menu(st_engine *engine_state);
