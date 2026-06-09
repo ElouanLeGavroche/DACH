@@ -16,13 +16,6 @@ Ma on kab skrivañ ar yezh.
 
 *ken ar c'hentañ*
 
-
-# Règles du développement du projet
-
-## Normalisation des fichiers
-- Separateur **;**
-- Case **snake_case**
-
 # Manuel 
 
 ## Librairies externe à installer
@@ -32,6 +25,9 @@ Vous devez en premier lieux installer GLFW.
 sudo apt-get install libglfw3
 sudo apt-get install libglfw3-dev
 ```
+
+## Puis vous pouvez compilé/executer le code ainsi
+
 make && make clean | ./out/DACH 
 
 ## Contribution
