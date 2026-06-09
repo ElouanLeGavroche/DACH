@@ -3,7 +3,8 @@
 
 #include <stdio.h>
 
-#include <glad/glad.h>
+#include "../../../../extern_lib/glad/glad.h"
+
 #include <GLFW/glfw3.h>
 
 #include "../../../types.h"
