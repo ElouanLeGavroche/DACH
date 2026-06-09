@@ -25,57 +25,18 @@ Ma on kab skrivañ ar yezh.
 
 # Manuel 
 
-## Librairies extern à installer
+## Librairies externe à installer
 Vous devez en premier lieux installer GLFW.
 
 ```bash
 sudo apt-get install libglfw3
 sudo apt-get install libglfw3-dev
 ```
-
-Puis télécharger via se site GLAD
-https://glad.dav1d.de/
-
-Mettez-y les options :
-#### Language
-- C/C++
-
-#### Specification
-- OpenGL
-
-#### Profile
-- Core
-
-Puis généré le document.
-
-Par la suite, vous devrez copie glad/glad.h et KHR/khrplatform.h dans le dossier usr/lib
-```bash
-sudo cp -r ~/Téléchargements/glad/include/glad ~/usr/lib/
-sudo cp -r ~/Téléchargements/glad/include/KHR ~/usr/lib/
-```
-## Exec
 make && make clean | ./out/DACH 
 
+## Contribution
 
-# MVC
-Le MVC que j'utilise prend 2 formes :
-- La première est la plus basique : on envoie des infos au contrôleur, ça va dans le modèle, puis c'est affiché sur l'écran de la vue.
-    Ex : 
-    ```c
-    void main_controller():
-        int data = calcul_model();
-        rendu_view(data);
-    ```
-- Le second sont pour les outils qui ne touchent pas à l'affichage : on envoie des infos au contrôleur qui les envoie au modèle, puis à la view qui va mettre en forme ces informations avant de les renvoyer à nouveau au contrôleur qui va les retourner.
-    Ex :
-    ```c
-    void main_controller():
-        int data = calcul_model();
-        int data_en_page = rendu_view(data);
-        
-        return data_en_page;
-    ```
+N'hésitez pas à me faire remonter des problèmes ou des conseil via GitHub. Je prendrais vos demande au sérieux et m'appliquerais à les mettre en oeuvre.
+Je vous remercie d'avance à toute aide que vous pourrez m'apporter dans les "Issues".
 
-*Note : *
-Certains outils sont suffisamment simples pour n'être présents que sous la forme d'une fonction à appeler.
-Je pense notamment à l'outil de couleurs.
+Bien cordialement, Paotr neñvel.
