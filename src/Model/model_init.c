@@ -29,7 +29,7 @@ int load_screen_data(st_loaded_windows_data *screen_data, st_engine *engine_stat
     // Initialisation des outils de context
     engine_state->context_tool.put_context = put_context;
     engine_state->context_tool.remove_context = remove_context;
-    engine_state->context_tool.level_of_depth = 0;
+    engine_state->stack_context.level_of_depth = 0;
     
     engine_state->stack_context.next_state = 0;
     engine_state->stack_context.current_state = 0;

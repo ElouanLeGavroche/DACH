@@ -39,6 +39,8 @@ typedef struct st_state
 typedef struct {
     st_state *current_state;
     st_state *next_state;
+
+    int level_of_depth;
 }stack;
 
 /**
@@ -55,7 +57,6 @@ typedef struct
 {
     void (*put_context) (stack *my_stack, st_state *my_state);
     int (*remove_context)(stack *my_stack);
-    int level_of_depth;
     
 }st_context_tool;
 
@@ -73,10 +74,14 @@ typedef struct
 
 typedef struct st_engine
 {
+    // Attribut
     atomic_bool running;
+
+    // Attribut de structure
     st_input input;
     stack stack_context;
     
+    // Méthode ou groupe de méthodes
     st_context_tool context_tool;
 } st_engine;
 

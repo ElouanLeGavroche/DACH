@@ -20,18 +20,13 @@ void input_context_game(st_engine *engine_state)
     {  
         engine_state->running = false;
     }
-    else if(engine_state->input.up_arrow == true)
-    {
-        engine_state->context_tool.put_context(&engine_state->stack_context, &game_state);
-        engine_state->context_tool.level_of_depth ++;
-        printf("%d\n", engine_state->context_tool.level_of_depth);
-    }
+
     else if(engine_state->input.down_arrow == true)
     {
         if(engine_state->context_tool.remove_context(&engine_state->stack_context) == 0){
          
-            engine_state->context_tool.level_of_depth --;
-            printf("%d\n", engine_state->context_tool.level_of_depth);
+            engine_state->stack_context.level_of_depth --;
+            printf("%d\n", engine_state->stack_context.level_of_depth);
         } 
     }
 
