@@ -10,7 +10,7 @@ struct st_state game_state =
 
 void init_game(st_engine *engine_state)
 {
-    printf("Context menu initier\n");
+    printf("Context jeu initier\n");
 }
 
 void input_context_game(st_engine *engine_state)

@@ -69,8 +69,14 @@ void controller_mainloop_management(st_engine *engine_state){
         process_input(&engine_state->input);
 
         // Voir à quoi peuvent servir ces entrée dans ce context (si l'une d'entre elle est appuyé)
-        if(engine_state->input.one_of_them){
+        if(engine_state->input.one_of_them)
+        {
             engine_state->stack_context.current_state->input_context(engine_state);
+        }
+        // Voir si un nouveau context est entré
+        if(engine_state->stack_context.next_state != 0)
+        {
+            new_context(engine_state);
         }
 
         view_clear();
@@ -98,4 +104,19 @@ void controller_mainloop_management(st_engine *engine_state){
     free(engine_state);
 
     view_close_window();
+}
+
+void new_context(st_engine *engine_state){
+
+    // L'on initialise le nouveau context
+    engine_state->stack_context.next_state->init_state(engine_state);
+
+    // L'on envoie le context suivant pour remplacer l'actuel
+    engine_state->context_tool.put_context(&engine_state->stack_context, engine_state->stack_context.next_state);
+    
+    // L'on supprime le context suivant qui est déjà placé
+    engine_state->stack_context.next_state = 0;
+    
+    // L'on incremente le niveau de profondeur
+    engine_state->context_tool.level_of_depth ++;
 }

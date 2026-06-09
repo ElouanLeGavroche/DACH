@@ -38,6 +38,7 @@ typedef struct st_state
  */
 typedef struct {
     st_state *current_state;
+    st_state *next_state;
 }stack;
 
 /**
