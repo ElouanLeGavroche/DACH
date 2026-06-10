@@ -80,6 +80,8 @@ typedef struct
  * des pages. En effet, un context possède des éléments, et ces élément des comportements :
  * graphique, logique ou statiques.
  * En bref, les informations propre au context sont stocké en eux-même.
+ * 
+ * A voir si je la split en plusieurs structure à l'avenir pour des question de lisibilité.
  */
 typedef struct st_engine
 {
@@ -87,7 +89,7 @@ typedef struct st_engine
     atomic_bool running;
     st_input input;
     
-    // élément liées au context
+    // élément liées au context et à la stack
     stack stack_context;
     st_context_tool context_tool;
     st_state *next_state;
