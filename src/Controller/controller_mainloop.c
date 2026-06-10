@@ -74,7 +74,7 @@ void controller_mainloop_management(st_engine *engine_state){
             engine_state->stack_context.current_state->input_context(engine_state);
         }
         // Voir si un nouveau context est entré
-        if(engine_state->stack_context.next_state != 0)
+        if(engine_state->next_state != 0)
         {
             new_context(engine_state);
         }
@@ -108,25 +108,13 @@ void controller_mainloop_management(st_engine *engine_state){
 
 void new_context(st_engine *engine_state)
 {
-
     // L'on initialise le nouveau context
-    engine_state->stack_context.next_state->init_state(engine_state);
+    engine_state->next_state->init_state(engine_state);
 
     // L'on envoie le context suivant pour remplacer l'actuel
-    engine_state->context_tool.put_context(&engine_state->stack_context, engine_state->stack_context.next_state);
+    engine_state->context_tool.put_context(&engine_state->stack_context, engine_state->next_state);
     
     // L'on supprime le context suivant qui est déjà placé
-    engine_state->stack_context.next_state = 0;
+    engine_state->next_state = 0;
     
-    // L'on incremente le niveau de profondeur
-    engine_state->stack_context.level_of_depth ++;
-}
-
-void old_context(st_engine *engine_state)
-{
-    if(engine_state->context_tool.remove_context(&engine_state->stack_context) == 0){
-         
-        engine_state->stack_context.level_of_depth --;
-        printf("%d\n", engine_state->stack_context.level_of_depth);
-    } 
 }

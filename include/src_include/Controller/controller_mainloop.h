@@ -31,5 +31,6 @@ void controller_mainloop_management(st_engine *engine_state);
 void* logical_loop(void *data_engine);
 
 void new_context(st_engine *engine_state);
+void old_context(st_engine *engine_state);
 
 #endif

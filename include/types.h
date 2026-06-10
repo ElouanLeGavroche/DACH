@@ -60,6 +60,7 @@ typedef struct
     
 }st_context_tool;
 
+
 // Le bool "one of them" sert à verifier s'il y en a
 // au moins un d'actionner. Pour éviter de parcourir
 // un switch pour rien.
@@ -72,17 +73,25 @@ typedef struct
     bool one_of_them;
 }st_input;
 
+/**
+ * @brief Structure du moteur.
+ * 
+ * NOTE IMPORTANTE /!\ - Le moteur n'a pas besoin de conaitre directement le contenu
+ * des pages. En effet, un context possède des éléments, et ces élément des comportements :
+ * graphique, logique ou statiques.
+ * En bref, les informations propre au context sont stocké en eux-même.
+ */
 typedef struct st_engine
 {
-    // Attribut
+    // éléments général
     atomic_bool running;
-
-    // Attribut de structure
     st_input input;
-    stack stack_context;
     
-    // Méthode ou groupe de méthodes
+    // élément liées au context
+    stack stack_context;
     st_context_tool context_tool;
+    st_state *next_state;
+
 } st_engine;
 
 
