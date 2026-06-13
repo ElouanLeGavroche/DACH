@@ -81,6 +81,7 @@ typedef struct
 typedef struct{
     unsigned int VAO;
     unsigned int VBO;
+    unsigned int EBO;
 
     unsigned int vertex_shader;
     unsigned int fragment_shader;
