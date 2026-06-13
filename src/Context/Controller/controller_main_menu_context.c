@@ -30,6 +30,10 @@ void input_context_main_menu(st_engine *engine_state)
     {
         engine_state->context_tool.remove_context(&engine_state->stack_context);
     }
+    else if(engine_state->input.enter)
+    {
+        change_render_mode(engine_state);
+    }
 
 }
 

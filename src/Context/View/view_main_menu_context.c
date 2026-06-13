@@ -48,7 +48,7 @@ void init_render(st_engine *engine_state){
     glEnableVertexAttribArray(0);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
-    
+
     engine_state->render_info.vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 
     glShaderSource(engine_state->render_info.vertex_shader, 1, &vertex_shader_source, NULL);
@@ -69,6 +69,9 @@ void init_render(st_engine *engine_state){
     glDeleteShader(engine_state->render_info.vertex_shader);
     glDeleteShader(engine_state->render_info.fragment_shader);
 
+    // Définir le mode de rendu (pour le Developpement)
+    engine_state->render_info.render_mode = GL_LINE;
+    glPolygonMode(GL_FRONT_AND_BACK, engine_state->render_info.render_mode);
 }
 void update_render_main_menu(st_engine *engine_state){
     
@@ -83,7 +86,19 @@ void update_render_main_menu(st_engine *engine_state){
     glBindVertexArray(0);
     //glBindBuffer( GL_ELEMENT_ARRAY_BUFFER ,engine_state->render_info.EBO);
     
-
-
     
+}
+
+void change_render_mode(st_engine *engine_state)
+{
+    if(engine_state->render_info.render_mode != GL_FILL)
+    {
+        engine_state->render_info.render_mode = GL_FILL;
+    } 
+    else
+    {
+        engine_state->render_info.render_mode = GL_LINE;
+    }
+    
+    glPolygonMode(GL_FRONT_AND_BACK, engine_state->render_info.render_mode);
 }

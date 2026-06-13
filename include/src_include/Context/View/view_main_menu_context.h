@@ -14,5 +14,6 @@
 
 void init_render(st_engine *engine_state);
 void update_render_main_menu(st_engine *engine_state);
+void change_render_mode(st_engine *engine_state);
 
 #endif

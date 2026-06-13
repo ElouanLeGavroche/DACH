@@ -19,11 +19,16 @@ void process_input(st_input *input)
         input->down_arrow = true;
         input->one_of_them = true;
     }
+    else if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
+        input->enter = true;
+        input->one_of_them = true;
+    }
     else{
 
         input->escape = false;
         input->down_arrow = false;
         input->up_arrow = false;
+        input->enter = false;
         input->one_of_them = false;
     }
 

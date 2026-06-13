@@ -70,7 +70,8 @@ typedef struct
     bool escape;
     bool up_arrow;
     bool down_arrow;
-
+    bool enter;
+    
     bool one_of_them;
 }st_input;
 
@@ -85,6 +86,8 @@ typedef struct{
 
     unsigned int vertex_shader;
     unsigned int fragment_shader;
+
+    unsigned int render_mode;
 
     unsigned int shader_program;
 }st_render_info;
