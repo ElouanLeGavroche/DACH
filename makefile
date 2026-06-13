@@ -24,11 +24,13 @@ CONTEXT_VIEW=$(SRC_CONTEXT)View/
 INCLUDE_TOOL=$(SRC)Shared_tools/
 TRANSFORM_TOOL=$(INCLUDE_TOOL)Transform_openGL_values/
 CONTEXT_TOOL=$(INCLUDE_TOOL)Context_tool/
-
+LOAD_TOOLS=$(INCLUDE_TOOL)Load_tools/
 
 #
 LIST_TOOLS=$(INCLUDE_TOOL)List/
 UNSIGNED_INT=$(LIST_TOOLS)Unsigned_list/
+
+
 
 
 #Lien vers certain .c externe comme GLAD
@@ -45,6 +47,7 @@ $(SAVE_EXEC)$(EXEC):\
 	$(TRANSFORM_TOOL)colors.o\
 	$(CONTEXT_TOOL)stack.o\
 	$(UNSIGNED_INT)unsigned_list.o\
+	$(LOAD_TOOLS)load_shader.o\
 	\
 	$(CONTROLLER)controller_init.o\
 	$(MODEL)model_init.o\

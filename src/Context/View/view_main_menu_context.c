@@ -3,9 +3,9 @@
 
 void init_render(st_engine *engine_state){
 
-    const char *vertex_shader_source = load_shader("../../Shaders/main_shader.vert");
-    const char *fragment_shader_source = load_shader("../../Shaders/main_shader.frag");
-    const char *fragment_shader_source_2 = load_shader("../../Shaders/main_menu_shader.frag");
+    const char *vertex_shader_source = load_shader("src/Shaders/main_shader.vert");
+    const char *fragment_shader_source = load_shader("src/Shaders/main_shader.frag");
+    const char *fragment_shader_source_2 = load_shader("src/Shaders/main_menu_shader.frag");
 
 
     float first_square[] = {
