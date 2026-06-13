@@ -5,8 +5,18 @@
 #include <stdio.h>
 #include <errno.h>
 #include <unistd.h>
+#include <string.h>
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+#define LINE_SIZE 30
 
 void parse_line(char file[]);
 float load_file(char *path);
 
+/*
+Note à moi même, parser des trucs en C c'est comme se foutre un baton dans le cul, ça fait mal.
+*/
 #endif
