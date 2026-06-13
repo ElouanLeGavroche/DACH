@@ -84,4 +84,5 @@ clean:
 	rm -rf $(CONTEXT_MODEL)*.o
 	rm -rf $(CONTEXT_VIEW)*.o
 	rm -rf $(UNSIGNED_INT)*.o
+	rm -rf $(LOAD_TOOLS)*.o
 	rm -rf *.o
