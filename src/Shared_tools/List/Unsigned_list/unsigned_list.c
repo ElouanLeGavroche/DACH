@@ -59,6 +59,10 @@ st_unsigned_element get_by_indice(st_unsigned_element *list, int i)
         indice ++;
     }
     
+    if(wanted_value.next == NULL && indice != i)
+    {
+        printf("Index error modifier maintenant le code\n");
+    }
 
     return wanted_value;
 }

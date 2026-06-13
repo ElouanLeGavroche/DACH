@@ -24,6 +24,6 @@
 
 #define TIME_PER_TICK 1.0 / X1_SPEED_LOGIC
 
-#define DEFAULT_CANVA "MAIN_MENU"
+#define EMPTY_LIST -1
 
 #endif 

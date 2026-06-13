@@ -91,12 +91,11 @@ typedef struct{
     st_unsigned_element VBOs;
     st_unsigned_element EBOs;
 
-    unsigned int vertex_shader;
-    unsigned int fragment_shader;
+
+    st_unsigned_element shader_programs;
 
     unsigned int render_mode;
 
-    unsigned int shader_program;
 }st_render_info;
 
 

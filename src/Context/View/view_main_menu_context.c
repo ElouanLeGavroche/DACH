@@ -36,19 +36,18 @@ void init_render(st_engine *engine_state){
     5,7,6
     };
     
-    engine_state->render_info.VAOs.elt = -1;
-    engine_state->render_info.VBOs.elt = -1;
-    engine_state->render_info.EBOs.elt = -1;
+    engine_state->render_info.VAOs.elt = EMPTY_LIST;
+    engine_state->render_info.VBOs.elt = EMPTY_LIST;
+    engine_state->render_info.EBOs.elt = EMPTY_LIST;
 
-    
-    
-    
+    engine_state->render_info.shader_programs.elt = EMPTY_LIST;
+
 
     int i;
     for(i = 0; i < 2; i ++)
     {
         unsigned int VAO, VBO, EBO;
-
+        unsigned int vertex_shader, fragment_shader, shader_program;
         
         // Tampon où l'on stock les sommets
         glGenVertexArrays(1, &VAO);
@@ -65,42 +64,40 @@ void init_render(st_engine *engine_state){
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-        printf("%d Bonjour\n", EBO);
         add_to_unsigned_list(&engine_state->render_info.VAOs, VAO);
         add_to_unsigned_list(&engine_state->render_info.VBOs, VBO);
         add_to_unsigned_list(&engine_state->render_info.EBOs, EBO);
-        printf("%d Bye\n", engine_state->render_info.EBOs.elt);
 
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0); 
+
+        vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+
+        glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
+        glCompileShader(vertex_shader);
+        
+        fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+        glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
+        glCompileShader(fragment_shader);
+
+        shader_program = glCreateProgram();
+        
+        // On lie le frag et le vert dans un seul prg
+        glAttachShader(shader_program, vertex_shader);
+        glAttachShader(shader_program, fragment_shader);
+        glLinkProgram(shader_program);
+        
+        // Une fois lié, l'on peux les supprimer
+        glDeleteShader(vertex_shader);
+        glDeleteShader(fragment_shader);
+
+        add_to_unsigned_list(&engine_state->render_info.shader_programs, shader_program);
     }
     
     printf("Bonsoir\n");
 
-
-    
-
-    engine_state->render_info.vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-
-    glShaderSource(engine_state->render_info.vertex_shader, 1, &vertex_shader_source, NULL);
-    glCompileShader(engine_state->render_info.vertex_shader);
-    
-    engine_state->render_info.fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(engine_state->render_info.fragment_shader, 1, &fragment_shader_source, NULL);
-    glCompileShader(engine_state->render_info.fragment_shader);
-
-    engine_state->render_info.shader_program = glCreateProgram();
-    
-    // On lie le frag et le vert dans un seul prg
-    glAttachShader(engine_state->render_info.shader_program, engine_state->render_info.vertex_shader);
-    glAttachShader(engine_state->render_info.shader_program, engine_state->render_info.fragment_shader);
-    glLinkProgram(engine_state->render_info.shader_program);
-    
-    // Une fois lié, l'on peux les supprimer
-    glDeleteShader(engine_state->render_info.vertex_shader);
-    glDeleteShader(engine_state->render_info.fragment_shader);
 
     // Définir le mode de rendu (pour le Developpement)
     engine_state->render_info.render_mode = GL_LINE;
@@ -112,9 +109,13 @@ void update_render_main_menu(st_engine *engine_state){
     glClearColor(num_to_01(123), num_to_01(12), num_to_01(123), 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glUseProgram(engine_state->render_info.shader_program);
+    glUseProgram(get_by_indice(&engine_state->render_info.shader_programs, 0).elt);
 
     glBindVertexArray(get_by_indice(&engine_state->render_info.VAOs, 0).elt);
+
+    glUseProgram(get_by_indice(&engine_state->render_info.shader_programs, 1).elt);
+    
+    glBindVertexArray(get_by_indice(&engine_state->render_info.VAOs, 1).elt);
 
     glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
