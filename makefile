@@ -48,6 +48,7 @@ $(SAVE_EXEC)$(EXEC):\
 	$(CONTEXT_TOOL)stack.o\
 	$(UNSIGNED_INT)unsigned_list.o\
 	$(LOAD_TOOLS)load_shader.o\
+	$(LOAD_TOOLS)load_obj_format.o\
 	\
 	$(CONTROLLER)controller_init.o\
 	$(MODEL)model_init.o\

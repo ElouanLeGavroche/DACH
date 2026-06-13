@@ -64,6 +64,13 @@ typedef struct
 }st_context_tool;
 
 
+/*
+typedef struct
+{
+
+}st_3d_object;
+*/
+
 // Le bool "one of them" sert à verifier s'il y en a
 // au moins un d'actionner. Pour éviter de parcourir
 // un switch pour rien.

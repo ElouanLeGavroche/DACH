@@ -8,17 +8,18 @@ void init_render(st_engine *engine_state){
     const char *fragment_shader_source = load_shader("src/Shaders/main_shader.frag");
     const char *fragment_shader_source_2 = load_shader("src/Shaders/main_menu_shader.frag");
 
-
+    load_file(BASIC_TILE_PATH);
+    
     float first_square[] = {
-        0.8f,  0.3f, 0.0f,  // top right
-        -0.8f, -0.3f, 0.0f,  // bottom right
-        -0.8f, -0.3f, 0.0f,  // bottom left
-        -0.8f,  0.3f, 0.0f,   // top left
+        0.8f,  0.3f, 0.8f,  // top right
+        0.8f, -0.3f, 0.8f,  // bottom right
+        -0.8f, -0.3f, 0.8f,  // bottom left
+        -0.8f,  0.3f, 0.8f,   // top left
 
-        -0.7f,  0.5f, 0.0f, 
-        -0.5f, 0.5f, 0.0f,  
-        -0.7f, 0.0f, 0.0f, 
-        -0.5f,  0.0f, 0.0f   
+        -0.7f,  0.5f, -0.8f, 
+        -0.5f, 0.5f, -0.8f,  
+        -0.7f, 0.0f, -0.8f, 
+        -0.5f,  0.0f, -0.8f   
     };
 
     float second_square[] = {
