@@ -26,6 +26,11 @@ TRANSFORM_TOOL=$(INCLUDE_TOOL)Transform_openGL_values/
 CONTEXT_TOOL=$(INCLUDE_TOOL)Context_tool/
 
 
+#
+LIST_TOOLS=$(INCLUDE_TOOL)List/
+UNSIGNED_INT=$(LIST_TOOLS)Unsigned_list/
+
+
 #Lien vers certain .c externe comme GLAD
 EXTERN_INCLUDE=extern_lib/
 
@@ -39,6 +44,7 @@ $(SAVE_EXEC)$(EXEC):\
 	\
 	$(TRANSFORM_TOOL)colors.o\
 	$(CONTEXT_TOOL)stack.o\
+	$(UNSIGNED_INT)unsigned_list.o\
 	\
 	$(CONTROLLER)controller_init.o\
 	$(MODEL)model_init.o\
@@ -74,4 +80,5 @@ clean:
 	rm -rf $(CONTEXT_CONTROLLER)*.o
 	rm -rf $(CONTEXT_MODEL)*.o
 	rm -rf $(CONTEXT_VIEW)*.o
+	rm -rf $(UNSIGNED_INT)*.o
 	rm -rf *.o

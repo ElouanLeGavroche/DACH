@@ -7,6 +7,8 @@
 typedef struct st_engine st_engine;
 typedef struct st_state st_state;
 
+typedef struct st_unsigned_element st_unsigned_element;
+
 /**
  * @brief Structure (presque class) qui contient deux catégorie d'élément
  * 
@@ -71,18 +73,23 @@ typedef struct
     bool up_arrow;
     bool down_arrow;
     bool enter;
-    
+
     bool one_of_them;
 }st_input;
 
+
+typedef struct st_unsigned_element{
+    unsigned int elt;
+    struct st_unsigned_element *next;
+} st_unsigned_element;
 
 /**
  * @brief Structure qui stock les informations de rendu du context
  */
 typedef struct{
-    unsigned int VAO;
-    unsigned int VBO;
-    unsigned int EBO;
+    st_unsigned_element VAOs;
+    st_unsigned_element VBOs;
+    st_unsigned_element EBOs;
 
     unsigned int vertex_shader;
     unsigned int fragment_shader;

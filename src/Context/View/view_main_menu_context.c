@@ -16,38 +16,71 @@ void init_render(st_engine *engine_state){
     "}\n\0";
 
 
-    float vertices[] = {
+    float first_square[] = {
         0.5f,  0.5f, 0.0f,  // top right
         0.5f, -0.5f, 0.0f,  // bottom right
         -0.5f, -0.5f, 0.0f,  // bottom left
-        -0.5f,  0.5f, 0.0f   // top left 
+        -0.5f,  0.5f, 0.0f,   // top left
+
+        -0.7f,  0.5f, 0.0f, 
+        -0.5f, 0.5f, 0.0f,  
+        -0.7f, 0.0f, 0.0f, 
+        -0.5f,  0.0f, 0.0f   
     };
-    unsigned int indices[] = {  // Notons que l’on commence à 0!
+    
+    unsigned int indices[] = {
     0, 1, 3,   // premier triangle
-    1, 2, 3    // second triangle
+    1, 2, 3,    // second triangle
+
+    4,5,6,
+    5,7,6
     };
-
-    // Tampon où l'on stock les sommets
-    glGenVertexArrays(1, &engine_state->render_info.VAO);
-    glGenBuffers(1, &engine_state->render_info.VBO);  
-    glGenBuffers(1, &engine_state->render_info.EBO);
-
-    // 1.Attacher le VAO (Vertex Array Object)
-    glBindVertexArray(engine_state->render_info.VAO);
+    
+    engine_state->render_info.VAOs.elt = -1;
+    engine_state->render_info.VBOs.elt = -1;
+    engine_state->render_info.EBOs.elt = -1;
 
     
+    
+    
 
-    // 2.Mettre les sommet dans le VBO et EBO
-    glBindBuffer(GL_ARRAY_BUFFER, engine_state->render_info.VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    int i;
+    for(i = 0; i < 2; i ++)
+    {
+        unsigned int VAO, VBO, EBO;
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, engine_state->render_info.EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+        
+        // Tampon où l'on stock les sommets
+        glGenVertexArrays(1, &VAO);
+        glGenBuffers(1, &VBO);  
+        glGenBuffers(1, &EBO);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
+        // 1.Attacher le VAO (Vertex Array Object)
+        glBindVertexArray(VAO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0); 
+        // 2.Mettre les sommet dans le VBO et EBO
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(first_square), first_square, GL_STATIC_DRAW);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+        printf("%d Bonjour\n", EBO);
+        add_to_unsigned_list(&engine_state->render_info.VAOs, VAO);
+        add_to_unsigned_list(&engine_state->render_info.VBOs, VBO);
+        add_to_unsigned_list(&engine_state->render_info.EBOs, EBO);
+        printf("%d Bye\n", engine_state->render_info.EBOs.elt);
+
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0); 
+    }
+    
+    printf("Bonsoir\n");
+
+
+    
 
     engine_state->render_info.vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 
@@ -75,16 +108,16 @@ void init_render(st_engine *engine_state){
 }
 void update_render_main_menu(st_engine *engine_state){
     
-
+    
     glClearColor(num_to_01(123), num_to_01(12), num_to_01(123), 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(engine_state->render_info.shader_program);
-    glBindVertexArray(engine_state->render_info.VAO);
 
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(get_by_indice(&engine_state->render_info.VAOs, 0).elt);
+
+    glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
-    //glBindBuffer( GL_ELEMENT_ARRAY_BUFFER ,engine_state->render_info.EBO);
     
     
 }
