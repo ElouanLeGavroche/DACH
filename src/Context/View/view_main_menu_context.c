@@ -1,7 +1,7 @@
 #include "../../../include/src_include/Context/View/view_main_menu_context.h"
 
 
-void init_render(st_engine *engin_state){
+void init_render(st_engine *engine_state){
     const char *vertex_shader_source = "#version 330 core\n"
     "layout (location = 0) in vec3 aPos;\n"
     "void main()\n"
@@ -23,58 +23,53 @@ void init_render(st_engine *engin_state){
      0.5f, -0.5f, 0.0f,
      0.0f,  0.5f, 0.0f
     };  
-    
+
     // Tampon où l'on stock les sommets
-    unsigned int VAO, VBO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);  
+    glGenVertexArrays(1, &engine_state->render_info.VAO);
+    glGenBuffers(1, &engine_state->render_info.VBO);  
+    printf("Bonjour\n");
+    glBindVertexArray(engine_state->render_info.VAO);
 
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, engine_state->render_info.VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);  
+    glBindBuffer(GL_ARRAY_BUFFER, engine_state->render_info.VBO);  
 
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    
+    engine_state->render_info.vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 
-    // Création de l'objet shaders
-    unsigned int vertex_shader;
-    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(engine_state->render_info.vertex_shader, 1, &vertex_shader_source, NULL);
+    glCompileShader(engine_state->render_info.vertex_shader);
+    
+    engine_state->render_info.fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(engine_state->render_info.fragment_shader, 1, &fragment_shader_source, NULL);
+    glCompileShader(engine_state->render_info.fragment_shader);
 
-    glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
-    glCompileShader(vertex_shader);
-
-    unsigned int fragment_shader;
-    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
-    glCompileShader(fragment_shader);
-
-    unsigned int shader_program;
-    shader_program = glCreateProgram();
-
+    engine_state->render_info.shader_program = glCreateProgram();
+    
     // On lie le frag et le vert dans un seul prg
-    glAttachShader(shader_program, vertex_shader);
-    glAttachShader(shader_program, fragment_shader);
-    glLinkProgram(shader_program);
-
+    glAttachShader(engine_state->render_info.shader_program, engine_state->render_info.vertex_shader);
+    glAttachShader(engine_state->render_info.shader_program, engine_state->render_info.fragment_shader);
+    glLinkProgram(engine_state->render_info.shader_program);
+    
     // Une fois lié, l'on peux les supprimer
-    glDeleteShader(vertex_shader);
-    glDeleteShader(fragment_shader);
+    glDeleteShader(engine_state->render_info.vertex_shader);
+    glDeleteShader(engine_state->render_info.fragment_shader);
 
 }
 void update_render_main_menu(st_engine *engine_state){
     
-    
-    glUseProgram(shader_program);
+
+    glUseProgram(engine_state->render_info.shader_program);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
 
-    glUseProgram(shader_program);
-    glBindVertexArray(VBO);
+    glUseProgram(engine_state->render_info.shader_program);
+    glBindVertexArray(engine_state->render_info.VBO);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
 

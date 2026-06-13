@@ -12,7 +12,7 @@
 
 #include "../../../../include/src_include/Shared_tools/Transform_openGL_values/colors.h"
 
-void init_render(st_engine *engin_state);
+void init_render(st_engine *engine_state);
 void update_render_main_menu(st_engine *engine_state);
 
 #endif

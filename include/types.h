@@ -28,6 +28,7 @@ typedef struct st_state
     void (*update_render_context)(st_engine *engine_state);
     
     struct st_state *upper;
+    
 }st_state;
 /**
  * @brief   Le stack permet de hierachisé l'ordre d'apparition des page.
@@ -73,6 +74,21 @@ typedef struct
     bool one_of_them;
 }st_input;
 
+
+/**
+ * @brief Structure qui stock les informations de rendu du context
+ */
+typedef struct{
+    unsigned int VAO;
+    unsigned int VBO;
+
+    unsigned int vertex_shader;
+    unsigned int fragment_shader;
+
+    unsigned int shader_program;
+}st_render_info;
+
+
 /**
  * @brief Structure du moteur.
  * 
@@ -82,6 +98,8 @@ typedef struct
  * En bref, les informations propre au context sont stocké en eux-même.
  * 
  * A voir si je la split en plusieurs structure à l'avenir pour des question de lisibilité.
+ * 
+ * @param render_info Ici les information qui servent au rendu (les VBO, VAO...).
  */
 typedef struct st_engine
 {
@@ -93,6 +111,8 @@ typedef struct st_engine
     stack stack_context;
     st_context_tool context_tool;
     st_state *next_state;
+
+    st_render_info render_info;
 
 } st_engine;
 

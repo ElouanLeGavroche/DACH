@@ -10,6 +10,8 @@ struct st_state main_menu_state =
 
 void init_menu(st_engine *engine_state)
 {
+    printf("début de l'initiation\n");
+    init_render(engine_state);
     printf("Context menu initier\n");
 }
 
