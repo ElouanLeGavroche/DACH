@@ -13,7 +13,7 @@
 
 #include "../../../../include/src_include/Shared_tools/Transform_openGL_values/colors.h"
 
-
+#include "../../Shared_tools/Load_tools/load_shader.h"
 #include "../../Shared_tools/List/Unsigned_list/unsigned_list.h"
 
 void init_render(st_engine *engine_state);

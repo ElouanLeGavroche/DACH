@@ -2,26 +2,11 @@
 
 
 void init_render(st_engine *engine_state){
-    const char *vertex_shader_source = "#version 460 core\n"
-        "layout (location = 0) in vec3 aPos;\n"
-        "void main()\n"
-        "{\n"
-        "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-        "}\0";
 
-    const char *fragment_shader_source = "#version 460 core\n"
-        "out vec4 FragColor;\n"
-        "void main()\n"
-        "{\n"
-        "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-        "}\n\0";
+    const char *vertex_shader_source = load_shader("../../Shaders/main_shader.vert");
+    const char *fragment_shader_source = load_shader("../../Shaders/main_shader.frag");
+    const char *fragment_shader_source_2 = load_shader("../../Shaders/main_menu_shader.frag");
 
-    const char *fragment_shader_source_2 = "#version 460 core\n"
-        "out vec4 FragColor;\n"
-        "void main()\n"
-        "{\n"
-        "   FragColor = vec4(0.5f, 0.5f, 0.2f, 1.0f);\n"
-        "}\n\0";
 
     float first_square[] = {
         0.5f,  0.5f, 0.0f,  // top right
