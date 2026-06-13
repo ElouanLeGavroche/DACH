@@ -2,23 +2,42 @@
 
 
 void init_render(st_engine *engine_state){
-    const char *vertex_shader_source = "#version 330 core\n"
-    "layout (location = 0) in vec3 aPos;\n"
-    "void main()\n"
-    "{\n"
-    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-    "}\0";
-    const char *fragment_shader_source = "#version 330 core\n"
-    "out vec4 FragColor;\n"
-    "void main()\n"
-    "{\n"
-    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-    "}\n\0";
+    const char *vertex_shader_source = "#version 460 core\n"
+        "layout (location = 0) in vec3 aPos;\n"
+        "void main()\n"
+        "{\n"
+        "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+        "}\0";
 
+    const char *fragment_shader_source = "#version 460 core\n"
+        "out vec4 FragColor;\n"
+        "void main()\n"
+        "{\n"
+        "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+        "}\n\0";
+
+    const char *fragment_shader_source_2 = "#version 460 core\n"
+        "out vec4 FragColor;\n"
+        "void main()\n"
+        "{\n"
+        "   FragColor = vec4(0.5f, 0.5f, 0.2f, 1.0f);\n"
+        "}\n\0";
 
     float first_square[] = {
         0.5f,  0.5f, 0.0f,  // top right
         0.5f, -0.5f, 0.0f,  // bottom right
+        -0.5f, -0.5f, 0.0f,  // bottom left
+        -0.5f,  0.5f, 0.0f,   // top left
+
+        -0.7f,  0.5f, 0.0f, 
+        -0.5f, 0.5f, 0.0f,  
+        -0.7f, 0.0f, 0.0f, 
+        -0.5f,  0.0f, 0.0f   
+    };
+
+    float second_square[] = {
+        -0.9f,  0.9f, 0.0f,  // top right
+        -0.9f, 0.6f, 0.0f,  // bottom right
         -0.5f, -0.5f, 0.0f,  // bottom left
         -0.5f,  0.5f, 0.0f,   // top left
 
@@ -59,8 +78,12 @@ void init_render(st_engine *engine_state){
 
         // 2.Mettre les sommet dans le VBO et EBO
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(first_square), first_square, GL_STATIC_DRAW);
-
+        if(i == 0){
+            glBufferData(GL_ARRAY_BUFFER, sizeof(first_square), first_square, GL_STATIC_DRAW);
+        }
+        else{
+            glBufferData(GL_ARRAY_BUFFER, sizeof(second_square), second_square, GL_STATIC_DRAW);
+        }
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
@@ -74,12 +97,17 @@ void init_render(st_engine *engine_state){
         glBindBuffer(GL_ARRAY_BUFFER, 0); 
 
         vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-
+        
         glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
         glCompileShader(vertex_shader);
         
         fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
+        if(i == 0){
+            glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);    
+        }
+        else{
+        glShaderSource(fragment_shader, 1, &fragment_shader_source_2, NULL);
+        }
         glCompileShader(fragment_shader);
 
         shader_program = glCreateProgram();
@@ -112,6 +140,8 @@ void update_render_main_menu(st_engine *engine_state){
     glUseProgram(get_by_indice(&engine_state->render_info.shader_programs, 0).elt);
 
     glBindVertexArray(get_by_indice(&engine_state->render_info.VAOs, 0).elt);
+
+    glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
 
     glUseProgram(get_by_indice(&engine_state->render_info.shader_programs, 1).elt);
     
