@@ -70,7 +70,6 @@ void load_file(char *path, st_tile *tile)
                 // Si c'est un f, on regarde avec les face
                 if(line[0] == 'v')
                 {
-                    printf("ouiiii\n");
                     // Initialisation du regex
                     err = regcomp(&reegex, vert_reegex_def, REG_NOSUB | REG_EXTENDED);
                     parse_func = parse_vertext;
@@ -94,13 +93,13 @@ void load_file(char *path, st_tile *tile)
 
                     if(match == 0)
                     {
-                        printf("La ligne est bien reconnu comme coordonnée pour un obj 3D.\n");
+                        //printf("La ligne est bien reconnu comme coordonnée pour un obj 3D.\n");
                         parse_func(line, tile);
                         
                     }
                     else if(match == REG_NOMATCH)
                     {
-                        fprintf (stderr, "Cette ligne n'est pas reconnu comme ligne valide, elle est donc ignorée.\n");
+                        //fprintf (stderr, "Cette ligne n'est pas reconnu comme ligne valide, elle est donc ignorée.\n");
                     }
                     else
                     {
@@ -124,15 +123,6 @@ void load_file(char *path, st_tile *tile)
 
         } while (!feof(file));
         
-        int i;
-        for(i = 0; i < 24; i ++)
-        {
-            printf("%f | ", tile->vert_pos[i]);
-
-            printf("%d \n", tile->face_pos[i]);
-
-        }
-        fclose(file);
     }
 
 }

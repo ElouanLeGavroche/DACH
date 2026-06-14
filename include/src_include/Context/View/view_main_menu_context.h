@@ -11,6 +11,8 @@
 #include "../../../types.h"
 #include "../../Config/constantes.h"
 
+#include "../../View/view_render_loop.h"
+
 #include "../../../../include/src_include/Shared_tools/Transform_openGL_values/colors.h"
 
 #include "../../Shared_tools/Load_tools/load_shader.h"
