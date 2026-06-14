@@ -7,8 +7,8 @@ float load_file(char *path)
     struct stat sb;
     char line[LINE_SIZE];
     //
-    //const char *reegex_def = "v [-0-9]+.[0-9]* [-0-9]+.[0-9]* [-0-9]+.[0-9]*";
-    const char *reegex_def = "v 1";
+    const char *reegex_def = "v [-0-9]+.[0-9]* [-0-9]+.[0-9]* [-0-9]+.[0-9]*";
+    //const char *reegex_def = "v";
     regex_t reegex;
     int match;
     float x, y, z;
@@ -65,8 +65,8 @@ float load_file(char *path)
                 if (err == 0)
                 {
                     // à présent on va voir s'il correspond à quelque chose dans les lignes
-                    match = regexec (&reegex, reegex_def, 0, NULL, 0);
-                    printf("match : %d\nreg_val : %s \nline : %s\n", match, line, reegex_def);
+                    match = regexec (&reegex, line, 0, NULL, 0);
+                    printf("match : %d\nreg_val : %s line : %s\n\n", match, line, reegex_def);
                     if(match == 0)
                     {
                         printf("La ligne est bien reconnu comme coordonnée pour un obj 3D.\n");
