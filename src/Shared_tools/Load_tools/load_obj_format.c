@@ -1,21 +1,24 @@
 #include "../../../include/src_include/Shared_tools/Load_tools/load_obj_format.h"
 
-float load_file(char *path)
+void load_file(char *path, st_tile *tile)
 {
-    //
+    /* Variables pour la gestion du fichier */
     FILE *file;
     struct stat sb;
     char line[LINE_SIZE];
-    //
+
+    /* Variables pour la gestion du regex*/
     const char *reegex_def = "v [-0-9]+.[0-9]* [-0-9]+.[0-9]* [-0-9]+.[0-9]*";
-    //const char *reegex_def = "v";
     regex_t reegex;
     int match;
-    float x, y, z;
-    //
+
+    /* Variables pour la gestion des erreurs */
     int err;
     char *text_err;
     size_t size_text_err;
+
+    /* */
+    tile->used = 0;
 
     // ouverture du document + gestion des erreurs
     file = fopen(path, "r");
@@ -44,9 +47,6 @@ float load_file(char *path)
     }
     else
     {
-        // Technique un peu barbare pour ignoré les deux première ligne
-        fgets(line, sb.st_size, file);
-        fgets(line, sb.st_size, file);
 
         do
         {
@@ -66,14 +66,16 @@ float load_file(char *path)
                 {
                     // à présent on va voir s'il correspond à quelque chose dans les lignes
                     match = regexec (&reegex, line, 0, NULL, 0);
-                    printf("match : %d\nreg_val : %s line : %s\n\n", match, line, reegex_def);
+
                     if(match == 0)
                     {
-                        printf("La ligne est bien reconnu comme coordonnée pour un obj 3D.\n");
+                        //printf("La ligne est bien reconnu comme coordonnée pour un obj 3D.\n");
+                        parse_line(line, tile);
+                        
                     }
                     else if(match == REG_NOMATCH)
                     {
-                        fprintf (stderr, "Cette ligne n'est pas reconnu comme ligne valide, elle est donc ignorée.\n");
+                        //fprintf (stderr, "Cette ligne n'est pas reconnu comme ligne valide, elle est donc ignorée.\n");
                     }
                     else
                     {
@@ -102,5 +104,18 @@ float load_file(char *path)
         fclose(file);
     }
 
-    return 0;
+}
+
+void parse_line(char line[], st_tile *tile)
+{
+    char * letter;
+    letter = strtok ( line, " " );
+    int i;
+    for(i = 0; i < 3; i ++)
+    {
+        letter = strtok ( NULL, " " );
+        tile->x[tile->used] = atof(letter);
+        tile->used ++;
+    }
+    
 }

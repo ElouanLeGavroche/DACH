@@ -8,19 +8,15 @@ void init_render(st_engine *engine_state){
     const char *fragment_shader_source = load_shader("src/Shaders/main_shader.frag");
     const char *fragment_shader_source_2 = load_shader("src/Shaders/main_menu_shader.frag");
 
-    load_file(BASIC_TILE_PATH);
-    
-    float first_square[] = {
-        0.8f,  0.3f, 0.8f,  // top right
-        0.8f, -0.3f, 0.8f,  // bottom right
-        -0.8f, -0.3f, 0.8f,  // bottom left
-        -0.8f,  0.3f, 0.8f,   // top left
+    st_tile first_square;
 
-        -0.7f,  0.5f, -0.8f, 
-        -0.5f, 0.5f, -0.8f,  
-        -0.7f, 0.0f, -0.8f, 
-        -0.5f,  0.0f, -0.8f   
-    };
+    load_file(BASIC_TILE_PATH, &first_square);
+    int z;
+    printf("%d\n", first_square.used);
+    for(z = 0; z < 24; z ++)
+    {
+        printf("%f\n", first_square.x[z]);
+    }
 
     float second_square[] = {
         -0.9f,  0.9f, 0.0f,  // top right
@@ -35,11 +31,13 @@ void init_render(st_engine *engine_state){
     };
     
     unsigned int indices[] = {
-    0, 1, 3,   // premier triangle
-    1, 2, 3,    // second triangle
 
-    4,5,6,
-    5,7,6
+    1 , 1  , 1 , 3, 4  , 1, 7 , 3  , 1 , 5 , 2 ,  1,
+    4 , 5  , 2 , 8, 7  , 2, 7 , 6  , 2 , 3 , 4 ,  2,
+    8 , 8  , 3 , 6, 11 , 3, 5 , 10 , 3 , 7 , 9 ,  3,
+    6 , 12 , 4 , 8, 14 , 4, 4 , 5  , 4 , 2 , 13 , 4,
+    2 , 13 , 5 , 4, 5  , 5, 3 , 4  , 5 , 1 , 1 ,  5,
+    6 , 11 , 6 , 2, 13 , 6, 1 , 1  , 6 , 5 , 10 , 6
     };
     
     engine_state->render_info.VAOs.elt = EMPTY_LIST;
@@ -66,7 +64,7 @@ void init_render(st_engine *engine_state){
         // 2.Mettre les sommet dans le VBO et EBO
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         if(i == 0){
-            glBufferData(GL_ARRAY_BUFFER, sizeof(first_square), first_square, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(first_square), first_square.x, GL_STATIC_DRAW);
         }
         else{
             glBufferData(GL_ARRAY_BUFFER, sizeof(second_square), second_square, GL_STATIC_DRAW);
@@ -126,7 +124,7 @@ void update_render_main_menu(st_engine *engine_state){
 
     glBindVertexArray(get_by_indice(&engine_state->render_info.VAOs, 0).elt);
 
-    glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
 
     glUseProgram(get_by_indice(&engine_state->render_info.shader_programs, 1).elt);
     

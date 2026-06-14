@@ -65,11 +65,17 @@ typedef struct
 
 
 /*
-typedef struct
-{
-
-}st_3d_object;
+tile qui auron toujours le même nombre d'elts
+à faire évoluer
 */
+typedef struct st_points
+{
+    int used;
+    float x[24];
+
+}st_tile;
+
+
 
 // Le bool "one of them" sert à verifier s'il y en a
 // au moins un d'actionner. Pour éviter de parcourir

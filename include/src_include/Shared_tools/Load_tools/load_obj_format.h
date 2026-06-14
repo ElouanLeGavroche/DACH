@@ -15,8 +15,9 @@
 
 #define LINE_SIZE 30
 
-void parse_line(char file[]);
-float load_file(char *path);
+#include "../../../../include/types.h"
+void parse_line(char line[], st_tile *tile);
+void load_file(char *path, st_tile *tile);
 
 /*
 Note à moi même, parser des trucs en C c'est comme se foutre un baton dans le cul, ça fait mal.
