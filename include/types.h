@@ -68,10 +68,12 @@ typedef struct
 tile qui auron toujours le même nombre d'elts
 à faire évoluer
 */
-typedef struct st_points
+typedef struct
 {
-    int used;
-    float x[24];
+    int nb_vert;
+    int nb_face;
+    float vert_pos[24];
+    int face_pos[24 * 3];
 
 }st_tile;
 

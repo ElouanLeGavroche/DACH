@@ -16,7 +16,8 @@
 #define LINE_SIZE 30
 
 #include "../../../../include/types.h"
-void parse_line(char line[], st_tile *tile);
+void parse_vertext(char line[], st_tile *tile);
+void parse_face(char line[], st_tile *tile);
 void load_file(char *path, st_tile *tile);
 
 /*

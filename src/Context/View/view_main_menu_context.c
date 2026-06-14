@@ -11,12 +11,6 @@ void init_render(st_engine *engine_state){
     st_tile first_square;
 
     load_file(BASIC_TILE_PATH, &first_square);
-    int z;
-    printf("%d\n", first_square.used);
-    for(z = 0; z < 24; z ++)
-    {
-        printf("%f\n", first_square.x[z]);
-    }
 
     float second_square[] = {
         -0.9f,  0.9f, 0.0f,  // top right
@@ -64,7 +58,7 @@ void init_render(st_engine *engine_state){
         // 2.Mettre les sommet dans le VBO et EBO
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         if(i == 0){
-            glBufferData(GL_ARRAY_BUFFER, sizeof(first_square), first_square.x, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(first_square), first_square.vert_pos, GL_STATIC_DRAW);
         }
         else{
             glBufferData(GL_ARRAY_BUFFER, sizeof(second_square), second_square, GL_STATIC_DRAW);

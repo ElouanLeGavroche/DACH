@@ -8,17 +8,23 @@ void load_file(char *path, st_tile *tile)
     char line[LINE_SIZE];
 
     /* Variables pour la gestion du regex*/
-    const char *reegex_def = "v [-0-9]+.[0-9]* [-0-9]+.[0-9]* [-0-9]+.[0-9]*";
+    const char *vert_reegex_def = "^v [-0-9]+.[0-9]* [-0-9]+.[0-9]* [-0-9]+.[0-9]*";
+    const char *face_reegex_def = "^f( ([0-9]{0,3}/)[0-9]{0,3}/[0-9]{0,3}){4}";
     regex_t reegex;
+
     int match;
+
+    void (*parse_func)(char line[], st_tile *tile);
 
     /* Variables pour la gestion des erreurs */
     int err;
+    int valid;
     char *text_err;
     size_t size_text_err;
 
     /* */
-    tile->used = 0;
+    tile->nb_vert = 0;
+    tile->nb_face = 0;
 
     // ouverture du document + gestion des erreurs
     file = fopen(path, "r");
@@ -47,35 +53,54 @@ void load_file(char *path, st_tile *tile)
     }
     else
     {
-
         do
         {
             // Ici l'on va lire les ligne individuellement
             err = 0;
-            fgets(line, sb.st_size, file);
+            valid = true;
 
+            fgets(line, sb.st_size, file);
             if (ferror(file))
             {
                 printf("Erreur lors de la lecture du document\n");
             }
             else
             {  
-                // Initialisation du regex
-                err = regcomp(&reegex, reegex_def, REG_NOSUB | REG_EXTENDED);
-                if (err == 0)
+                // On vérifie la première lettre de la ligne, si c'est un v, on analyse pour les vetrex
+                // Si c'est un f, on regarde avec les face
+                if(line[0] == 'v')
+                {
+                    printf("ouiiii\n");
+                    // Initialisation du regex
+                    err = regcomp(&reegex, vert_reegex_def, REG_NOSUB | REG_EXTENDED);
+                    parse_func = parse_vertext;
+                    
+                }
+                else if(line[0] == 'f')
+                {
+                    // Initialisation du regex
+                    err = regcomp(&reegex, face_reegex_def, REG_NOSUB | REG_EXTENDED);
+                    parse_func = parse_face;
+                }
+                else
+                {
+                    valid = false;
+                }
+
+                if (err == 0 && valid == true)
                 {
                     // à présent on va voir s'il correspond à quelque chose dans les lignes
                     match = regexec (&reegex, line, 0, NULL, 0);
 
                     if(match == 0)
                     {
-                        //printf("La ligne est bien reconnu comme coordonnée pour un obj 3D.\n");
-                        parse_line(line, tile);
+                        printf("La ligne est bien reconnu comme coordonnée pour un obj 3D.\n");
+                        parse_func(line, tile);
                         
                     }
                     else if(match == REG_NOMATCH)
                     {
-                        //fprintf (stderr, "Cette ligne n'est pas reconnu comme ligne valide, elle est donc ignorée.\n");
+                        fprintf (stderr, "Cette ligne n'est pas reconnu comme ligne valide, elle est donc ignorée.\n");
                     }
                     else
                     {
@@ -94,28 +119,59 @@ void load_file(char *path, st_tile *tile)
                     }
                     
                 }
-                else
-                {
-                    printf("erreur lors de la création du regex\n");
-                }
+
             }
 
         } while (!feof(file));
+        
+        int i;
+        for(i = 0; i < 24; i ++)
+        {
+            printf("%f | ", tile->vert_pos[i]);
+
+            printf("%d \n", tile->face_pos[i]);
+
+        }
         fclose(file);
     }
 
 }
 
-void parse_line(char line[], st_tile *tile)
+
+void parse_vertext(char line[], st_tile *tile)
 {
     char * letter;
     letter = strtok ( line, " " );
+    
     int i;
+
     for(i = 0; i < 3; i ++)
     {
-        letter = strtok ( NULL, " " );
-        tile->x[tile->used] = atof(letter);
-        tile->used ++;
+        letter = strtok( NULL, " " );
+        tile->vert_pos[tile->nb_vert] = atof(letter);
+        tile->nb_vert ++;
     }
     
+}
+
+void parse_face(char line[], st_tile *tile)
+{
+    char * letter;
+    letter = strtok( line, " ");
+
+    int i, y;
+
+    for(y = 0; y < 4; y ++)
+    {
+        for(i = 0; i < 2; i ++)
+        {
+            letter = strtok(NULL, "/");
+            tile->face_pos[tile->nb_face] = atoi(letter);
+            tile->nb_face ++;
+        }
+
+        letter = strtok(NULL, " ");
+        tile->face_pos[tile->nb_face] = atoi(letter);
+        tile->nb_face ++;
+    }
 }
