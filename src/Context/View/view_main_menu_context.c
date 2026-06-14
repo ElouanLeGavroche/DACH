@@ -111,8 +111,6 @@ void init_render(st_engine *engine_state){
         add_to_unsigned_list(&engine_state->render_info.shader_programs, shader_program);
     }
     
-    printf("Bonsoir\n");
-
 
     // Définir le mode de rendu (pour le Developpement)
     engine_state->render_info.render_mode = GL_LINE;

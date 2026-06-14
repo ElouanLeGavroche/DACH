@@ -11,6 +11,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include <regex.h>
+
 #define LINE_SIZE 30
 
 void parse_line(char file[]);
