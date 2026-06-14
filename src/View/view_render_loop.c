@@ -37,7 +37,6 @@ void init_a_3d_loaded_element(st_engine *engine_state, st_tile *elt)
 {
 
     unsigned int VAO, VBO, EBO;
-    
     // Tampon où l'on stock les sommets
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);  
@@ -55,9 +54,9 @@ void init_a_3d_loaded_element(st_engine *engine_state, st_tile *elt)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elt->face_pos), elt->face_pos, GL_STATIC_DRAW);
 
-    add_to_unsigned_list(&engine_state->render_info.VAOs, VAO);
-    add_to_unsigned_list(&engine_state->render_info.VBOs, VBO);
-    add_to_unsigned_list(&engine_state->render_info.EBOs, EBO);
+    add_to_unsigned_list(&engine_state->render.VAOs, VAO);
+    add_to_unsigned_list(&engine_state->render.VBOs, VBO);
+    add_to_unsigned_list(&engine_state->render.EBOs, EBO);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -65,8 +64,8 @@ void init_a_3d_loaded_element(st_engine *engine_state, st_tile *elt)
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
 
     // Définir le mode de rendu (pour le Developpement)
-    engine_state->render_info.render_mode = GL_LINE;
-    glPolygonMode(GL_FRONT_AND_BACK, engine_state->render_info.render_mode);
+    engine_state->render.render_mode = GL_LINE;
+    glPolygonMode(GL_FRONT_AND_BACK, engine_state->render.render_mode);
 
 }
 
@@ -119,5 +118,5 @@ void init_a_loaded_shader(st_engine *engine_state, const char vertex_shader_sour
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
 
-    add_to_unsigned_list(&engine_state->render_info.shader_programs, shader_program);
+    add_to_unsigned_list(&engine_state->render.shader_programs, shader_program);
 }

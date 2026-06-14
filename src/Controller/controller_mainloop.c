@@ -55,6 +55,10 @@ void controller_mainloop_management(st_engine *engine_state){
     struct timespec ts_start, ts_end;
     double elapsed;
 
+    // Ce tampon permet de savoir si le jeu est revenu à un etat entérieur
+    // Et donc de recharger les éléments qui lui y étais associé
+    int level_tampon = engine_state->stack_context.level_of_depth;
+
     ////////////////////////////////////////////
     //                                        //
     //                Boucle                  //
@@ -73,10 +77,17 @@ void controller_mainloop_management(st_engine *engine_state){
         {
             engine_state->stack_context.current_state->input_context(engine_state);
         }
+
         // Voir si un nouveau context est entré
         if(engine_state->next_state != 0)
         {
             new_context(engine_state);
+            level_tampon = engine_state->stack_context.level_of_depth;
+        }
+        else if(level_tampon > engine_state->stack_context.level_of_depth)
+        {
+            level_tampon = engine_state->stack_context.level_of_depth;
+            engine_state->stack_context.current_state->init_state(engine_state);
         }
 
         view_clear();
@@ -116,5 +127,31 @@ void new_context(st_engine *engine_state)
     
     // L'on supprime le context suivant qui est déjà placé
     engine_state->next_state = 0;
+
+    unload_data(engine_state);
     
+}
+
+void unload_data(st_engine *engine_state)
+{
+    //free(&engine_state->input);
+    // Faudra faire une boucle qui viendra détruire tout les éléments
+    /*
+    glDeleteVertexArrays(0, &engine_state->render.VAOs);
+    glDeleteBuffers(0, &engine_state->render.EBOs);
+    glDeleteBuffers(0, &engine_state->render.VBOs);
+    glDeleteProgram(&engine_state->render.shader_programs);
+    */
+    free(engine_state->render.shader_programs.next);
+    engine_state->render.shader_programs.elt = 0;
+
+    free(engine_state->render.EBOs.next);
+    engine_state->render.EBOs.elt = 0;
+
+    free(engine_state->render.VBOs.next);
+    engine_state->render.VBOs.elt = 0;
+
+    free(engine_state->render.VAOs.next);
+    engine_state->render.VAOs.elt = 0;
+
 }

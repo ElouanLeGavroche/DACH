@@ -26,6 +26,9 @@ void load_file(char *path, st_tile *tile)
     tile->nb_vert = 0;
     tile->nb_face = 0;
 
+    /* Valeur tampon */
+    char previous = ' ';
+
     // ouverture du document + gestion des erreurs
     file = fopen(path, "r");
 
@@ -68,20 +71,22 @@ void load_file(char *path, st_tile *tile)
             {  
                 // On vérifie la première lettre de la ligne, si c'est un v, on analyse pour les vetrex
                 // Si c'est un f, on regarde avec les face
-                if(line[0] == 'v')
+                if(line[0] == 'v' && previous != 'v')
                 {
                     // Initialisation du regex
+                    previous = 'v';
                     err = regcomp(&reegex, vert_reegex_def, REG_NOSUB | REG_EXTENDED);
                     parse_func = parse_vertext;
                     
                 }
-                else if(line[0] == 'f')
+                else if(line[0] == 'f' && previous != 'f')
                 {
                     // Initialisation du regex
+                    previous = 'f';
                     err = regcomp(&reegex, face_reegex_def, REG_NOSUB | REG_EXTENDED);
                     parse_func = parse_face;
                 }
-                else
+                else if (line[0] != 'f' && line[0] != 'v')
                 {
                     valid = false;
                 }
@@ -123,6 +128,7 @@ void load_file(char *path, st_tile *tile)
 
         } while (!feof(file));
         
+        regfree(&reegex);
     }
 
 }
@@ -130,6 +136,9 @@ void load_file(char *path, st_tile *tile)
 
 void parse_vertext(char line[], st_tile *tile)
 {
+    st_int_list *list = malloc(sizeof(st_int_list));
+    st_int *value = malloc(sizeof(st_int));
+    
     char * letter;
     letter = strtok ( line, " " );
     
@@ -138,7 +147,8 @@ void parse_vertext(char line[], st_tile *tile)
     for(i = 0; i < 3; i ++)
     {
         letter = strtok( NULL, " " );
-        tile->vert_pos[tile->nb_vert] = atof(letter);
+        value->value = atof(letter);
+        //tile->vert_pos[tile->nb_vert] = atof(letter);
         tile->nb_vert ++;
     }
     
@@ -156,11 +166,13 @@ void parse_face(char line[], st_tile *tile)
         for(i = 0; i < 2; i ++)
         {
             letter = strtok(NULL, "/");
+            tile->face_pos = malloc(sizeof(int));
             tile->face_pos[tile->nb_face] = atoi(letter);
             tile->nb_face ++;
         }
-
+        
         letter = strtok(NULL, " ");
+        tile->face_pos = malloc(sizeof(int));
         tile->face_pos[tile->nb_face] = atoi(letter);
         tile->nb_face ++;
     }

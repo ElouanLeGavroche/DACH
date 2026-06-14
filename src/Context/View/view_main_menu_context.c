@@ -13,11 +13,11 @@ void init_render(st_engine *engine_state){
     load_file(BASIC_TILE_PATH, &first_square);
 
 
-    engine_state->render_info.VAOs.elt = EMPTY_LIST;
-    engine_state->render_info.VBOs.elt = EMPTY_LIST;
-    engine_state->render_info.EBOs.elt = EMPTY_LIST;
+    engine_state->render.VAOs.elt = EMPTY_LIST;
+    engine_state->render.VBOs.elt = EMPTY_LIST;
+    engine_state->render.EBOs.elt = EMPTY_LIST;
 
-    engine_state->render_info.shader_programs.elt = EMPTY_LIST;
+    engine_state->render.shader_programs.elt = EMPTY_LIST;
 
 
     init_a_3d_loaded_element(engine_state,  &first_square);
@@ -30,9 +30,9 @@ void update_render_main_menu(st_engine *engine_state){
     glClearColor(num_to_01(123), num_to_01(12), num_to_01(123), 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glUseProgram(get_by_indice(&engine_state->render_info.shader_programs, 0).elt);
+    glUseProgram(get_by_indice(&engine_state->render.shader_programs, 0).elt);
 
-    glBindVertexArray(get_by_indice(&engine_state->render_info.VAOs, 0).elt);
+    glBindVertexArray(get_by_indice(&engine_state->render.VAOs, 0).elt);
     
     glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
 
@@ -43,14 +43,14 @@ void update_render_main_menu(st_engine *engine_state){
 
 void change_render_mode(st_engine *engine_state)
 {
-    if(engine_state->render_info.render_mode != GL_FILL)
+    if(engine_state->render.render_mode != GL_FILL)
     {
-        engine_state->render_info.render_mode = GL_FILL;
+        engine_state->render.render_mode = GL_FILL;
     } 
     else
     {
-        engine_state->render_info.render_mode = GL_LINE;
+        engine_state->render.render_mode = GL_LINE;
     }
     
-    glPolygonMode(GL_FRONT_AND_BACK, engine_state->render_info.render_mode);
+    glPolygonMode(GL_FRONT_AND_BACK, engine_state->render.render_mode);
 }

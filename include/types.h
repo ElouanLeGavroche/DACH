@@ -72,8 +72,8 @@ typedef struct
 {
     int nb_vert;
     int nb_face;
-    float vert_pos[24];
-    int face_pos[24 * 3];
+    float *vert_pos;
+    int *face_pos;
 
 }st_tile;
 
@@ -111,7 +111,7 @@ typedef struct{
 
     unsigned int render_mode;
 
-}st_render_info;
+}st_render_data;
 
 
 /**
@@ -124,7 +124,7 @@ typedef struct{
  * 
  * A voir si je la split en plusieurs structure à l'avenir pour des question de lisibilité.
  * 
- * @param render_info Ici les information qui servent au rendu (les VBO, VAO...).
+ * @param render Ici les information qui servent au rendu (les VBO, VAO...).
  */
 typedef struct st_engine
 {
@@ -137,7 +137,7 @@ typedef struct st_engine
     st_context_tool context_tool;
     st_state *next_state;
 
-    st_render_info render_info;
+    st_render_data render;
 
 } st_engine;
 
@@ -149,5 +149,30 @@ typedef struct {
     float frame_rate;
 }st_loaded_windows_data;
 
+
+// Liste chainé de primitive
+
+// Structure pour faire une liste chainée d'entier
+typedef struct st_int st_int; 
+// Structure pour faire une liste chainée de flotant
+typedef struct st_float_list st_float_list;
+
+struct st_int
+{
+    int value;
+    st_int *next;
+};
+
+// Structure de la liste d'entier
+typedef struct
+{
+    st_int *first;
+}st_int_list;
+
+struct st_float_list
+{
+    float value;
+    st_float_list *next;
+};
 
 #endif

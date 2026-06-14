@@ -42,6 +42,8 @@ void add_to_unsigned_list(st_unsigned_element *list, unsigned int value)
             }
         }while(in_loop);
     }
+
+    free(element);
  
 }
 
