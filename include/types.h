@@ -187,5 +187,12 @@ typedef struct
     int size;
 }st_float_list;
 
+//Structure qui permet de regrouper toute les listes primitive en une seule. Simplifie le travail dans certain
+//Cas. ex : Pointeur de fonction
+typedef struct
+{
+    st_float_list *float_list;
+    st_int_list *int_list;
+}st_primitives_list;
 
 #endif

@@ -48,7 +48,7 @@ void put_int_lst(st_int_list *list, int value)
 st_int* get_int_lst_pointer(st_int_list *list, int i)
 {
     st_int *tampon;
-    if(i > 0 && i < list->size)
+    if(i >= 0 && i < list->size)
     {
         tampon = list->first;
 
@@ -146,8 +146,14 @@ void print_int_list(st_int_list *list)
 
     for(i = 0; i < list->size; i ++)
     {
-        printf("%f ", tampon->value);
+        printf("%d ", tampon->value);
         tampon = tampon->next;
     }
     printf("\n");
+}
+
+
+int get_int_list_size(st_int_list *list)
+{
+    return list->size;
 }

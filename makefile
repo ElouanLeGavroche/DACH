@@ -28,7 +28,9 @@ LOAD_TOOLS=$(INCLUDE_TOOL)Load_tools/
 
 #
 LIST_TOOLS=$(INCLUDE_TOOL)List/
-UNSIGNED_INT=$(LIST_TOOLS)Unsigned_list/
+UNSIGNED_INT_LIST=$(LIST_TOOLS)Unsigned_list/
+INT_LIST=$(LIST_TOOLS)Int_list/
+FLOAT_LIST=$(LIST_TOOLS)Float_list/
 
 
 
@@ -46,7 +48,11 @@ $(SAVE_EXEC)$(EXEC):\
 	\
 	$(TRANSFORM_TOOL)colors.o\
 	$(CONTEXT_TOOL)stack.o\
-	$(UNSIGNED_INT)unsigned_list.o\
+	\
+	$(UNSIGNED_INT_LIST)unsigned_list.o\
+	$(FLOAT_LIST)float_list.o\
+	$(INT_LIST)int_list.o\
+	\
 	$(LOAD_TOOLS)load_shader.o\
 	$(LOAD_TOOLS)load_obj_format.o\
 	\
@@ -84,6 +90,8 @@ clean:
 	rm -rf $(CONTEXT_CONTROLLER)*.o
 	rm -rf $(CONTEXT_MODEL)*.o
 	rm -rf $(CONTEXT_VIEW)*.o
-	rm -rf $(UNSIGNED_INT)*.o
+	rm -rf $(UNSIGNED_INT_LIST)*.o
+	rm -rf $(INT_LIST)*.o
+	rm -rf $(FLOAT_LIST)*.o
 	rm -rf $(LOAD_TOOLS)*.o
 	rm -rf *.o

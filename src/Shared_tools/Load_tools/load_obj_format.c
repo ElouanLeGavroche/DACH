@@ -14,7 +14,20 @@ void load_file(char *path, st_tile *tile)
 
     int match;
 
-    void (*parse_func)(char line[], st_tile *tile);
+    /* Listes chainées */
+    st_int_list *face_list;
+    st_float_list *vert_list;
+
+    init_int_lst(&face_list);
+    init_float_lst(&vert_list);
+
+    st_primitives_list *primitives_list;
+    primitives_list = malloc(sizeof(st_primitives_list));
+
+    primitives_list->float_list = vert_list;
+    primitives_list->int_list = face_list;
+
+    void (*parse_func)(char line[], st_tile *tile, st_primitives_list *primitives_list);
 
     /* Variables pour la gestion des erreurs */
     int err;
@@ -28,7 +41,7 @@ void load_file(char *path, st_tile *tile)
 
     /* Valeur tampon */
     char previous = ' ';
-
+    
     // ouverture du document + gestion des erreurs
     file = fopen(path, "r");
 
@@ -99,7 +112,7 @@ void load_file(char *path, st_tile *tile)
                     if(match == 0)
                     {
                         //printf("La ligne est bien reconnu comme coordonnée pour un obj 3D.\n");
-                        parse_func(line, tile);
+                        parse_func(line, tile, primitives_list);
                         
                     }
                     else if(match == REG_NOMATCH)
@@ -131,13 +144,39 @@ void load_file(char *path, st_tile *tile)
         regfree(&reegex);
     }
 
+    //print_float_list(vert_list);
+    //print_int_list(face_list);
+
+    // On attribue ici les valeurs qui ont été récuperer par le parse dans l'obj
+    tile->nb_face = get_int_list_size(face_list);
+    tile->nb_vert = get_float_list_size(vert_list);
+
+    tile->face_pos = malloc(sizeof(int) * tile->nb_face);
+    tile->vert_pos = malloc(sizeof(float) * tile->nb_vert);
+
+    int i;
+
+    for(i = 0; i < tile->nb_face; i ++)
+    {
+        tile->face_pos[i] = get_int_lst(face_list, i);
+    }
+    
+    for(i = 0; i < tile->nb_vert; i ++)
+    {
+        tile->vert_pos[i] = get_float_lst(vert_list, i);
+    }
+
+    // On nettoie les infos qui ne nous servirons plus
+    free(vert_list);
+    free(face_list);
+    free(primitives_list);
+
 }
 
 
-void parse_vertext(char line[], st_tile *tile)
+void parse_vertext(char line[], st_tile *tile, st_primitives_list *primitives_list)
 {
-    st_int_list *list = malloc(sizeof(st_int_list));
-    st_int *value = malloc(sizeof(st_int));
+    float value;
     
     char * letter;
     letter = strtok ( line, " " );
@@ -147,33 +186,35 @@ void parse_vertext(char line[], st_tile *tile)
     for(i = 0; i < 3; i ++)
     {
         letter = strtok( NULL, " " );
-        value->value = atof(letter);
-        //tile->vert_pos[tile->nb_vert] = atof(letter);
-        tile->nb_vert ++;
+        value = atof(letter);
+        put_float_lst(primitives_list->float_list, value);
     }
     
 }
 
-void parse_face(char line[], st_tile *tile)
+void parse_face(char line[], st_tile *tile, st_primitives_list *primitives_list)
 {
-    char * letter;
-    letter = strtok( line, " ");
-
+    int value;
     int i, y;
+
+    char *letter;
+
+    letter = strtok( line, " ");
 
     for(y = 0; y < 4; y ++)
     {
         for(i = 0; i < 2; i ++)
         {
             letter = strtok(NULL, "/");
-            tile->face_pos = malloc(sizeof(int));
-            tile->face_pos[tile->nb_face] = atoi(letter);
-            tile->nb_face ++;
+            
+            value = atoi(letter);
+            put_int_lst(primitives_list->int_list, value);
+            
         }
         
         letter = strtok(NULL, " ");
-        tile->face_pos = malloc(sizeof(int));
-        tile->face_pos[tile->nb_face] = atoi(letter);
-        tile->nb_face ++;
+
+        value = atoi(letter);
+        put_int_lst(primitives_list->int_list, value);
     }
 }

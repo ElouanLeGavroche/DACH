@@ -48,7 +48,7 @@ void put_float_lst(st_float_list *list, float value)
 st_float* get_float_lst_pointer(st_float_list *list, int i)
 {
     st_float *tampon;
-    if(i > 0 && i < list->size)
+    if(i >= 0 && i < list->size)
     {
         tampon = list->first;
 
@@ -150,4 +150,10 @@ void print_float_list(st_float_list *list)
         tampon = tampon->next;
     }
     printf("\n");
+}
+
+
+int get_float_list_size(st_float_list *list)
+{
+    return list->size;
 }

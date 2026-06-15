@@ -16,4 +16,7 @@ st_float* get_float_lst_pointer(st_float_list *list, int i);
 
 float get_float_lst(st_float_list *list, int i);
 
+int get_float_list_size(st_float_list *list);
+
+
 #endif
