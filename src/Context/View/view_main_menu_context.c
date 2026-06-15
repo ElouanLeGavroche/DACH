@@ -9,9 +9,29 @@ void init_render(st_engine *engine_state){
     const char *fragment_shader_source_2 = load_shader("src/Shaders/main_menu_shader.frag");
 
     st_tile first_square;
+    st_tile seconde;
 
     load_file(BASIC_TILE_PATH, &first_square);
+    load_file(BASIC_HOUSE_PATH, &seconde);
 
+    int i;
+    for(i = 0; i < first_square.nb_vert; i ++)
+    {
+        printf("%f \n", first_square.vert_pos[i]);
+    }
+    for(i = 0; i < first_square.nb_face; i ++)
+    {
+        printf("%d \n", first_square.face_pos[i]);
+    }
+
+    for(i = 0; i < seconde.nb_vert; i ++)
+    {
+        printf("%f \n", seconde.vert_pos[i]);
+    }
+    for(i = 0; i < seconde.nb_face; i ++)
+    {
+        printf("%d \n", seconde.face_pos[i]);
+    }
 
     engine_state->render.VAOs.elt = EMPTY_LIST;
     engine_state->render.VBOs.elt = EMPTY_LIST;
@@ -21,6 +41,7 @@ void init_render(st_engine *engine_state){
 
 
     init_a_3d_loaded_element(engine_state,  &first_square);
+    init_a_3d_loaded_element(engine_state,  &seconde);
     init_a_loaded_shader(engine_state, vertex_shader_source, fragment_shader_source);
 
     
@@ -35,6 +56,9 @@ void update_render_main_menu(st_engine *engine_state){
     glBindVertexArray(get_unsigned_lst(&engine_state->render.VAOs, 0).elt);
     
     glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
+
+    glBindVertexArray(get_unsigned_lst(&engine_state->render.VAOs, 1).elt);
+    glDrawElements(GL_TRIANGLES, 72, GL_UNSIGNED_INT, 1);
 
     glBindVertexArray(0);
     

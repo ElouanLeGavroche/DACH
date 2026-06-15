@@ -27,6 +27,7 @@ Ce n'est sans doute pas la meilleur solution, mais cela fera l'affaire pour le d
 
 // Les chemins des éléments du menu
 #define BASIC_TILE_PATH "ressources/tiles/basic_tile.obj"
+#define BASIC_HOUSE_PATH "ressources/houses/test.obj"
 
 void init_render(st_engine *engine_state);
 void update_render_main_menu(st_engine *engine_state);
