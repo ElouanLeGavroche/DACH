@@ -6,8 +6,8 @@
 
 #include "../../../../types.h"
 
-void add_to_unsigned_list(st_unsigned_element *list, unsigned int value);
-st_unsigned_element get_by_indice(st_unsigned_element *list, int i);
-void remove_to_unsigned_list(st_unsigned_element *list);
+void put_unsigned_lst(st_unsigned_element *list, unsigned int value);
+st_unsigned_element get_unsigned_lst(st_unsigned_element *list, int i);
+void remove_unsigned_lst(st_unsigned_element *list);
 
 #endif

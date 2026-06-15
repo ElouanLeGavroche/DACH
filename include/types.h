@@ -150,13 +150,16 @@ typedef struct {
 }st_loaded_windows_data;
 
 
-// Liste chainé de primitive
+  ///////////////////////////////
+ // Liste chainé de primitive //
+///////////////////////////////
 
 // Structure pour faire une liste chainée d'entier
 typedef struct st_int st_int; 
 // Structure pour faire une liste chainée de flotant
-typedef struct st_float_list st_float_list;
+typedef struct st_float st_float;
 
+// Structure d'un entier d'une liste
 struct st_int
 {
     int value;
@@ -167,12 +170,22 @@ struct st_int
 typedef struct
 {
     st_int *first;
+    int size;
 }st_int_list;
 
-struct st_float_list
+// Structure d'un flotant d'une liste
+struct st_float
 {
     float value;
-    st_float_list *next;
+    st_float *next;
 };
+
+// Structure de la liste de flotant
+typedef struct
+{
+    st_float * first;
+    int size;
+}st_float_list;
+
 
 #endif

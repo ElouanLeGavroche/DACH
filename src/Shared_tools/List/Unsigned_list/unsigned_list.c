@@ -9,7 +9,7 @@
 
 #include "../../../../include/src_include/Shared_tools/List/Unsigned_list/unsigned_list.h"
 
-void add_to_unsigned_list(st_unsigned_element *list, unsigned int value)
+void put_unsigned_lst(st_unsigned_element *list, unsigned int value)
 {
 
     // Définition des variables
@@ -47,7 +47,7 @@ void add_to_unsigned_list(st_unsigned_element *list, unsigned int value)
  
 }
 
-st_unsigned_element get_by_indice(st_unsigned_element *list, int i)
+st_unsigned_element get_unsigned_lst(st_unsigned_element *list, int i)
 {
     int indice = 0;
     st_unsigned_element wanted_value; //= malloc(sizeof(st_unsigned_element));
@@ -69,7 +69,7 @@ st_unsigned_element get_by_indice(st_unsigned_element *list, int i)
     return wanted_value;
 }
 
-void remove_to_unsigned_list(st_unsigned_element *list)
+void remove_unsigned_lst(st_unsigned_element *list)
 {
 
 }

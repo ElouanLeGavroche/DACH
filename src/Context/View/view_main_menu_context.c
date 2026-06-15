@@ -30,9 +30,9 @@ void update_render_main_menu(st_engine *engine_state){
     glClearColor(num_to_01(123), num_to_01(12), num_to_01(123), 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glUseProgram(get_by_indice(&engine_state->render.shader_programs, 0).elt);
+    glUseProgram(get_unsigned_lst(&engine_state->render.shader_programs, 0).elt);
 
-    glBindVertexArray(get_by_indice(&engine_state->render.VAOs, 0).elt);
+    glBindVertexArray(get_unsigned_lst(&engine_state->render.VAOs, 0).elt);
     
     glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
 
