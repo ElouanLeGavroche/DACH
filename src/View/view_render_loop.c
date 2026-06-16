@@ -54,9 +54,9 @@ void init_a_3d_loaded_element(st_engine *engine_state, st_tile *elt)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(*elt->face_pos)*elt->nb_face, elt->face_pos, GL_STATIC_DRAW);
 
-    put_unsigned_lst(&engine_state->render.VAOs, VAO);
-    put_unsigned_lst(&engine_state->render.VBOs, VBO);
-    put_unsigned_lst(&engine_state->render.EBOs, EBO);
+    put_unsigned_int_lst(&engine_state->render.VAOs, VAO);
+    put_unsigned_int_lst(&engine_state->render.VBOs, VBO);
+    put_unsigned_int_lst(&engine_state->render.EBOs, EBO);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -118,5 +118,5 @@ void init_a_loaded_shader(st_engine *engine_state, const char vertex_shader_sour
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
 
-    put_unsigned_lst(&engine_state->render.shader_programs, shader_program);
+    put_unsigned_int_lst(&engine_state->render.shader_programs, shader_program);
 }

@@ -9,67 +9,107 @@
 
 #include "../../../../include/src_include/Shared_tools/List/Unsigned_list/unsigned_list.h"
 
-void put_unsigned_lst(st_unsigned_element *list, unsigned int value)
+
+void init_unsigned_int_lst(st_unsigned_int_list **list)
+{
+    *list = malloc(sizeof(st_unsigned_int_list));
+    (*list)->first = NULL;
+    (*list)->size = 0;
+}
+
+void put_unsigned_int_lst(st_unsigned_int_list *list, unsigned int value)
 {
 
     // Définition des variables
-    st_unsigned_element *element = malloc(sizeof(st_unsigned_element));
-    st_unsigned_element *tamp = list; 
-    bool in_loop = true;
+    st_unsigned_int *list_value = malloc(sizeof(st_unsigned_int));
+    list_value->value = value;
+    list_value->next = NULL;
 
-    // On donne la valeur souhaiter à la nouvelle cellule de la liste
-    element->elt = value;
-    // On met son suivant en NULL car il n'y en à pas
-    element->next = NULL;
-    
-    if(list->elt == -1)
+    if(list->first == NULL)
     {
-        list->elt = value;
-        list->next = NULL;
+        list->first = list_value;
     }
     else
-    {   
-        do{
-            if(tamp->next == NULL)
-            {
-                tamp->next = element;
-                
-                in_loop = false;
-            }
-            else
-            {
-                tamp = tamp->next;
-            }
-        }while(in_loop);
-    }
-
-    free(element);
- 
-}
-
-st_unsigned_element get_unsigned_lst(st_unsigned_element *list, int i)
-{
-    int indice = 0;
-    st_unsigned_element wanted_value; //= malloc(sizeof(st_unsigned_element));
-
-    wanted_value = *list;
-
-    while (indice != i && wanted_value.next != NULL)
     {
+        st_unsigned_int *tampon = list->first;
+
+        while (tampon->next != NULL)
+        {
+            tampon = tampon->next;
+        }
         
-        wanted_value = *wanted_value.next;
-        indice ++;
-    }
-    
-    if(wanted_value.next == NULL && indice != i)
-    {
-        printf("Index error modifier maintenant le code\n");
+        tampon->next = list_value;
     }
 
-    return wanted_value;
+    list->size ++;
 }
 
-void remove_unsigned_lst(st_unsigned_element *list)
+st_unsigned_int* get_unsigned_int_lst_pointer(st_unsigned_int_list *list, int i)
 {
+    st_unsigned_int *tampon;
+    if(i >= 0 && i < list->size)
+    {
+        tampon = list->first;
 
+        int y;
+        for(y = 0; y < i; y ++)
+        {
+            tampon = tampon->next;
+        }
+    }
+    else
+    {
+        tampon = NULL;
+    }
+    return tampon;
+
+}
+
+unsigned int get_unsigned_int(st_unsigned_int_list *list, int i)
+{
+    st_unsigned_int *tampon = get_unsigned_int_lst_pointer(list, i);
+    if(tampon == NULL)
+    {
+        printf("Vous avez demander un élément hors de la liste\n");
+    }
+    return tampon->value;
+}
+
+void remove_unsigned_lst(st_unsigned_int_list *list, int i)
+{
+    // Si l'on cherche à supprimer le première élément
+    if (i == 0)
+    {
+        st_unsigned_int *tampon = list->first;
+        list->first = list->first->next;
+
+        free(tampon);
+
+        list->size --;
+    }
+    else
+    {
+        if(get_unsigned_int_lst_pointer(list, i) == NULL)
+        {
+            printf("Vous avez demander un élément hors de la liste\n");
+        }
+        else
+        {
+            // On récupère le pointeur du précédent pour ne pas briser le lien
+            st_unsigned_int *previous = get_unsigned_int_lst_pointer(list, i - 1);
+            
+            // On récupère l'acutel pour l'effacer
+            st_unsigned_int *wanted = get_unsigned_int_lst_pointer(list, i);
+            
+            // On refait le lien entre les deux
+            previous->next = wanted->next;
+            
+            // On efface l'élément souhaiter
+            free(wanted);
+
+            list->size --;
+
+        }
+        
+    }
 }

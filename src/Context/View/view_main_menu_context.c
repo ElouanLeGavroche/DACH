@@ -9,10 +9,10 @@ void init_render(st_engine *engine_state){
     const char *fragment_shader_source_2 = load_shader("src/Shaders/main_menu_shader.frag");
 
     st_tile first_square;
-    st_tile seconde;
+    //st_tile seconde;
 
     load_file(BASIC_TILE_PATH, &first_square);
-    load_file(BASIC_HOUSE_PATH, &seconde);
+    //load_file(BASIC_HOUSE_PATH, &seconde);
 
     int i;
     for(i = 0; i < first_square.nb_vert; i ++)
@@ -23,7 +23,7 @@ void init_render(st_engine *engine_state){
     {
         printf("%d \n", first_square.face_pos[i]);
     }
-
+/*
     for(i = 0; i < seconde.nb_vert; i ++)
     {
         printf("%f \n", seconde.vert_pos[i]);
@@ -32,16 +32,16 @@ void init_render(st_engine *engine_state){
     {
         printf("%d \n", seconde.face_pos[i]);
     }
+*/
+    
+    init_unsigned_int_lst(&engine_state->render.VAOs);
+    init_unsigned_int_lst(&engine_state->render.VBOs);
+    init_unsigned_int_lst(&engine_state->render.EBOs);
 
-    engine_state->render.VAOs.elt = EMPTY_LIST;
-    engine_state->render.VBOs.elt = EMPTY_LIST;
-    engine_state->render.EBOs.elt = EMPTY_LIST;
-
-    engine_state->render.shader_programs.elt = EMPTY_LIST;
-
+    init_unsigned_int_lst(&engine_state->render.shader_programs);
 
     init_a_3d_loaded_element(engine_state,  &first_square);
-    init_a_3d_loaded_element(engine_state,  &seconde);
+    //init_a_3d_loaded_element(engine_state,  &seconde);
     init_a_loaded_shader(engine_state, vertex_shader_source, fragment_shader_source);
 
     
@@ -51,15 +51,14 @@ void update_render_main_menu(st_engine *engine_state){
     glClearColor(num_to_01(123), num_to_01(12), num_to_01(123), 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glUseProgram(get_unsigned_lst(&engine_state->render.shader_programs, 0).elt);
+    glUseProgram(get_unsigned_int_lst_pointer(&engine_state->render.shader_programs, 0)->value);
 
-    glBindVertexArray(get_unsigned_lst(&engine_state->render.VAOs, 0).elt);
-    
-    glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
-
-    glBindVertexArray(get_unsigned_lst(&engine_state->render.VAOs, 1).elt);
-    glDrawElements(GL_TRIANGLES, 72, GL_UNSIGNED_INT, 1);
-
+    glBindVertexArray(get_unsigned_int_lst_pointer(&engine_state->render.VAOs, 0)->value);
+    glDrawElements(GL_TRIANGLES, sizeof(get_unsigned_int_lst_pointer(&engine_state->render.VAOs, 0)), GL_UNSIGNED_INT, 0);
+    /*
+    glBindVertexArray(get_unsigned_int_lst_pointer(&engine_state->render.VAOs, 1).elt);
+    glDrawElements(GL_TRIANGLES, sizeof(get_unsigned_int_lst_pointer(&engine_state->render.VAOs, 1)), GL_UNSIGNED_INT, 0);
+    */
     glBindVertexArray(0);
     
     

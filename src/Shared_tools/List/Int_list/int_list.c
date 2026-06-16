@@ -1,6 +1,6 @@
 #include "../../../../include/src_include/Shared_tools/List/Int_list/int_list.h"
 /**
- * @brief Permet d'initialiser une liste de flotants.
+ * @brief Permet d'initialiser une liste d'entier.
  */
 void init_int_lst(st_int_list **list)
 {
@@ -11,7 +11,7 @@ void init_int_lst(st_int_list **list)
 
 
 /**
- * @brief Insert à la fin d'une liste de flotants une nouvelle valeur.
+ * @brief Insert à la fin d'une liste d'entier une nouvelle valeur.
  */
 void put_int_lst(st_int_list *list, int value)
 {
@@ -42,7 +42,7 @@ void put_int_lst(st_int_list *list, int value)
 }
 
 /** 
- * @brief Récupère le pointeur d'une liste de flotants à l'adresse i. Utile pour la 
+ * @brief Récupère le pointeur d'une liste d'entier à l'adresse i. Utile pour la 
  * destruction de la liste ou la suppression d'un elt de celle-ci.
  */
 st_int* get_int_lst_pointer(st_int_list *list, int i)

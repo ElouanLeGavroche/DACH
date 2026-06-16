@@ -142,10 +142,11 @@ void unload_data(st_engine *engine_state)
     glDeleteBuffers(0, &engine_state->render.VBOs);
     glDeleteProgram(&engine_state->render.shader_programs);
     */
-    free(engine_state->render.shader_programs.next);
+    /*
+    free(&engine_state->render.shader_programs);
     engine_state->render.shader_programs.elt = 0;
 
-    free(engine_state->render.EBOs.next);
+    free(&engine_state->render.EBOs);
     engine_state->render.EBOs.elt = 0;
 
     free(engine_state->render.VBOs.next);
@@ -153,5 +154,5 @@ void unload_data(st_engine *engine_state)
 
     free(engine_state->render.VAOs.next);
     engine_state->render.VAOs.elt = 0;
-
+    */
 }
