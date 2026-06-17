@@ -122,7 +122,6 @@ typedef struct st_state
  */
 typedef struct {
     st_state *current_state;
-    st_state *next_state;
 
     int level_of_depth;
 }stack;

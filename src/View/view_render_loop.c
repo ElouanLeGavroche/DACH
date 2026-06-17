@@ -49,8 +49,9 @@ void init_a_3d_loaded_element(st_engine *engine_state, st_tile *elt)
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     
     
-    glBufferData(GL_ARRAY_BUFFER, sizeof(elt->vert_pos)*elt->nb_vert, elt->vert_pos, GL_STATIC_DRAW);
-    
+    glBufferData(GL_ARRAY_BUFFER, sizeof(*elt->vert_pos)*elt->nb_vert, elt->vert_pos, GL_STATIC_DRAW);
+    printf("nb_vert = %d\n", elt->nb_vert);
+    printf("nb_face = %d\n", elt->nb_face);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(*elt->face_pos)*elt->nb_face, elt->face_pos, GL_STATIC_DRAW);
 

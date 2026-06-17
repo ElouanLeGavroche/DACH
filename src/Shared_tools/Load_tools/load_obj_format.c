@@ -5,7 +5,7 @@ void load_file(char *path, st_tile *tile)
     /* Variables pour la gestion du fichier */
     FILE *file;
     struct stat sb;
-    char line[50];
+    char line[LINE_SIZE];
 
     /* Variables pour la gestion du regex*/
     const char *vert_reegex_def = "^v [-0-9]+.[0-9]* [-0-9]+.[0-9]* [-0-9]+.[0-9]*";
@@ -203,20 +203,18 @@ void parse_face(char line[], st_tile *tile, st_primitives_list *primitives_list)
 
     for(y = 0; y < 4; y ++)
     {
-
-        letter = strtok(NULL, "/");
-
-        value = atoi(letter);
-        put_int_lst(primitives_list->int_list, value);
-        printf("%d\n", value);
-
-        letter = strtok(NULL, "/");
-        letter = strtok(NULL, "/");
+        for(i = 0; i < 2; i ++)
+        {
+            letter = strtok(NULL, "/");
+            
+            value = atoi(letter);
+            put_int_lst(primitives_list->int_list, value);
+            
+        }
         
         letter = strtok(NULL, " ");
 
         value = atoi(letter);
-        printf("%d\n", value);
         put_int_lst(primitives_list->int_list, value);
     }
 }

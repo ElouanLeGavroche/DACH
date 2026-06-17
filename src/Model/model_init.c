@@ -20,19 +20,23 @@ int load_screen_data(st_loaded_windows_data *screen_data, st_engine *engine_stat
     const char *initial_context_value = NULL;
 
     // Initialisation des premières variables du moteur
-    //st_engine *engine_state = malloc(sizeof(st_engine));
     engine_state->running = true;
 
     engine_state->input.escape = false;
+    engine_state->input.down_arrow = false;
+    engine_state->input.up_arrow = false;
+    engine_state->input.escape = false;
+
     engine_state->input.one_of_them = false;
+
 
     // Initialisation des outils de context
     engine_state->context_tool.put_context = put_context;
     engine_state->context_tool.remove_context = remove_context;
-    engine_state->stack_context.level_of_depth = 0;
-    
-    engine_state->stack_context.next_state = 0;
-    engine_state->stack_context.current_state = 0;
+
+    engine_state->stack_context.level_of_depth = NULL;
+    engine_state->stack_context.current_state = NULL;
+    engine_state->next_state = NULL;
 
     fp = fopen(PATH_LOAD_GAME_DATA, "r");
     if(fp == NULL){
