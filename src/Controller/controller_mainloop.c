@@ -134,27 +134,13 @@ void new_context(st_engine *engine_state)
 
 void unload_data(st_engine *engine_state)
 {
-    //free(&engine_state->input);
-    // Faudra faire une boucle qui viendra détruire tout les éléments
     /*
     glDeleteVertexArrays(0, &engine_state->render.VAOs);
     glDeleteBuffers(0, &engine_state->render.EBOs);
     glDeleteBuffers(0, &engine_state->render.VBOs);
     glDeleteProgram(&engine_state->render.shader_programs);
     */
-    /*
-    free(&engine_state->render.shader_programs);
-    engine_state->render.shader_programs.elt = 0;
 
-    free(&engine_state->render.EBOs);
-    engine_state->render.EBOs.elt = 0;
-
-    free(engine_state->render.VBOs.next);
-    engine_state->render.VBOs.elt = 0;
-
-    free(engine_state->render.VAOs.next);
-    engine_state->render.VAOs.elt = 0;
-    */
     destroy_unsigned_lst(engine_state->render.shader_programs);
     destroy_unsigned_lst(engine_state->render.VAOs);
     destroy_unsigned_lst(engine_state->render.VBOs);

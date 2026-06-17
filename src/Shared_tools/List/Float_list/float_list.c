@@ -74,6 +74,7 @@ float get_float_lst(st_float_list *list, int i)
     if(tampon == NULL)
     {
         printf("Vous avez demander un élément hors de la liste\n");
+        tampon->value = 0.0f;
     }
     return tampon->value;
 }
@@ -83,40 +84,43 @@ float get_float_lst(st_float_list *list, int i)
  */
 void remove_float_lst(st_float_list *list, int i)
 {
-    // Si l'on cherche à supprimer le première élément
-    if (i == 0)
+    if (list->first != NULL)
     {
-        st_float *tampon = list->first;
-        list->first = list->first->next;
-
-        free(tampon);
-
-        list->size --;
-    }
-    else
-    {
-        if(get_float_lst_pointer(list, i) == NULL)
+        // Si l'on cherche à supprimer le première élément
+        if (i == 0)
         {
-            printf("Vous avez demander un élément hors de la liste\n");
+            st_float *tampon = list->first;
+            list->first = list->first->next;
+
+            free(tampon);
+
+            list->size --;
         }
         else
         {
-            // On récupère le pointeur du précédent pour ne pas briser le lien
-            st_float *previous = get_float_lst_pointer(list, i - 1);
-            
-            // On récupère l'acutel pour l'effacer
-            st_float *wanted = get_float_lst_pointer(list, i);
-            
-            // On refait le lien entre les deux
-            previous->next = wanted->next;
-            
-            // On efface l'élément souhaiter
-            free(wanted);
+            if(get_float_lst_pointer(list, i) == NULL)
+            {
+                printf("Vous avez demander un élément hors de la liste\n");
+            }
+            else
+            {
+                // On récupère le pointeur du précédent pour ne pas briser le lien
+                st_float *previous = get_float_lst_pointer(list, i - 1);
+                
+                // On récupère l'acutel pour l'effacer
+                st_float *wanted = get_float_lst_pointer(list, i);
+                
+                // On refait le lien entre les deux
+                previous->next = wanted->next;
+                
+                // On efface l'élément souhaiter
+                free(wanted);
 
-            list->size --;
+                list->size --;
 
+            }
+            
         }
-        
     }
     
 }

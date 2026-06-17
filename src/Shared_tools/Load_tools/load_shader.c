@@ -14,7 +14,7 @@ char* load_shader(const char* file_name)
     fp = fopen(file_name, "rb");
     if(fp == NULL) {
         printf("échec de la lecture du shader, vérifiez le path\n");
-        return "";
+        return NULL;
     }
     fseek(fp, 0L, SEEK_END);
     size = ftell(fp)+1;

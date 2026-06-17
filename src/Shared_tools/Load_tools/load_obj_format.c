@@ -134,6 +134,8 @@ void load_file(char *path, st_tile *tile)
                             regerror (err, &reegex, text_err, size_text_err);
                             fprintf (stderr, "%s\n", text_err);
                         }
+
+                        free(text_err);
                     }
                     
                 }
@@ -172,6 +174,7 @@ void load_file(char *path, st_tile *tile)
     destroy_int_lst(face_list);
     free(primitives_list);
 
+    fclose(file);
 }
 
 
@@ -181,12 +184,19 @@ void parse_vertext(char line[], st_tile *tile, st_primitives_list *primitives_li
     
     char * letter;
     letter = strtok ( line, " " );
-    
+    if(letter == NULL)
+    {
+        return;
+    }
     int i;
 
     for(i = 0; i < 3; i ++)
     {
         letter = strtok( NULL, " " );
+        if(letter == NULL)
+        {
+            return;
+        }
         value = atof(letter);
         put_float_lst(primitives_list->float_list, value);
     }
@@ -201,13 +211,19 @@ void parse_face(char line[], st_tile *tile, st_primitives_list *primitives_list)
     char *letter;
 
     letter = strtok( line, " ");
-
+    if(letter == NULL)
+    {
+        return;
+    }
     for(y = 0; y < 4; y ++)
     {
         for(i = 0; i < 2; i ++)
         {
             letter = strtok(NULL, "/");
-            
+            if(letter == NULL)
+            {
+                return;
+            }
             value = atoi(letter);
             put_int_lst(primitives_list->int_list, value);
             
