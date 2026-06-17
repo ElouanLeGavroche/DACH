@@ -1,6 +1,8 @@
 #ifndef LOAD_OBJ_FORMAT
 #define LOAD_OBJ_FORMAT
 
+#define _GNU_SOURCE
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>

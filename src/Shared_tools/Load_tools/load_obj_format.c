@@ -5,7 +5,9 @@ void load_file(char *path, st_tile *tile)
     /* Variables pour la gestion du fichier */
     FILE *file;
     struct stat sb;
-    char line[LINE_SIZE];
+    char *line;
+
+    size_t cap = 0;
 
     /* Variables pour la gestion du regex*/
     const char *vert_reegex_def = "^v [-0-9]+.[0-9]* [-0-9]+.[0-9]* [-0-9]+.[0-9]*";
@@ -69,13 +71,12 @@ void load_file(char *path, st_tile *tile)
     }
     else
     {
-        do
+        while (getline(&line, &cap, file) != -1)
         {
             // Ici l'on va lire les ligne individuellement
             err = 0;
             valid = true;
 
-            fgets(line, sb.st_size, file);
             if (ferror(file))
             {
                 printf("Erreur lors de la lecture du document\n");
@@ -139,8 +140,8 @@ void load_file(char *path, st_tile *tile)
 
             }
 
-        } while (!feof(file));
-        
+        }
+        free(line);
         regfree(&reegex);
     }
 

@@ -25,7 +25,7 @@ int load_screen_data(st_loaded_windows_data *screen_data, st_engine *engine_stat
     engine_state->input.escape = false;
     engine_state->input.down_arrow = false;
     engine_state->input.up_arrow = false;
-    engine_state->input.escape = false;
+    engine_state->input.enter = false;
 
     engine_state->input.one_of_them = false;
 
