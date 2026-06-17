@@ -203,18 +203,20 @@ void parse_face(char line[], st_tile *tile, st_primitives_list *primitives_list)
 
     for(y = 0; y < 4; y ++)
     {
-        for(i = 0; i < 2; i ++)
-        {
-            letter = strtok(NULL, "/");
-            
-            value = atoi(letter);
-            put_int_lst(primitives_list->int_list, value);
-            
-        }
+
+        letter = strtok(NULL, "/");
+
+        value = atoi(letter);
+        put_int_lst(primitives_list->int_list, value);
+        printf("%d\n", value);
+
+        letter = strtok(NULL, "/");
+        letter = strtok(NULL, "/");
         
         letter = strtok(NULL, " ");
 
         value = atoi(letter);
+        printf("%d\n", value);
         put_int_lst(primitives_list->int_list, value);
     }
 }

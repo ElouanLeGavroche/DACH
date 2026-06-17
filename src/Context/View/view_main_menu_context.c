@@ -56,7 +56,7 @@ void update_render_main_menu(st_engine *engine_state){
     glUseProgram(get_unsigned_int_lst_pointer(engine_state->render.shader_programs, 0)->value);
 
     glBindVertexArray(get_unsigned_int_lst_pointer(engine_state->render.VAOs, 0)->value);
-    glDrawElements(GL_TRIANGLES, sizeof(get_unsigned_int_lst_pointer(engine_state->render.VAOs, 0))*3, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
     /*
     glBindVertexArray(get_unsigned_int_lst_pointer(&engine_state->render.VAOs, 1).elt);
     glDrawElements(GL_TRIANGLES, sizeof(get_unsigned_int_lst_pointer(&engine_state->render.VAOs, 1)), GL_UNSIGNED_INT, 0);
