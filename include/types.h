@@ -69,10 +69,14 @@ typedef struct
 //////////////////
 
 // Structure d'un entier non signée d'une liste
+// Il sert uniquement pour stocker les éléments 3D
 struct st_unsigned_int
 {
     unsigned int value;
     st_unsigned_int *next;
+
+    int nb_face;
+    int nb_vert;
 };
 
 

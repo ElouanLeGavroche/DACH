@@ -10,19 +10,20 @@ void init_mesh(st_engine *engine_state, st_mesh mesh)
 
 void update_render_main_menu(st_engine *engine_state){
     
-    glClearColor(num_to_01(123), num_to_01(12), num_to_01(123), 1.0f);
+    glClearColor(num_to_01(0), num_to_01(0), num_to_01(0), 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(get_unsigned_int_lst_pointer(engine_state->render.shader_programs, 0)->value);
-
-    glBindVertexArray(get_unsigned_int_lst_pointer(engine_state->render.VAOs, 0)->value);
-    glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
-    /*
-    glBindVertexArray(get_unsigned_int_lst_pointer(&engine_state->render.VAOs, 1).elt);
-    glDrawElements(GL_TRIANGLES, sizeof(get_unsigned_int_lst_pointer(&engine_state->render.VAOs, 1)), GL_UNSIGNED_INT, 0);
-    */
-    glBindVertexArray(0);
     
+    int i;
+    int nb_elt = engine_state->render.VAOs->size;
+    for(i = 0; i < nb_elt; i ++)
+    {
+        glBindVertexArray(get_unsigned_int_lst_pointer(engine_state->render.VAOs, i)->value);
+        glDrawElements(GL_TRIANGLES, engine_state->render.VAOs->first->nb_face, GL_UNSIGNED_INT, 0);
+
+        glBindVertexArray(0);
+    }
     
 }
 

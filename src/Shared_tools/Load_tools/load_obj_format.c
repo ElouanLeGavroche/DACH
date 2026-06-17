@@ -11,7 +11,7 @@ void load_file(char *path, st_mesh *tile)
 
     /* Variables pour la gestion du regex*/
     const char *vert_reegex_def = "^v [-0-9]+.[0-9]* [-0-9]+.[0-9]* [-0-9]+.[0-9]*";
-    const char *face_reegex_def = "^f( ([0-9]{0,3}/)[0-9]{0,3}/[0-9]{0,3}){4}";
+    const char *face_reegex_def = "^f( ([0-9]{0,3}/)[0-9]{0,3}/[0-9]{0,3}){3}";
     regex_t reegex;
 
     int match;
@@ -225,7 +225,7 @@ void parse_face(char line[], st_mesh *tile, st_primitives_list *primitives_list)
             return;
         }
         value = atoi(letter);
-        put_int_lst(primitives_list->int_list, value);
+        put_int_lst(primitives_list->int_list, value - 1);
 
         letter = strtok(NULL, " ");
         letter = strtok(NULL, "/");

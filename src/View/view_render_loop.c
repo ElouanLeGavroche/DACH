@@ -54,10 +54,11 @@ void init_a_3d_loaded_element(st_engine *engine_state, st_mesh *elt)
     printf("nb_face = %d\n", elt->nb_face);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(*elt->face_pos)*elt->nb_face, elt->face_pos, GL_STATIC_DRAW);
-    
-    put_unsigned_int_lst(engine_state->render.VAOs, VAO);
-    put_unsigned_int_lst(engine_state->render.VBOs, VBO);
-    put_unsigned_int_lst(engine_state->render.EBOs, EBO);
+
+
+    put_unsigned_int_3d_obj_lst(engine_state->render.VAOs, VAO, elt->nb_vert, elt->nb_face);
+    put_unsigned_int_3d_obj_lst(engine_state->render.VBOs, VBO, elt->nb_vert, elt->nb_face);
+    put_unsigned_int_3d_obj_lst(engine_state->render.EBOs, EBO, elt->nb_vert, elt->nb_face);
     
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);

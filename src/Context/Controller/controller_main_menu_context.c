@@ -27,21 +27,10 @@ void init_menu(st_engine *engine_state)
     st_mesh first_square;
     load_file(BASIC_HOUSE_PATH, &first_square);
 
-    
+    st_mesh seconde_square;
+    load_file(BASIC_TILE_PATH, &seconde_square);
 
-    ////////////////////////////////////////////////// débug
-    int i;
-    for(i = 0; i < first_square.nb_vert; i ++)
-    {
-        printf("%f \n", first_square.vert_pos[i]);
-    }
     
-    for(i = 0; i < first_square.nb_face; i ++)
-    {
-        printf("%d \n", first_square.face_pos[i]);
-    }
-    printf("nb : %d\n", i);
-    //////////////////////////////////////////////////
     
     // Initialiser le rendu --------------------------------------------------------------------------------------------
     
@@ -58,6 +47,7 @@ void init_menu(st_engine *engine_state)
 
     // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
     init_mesh(engine_state, first_square);
+    init_mesh(engine_state, seconde_square);
 
 
 

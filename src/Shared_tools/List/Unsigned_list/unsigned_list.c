@@ -17,6 +17,36 @@ void init_unsigned_int_lst(st_unsigned_int_list **list)
     (*list)->size = 0;
 }
 
+void put_unsigned_int_3d_obj_lst(st_unsigned_int_list *list, unsigned int value, int nb_vert, int nb_face)
+{
+
+    // Définition des variables
+    st_unsigned_int *list_value = malloc(sizeof(st_unsigned_int));
+    list_value->value = value;
+    list_value->next = NULL;
+
+    list_value->nb_face = nb_face;
+    list_value->nb_vert = nb_vert;
+
+    if(list->first == NULL)
+    {
+        list->first = list_value;
+    }
+    else
+    {
+        st_unsigned_int *tampon = list->first;
+
+        while (tampon->next != NULL)
+        {
+            tampon = tampon->next;
+        }
+        
+        tampon->next = list_value;
+    }
+
+    list->size ++;
+}
+
 void put_unsigned_int_lst(st_unsigned_int_list *list, unsigned int value)
 {
 

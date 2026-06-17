@@ -136,6 +136,7 @@ void unload_data(st_engine *engine_state)
 {
     
     int i;
+    
     // On détruit tout les éléments de la liste
     for(i = 0; i < engine_state->render.VAOs->size; i ++)
     {
@@ -155,12 +156,11 @@ void unload_data(st_engine *engine_state)
         glDeleteVertexArrays(1, &ebo);
     }
 
-        for(i = 0; i < engine_state->render.EBOs->size; i ++)
+        for(i = 0; i < engine_state->render.shader_programs->size; i ++)
     {
         unsigned int shader = get_unsigned_int(engine_state->render.shader_programs, i);
         glDeleteProgram(shader);
     }
-    
     
     destroy_unsigned_lst(engine_state->render.VAOs);
     destroy_unsigned_lst(engine_state->render.VBOs);
