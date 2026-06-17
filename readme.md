@@ -32,7 +32,6 @@ make && make clean | ./out/DACH
 
 ## Contribution
 
-N'hésitez pas à me faire remonter des problèmes ou des conseil via GitHub. Je prendrais vos demande au sérieux et m'appliquerais à les mettre en oeuvre.
-Je vous remercie d'avance à toute aide que vous pourrez m'apporter dans les "Issues".
+N'hésitez pas à me faire remonter des problèmes ou des conseils via GitHub. Je prendrais vos demandes au sérieux et m'appliquerais à les mettre en oeuvre. Je vous remercie d'avance de toute aide que vous pourrez m'apporter dans les "Issues".
 
 Bien cordialement, Paotr neñvel.
