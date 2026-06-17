@@ -16,7 +16,6 @@ void init_render(st_engine *engine_state){
     //st_tile seconde;
 
     load_file(BASIC_HOUSE_PATH, &first_square);
-    //load_file(BASIC_HOUSE_PATH, &seconde);
 
     int i;
     for(i = 0; i < first_square.nb_vert; i ++)
@@ -29,16 +28,6 @@ void init_render(st_engine *engine_state){
         printf("%d \n", first_square.face_pos[i]);
     }
     printf("nb : %d\n", i);
-/*
-    for(i = 0; i < seconde.nb_vert; i ++)
-    {
-        printf("%f \n", seconde.vert_pos[i]);
-    }
-    for(i = 0; i < seconde.nb_face; i ++)
-    {
-        printf("%d \n", seconde.face_pos[i]);
-    }
-*/
     
     init_unsigned_int_lst(&engine_state->render.VAOs);
     init_unsigned_int_lst(&engine_state->render.VBOs);
@@ -59,6 +48,7 @@ void init_render(st_engine *engine_state){
     free((void *)vertex_shader_source);
     free((void *)fragment_shader_source);
 }
+
 void update_render_main_menu(st_engine *engine_state){
     
     glClearColor(num_to_01(123), num_to_01(12), num_to_01(123), 1.0f);
