@@ -155,4 +155,8 @@ void unload_data(st_engine *engine_state)
     free(engine_state->render.VAOs.next);
     engine_state->render.VAOs.elt = 0;
     */
+    destroy_unsigned_lst(engine_state->render.shader_programs);
+    destroy_unsigned_lst(engine_state->render.VAOs);
+    destroy_unsigned_lst(engine_state->render.VBOs);
+    destroy_unsigned_lst(engine_state->render.EBOs);
 }

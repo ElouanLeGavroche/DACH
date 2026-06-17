@@ -168,8 +168,8 @@ void load_file(char *path, st_tile *tile)
     }
 
     // On nettoie les infos qui ne nous servirons plus
-    free(vert_list);
-    free(face_list);
+    destroy_float_lst(vert_list);
+    destroy_int_lst(face_list);
     free(primitives_list);
 
 }

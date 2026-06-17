@@ -113,3 +113,13 @@ void remove_unsigned_lst(st_unsigned_int_list *list, int i)
         
     }
 }
+
+void destroy_unsigned_lst(st_unsigned_int_list *list)
+{
+    while (list->first != NULL)
+    {
+        remove_unsigned_lst(list, 0);
+    }
+
+    free(list);
+}
