@@ -20,7 +20,7 @@ void view_clear();
 int window_should_close();
 
 void init_a_loaded_shader(st_engine *engine_state, const char vertex_shader_source[], const char fragment_shader_source[]);
-void init_a_3d_loaded_element(st_engine *engine_state, st_tile *elt);
+void init_a_3d_loaded_element(st_engine *engine_state, st_mesh *elt);
 
 
 #endif

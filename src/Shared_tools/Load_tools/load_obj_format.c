@@ -1,6 +1,6 @@
 #include "../../../include/src_include/Shared_tools/Load_tools/load_obj_format.h"
 
-void load_file(char *path, st_tile *tile)
+void load_file(char *path, st_mesh *tile)
 {
     /* Variables pour la gestion du fichier */
     FILE *file;
@@ -29,7 +29,7 @@ void load_file(char *path, st_tile *tile)
     primitives_list->float_list = vert_list;
     primitives_list->int_list = face_list;
 
-    void (*parse_func)(char line[], st_tile *tile, st_primitives_list *primitives_list);
+    void (*parse_func)(char line[], st_mesh *tile, st_primitives_list *primitives_list);
 
     /* Variables pour la gestion des erreurs */
     int err;
@@ -178,7 +178,7 @@ void load_file(char *path, st_tile *tile)
 }
 
 
-void parse_vertext(char line[], st_tile *tile, st_primitives_list *primitives_list)
+void parse_vertext(char line[], st_mesh *tile, st_primitives_list *primitives_list)
 {
     float value;
     
@@ -203,7 +203,7 @@ void parse_vertext(char line[], st_tile *tile, st_primitives_list *primitives_li
     
 }
 
-void parse_face(char line[], st_tile *tile, st_primitives_list *primitives_list)
+void parse_face(char line[], st_mesh *tile, st_primitives_list *primitives_list)
 {
     int value;
     int i, y;

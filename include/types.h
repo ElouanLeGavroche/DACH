@@ -90,6 +90,19 @@ typedef struct
     st_int_list *int_list;
 }st_primitives_list;
 
+
+//structures qui regroupent tout les meshs et les shader
+typedef struct st_mesh st_mesh;
+
+struct st_mesh
+{
+    int nb_vert;
+    int nb_face;
+    float *vert_pos;
+    int *face_pos;
+
+};
+
 /**
  * @brief Structure (presque class) qui contient deux catégorie d'élément
  * 
@@ -142,22 +155,6 @@ typedef struct
     int (*remove_context)(stack *my_stack);
     
 }st_context_tool;
-
-
-/*
-tile qui auron toujours le même nombre d'elts
-à faire évoluer
-*/
-typedef struct
-{
-    int nb_vert;
-    int nb_face;
-    float *vert_pos;
-    int *face_pos;
-
-}st_tile;
-
-
 
 // Le bool "one of them" sert à verifier s'il y en a
 // au moins un d'actionner. Pour éviter de parcourir

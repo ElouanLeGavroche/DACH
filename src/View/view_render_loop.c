@@ -33,7 +33,7 @@ int window_should_close(){
 /**
  * @brief Cette fonction va me servir à initialiser les différent éléments graphique de la page
  */
-void init_a_3d_loaded_element(st_engine *engine_state, st_tile *elt)
+void init_a_3d_loaded_element(st_engine *engine_state, st_mesh *elt)
 {
 
     unsigned int VAO, VBO, EBO;
@@ -41,7 +41,7 @@ void init_a_3d_loaded_element(st_engine *engine_state, st_tile *elt)
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);  
     glGenBuffers(1, &EBO);
-
+    
     // 1.Attacher le VAO (Vertex Array Object)
     glBindVertexArray(VAO);
 
@@ -54,11 +54,11 @@ void init_a_3d_loaded_element(st_engine *engine_state, st_tile *elt)
     printf("nb_face = %d\n", elt->nb_face);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(*elt->face_pos)*elt->nb_face, elt->face_pos, GL_STATIC_DRAW);
-
+    
     put_unsigned_int_lst(engine_state->render.VAOs, VAO);
     put_unsigned_int_lst(engine_state->render.VBOs, VBO);
     put_unsigned_int_lst(engine_state->render.EBOs, EBO);
-
+    
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
@@ -81,7 +81,7 @@ void init_a_loaded_shader(st_engine *engine_state, const char vertex_shader_sour
     
     glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
     glCompileShader(vertex_shader);
-
+    
     glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
     if(!success)
     {
@@ -90,7 +90,7 @@ void init_a_loaded_shader(st_engine *engine_state, const char vertex_shader_sour
     }
 
     fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-
+    
     glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
     glCompileShader(fragment_shader);
 
@@ -101,9 +101,9 @@ void init_a_loaded_shader(st_engine *engine_state, const char vertex_shader_sour
         printf("Erreur lors de la compilation du Frag Shader\n");
     }
 
-
+    
     shader_program = glCreateProgram();
-
+    
     // On lie le frag et le vert dans un seul prg
     glAttachShader(shader_program, vertex_shader);
     glAttachShader(shader_program, fragment_shader);
@@ -114,7 +114,7 @@ void init_a_loaded_shader(st_engine *engine_state, const char vertex_shader_sour
         glGetProgramInfoLog(shader_program, 512, NULL, infoLog);
         printf("Erreur lors de la création du programe shader\n");
     }
-
+    
     // Une fois lié, l'on peux les supprimer
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);

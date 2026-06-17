@@ -22,9 +22,9 @@
 #include "../../Shared_tools/List/Int_list/int_list.h"
 
 #include "../../../../include/types.h"
-void parse_vertext(char line[], st_tile *tile, st_primitives_list *primitives_list);
-void parse_face(char line[], st_tile *tile, st_primitives_list *primitives_list);
-void load_file(char *path, st_tile *tile);
+void parse_vertext(char line[], st_mesh *tile, st_primitives_list *primitives_list);
+void parse_face(char line[], st_mesh *tile, st_primitives_list *primitives_list);
+void load_file(char *path, st_mesh *tile);
 
 /*
 Note à moi même, parser des trucs en C c'est comme se foutre un baton dans le cul, ça fait mal.

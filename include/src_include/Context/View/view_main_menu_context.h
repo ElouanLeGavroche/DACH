@@ -29,7 +29,8 @@ Ce n'est sans doute pas la meilleur solution, mais cela fera l'affaire pour le d
 #define BASIC_TILE_PATH "ressources/tiles/basic_tile.obj"
 #define BASIC_HOUSE_PATH "ressources/houses/test.obj"
 
-void init_render(st_engine *engine_state);
+void init_mesh(st_engine *engine_state, st_mesh mesh);
+
 void update_render_main_menu(st_engine *engine_state);
 void change_render_mode(st_engine *engine_state);
 

@@ -11,7 +11,61 @@ struct st_state main_menu_state =
 void init_menu(st_engine *engine_state)
 {
     printf("début de l'initiation\n");
-    init_render(engine_state);
+
+    // CHARGER LES SHADERS --------------------------------------------------------------------------------------------
+    const char *vertex_shader_source = load_shader("src/Shaders/main_shader.vert");
+    const char *fragment_shader_source = load_shader("src/Shaders/main_shader.frag");
+    
+    // ""Gestion de l'erreur - lmao""
+    if(!vertex_shader_source || !fragment_shader_source)
+    {
+        printf("Attention, certains shaders n'ont pas élé chargé"
+        "Le comportement du programme peux-être compromis.\n");
+    }
+    
+    // CHARGER LES ELEMENTS --------------------------------------------------------------------------------------------
+    st_mesh first_square;
+    load_file(BASIC_HOUSE_PATH, &first_square);
+
+    
+
+    ////////////////////////////////////////////////// débug
+    int i;
+    for(i = 0; i < first_square.nb_vert; i ++)
+    {
+        printf("%f \n", first_square.vert_pos[i]);
+    }
+    
+    for(i = 0; i < first_square.nb_face; i ++)
+    {
+        printf("%d \n", first_square.face_pos[i]);
+    }
+    printf("nb : %d\n", i);
+    //////////////////////////////////////////////////
+    
+    // Initialiser le rendu --------------------------------------------------------------------------------------------
+    init_render(engine_state, vertex_shader_source, fragment_shader_source);
+    
+    init_unsigned_int_lst(&engine_state->render.VAOs);
+    init_unsigned_int_lst(&engine_state->render.VBOs);
+    init_unsigned_int_lst(&engine_state->render.EBOs);
+    init_unsigned_int_lst(&engine_state->render.shader_programs);
+
+
+    // Initialiser les shaders --------------------------------------------------------------------------------------------
+    // Faire une fonction propre pour les charger individuellement ou par liste
+    init_a_loaded_shader(engine_state, vertex_shader_source, fragment_shader_source);
+    
+
+    // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
+    init_mesh(engine_state, first_square);
+
+
+
+    // Libéré les shader qui sont compilé côté GPU à présent
+    free((void *)vertex_shader_source);
+    free((void *)fragment_shader_source);
+
     printf("Context menu initier\n");
 }
 
