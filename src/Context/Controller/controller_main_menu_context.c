@@ -44,7 +44,6 @@ void init_menu(st_engine *engine_state)
     //////////////////////////////////////////////////
     
     // Initialiser le rendu --------------------------------------------------------------------------------------------
-    init_render(engine_state, vertex_shader_source, fragment_shader_source);
     
     init_unsigned_int_lst(&engine_state->render.VAOs);
     init_unsigned_int_lst(&engine_state->render.VBOs);

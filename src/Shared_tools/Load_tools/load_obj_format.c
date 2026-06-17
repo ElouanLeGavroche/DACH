@@ -215,23 +215,21 @@ void parse_face(char line[], st_mesh *tile, st_primitives_list *primitives_list)
     {
         return;
     }
+    letter = strtok(NULL, "/");
     for(y = 0; y < 4; y ++)
     {
-        for(i = 0; i < 2; i ++)
-        {
-            letter = strtok(NULL, "/");
-            if(letter == NULL)
-            {
-                return;
-            }
-            value = atoi(letter);
-            put_int_lst(primitives_list->int_list, value);
-            
-        }
-        
-        letter = strtok(NULL, " ");
 
+        
+        if(letter == NULL)
+        {
+            return;
+        }
         value = atoi(letter);
         put_int_lst(primitives_list->int_list, value);
+
+        letter = strtok(NULL, " ");
+        letter = strtok(NULL, "/");
+        
+        
     }
 }
