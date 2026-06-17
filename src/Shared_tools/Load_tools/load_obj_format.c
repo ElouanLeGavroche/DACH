@@ -5,7 +5,7 @@ void load_file(char *path, st_tile *tile)
     /* Variables pour la gestion du fichier */
     FILE *file;
     struct stat sb;
-    char line[LINE_SIZE];
+    char line[50];
 
     /* Variables pour la gestion du regex*/
     const char *vert_reegex_def = "^v [-0-9]+.[0-9]* [-0-9]+.[0-9]* [-0-9]+.[0-9]*";

@@ -177,12 +177,12 @@ typedef struct
  * @brief Structure qui stock les informations de rendu du context
  */
 typedef struct{
-    st_unsigned_int_list VAOs;
-    st_unsigned_int_list VBOs;
-    st_unsigned_int_list EBOs;
+    st_unsigned_int_list *VAOs;
+    st_unsigned_int_list *VBOs;
+    st_unsigned_int_list *EBOs;
 
 
-    st_unsigned_int_list shader_programs;
+    st_unsigned_int_list *shader_programs;
 
     unsigned int render_mode;
 
