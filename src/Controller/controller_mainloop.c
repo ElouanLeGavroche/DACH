@@ -134,15 +134,36 @@ void new_context(st_engine *engine_state)
 
 void unload_data(st_engine *engine_state)
 {
-    /*
-    glDeleteVertexArrays(0, &engine_state->render.VAOs);
-    glDeleteBuffers(0, &engine_state->render.EBOs);
-    glDeleteBuffers(0, &engine_state->render.VBOs);
-    glDeleteProgram(&engine_state->render.shader_programs);
-    */
+    
+    int i;
+    // On détruit tout les éléments de la liste
+    for(i = 0; i < engine_state->render.VAOs->size; i ++)
+    {
+        unsigned int vao = get_unsigned_int(engine_state->render.VAOs, i);
+        glDeleteVertexArrays(1, &vao);
+    }
+    
+    for(i = 0; i < engine_state->render.VBOs->size; i ++)
+    {
+        unsigned int vbo = get_unsigned_int(engine_state->render.VBOs, i);
+        glDeleteVertexArrays(1, &vbo);
+    }
 
-    destroy_unsigned_lst(engine_state->render.shader_programs);
+    for(i = 0; i < engine_state->render.EBOs->size; i ++)
+    {
+        unsigned int ebo = get_unsigned_int(engine_state->render.EBOs, i);
+        glDeleteVertexArrays(1, &ebo);
+    }
+
+        for(i = 0; i < engine_state->render.EBOs->size; i ++)
+    {
+        unsigned int shader = get_unsigned_int(engine_state->render.shader_programs, i);
+        glDeleteProgram(shader);
+    }
+    
+    
     destroy_unsigned_lst(engine_state->render.VAOs);
     destroy_unsigned_lst(engine_state->render.VBOs);
     destroy_unsigned_lst(engine_state->render.EBOs);
+    destroy_unsigned_lst(engine_state->render.shader_programs);
 }
