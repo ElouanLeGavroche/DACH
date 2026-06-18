@@ -8,16 +8,16 @@
 typedef struct st_engine st_engine;
 typedef struct st_state st_state;
 
-
-// Structure pour faire une liste chainée d'entier non signée
-typedef struct st_unsigned_int st_unsigned_int;
-
 //////////////////
 //              //
 //  ENTIER      //
 //  NON SIGNÉ   //
 //              //
 //////////////////
+
+// Structure pour faire une liste chainée d'entier non signée
+typedef struct st_unsigned_int st_unsigned_int;
+
 
 // Structure d'un entier non signée d'une liste
 // Il sert uniquement pour stocker les éléments 3D
@@ -124,12 +124,11 @@ typedef struct
 // un switch pour rien.
 typedef struct
 {
-    bool escape;
-    bool up_arrow;
-    bool down_arrow;
-    bool enter;
-
-    bool one_of_them;
+    atomic_bool escape;
+    atomic_bool up_arrow;
+    atomic_bool down_arrow;
+    atomic_bool enter;
+    atomic_bool one_of_them;
 }st_input;
 
 
