@@ -9,7 +9,7 @@ void init_mesh(st_engine *engine_state, st_mesh mesh)
 }
 
 void update_render_main_menu(st_engine *engine_state){
-    
+    // Ici l'on actualise = tout les éléments du menu
     glClearColor(num_to_01(0), num_to_01(0), num_to_01(0), 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 

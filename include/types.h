@@ -9,73 +9,8 @@ typedef struct st_engine st_engine;
 typedef struct st_state st_state;
 
 
-  ///////////////////////////////
- // Liste chainé de primitive //
-///////////////////////////////
-
-// Structure pour faire une liste chainée d'entier
-typedef struct st_int st_int; 
-// Structure pour faire une liste chainée de flotant
-typedef struct st_float st_float;
 // Structure pour faire une liste chainée d'entier non signée
 typedef struct st_unsigned_int st_unsigned_int;
-
-///////////////////
-//               //
-//    ENTIER     //
-//               //
-///////////////////
-
-
-// Structure d'un entier d'une liste
-struct st_int
-{
-    int value;
-    st_int *next;
-};
-
-// Structure de la liste d'entier
-typedef struct
-{
-    st_int *first;
-    int size;
-}st_int_list;
-
-//////////////////
-//              //
-//   FLOTANT    //
-//              //
-//////////////////
-
-
-// Structure d'un flotant d'une liste
-struct st_float
-{
-    float value;
-    st_float *next;
-};
-
-typedef struct st_int_list_2
-{
-    int *data;
-    size_t lenght;
-    size_t count;
-}st_int_list_2;
-
-// Structure de la liste de flotant
-
-typedef struct
-{
-    st_float * first;
-    int size;
-}st_float_list;
-
-typedef struct st_float_list
-{
-    float *data;
-    size_t lenght;
-    size_t count;
-}st_float_list_2;
 
 //////////////////
 //              //
@@ -101,15 +36,6 @@ typedef struct{
     st_unsigned_int *first;
     int size;
 } st_unsigned_int_list;
-
-//Structure qui permet de regrouper toute les listes primitive en une seule. Simplifie le travail dans certain
-//Cas. ex : Pointeur de fonction
-typedef struct
-{
-    st_float_list *float_list;
-    st_int_list *int_list;
-}st_primitives_list;
-
 
 //structures qui regroupent tout les meshs et les shader
 typedef struct st_mesh st_mesh;

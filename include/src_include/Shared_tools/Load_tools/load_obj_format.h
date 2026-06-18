@@ -17,10 +17,6 @@
 
 #define LINE_SIZE 30
 
-//Include des listes chainée
-#include "../../Shared_tools/List/Float_list/float_list.h"
-#include "../../Shared_tools/List/Int_list/int_list.h"
-
 #include "../../../../include/types.h"
 int parse_vertext(char line[], st_mesh *tile, int i_v);
 int parse_face(char line[], st_mesh *tile, int i_f);
