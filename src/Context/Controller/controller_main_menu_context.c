@@ -74,9 +74,8 @@ void input_context_main_menu(st_engine *engine_state)
     }
     else if(engine_state->input.enter)
     {
-        change_render_mode(engine_state);
+        change_render_mode(&engine_state->stack_context.current_state->render);
     }
-
 }
 
 void controller_update_logic_main_menu(st_engine *engine_state)
@@ -86,5 +85,5 @@ void controller_update_logic_main_menu(st_engine *engine_state)
 
 void controller_update_render_main_menu(st_engine *engine_state)
 {
-    update_render_main_menu(engine_state);
+    update_render_main_menu(&engine_state->stack_context.current_state->render);
 }

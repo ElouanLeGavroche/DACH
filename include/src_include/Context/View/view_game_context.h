@@ -10,6 +10,6 @@
 
 #include "../../../../include/src_include/Shared_tools/Transform_openGL_values/colors.h"
 
-void update_render_game(st_engine *engine_state);
+void update_render_game(st_render_data *render);
 
 #endif

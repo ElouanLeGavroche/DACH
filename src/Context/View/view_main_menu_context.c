@@ -8,35 +8,37 @@ void init_mesh(st_render_data *render, st_mesh mesh)
     free(mesh.face_pos);
 }
 
-void update_render_main_menu(st_engine *engine_state){
-    // Ici l'on actualise = tout les éléments du menu
+void update_render_main_menu(st_render_data *render){
+    /* Ici l'on actualise = tout les éléments du menu */
+    
     glClearColor(num_to_01(0), num_to_01(0), num_to_01(0), 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glUseProgram(get_unsigned_int_lst_pointer(engine_state->stack_context.current_state->render.shader_programs, 0)->value);
+    glUseProgram(get_unsigned_int_lst_pointer(render->shader_programs, 0)->value);
     
     int i;
-    int nb_elt = engine_state->stack_context.current_state->render.VAOs->size;
+    int nb_elt = render->VAOs->size;
     for(i = 0; i < nb_elt; i ++)
     {
-        glBindVertexArray(get_unsigned_int_lst_pointer(engine_state->stack_context.current_state->render.VAOs, i)->value);
-        glDrawElements(GL_TRIANGLES, engine_state->stack_context.current_state->render.VAOs->first->nb_face, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(get_unsigned_int_lst_pointer(render->VAOs, i)->value);
+        glDrawElements(GL_TRIANGLES, render->VAOs->first->nb_face, GL_UNSIGNED_INT, 0);
 
         glBindVertexArray(0);
     }
     
 }
 
-void change_render_mode(st_engine *engine_state)
+void change_render_mode(st_render_data *render)
 {
-    if(engine_state->stack_context.current_state->render.render_mode != GL_FILL)
+    /* Passage d'un rendu plein à un rendu filaire (pour le debug) */
+    if(render->render_mode != GL_FILL)
     {
-        engine_state->stack_context.current_state->render.render_mode = GL_FILL;
+        render->render_mode = GL_FILL;
     } 
     else
     {
-        engine_state->stack_context.current_state->render.render_mode = GL_LINE;
+        render->render_mode = GL_LINE;
     }
     
-    glPolygonMode(GL_FRONT_AND_BACK, engine_state->stack_context.current_state->render.render_mode);
+    glPolygonMode(GL_FRONT_AND_BACK, render->render_mode);
 }
