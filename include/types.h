@@ -99,7 +99,7 @@ typedef struct st_state
 typedef struct {
     st_state *current_state;
 
-    int level_of_depth;
+    atomic_int level_of_depth;
 }stack;
 
 /**

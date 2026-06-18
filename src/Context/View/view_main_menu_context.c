@@ -1,8 +1,8 @@
 #include "../../../include/src_include/Context/View/view_main_menu_context.h"
 
-void init_mesh(st_engine *engine_state, st_mesh mesh)
+void init_mesh(st_render_data *render, st_mesh mesh)
 {
-    init_a_3d_loaded_element(engine_state,  &mesh);
+    init_a_3d_loaded_element(render,  &mesh);
     // Vider côté CPU
     free(mesh.vert_pos);
     free(mesh.face_pos);

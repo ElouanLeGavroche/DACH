@@ -33,7 +33,7 @@ int window_should_close(){
 /**
  * @brief Cette fonction va me servir à initialiser les différent éléments graphique de la page
  */
-void init_a_3d_loaded_element(st_engine *engine_state, st_mesh *elt)
+void init_a_3d_loaded_element(st_render_data *render, st_mesh *elt)
 {
 
     unsigned int VAO, VBO, EBO;
@@ -56,9 +56,9 @@ void init_a_3d_loaded_element(st_engine *engine_state, st_mesh *elt)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(*elt->face_pos)*elt->nb_face, elt->face_pos, GL_STATIC_DRAW);
 
 
-    put_unsigned_int_3d_obj_lst(engine_state->stack_context.current_state->render.VAOs, VAO, elt->nb_vert, elt->nb_face);
-    put_unsigned_int_3d_obj_lst(engine_state->stack_context.current_state->render.VBOs, VBO, elt->nb_vert, elt->nb_face);
-    put_unsigned_int_3d_obj_lst(engine_state->stack_context.current_state->render.EBOs, EBO, elt->nb_vert, elt->nb_face);
+    put_unsigned_int_3d_obj_lst(render->VAOs, VAO, elt->nb_vert, elt->nb_face);
+    put_unsigned_int_3d_obj_lst(render->VBOs, VBO, elt->nb_vert, elt->nb_face);
+    put_unsigned_int_3d_obj_lst(render->EBOs, EBO, elt->nb_vert, elt->nb_face);
     
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -66,12 +66,12 @@ void init_a_3d_loaded_element(st_engine *engine_state, st_mesh *elt)
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
 
     // Définir le mode de rendu (pour le Developpement)
-    engine_state->stack_context.current_state->render.render_mode = GL_LINE;
-    glPolygonMode(GL_FRONT_AND_BACK, engine_state->stack_context.current_state->render.render_mode);
+    render->render_mode = GL_LINE;
+    glPolygonMode(GL_FRONT_AND_BACK, render->render_mode);
 
 }
 
-void init_a_loaded_shader(st_engine *engine_state, const char vertex_shader_source[], const char fragment_shader_source[])
+void init_a_loaded_shader(st_render_data *render, const char vertex_shader_source[], const char fragment_shader_source[])
 {
     /* Variables de debug */
     int  success;
@@ -120,5 +120,5 @@ void init_a_loaded_shader(st_engine *engine_state, const char vertex_shader_sour
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
 
-    put_unsigned_int_lst(engine_state->stack_context.current_state->render.shader_programs, shader_program);
+    put_unsigned_int_lst(render->shader_programs, shader_program);
 }
