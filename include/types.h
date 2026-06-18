@@ -2,6 +2,7 @@
 #define TYPE
 
 #include <stdbool.h>
+#include <stdlib.h>
 #include <stdatomic.h>
 
 typedef struct st_engine st_engine;
@@ -54,12 +55,27 @@ struct st_float
     st_float *next;
 };
 
+typedef struct st_int_list_2
+{
+    int *data;
+    size_t lenght;
+    size_t count;
+}st_int_list_2;
+
 // Structure de la liste de flotant
+
 typedef struct
 {
     st_float * first;
     int size;
 }st_float_list;
+
+typedef struct st_float_list
+{
+    float *data;
+    size_t lenght;
+    size_t count;
+}st_float_list_2;
 
 //////////////////
 //              //
@@ -108,6 +124,21 @@ struct st_mesh
 };
 
 /**
+ * @brief Structure qui stock les informations de rendu du context
+ */
+typedef struct{
+    st_unsigned_int_list *VAOs;
+    st_unsigned_int_list *VBOs;
+    st_unsigned_int_list *EBOs;
+
+
+    st_unsigned_int_list *shader_programs;
+
+    unsigned int render_mode;
+
+}st_render_data;
+
+/**
  * @brief Structure (presque class) qui contient deux catégorie d'élément
  * 
  * 1 - Des pointeurs de fonction, celle-ci servent à y placer de manière efficaces toutes les page de l'application
@@ -128,6 +159,8 @@ typedef struct st_state
     void (*update_render_context)(st_engine *engine_state);
     
     struct st_state *upper;
+
+    st_render_data render;
     
 }st_state;
 /**
@@ -173,21 +206,6 @@ typedef struct
     bool one_of_them;
 }st_input;
 
-/**
- * @brief Structure qui stock les informations de rendu du context
- */
-typedef struct{
-    st_unsigned_int_list *VAOs;
-    st_unsigned_int_list *VBOs;
-    st_unsigned_int_list *EBOs;
-
-
-    st_unsigned_int_list *shader_programs;
-
-    unsigned int render_mode;
-
-}st_render_data;
-
 
 /**
  * @brief Structure du moteur.
@@ -211,8 +229,6 @@ typedef struct st_engine
     stack stack_context;
     st_context_tool context_tool;
     st_state *next_state;
-
-    st_render_data render;
 
 } st_engine;
 

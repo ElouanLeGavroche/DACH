@@ -28,7 +28,7 @@ sudo apt-get install libglfw3-dev
 
 ## Puis vous pouvez compilé/executer le code ainsi
 
-make && make clean | ./out/DACH 
+make && ./out/DACH && make clean
 
 ## Contribution
 

@@ -34,11 +34,10 @@ void init_menu(st_engine *engine_state)
     
     // Initialiser le rendu --------------------------------------------------------------------------------------------
     
-    init_unsigned_int_lst(&engine_state->render.VAOs);
-    init_unsigned_int_lst(&engine_state->render.VBOs);
-    init_unsigned_int_lst(&engine_state->render.EBOs);
-    init_unsigned_int_lst(&engine_state->render.shader_programs);
-
+    init_unsigned_int_lst(&engine_state->stack_context.current_state->render.VAOs);
+    init_unsigned_int_lst(&engine_state->stack_context.current_state->render.VBOs);
+    init_unsigned_int_lst(&engine_state->stack_context.current_state->render.EBOs);
+    init_unsigned_int_lst(&engine_state->stack_context.current_state->render.shader_programs);
 
     // Initialiser les shaders --------------------------------------------------------------------------------------------
     // Faire une fonction propre pour les charger individuellement ou par liste
@@ -48,7 +47,6 @@ void init_menu(st_engine *engine_state)
     // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
     init_mesh(engine_state, first_square);
     init_mesh(engine_state, seconde_square);
-
 
 
     // Libéré les shader qui sont compilé côté GPU à présent

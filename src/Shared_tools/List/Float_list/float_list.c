@@ -2,6 +2,7 @@
 /**
  * @brief Permet d'initialiser une liste de flotants.
  */
+
 void init_float_lst(st_float_list **list)
 {
     *list = malloc(sizeof(st_float_list));

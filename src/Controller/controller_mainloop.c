@@ -119,6 +119,8 @@ void controller_mainloop_management(st_engine *engine_state){
 
 void new_context(st_engine *engine_state)
 {
+    unload_data(engine_state);
+    
     // L'on initialise le nouveau context
     engine_state->next_state->init_state(engine_state);
 
@@ -127,8 +129,6 @@ void new_context(st_engine *engine_state)
     
     // L'on supprime le context suivant qui est déjà placé
     engine_state->next_state = 0;
-
-    unload_data(engine_state);
     
 }
 
@@ -136,34 +136,33 @@ void unload_data(st_engine *engine_state)
 {
     
     int i;
-    
     // On détruit tout les éléments de la liste
-    for(i = 0; i < engine_state->render.VAOs->size; i ++)
+    for(i = 0; i < engine_state->stack_context.current_state->render.VAOs->size; i ++)
     {
-        unsigned int vao = get_unsigned_int(engine_state->render.VAOs, i);
+        unsigned int vao = get_unsigned_int(engine_state->stack_context.current_state->render.VAOs, i);
         glDeleteVertexArrays(1, &vao);
     }
     
-    for(i = 0; i < engine_state->render.VBOs->size; i ++)
+    for(i = 0; i < engine_state->stack_context.current_state->render.VBOs->size; i ++)
     {
-        unsigned int vbo = get_unsigned_int(engine_state->render.VBOs, i);
-        glDeleteVertexArrays(1, &vbo);
+        unsigned int vbo = get_unsigned_int(engine_state->stack_context.current_state->render.VBOs, i);
+        glDeleteBuffers(1, &vbo);
+    }
+    
+    for(i = 0; i < engine_state->stack_context.current_state->render.EBOs->size; i ++)
+    {
+        unsigned int ebo = get_unsigned_int(engine_state->stack_context.current_state->render.EBOs, i);
+        glDeleteBuffers(1, &ebo);
     }
 
-    for(i = 0; i < engine_state->render.EBOs->size; i ++)
+        for(i = 0; i < engine_state->stack_context.current_state->render.shader_programs->size; i ++)
     {
-        unsigned int ebo = get_unsigned_int(engine_state->render.EBOs, i);
-        glDeleteVertexArrays(1, &ebo);
-    }
-
-        for(i = 0; i < engine_state->render.shader_programs->size; i ++)
-    {
-        unsigned int shader = get_unsigned_int(engine_state->render.shader_programs, i);
+        unsigned int shader = get_unsigned_int(engine_state->stack_context.current_state->render.shader_programs, i);
         glDeleteProgram(shader);
     }
     
-    destroy_unsigned_lst(engine_state->render.VAOs);
-    destroy_unsigned_lst(engine_state->render.VBOs);
-    destroy_unsigned_lst(engine_state->render.EBOs);
-    destroy_unsigned_lst(engine_state->render.shader_programs);
+    destroy_unsigned_lst(engine_state->stack_context.current_state->render.VAOs);
+    destroy_unsigned_lst(engine_state->stack_context.current_state->render.VBOs);
+    destroy_unsigned_lst(engine_state->stack_context.current_state->render.EBOs);
+    destroy_unsigned_lst(engine_state->stack_context.current_state->render.shader_programs);
 }
