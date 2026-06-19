@@ -12,7 +12,7 @@
 
 void controller_update_render_main_menu(st_engine *engine_state);
 void init_menu(st_engine *engine_state);
-void input_context_main_menu(st_engine *engine_state);
 void controller_update_logic_main_menu(st_engine *engine_state);
 
+int input_context_main_menu(st_input *inputs);
 #endif

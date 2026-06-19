@@ -13,17 +13,17 @@ void init_game(st_engine *engine_state)
     printf("Context jeu initier\n");
 }
 
-void input_context_game(st_engine *engine_state)
+int input_context_game(st_input *inputs)
 {
     // Système temporaire pour traiter les entrées
-    if(engine_state->input.escape == true)
+    if(inputs->escape == true)
     {  
-        engine_state->running = false;
+        return INP_CLOSE_GAME;
     }
 
-    else if(engine_state->input.down_arrow == true)
+    else if(inputs->down_arrow == true)
     {
-        engine_state->context_tool.remove_context(&engine_state->stack_context);
+        return INP_OLD_CONTEXT;
         
     }
 

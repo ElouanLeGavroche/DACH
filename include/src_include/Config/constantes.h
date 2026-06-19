@@ -26,4 +26,14 @@
 
 #define EMPTY_LIST -1
 
+
+/* Données qui permettent de savoir si un input d'un context doit affecter le jeu au global */
+#define INP_CLOSE_GAME 1
+#define INP_OLD_CONTEXT 2
+/* Vers les context */
+#define INP_TO_MAIN_MENU 3
+#define INP_TO_GAME 4
+/* Autres paramètres */
+#define INP_CHANGE_RENDER_DEBUG 5
+
 #endif 

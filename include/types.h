@@ -49,6 +49,19 @@ struct st_mesh
 
 };
 
+// Le bool "one of them" sert à verifier s'il y en a
+// au moins un d'actionner. Pour éviter de parcourir
+// un switch pour rien.
+typedef struct
+{
+    atomic_bool escape;
+    atomic_bool up_arrow;
+    atomic_bool down_arrow;
+    atomic_bool enter;
+    atomic_bool one_of_them;
+}st_input;
+
+
 /**
  * @brief Structure qui stock les informations de rendu du context
  */
@@ -80,7 +93,7 @@ typedef struct{
 typedef struct st_state
 {
     void (*init_state)(st_engine *engine_state);
-    void (*input_context)(st_engine *engine_state);
+    int (*input_context)(st_input *inputs);
     void (*update_logic_context)(st_engine *engine_state);
     void (*update_render_context)(st_engine *engine_state);
     
@@ -118,19 +131,6 @@ typedef struct
     int (*remove_context)(stack *my_stack);
     
 }st_context_tool;
-
-// Le bool "one of them" sert à verifier s'il y en a
-// au moins un d'actionner. Pour éviter de parcourir
-// un switch pour rien.
-typedef struct
-{
-    atomic_bool escape;
-    atomic_bool up_arrow;
-    atomic_bool down_arrow;
-    atomic_bool enter;
-    atomic_bool one_of_them;
-}st_input;
-
 
 /**
  * @brief Structure du moteur.

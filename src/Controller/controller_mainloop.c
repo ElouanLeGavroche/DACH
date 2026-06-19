@@ -58,7 +58,7 @@ void controller_mainloop_management(st_engine *engine_state){
     // Ce tampon permet de savoir si le jeu est revenu à un etat entérieur
     // Et donc de recharger les éléments qui lui y étais associé
     int level_tampon = engine_state->stack_context.level_of_depth;
-
+    int input_res = 0;
     ////////////////////////////////////////////
     //                                        //
     //                Boucle                  //
@@ -75,7 +75,29 @@ void controller_mainloop_management(st_engine *engine_state){
         // Voir à quoi peuvent servir ces entrée dans ce context (si l'une d'entre elle est appuyé)
         if(engine_state->input.one_of_them)
         {
-            engine_state->stack_context.current_state->input_context(engine_state);
+            input_res = engine_state->stack_context.current_state->input_context(&engine_state->input);
+            
+            // Ici les actions à faire à l'échelle global, et non pas à l'échelle des context eux même
+            switch (input_res)
+            {
+            case INP_CLOSE_GAME:
+                engine_state->running = false;
+                break;
+
+            case INP_OLD_CONTEXT:
+                engine_state->context_tool.remove_context(&engine_state->stack_context);
+                break;
+
+            case INP_TO_GAME:
+                engine_state->next_state = &game_state;
+                break;
+
+            case INP_CHANGE_RENDER_DEBUG:
+                change_render_mode(&engine_state->stack_context.current_state->render);
+                
+            default:
+                break;
+            }
         }
 
         // Voir si un nouveau context est entré
