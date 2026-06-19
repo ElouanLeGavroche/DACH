@@ -70,14 +70,14 @@ void controller_mainloop_management(st_engine *engine_state){
         clock_gettime(CLOCK_MONOTONIC, &ts_start);
 
         // Mettre à jour le tableau des entrée //
-        process_input(&engine_state->input);
+        //process_input(&engine_state->input);
 
         // Voir à quoi peuvent servir ces entrée dans ce context (si l'une d'entre elle est appuyé)
-        if(engine_state->input.one_of_them)
+
+        input_res = engine_state->stack_context.current_state->input_context(&engine_state->input);
+        if(input_res != 0)
         {
-            input_res = engine_state->stack_context.current_state->input_context(&engine_state->input);
-            
-            // Ici les actions à faire à l'échelle global, et non pas à l'échelle des context eux même
+            // Ici on traite les actions à faire à l'échelle global, et non pas à l'échelle des context eux même
             switch (input_res)
             {
             case INP_CLOSE_GAME:
@@ -94,7 +94,7 @@ void controller_mainloop_management(st_engine *engine_state){
 
             case INP_CHANGE_RENDER_DEBUG:
                 change_render_mode(&engine_state->stack_context.current_state->render);
-                
+
             default:
                 break;
             }

@@ -19,8 +19,6 @@
 #include "../View/view_render_loop.h"
 #include "../Model/model_mainloop.h"
 
-#include "controller_input.h"
-
 //Chargement des structures du jeu
 #include "../../types.h"
 
