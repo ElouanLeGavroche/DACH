@@ -24,11 +24,11 @@ void init_menu(st_engine *engine_state)
     }
     
     // CHARGER LES ELEMENTS --------------------------------------------------------------------------------------------
-    st_mesh first_square;
-    load_file(BASIC_HOUSE_PATH, &first_square);
+    //st_mesh first_square;
+    //load_file(BASIC_HOUSE_PATH, &first_square);
 
-    //st_mesh seconde_square;
-    //load_file(BASIC_TILE_PATH, &seconde_square);
+    st_mesh seconde_square;
+    load_file(BASIC_TILE_PATH, &seconde_square);
 
     
     
@@ -46,8 +46,8 @@ void init_menu(st_engine *engine_state)
     
 
     // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
-    init_mesh(&engine_state->stack_context.current_state->render, first_square);
-    //init_mesh(&engine_state->stack_context.current_state->render, seconde_square);
+    //init_mesh(&engine_state->stack_context.current_state->render, first_square);
+    init_mesh(&engine_state->stack_context.current_state->render, seconde_square);
 
 
     // Libéré les shader qui sont compilé côté GPU à présent

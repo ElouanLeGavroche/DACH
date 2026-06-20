@@ -135,7 +135,6 @@ int parse_vertext(char line[], st_mesh *tile, int i_v)
     
     char * letter;
     letter = strtok ( line, " " );
-    printf("%s\n", line);
     if(letter == NULL)
     {
         return -1;
@@ -150,7 +149,6 @@ int parse_vertext(char line[], st_mesh *tile, int i_v)
             return -1;
         }
         value = atof(letter);
-        printf("%f\n", value);
         tile->vert_pos[i_v] = value;
         i_v ++;
     }
