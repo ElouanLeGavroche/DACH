@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include <stdatomic.h>
 
+#include <cglm/cglm.h>
+#include <cglm/types.h>
+
 typedef struct st_engine st_engine;
 typedef struct st_state st_state;
 
@@ -61,6 +64,17 @@ typedef struct
     atomic_bool one_of_them;
 }st_input;
 
+
+
+typedef struct
+{
+    unsigned int shader_prg;
+
+    void(* set_int_uniform)();
+    void(* set_flaot_uniform)();
+    void(* set_bool_uniform)();
+
+}st_shader;
 
 /**
  * @brief Structure qui stock les informations de rendu du context

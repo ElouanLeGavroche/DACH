@@ -1,4 +1,4 @@
-CC=cc 
+CC=gcc 
 CFLAG= -lglfw -ljson-c  -lm -lX11 -lpthread -lXrandr -ldl -Wall
 INC=-I
 
