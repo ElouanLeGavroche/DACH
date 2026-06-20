@@ -46,7 +46,7 @@ void controller_mainloop_management(st_engine *engine_state){
     engine_state->context_tool.put_context(&engine_state->stack_context, &main_menu_state);
 
     //Initialiser le contenu de la State
-    engine_state->stack_context.current_state->init_state(engine_state);
+    engine_state->stack_context.current_state->init_state(engine_state->stack_context.current_state);
     
     // Création du thread et passage de la structure engine
     pthread_create(&logical_thread, NULL, logical_loop, engine_state);
@@ -109,7 +109,7 @@ void controller_mainloop_management(st_engine *engine_state){
         else if(level_tampon > engine_state->stack_context.level_of_depth)
         {
             level_tampon = engine_state->stack_context.level_of_depth;
-            engine_state->stack_context.current_state->init_state(engine_state);
+            engine_state->stack_context.current_state->init_state(engine_state->stack_context.current_state);
         }
 
         view_clear();
@@ -144,7 +144,7 @@ void new_context(st_engine *engine_state)
     unload_data(engine_state);
     
     // L'on initialise le nouveau context
-    engine_state->next_state->init_state(engine_state);
+    engine_state->next_state->init_state(engine_state->stack_context.current_state);
 
     // L'on envoie le context suivant pour remplacer l'actuel
     engine_state->context_tool.put_context(&engine_state->stack_context, engine_state->next_state);

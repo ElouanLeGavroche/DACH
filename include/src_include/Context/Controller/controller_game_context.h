@@ -13,7 +13,7 @@
 #include "../../../state.h"
 
 void controller_update_render_game(st_render_data *render);
-void init_game(st_engine *engine_state);
+void init_game(st_state *state);
 void controller_update_logic_game(st_engine *engine_state);
 
 int input_context_game(st_input *inputs);

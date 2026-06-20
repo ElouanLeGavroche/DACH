@@ -107,7 +107,7 @@ typedef struct{
 typedef struct st_state
 {
     // L'initialiseur connait tout
-    void (*init_state)(st_engine *engine_state);
+    void (*init_state)(st_state *state);
     // L'input ne connait que les entrée clavier
     int (*input_context)(st_input *inputs);
     // La logique ne connaitra que les model

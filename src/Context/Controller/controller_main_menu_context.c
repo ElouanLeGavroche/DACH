@@ -8,7 +8,7 @@ struct st_state main_menu_state =
     controller_update_render_main_menu
 };
 
-void init_menu(st_engine *engine_state)
+void init_menu(st_state *state)
 {
     printf("début de l'initiation\n");
 
@@ -34,20 +34,19 @@ void init_menu(st_engine *engine_state)
     
     // Initialiser le rendu --------------------------------------------------------------------------------------------
     //st_render_data *render = &engine_state->stack_context.current_state->render;
-
-    init_unsigned_int_lst(&engine_state->stack_context.current_state->render.VAOs);
-    init_unsigned_int_lst(&engine_state->stack_context.current_state->render.VBOs);
-    init_unsigned_int_lst(&engine_state->stack_context.current_state->render.EBOs);
-    init_unsigned_int_lst(&engine_state->stack_context.current_state->render.shader_programs);
+    
+    init_unsigned_int_lst(&state->render.VAOs);
+    init_unsigned_int_lst(&state->render.VBOs);
+    init_unsigned_int_lst(&state->render.EBOs);
+    init_unsigned_int_lst(&state->render.shader_programs);
 
     // Initialiser les shaders --------------------------------------------------------------------------------------------
     // Faire une fonction propre pour les charger individuellement ou par liste
-    init_a_loaded_shader(&engine_state->stack_context.current_state->render, vertex_shader_source, fragment_shader_source);
-    
+    init_a_loaded_shader(&state->render, vertex_shader_source, fragment_shader_source);
 
     // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
     //init_mesh(&engine_state->stack_context.current_state->render, first_square);
-    init_mesh(&engine_state->stack_context.current_state->render, seconde_square);
+    init_mesh(&state->render, seconde_square);
 
 
     // Libéré les shader qui sont compilé côté GPU à présent

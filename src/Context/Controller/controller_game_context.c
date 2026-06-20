@@ -8,7 +8,7 @@ struct st_state game_state =
     controller_update_render_game
 };
 
-void init_game(st_engine *engine_state)
+void init_game(st_state *state)
 {
     printf("Context jeu initier\n");
 }
