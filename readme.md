@@ -11,20 +11,28 @@ Je ne sais pas, on verra où me mène ce jeu, je code à mon rythme pour passer 
 
 #### Hag e brezhonneg ?
 
-Ma on kab skrivañ ar yezh.
-
-
-*ken ar c'hentañ*
+Ma on kab da skriva e Brezhoneg.
 
 # Manuel 
 
+Voici quelques explications nécéssaire pour lancer sans accro le programe.
+
 ## Librairies externe à installer
-Vous devez en premier lieux installer GLFW.
+
+### - GLFW
+
+Vous devez en premier lieux installer GLFW. C'est avec lui que l'on va utiliser OpenGL et communiquer avec la carte graphique.
 
 ```bash
 sudo apt-get install libglfw3
 sudo apt-get install libglfw3-dev
 ```
+
+### - CGLM
+Nous avons aussi besoin de CGLM. Cette librairie nous permet de faire des calculs sur des matrices et des vecteur assez aisémment.
+
+*Rendez vous sur ce dépôt pour l'installer dans votre repertoire de librairie C :*
+https://github.com/recp/cglm
 
 ## Puis vous pouvez compilé/executer le code ainsi
 
