@@ -2,4 +2,6 @@
 Thumbs.db
 
 *.o
+.vscode
 /out
+test
