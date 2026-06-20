@@ -100,7 +100,6 @@ int load_file(char *path, st_mesh *tile)
             }
         }
     }
-    
     fclose(file);
     return 0;
 }
@@ -136,13 +135,14 @@ int parse_vertext(char line[], st_mesh *tile, int i_v)
     
     char * letter;
     letter = strtok ( line, " " );
+    printf("%s\n", line);
     if(letter == NULL)
     {
         return -1;
     }
     int i;
 
-    for(i = 0; i < 3; i ++)
+    for(i = 0; i < 6; i ++)
     {
         letter = strtok( NULL, " " );
         if(letter == NULL)
@@ -150,6 +150,7 @@ int parse_vertext(char line[], st_mesh *tile, int i_v)
             return -1;
         }
         value = atof(letter);
+        printf("%f\n", value);
         tile->vert_pos[i_v] = value;
         i_v ++;
     }
@@ -163,16 +164,12 @@ int parse_face(char line[], st_mesh *tile, int i_f)
     int i, y;
 
     char *letter;
-
     letter = strtok( line, " ");
-    if(letter == NULL)
-    {
-        return -1;
-    }
-    letter = strtok(NULL, "/");
+
     for(y = 0; y < 3; y ++)
     {
 
+        letter = strtok(NULL, " ");
         
         if(letter == NULL)
         {
@@ -182,8 +179,7 @@ int parse_face(char line[], st_mesh *tile, int i_f)
         tile->face_pos[i_f] = value - 1;
         i_f ++;
 
-        letter = strtok(NULL, " ");
-        letter = strtok(NULL, "/");
+        
     }
 
     return i_f;

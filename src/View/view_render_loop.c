@@ -50,8 +50,6 @@ void init_a_3d_loaded_element(st_render_data *render, st_mesh *elt)
     
     
     glBufferData(GL_ARRAY_BUFFER, sizeof(*elt->vert_pos)*elt->nb_vert, elt->vert_pos, GL_STATIC_DRAW);
-    printf("nb_vert = %d\n", elt->nb_vert);
-    printf("nb_face = %d\n", elt->nb_face);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(*elt->face_pos)*elt->nb_face, elt->face_pos, GL_STATIC_DRAW);
 
@@ -60,8 +58,13 @@ void init_a_3d_loaded_element(st_render_data *render, st_mesh *elt)
     put_unsigned_int_3d_obj_lst(render->VBOs, VBO, elt->nb_vert, elt->nb_face);
     put_unsigned_int_3d_obj_lst(render->EBOs, EBO, elt->nb_vert, elt->nb_face);
     
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    // Positition des polygone
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+
+    // Les couleurs
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3* sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
 

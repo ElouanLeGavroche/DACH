@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <math.h>
+
 #include "../../../../extern_lib/glad/glad.h"
 
 #include <GLFW/glfw3.h>
@@ -19,7 +21,7 @@
 
 // Les chemins des éléments du menu
 #define BASIC_TILE_PATH "ressources/tiles/basic_tile.obj"
-#define BASIC_HOUSE_PATH "ressources/houses/test.obj"
+#define BASIC_HOUSE_PATH "ressources/houses/house.obj"
 
 void init_mesh(st_render_data *render, st_mesh mesh);
 void update_render_main_menu(st_render_data *render);

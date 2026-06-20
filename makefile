@@ -89,4 +89,5 @@ clean:
 	rm -rf $(INT_LIST)*.o
 	rm -rf $(FLOAT_LIST)*.o
 	rm -rf $(LOAD_TOOLS)*.o
+	rm -rf $(EXTERN_INCLUDE)glad/*.o
 	rm -rf *.o
