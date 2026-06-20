@@ -10,7 +10,7 @@
 
 #include "../../../state.h"
 
-void controller_update_render_main_menu(st_engine *engine_state);
+void controller_update_render_main_menu(st_render_data *render);
 void init_menu(st_engine *engine_state);
 void controller_update_logic_main_menu(st_engine *engine_state);
 

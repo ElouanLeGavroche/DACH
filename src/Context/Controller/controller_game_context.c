@@ -35,7 +35,7 @@ void controller_update_logic_game(st_engine *engine_state)
     update_logic_game(engine_state);
 }
 
-void controller_update_render_game(st_engine *engine_state)
+void controller_update_render_game(st_render_data *render)
 {
-    update_render_game(&engine_state->stack_context.current_state->render);
+    update_render_game(render);
 }

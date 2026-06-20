@@ -115,7 +115,7 @@ void controller_mainloop_management(st_engine *engine_state){
         view_clear();
         
         //Actual context
-        engine_state->stack_context.current_state->update_render_context(engine_state);
+        engine_state->stack_context.current_state->update_render_context(&engine_state->stack_context.current_state->render);
 
         view_swap();
 

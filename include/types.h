@@ -106,13 +106,16 @@ typedef struct{
  */
 typedef struct st_state
 {
+    // L'initialiseur connait tout
     void (*init_state)(st_engine *engine_state);
+    // L'input ne connait que les entrée clavier
     int (*input_context)(st_input *inputs);
+    // La logique ne connaitra que les model
     void (*update_logic_context)(st_engine *engine_state);
-    void (*update_render_context)(st_engine *engine_state);
+    // Le rendu ne connait que les données liée au rendu
+    void (*update_render_context)(st_render_data *render);
     
     struct st_state *upper;
-
     st_render_data render;
     
 }st_state;
