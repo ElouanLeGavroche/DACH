@@ -28,5 +28,8 @@ int init_View(st_loaded_windows_data *window_data)
         return -1;
     }
 
+    /* Activer le test de profondeur */
+    glEnable(GL_DEPTH_TEST);
+
     return DONE;
 }
