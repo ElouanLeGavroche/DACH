@@ -5,9 +5,6 @@
 
 #include "../../../types.h"
 
-#include "../../Shared_tools/Load_tools/load_shader.h"
-#include "../../Shared_tools/Load_tools/load_obj_format.h"
-
 void update_logic_main_menu(st_engine *engine_state);
 void init_data_main_menu(st_engine *engine);
 #endif

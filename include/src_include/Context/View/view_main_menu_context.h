@@ -23,8 +23,6 @@
 #define BASIC_TILE_PATH "ressources/tiles/basic_tile.obj"
 #define BASIC_HOUSE_PATH "ressources/houses/house.obj"
 
-void init_mesh(st_render_data *render, st_mesh mesh);
 void update_render_main_menu(st_render_data *render);
-void change_render_mode(st_render_data *render);
 
 #endif

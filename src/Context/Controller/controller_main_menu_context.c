@@ -16,6 +16,8 @@ void init_menu(st_state *state)
     const char *vertex_shader_source = load_shader("src/Shaders/main_shader.vert");
     const char *fragment_shader_source = load_shader("src/Shaders/main_shader.frag");
     
+    int nb_SH = 2;
+
     // ""Gestion de l'erreur - lmao""
     if(!vertex_shader_source || !fragment_shader_source)
     {
@@ -30,7 +32,7 @@ void init_menu(st_state *state)
     st_mesh seconde_square;
     load_file(BASIC_TILE_PATH, &seconde_square);
 
-    
+    int nb_elts = 2;
     
     // Initialiser le rendu --------------------------------------------------------------------------------------------
     //st_render_data *render = &engine_state->stack_context.current_state->render;
@@ -45,8 +47,8 @@ void init_menu(st_state *state)
     init_a_loaded_shader(&state->render, vertex_shader_source, fragment_shader_source);
 
     // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
-    init_mesh(&state->render, first_square);
-    init_mesh(&state->render, seconde_square);
+    init_a_3d_loaded_element(&state->render, &seconde_square);
+    init_a_3d_loaded_element(&state->render, &first_square);
 
 
     // Libéré les shader qui sont compilé côté GPU à présent

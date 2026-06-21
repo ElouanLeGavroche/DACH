@@ -48,12 +48,12 @@ void init_a_3d_loaded_element(st_render_data *render, st_mesh *elt)
     // 2.Mettre les sommet dans le VBO et EBO
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     
-    
     glBufferData(GL_ARRAY_BUFFER, sizeof(*elt->vert_pos)*elt->nb_vert, elt->vert_pos, GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(*elt->face_pos)*elt->nb_face, elt->face_pos, GL_STATIC_DRAW);
 
 
+    
     put_unsigned_int_3d_obj_lst(render->VAOs, VAO, elt->nb_vert, elt->nb_face);
     put_unsigned_int_3d_obj_lst(render->VBOs, VBO, elt->nb_vert, elt->nb_face);
     put_unsigned_int_3d_obj_lst(render->EBOs, EBO, elt->nb_vert, elt->nb_face);
@@ -68,9 +68,9 @@ void init_a_3d_loaded_element(st_render_data *render, st_mesh *elt)
 
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
 
-    // Définir le mode de rendu (pour le Developpement)
-    render->render_mode = GL_LINE;
-    glPolygonMode(GL_FRONT_AND_BACK, render->render_mode);
+    // Vider côté CPU
+    free(elt->vert_pos);
+    free(elt->face_pos);
 
 }
 

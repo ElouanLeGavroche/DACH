@@ -76,6 +76,14 @@ typedef struct
 
 }st_shader;
 
+
+/**
+ * @brief Structure qui contient les informations de la caméra
+ */
+typedef struct{
+    mat4 view_point;
+}st_camera;
+
 /**
  * @brief Structure qui stock les informations de rendu du context
  */
@@ -86,8 +94,7 @@ typedef struct{
 
 
     st_unsigned_int_list *shader_programs;
-
-    unsigned int render_mode;
+    st_camera camera;
 
 }st_render_data;
 

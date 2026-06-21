@@ -69,8 +69,9 @@ void controller_mainloop_management(st_engine *engine_state){
         // Time au début de la boucle
         clock_gettime(CLOCK_MONOTONIC, &ts_start);
 
-        // Mettre à jour le tableau des entrée //
-        //process_input(&engine_state->input);
+        // récupéré les entrées //
+        glfwPollEvents();
+
 
         // Voir à quoi peuvent servir ces entrée dans ce context (si l'une d'entre elle est appuyé)
 
@@ -92,13 +93,17 @@ void controller_mainloop_management(st_engine *engine_state){
                 engine_state->next_state = &game_state;
                 break;
 
-            case INP_CHANGE_RENDER_DEBUG:
-                change_render_mode(&engine_state->stack_context.current_state->render);
-
             default:
                 break;
             }
         }
+            
+        view_clear();
+        
+        //Actual context
+        engine_state->stack_context.current_state->update_render_context(&engine_state->stack_context.current_state->render);
+
+        view_swap();
 
         // Voir si un nouveau context est entré
         if(engine_state->next_state != 0)
@@ -111,16 +116,6 @@ void controller_mainloop_management(st_engine *engine_state){
             level_tampon = engine_state->stack_context.level_of_depth;
             engine_state->stack_context.current_state->init_state(engine_state->stack_context.current_state);
         }
-
-        view_clear();
-        
-        //Actual context
-        engine_state->stack_context.current_state->update_render_context(&engine_state->stack_context.current_state->render);
-
-        view_swap();
-
-        // récupéré les entrées //
-        glfwPollEvents();
 
         //Time fin de boucle
         clock_gettime(CLOCK_MONOTONIC, &ts_end);
@@ -142,7 +137,10 @@ void controller_mainloop_management(st_engine *engine_state){
 void new_context(st_engine *engine_state)
 {
     unload_data(engine_state);
-    
+
+    //Initialiser le contenu de la State
+    engine_state->stack_context.current_state->init_state(engine_state->stack_context.current_state);
+
     // L'on initialise le nouveau context
     engine_state->next_state->init_state(engine_state->stack_context.current_state);
 
@@ -151,7 +149,7 @@ void new_context(st_engine *engine_state)
     
     // L'on supprime le context suivant qui est déjà placé
     engine_state->next_state = 0;
-    
+
 }
 
 void unload_data(st_engine *engine_state)

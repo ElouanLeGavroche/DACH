@@ -15,6 +15,7 @@ void init_unsigned_int_lst(st_unsigned_int_list **list)
     *list = malloc(sizeof(st_unsigned_int_list));
     (*list)->first = NULL;
     (*list)->size = 0;
+
 }
 
 void put_unsigned_int_3d_obj_lst(st_unsigned_int_list *list, unsigned int value, int nb_vert, int nb_face)
@@ -43,7 +44,6 @@ void put_unsigned_int_3d_obj_lst(st_unsigned_int_list *list, unsigned int value,
         
         tampon->next = list_value;
     }
-
     list->size ++;
 }
 

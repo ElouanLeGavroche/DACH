@@ -6,6 +6,9 @@
 #include "../Model/model_main_menu_context.h"
 #include "../View/view_main_menu_context.h"
 
+#include "../../Shared_tools/Load_tools/load_shader.h"
+#include "../../Shared_tools/Load_tools/load_obj_format.h"
+
 #include "../../../types.h"
 
 #include "../../../state.h"

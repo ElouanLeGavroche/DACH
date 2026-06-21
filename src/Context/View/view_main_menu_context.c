@@ -1,11 +1,4 @@
 #include "../../../include/src_include/Context/View/view_main_menu_context.h"
-void init_mesh(st_render_data *render, st_mesh mesh)
-{
-    init_a_3d_loaded_element(render,  &mesh);
-    // Vider côté CPU
-    free(mesh.vert_pos);
-    free(mesh.face_pos);
-}
 
 void update_render_main_menu(st_render_data *render)
 {
@@ -14,12 +7,14 @@ void update_render_main_menu(st_render_data *render)
     /* Model */
     mat4 model;
     glm_mat4_identity(model);
-    glm_rotate(model, glm_rad(-55.0f), (vec3){1.0f, 0.0f, 0.0f});
+    glm_rotate(model, (float)glfwGetTime(), (vec3){0.0f, 0.0f, 1.0f});
 
     /* View */
+    /*
     mat4 view;
     glm_mat4_identity(view);
     glm_translate(view, (vec3){0.0f, 0.0f, -3.0f});
+    */
 
     /* Projection en perspective */
     mat4 proj;
@@ -32,6 +27,15 @@ void update_render_main_menu(st_render_data *render)
 
     glm_rotate(trans, (float)glfwGetTime(), (vec3){1.0, 1.0, 1.0});
     glm_scale(trans, (vec3){0.5, 0.5, 0.5});
+
+    float radius = 10.0f;
+    float cam_x = sin(glfwGetTime()) * radius;
+    float cam_z = cos(glfwGetTime()) * radius;
+
+    mat4 view;
+    glm_mat4_identity(view);
+
+    glm_lookat((vec3){cam_x, 0.0, cam_z}, (vec3){0.0, 0.0, 0.0}, (vec3){0.0, 1.0, 0.0}, view);
 
     unsigned int transfrom_loc;
 
@@ -61,29 +65,13 @@ void update_render_main_menu(st_render_data *render)
     glUniformMatrix4fv(transfrom_loc, 1, GL_FALSE, *trans);
 
     int i;
-    int nb_elt = render->VAOs->size;
-    for(i = 0; i < nb_elt; i ++)
+    for(i = 0; i < render->VAOs->size; i ++)
     {
 
         glBindVertexArray(get_unsigned_int_lst_pointer(render->VAOs, i)->value);
-        glDrawElements(GL_TRIANGLES, render->VAOs->first->nb_face, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, get_unsigned_int_lst_pointer(render->VAOs, i)->nb_face, GL_UNSIGNED_INT, 0);
 
         glBindVertexArray(0);
     }
     
-}
-
-void change_render_mode(st_render_data *render)
-{
-    /* Passage d'un rendu plein à un rendu filaire (pour le debug) */
-    if(render->render_mode != GL_FILL)
-    {
-        render->render_mode = GL_FILL;
-    } 
-    else
-    {
-        render->render_mode = GL_LINE;
-    }
-    
-    glPolygonMode(GL_FRONT_AND_BACK, render->render_mode);
 }

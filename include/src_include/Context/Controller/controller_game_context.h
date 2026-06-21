@@ -6,7 +6,8 @@
 #include "../Model/model_game_context.h"
 #include "../View/view_game_context.h"
 
-#include "../../Config/constantes.h"
+#include "../../Shared_tools/Load_tools/load_shader.h"
+#include "../../Shared_tools/Load_tools/load_obj_format.h"
 
 #include "../../../types.h"
 
