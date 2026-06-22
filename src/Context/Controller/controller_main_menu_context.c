@@ -40,7 +40,7 @@ void init_menu(st_state *state)
     init_unsigned_int_lst(&state->render.VAOs);
     init_unsigned_int_lst(&state->render.VBOs);
     init_unsigned_int_lst(&state->render.EBOs);
-    init_unsigned_int_lst(&state->render.shader_programs);
+    state->render.shader_programs = malloc(sizeof(unsigned int) * state->render.nb_shader);
 
     // Initialiser les shaders --------------------------------------------------------------------------------------------
     // Faire une fonction propre pour les charger individuellement ou par liste
@@ -56,6 +56,7 @@ void init_menu(st_state *state)
     
     free(first_square.face_pos);
     free(first_square.vert_pos);
+
 
     // Libéré les shader qui sont compilé côté GPU à présent
     free((void *)vertex_shader_source);

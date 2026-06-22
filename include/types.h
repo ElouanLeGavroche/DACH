@@ -65,10 +65,13 @@ typedef struct
 }st_input;
 
 
+/**
+ * @brief Structure qui stock le contenu d'un shader
+ */
 
 typedef struct
 {
-    unsigned int shader_prg;
+    unsigned int shader;
 
     void(* set_int_uniform)();
     void(* set_flaot_uniform)();
@@ -86,14 +89,22 @@ typedef struct{
 
 /**
  * @brief Structure qui stock les informations de rendu du context
+ * @param VAOs Liste des sommets
+ * @param VBOs Liste Buffer
+ * @param EBOs Liste Buffer
+ * @param shader_programs Liste des programe shaders
+ * @param camera structure de données de la camera
  */
 typedef struct{
+
+    unsigned int nb_shader;
+
     st_unsigned_int_list *VAOs;
     st_unsigned_int_list *VBOs;
     st_unsigned_int_list *EBOs;
 
 
-    st_unsigned_int_list *shader_programs;
+    st_shader *shader_programs;
     st_camera camera;
 
 }st_render_data;

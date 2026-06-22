@@ -185,17 +185,10 @@ void destroy_render_data(st_render_data *render)
         unsigned int ebo = get_unsigned_int(render->EBOs, i);
         glDeleteBuffers(1, &ebo);
     }
-
-        for(i = 0; i < render->shader_programs->size; i ++)
-    {
-        unsigned int shader = get_unsigned_int(render->shader_programs, i);
-        glDeleteProgram(shader);
-    }
     
     destroy_unsigned_lst(render->VAOs);
     destroy_unsigned_lst(render->VBOs);
     destroy_unsigned_lst(render->EBOs);
-    destroy_unsigned_lst(render->shader_programs);
 
     render->VAOs = NULL;
     render->VBOs = NULL;

@@ -16,6 +16,8 @@ void init_game(st_state *state)
     const char *vertex_shader_source = load_shader("src/Shaders/main_shader.vert");
     const char *fragment_shader_source = load_shader("src/Shaders/main_shader.frag");
     
+    state->render.nb_shader = 1;
+    
     // ""Gestion de l'erreur - lmao""
     if(!vertex_shader_source || !fragment_shader_source)
     {
@@ -35,7 +37,7 @@ void init_game(st_state *state)
     init_unsigned_int_lst(&state->render.VAOs);
     init_unsigned_int_lst(&state->render.VBOs);
     init_unsigned_int_lst(&state->render.EBOs);
-    init_unsigned_int_lst(&state->render.shader_programs);
+    state->render.shader_programs = malloc(sizeof(unsigned int) * state->render.nb_shader);
     
     // Initialiser les shaders --------------------------------------------------------------------------------------------
     // Faire une fonction propre pour les charger individuellement ou par liste

@@ -119,5 +119,5 @@ void init_a_loaded_shader(st_render_data *render, const char vertex_shader_sourc
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
 
-    put_unsigned_int_lst(render->shader_programs, shader_program);
+    render->shader_programs[0].shader = shader_program;
 }
