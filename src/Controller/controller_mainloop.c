@@ -139,7 +139,7 @@ void new_context(st_engine *engine_state)
     unload_data(engine_state);
 
     //Initialiser le contenu de la State
-    engine_state->stack_context.current_state->init_state(engine_state->stack_context.current_state);
+    engine_state->next_state->init_state(engine_state->next_state);
 
     // L'on initialise le nouveau context
     engine_state->next_state->init_state(engine_state->stack_context.current_state);
