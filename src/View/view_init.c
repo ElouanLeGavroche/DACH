@@ -17,15 +17,18 @@ int init_View(st_loaded_windows_data *window_data)
     if (!window)
     {
         glfwTerminate();
-        return EXIT_FAILURE;
+        return ERROR;
     }
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        printf("Failed to initialize GLAD");
-        return -1;
+        glfwDestroyWindow(window);
+        glfwTerminate();
+
+        fprintf(stderr, "Failed to initialize GLAD\n");
+        return ERROR;
     }
 
     /* Activer le test de profondeur */
@@ -37,7 +40,6 @@ int init_View(st_loaded_windows_data *window_data)
 void init_camera(st_render_data *render)
 {
     glm_mat4_identity(render->camera.view_point);
-    printf("yo\n");
     float radius = 10.0f;
     float cam_x = sin(glfwGetTime()) * radius;
     float cam_z = cos(glfwGetTime()) * radius;

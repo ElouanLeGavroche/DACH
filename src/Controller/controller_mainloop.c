@@ -108,12 +108,15 @@ void controller_mainloop_management(st_engine *engine_state){
         // Voir si un nouveau context est entré
         if(engine_state->next_state != 0)
         {
+            // Chargement du nouveau context et déchargement de celui-ci
             new_context(engine_state);
             level_tampon = engine_state->stack_context.level_of_depth;
         }
         else if(level_tampon > engine_state->stack_context.level_of_depth)
         {
+            // Déchargement du context actuel et rechargement du précédent
             level_tampon = engine_state->stack_context.level_of_depth;
+            unload_data(engine_state);
             engine_state->stack_context.current_state->init_state(engine_state->stack_context.current_state);
         }
 
@@ -128,8 +131,7 @@ void controller_mainloop_management(st_engine *engine_state){
     engine_state->running = false;
     pthread_join(logical_thread, NULL);
 
-    // Désalouer la mémoire avant la fermeture
-    free(engine_state);
+    unload_data(engine_state);
 
     view_close_window();
 }
@@ -154,35 +156,50 @@ void new_context(st_engine *engine_state)
 
 void unload_data(st_engine *engine_state)
 {
+    // Effacer les données de rendu
+    destroy_render_data(&engine_state->stack_context.current_state->render);
     
-    int i;
+    // Effacer les données de model
+}
+
+
+void destroy_render_data(st_render_data *render)
+{
+
+     int i;
     // On détruit tout les éléments de la liste
-    for(i = 0; i < engine_state->stack_context.current_state->render.VAOs->size; i ++)
+    for(i = 0; i < render->VAOs->size; i ++)
     {
-        unsigned int vao = get_unsigned_int(engine_state->stack_context.current_state->render.VAOs, i);
+        unsigned int vao = get_unsigned_int(render->VAOs, i);
         glDeleteVertexArrays(1, &vao);
     }
     
-    for(i = 0; i < engine_state->stack_context.current_state->render.VBOs->size; i ++)
+    for(i = 0; i < render->VBOs->size; i ++)
     {
-        unsigned int vbo = get_unsigned_int(engine_state->stack_context.current_state->render.VBOs, i);
+        unsigned int vbo = get_unsigned_int(render->VBOs, i);
         glDeleteBuffers(1, &vbo);
     }
     
-    for(i = 0; i < engine_state->stack_context.current_state->render.EBOs->size; i ++)
+    for(i = 0; i < render->EBOs->size; i ++)
     {
-        unsigned int ebo = get_unsigned_int(engine_state->stack_context.current_state->render.EBOs, i);
+        unsigned int ebo = get_unsigned_int(render->EBOs, i);
         glDeleteBuffers(1, &ebo);
     }
 
-        for(i = 0; i < engine_state->stack_context.current_state->render.shader_programs->size; i ++)
+        for(i = 0; i < render->shader_programs->size; i ++)
     {
-        unsigned int shader = get_unsigned_int(engine_state->stack_context.current_state->render.shader_programs, i);
+        unsigned int shader = get_unsigned_int(render->shader_programs, i);
         glDeleteProgram(shader);
     }
     
-    destroy_unsigned_lst(engine_state->stack_context.current_state->render.VAOs);
-    destroy_unsigned_lst(engine_state->stack_context.current_state->render.VBOs);
-    destroy_unsigned_lst(engine_state->stack_context.current_state->render.EBOs);
-    destroy_unsigned_lst(engine_state->stack_context.current_state->render.shader_programs);
+    destroy_unsigned_lst(render->VAOs);
+    destroy_unsigned_lst(render->VBOs);
+    destroy_unsigned_lst(render->EBOs);
+    destroy_unsigned_lst(render->shader_programs);
+
+    render->VAOs = NULL;
+    render->VBOs = NULL;
+    render->EBOs = NULL;
+    render->shader_programs = NULL;
+
 }

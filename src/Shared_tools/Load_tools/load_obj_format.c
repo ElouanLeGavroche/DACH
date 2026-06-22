@@ -3,8 +3,8 @@
 int load_file(char *path, st_mesh *tile)
 {
     /* Variables pour la gestion du fichier */
-    FILE *file;
-    char *line;
+    FILE *file = NULL;
+    char *line = NULL;
 
     size_t cap = 0;
 
@@ -19,52 +19,60 @@ int load_file(char *path, st_mesh *tile)
         {
             fprintf(stderr, "Erreur lors de la lecture du document\n");
         }
-
-        while (getline(&line, &cap, file) != -1)
+        else
         {
-
-            // Sert à savoir combien il y à de vert et de frag avant le malloc
-            
-            if(line[0] == 'v' && line[1] == ' ')
-            { 
-                int y = 0;
-                while(line[y] != '\0' && line[y] != '\n')
-                {
-                    if(line[y] == ' ')
-                    {
-                        tile->nb_vert ++;
-                    } 
-                    y ++;
-                }
-            }
-            else if(line[0] == 'f' && line[1] == ' ')
+            while (getline(&line, &cap, file) != -1)
             {
-                int y = 0;
-                while(line[y] != '\0' && line[y] != '\n')
-                {
-                    if(line[y] == ' ')
+
+                // Sert à savoir combien il y à de vert et de frag avant le malloc
+                
+                if(line[0] == 'v' && line[1] == ' ')
+                { 
+                    int y = 0;
+                    while(line[y] != '\0' && line[y] != '\n')
                     {
-                        tile->nb_face ++;
+                        if(line[y] == ' ')
+                        {
+                            tile->nb_vert ++;
+                        } 
+                        y ++;
                     }
-                    y ++;
-                        
                 }
+                else if(line[0] == 'f' && line[1] == ' ')
+                {
+                    int y = 0;
+                    while(line[y] != '\0' && line[y] != '\n')
+                    {
+                        if(line[y] == ' ')
+                        {
+                            tile->nb_face ++;
+                        }
+                        y ++;
+                            
+                    }
+                }
+                
             }
-            
+            fclose(file);
         }
-        fclose(file);
+
 
         tile->face_pos = malloc(sizeof(int) * tile->nb_face);
         if(tile->face_pos == NULL)
         {
+            free(line);
             return -1;
+        }
+        else
+        {
+            tile->vert_pos = malloc(sizeof(float) * tile->nb_vert);
+            if(tile->vert_pos == NULL)
+            {
+                free(line);
+                return -1;
+            }
         }
         
-        tile->vert_pos = malloc(sizeof(float) * tile->nb_vert);
-        if(tile->vert_pos == NULL)
-        {
-            return -1;
-        }
 
         if(open_obj_file(&file, path) != -1)
         {
@@ -99,8 +107,8 @@ int load_file(char *path, st_mesh *tile)
 
             }
         }
+        fclose(file);
     }
-    fclose(file);
     return 0;
 }
 

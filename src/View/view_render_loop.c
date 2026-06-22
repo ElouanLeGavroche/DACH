@@ -68,10 +68,6 @@ void init_a_3d_loaded_element(st_render_data *render, st_mesh *elt)
 
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
 
-    // Vider côté CPU
-    free(elt->vert_pos);
-    free(elt->face_pos);
-
 }
 
 void init_a_loaded_shader(st_render_data *render, const char vertex_shader_source[], const char fragment_shader_source[])

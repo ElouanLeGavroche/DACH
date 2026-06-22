@@ -13,6 +13,9 @@ char* load_shader(const char* file_name)
     /* Première lectuire pour connaitre la taille du fichier */
     fp = fopen(file_name, "rb");
     if(fp == NULL) {
+
+        fclose(fp);
+        
         printf("échec de la lecture du shader, vérifiez le path\n");
         return NULL;
     }
@@ -22,6 +25,12 @@ char* load_shader(const char* file_name)
 
     /* Lire le contenu du fichier */
     fp = fopen(file_name, "r");
+    if(fp == NULL)
+    {
+        fclose(fp);
+        return NULL;
+    }
+    
     shader_content = memset(malloc(size), '\0', size);
     fread(shader_content, 1, size-1, fp);
     fclose(fp);
