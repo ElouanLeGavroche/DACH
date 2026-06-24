@@ -41,22 +41,11 @@ void init_game(st_state *state)
     state->render.shader_programs = malloc(sizeof(st_shader) * state->render.nb_shader);
     
     // Initialiser les shaders --------------------------------------------------------------------------------------------
-    // Faire une fonction propre pour les charger individuellement ou par liste
     init_a_loaded_shader(&state->render, vertex_shader_source, fragment_shader_source);
 
     // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
     init_a_3d_loaded_element(&state->render, &seconde_square, 0);
     init_a_3d_loaded_element(&state->render, &first_square, 1);
-    
-    free(seconde_square.face_pos);
-    free(seconde_square.vert_pos);
-
-    free(first_square.face_pos);
-    free(first_square.vert_pos);
-
-    // Libéré les shader qui sont compilé côté GPU à présent
-    free((void *)vertex_shader_source);
-    free((void *)fragment_shader_source);
 
     printf("Context jeu initier\n");
 }

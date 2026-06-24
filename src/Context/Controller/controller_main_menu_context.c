@@ -46,17 +46,6 @@ void init_menu(st_state *state)
     // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
     init_a_3d_loaded_element(&state->render, &seconde_square, 0);
     init_a_3d_loaded_element(&state->render, &first_square, 1);
-    
-    free(seconde_square.face_pos);
-    free(seconde_square.vert_pos);
-    
-    free(first_square.face_pos);
-    free(first_square.vert_pos);
-
-
-    // Libéré les shader qui sont compilé côté GPU à présent
-    free((void *)vertex_shader_source);
-    free((void *)fragment_shader_source);
 
     printf("Context menu initier\n");
 }

@@ -162,7 +162,6 @@ void unload_data(st_engine *engine_state)
     // Effacer les données de model
 }
 
-
 void destroy_render_data(st_render_data *render)
 {
 
@@ -181,6 +180,9 @@ void destroy_render_data(st_render_data *render)
         glDeleteVertexArrays(1, &render->meshs[i].VAO);
         glDeleteBuffers(1, &render->meshs[i].VBO);
         glDeleteBuffers(1, &render->meshs[i].EBO);
+
+        free(render->meshs[i].face_pos);
+        free(render->meshs[i].vert_pos);
     }
     
     for(i = 0; i < render->nb_shader; i ++)
