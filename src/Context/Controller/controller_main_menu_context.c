@@ -32,7 +32,7 @@ void init_menu(st_state *state)
     st_mesh seconde_square;
     load_file(BASIC_TILE_PATH, &seconde_square);
 
-    int nb_elts = 2;
+    state->render.nb_shader = 1;
     
     // Initialiser le rendu --------------------------------------------------------------------------------------------
     //st_render_data *render = &engine_state->stack_context.current_state->render;
@@ -40,7 +40,7 @@ void init_menu(st_state *state)
     init_unsigned_int_lst(&state->render.VAOs);
     init_unsigned_int_lst(&state->render.VBOs);
     init_unsigned_int_lst(&state->render.EBOs);
-    state->render.shader_programs = malloc(sizeof(unsigned int) * state->render.nb_shader);
+    state->render.shader_programs = malloc(sizeof(st_shader) * state->render.nb_shader);
 
     // Initialiser les shaders --------------------------------------------------------------------------------------------
     // Faire une fonction propre pour les charger individuellement ou par liste

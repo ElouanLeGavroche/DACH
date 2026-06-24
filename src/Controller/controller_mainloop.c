@@ -196,7 +196,7 @@ void destroy_render_data(st_render_data *render)
     
     for(i = 0; i < render->nb_shader; i ++)
     {
-        glDeleteShader(render->shader_programs[i].shader);
+        glDeleteProgram(render->shader_programs[i].shader);
     }
     destroy_unsigned_lst(render->VAOs);
     destroy_unsigned_lst(render->VBOs);
@@ -206,6 +206,12 @@ void destroy_render_data(st_render_data *render)
     render->VBOs = NULL;
     render->EBOs = NULL;
     
-    printf("%d\n", &render->shader_programs);
+    // On reset les données au sein des shaders
+    free(render->shader_programs);
+    render->shader_programs = NULL;
+    render->nb_shader = 0;
+
+    // ça permet de forcer la cg à mettre à jour son utilisation de la mémoire.
+    glFinish();
 
 }

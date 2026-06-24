@@ -73,12 +73,12 @@ int load_file(char *path, st_mesh *tile)
             }
         }
         
-
         if(open_obj_file(&file, path) != -1)
         {
             // indice de où se trouve la boucle actuellement dans les deux listes
             int i_v = 0;
             int i_f = 0;
+            line = NULL;
 
             while (getline(&line, &cap, file) != -1)
             {
@@ -107,8 +107,12 @@ int load_file(char *path, st_mesh *tile)
 
             }
         }
-        fclose(file);
     }
+    if(file != NULL)
+        fclose(file);
+
+    if(line != NULL)
+        free(line);
     return 0;
 }
 
@@ -160,7 +164,6 @@ int parse_vertext(char line[], st_mesh *tile, int i_v)
         tile->vert_pos[i_v] = value;
         i_v ++;
     }
-    
     return i_v;
 }
 
@@ -187,6 +190,5 @@ int parse_face(char line[], st_mesh *tile, int i_f)
 
         
     }
-
     return i_f;
 }
