@@ -33,7 +33,7 @@ int window_should_close(){
 /**
  * @brief Cette fonction va me servir à initialiser les différent éléments graphique de la page
  */
-void init_a_3d_loaded_element(st_render_data *render, st_mesh *elt)
+void init_a_3d_loaded_element(st_render_data *render, st_mesh *elt, int indice)
 {
 
     unsigned int VAO, VBO, EBO;
@@ -47,16 +47,15 @@ void init_a_3d_loaded_element(st_render_data *render, st_mesh *elt)
 
     // 2.Mettre les sommet dans le VBO et EBO
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    
+
     glBufferData(GL_ARRAY_BUFFER, sizeof(*elt->vert_pos)*elt->nb_vert, elt->vert_pos, GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(*elt->face_pos)*elt->nb_face, elt->face_pos, GL_STATIC_DRAW);
 
 
-    
-    put_unsigned_int_3d_obj_lst(render->VAOs, VAO, elt->nb_vert, elt->nb_face);
-    put_unsigned_int_3d_obj_lst(render->VBOs, VBO, elt->nb_vert, elt->nb_face);
-    put_unsigned_int_3d_obj_lst(render->EBOs, EBO, elt->nb_vert, elt->nb_face);
+    elt->VAO = VAO;
+    elt->VBO = VBO;
+    elt->EBO = EBO;
     
     // Positition des polygone
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
@@ -67,6 +66,8 @@ void init_a_3d_loaded_element(st_render_data *render, st_mesh *elt)
     glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
+
+    render->meshs[indice] = *elt;
 
 }
 

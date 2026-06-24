@@ -26,13 +26,6 @@ TRANSFORM_TOOL=$(INCLUDE_TOOL)Transform_openGL_values/
 CONTEXT_TOOL=$(INCLUDE_TOOL)Context_tool/
 LOAD_TOOLS=$(INCLUDE_TOOL)Load_tools/
 
-#
-LIST_TOOLS=$(INCLUDE_TOOL)List/
-UNSIGNED_INT_LIST=$(LIST_TOOLS)Unsigned_list/
-
-
-
-
 #Lien vers certain .c externe comme GLAD
 EXTERN_INCLUDE=extern_lib/
 
@@ -46,8 +39,6 @@ $(SAVE_EXEC)$(EXEC):\
 	\
 	$(TRANSFORM_TOOL)colors.o\
 	$(CONTEXT_TOOL)stack.o\
-	\
-	$(UNSIGNED_INT_LIST)unsigned_list.o\
 	\
 	$(LOAD_TOOLS)load_shader.o\
 	$(LOAD_TOOLS)load_obj_format.o\

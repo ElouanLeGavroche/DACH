@@ -65,12 +65,11 @@ void update_render_main_menu(st_render_data *render)
     glUniformMatrix4fv(transfrom_loc, 1, GL_FALSE, *trans);
 
     int i;
-    for(i = 0; i < render->VAOs->size; i ++)
+    for(i = 0; i < render->nb_mesh; i ++)
     {
 
-        glBindVertexArray(get_unsigned_int_lst_pointer(render->VAOs, i)->value);
-        glDrawElements(GL_TRIANGLES, get_unsigned_int_lst_pointer(render->VAOs, i)->nb_face, GL_UNSIGNED_INT, 0);
-
+        glBindVertexArray(render->meshs[i].VAO);
+        glDrawElements(GL_TRIANGLES, render->meshs[i].nb_face, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     }
     

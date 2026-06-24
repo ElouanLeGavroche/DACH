@@ -16,7 +16,7 @@ void init_menu(st_state *state)
     const char *vertex_shader_source = load_shader("src/Shaders/main_shader.vert");
     const char *fragment_shader_source = load_shader("src/Shaders/main_shader.frag");
     
-    int nb_SH = 2;
+    state->render.nb_shader = 1;
 
     // ""Gestion de l'erreur - lmao""
     if(!vertex_shader_source || !fragment_shader_source)
@@ -32,14 +32,11 @@ void init_menu(st_state *state)
     st_mesh seconde_square;
     load_file(BASIC_TILE_PATH, &seconde_square);
 
-    state->render.nb_shader = 1;
-    
-    // Initialiser le rendu --------------------------------------------------------------------------------------------
-    //st_render_data *render = &engine_state->stack_context.current_state->render;
-    
-    init_unsigned_int_lst(&state->render.VAOs);
-    init_unsigned_int_lst(&state->render.VBOs);
-    init_unsigned_int_lst(&state->render.EBOs);
+    state->render.nb_mesh = 2;
+
+    // Mallocs --------------------------------------------------------------------------------------------
+
+    state->render.meshs = malloc(sizeof(st_mesh) * state->render.nb_mesh);
     state->render.shader_programs = malloc(sizeof(st_shader) * state->render.nb_shader);
 
     // Initialiser les shaders --------------------------------------------------------------------------------------------
@@ -47,12 +44,11 @@ void init_menu(st_state *state)
     init_a_loaded_shader(&state->render, vertex_shader_source, fragment_shader_source);
 
     // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
-    init_a_3d_loaded_element(&state->render, &seconde_square);
-
+    init_a_3d_loaded_element(&state->render, &seconde_square, 0);
+    init_a_3d_loaded_element(&state->render, &first_square, 1);
+    
     free(seconde_square.face_pos);
     free(seconde_square.vert_pos);
-
-    init_a_3d_loaded_element(&state->render, &first_square);
     
     free(first_square.face_pos);
     free(first_square.vert_pos);

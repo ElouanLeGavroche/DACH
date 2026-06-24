@@ -11,34 +11,6 @@
 typedef struct st_engine st_engine;
 typedef struct st_state st_state;
 
-//////////////////
-//              //
-//  ENTIER      //
-//  NON SIGNÉ   //
-//              //
-//////////////////
-
-// Structure pour faire une liste chainée d'entier non signée
-typedef struct st_unsigned_int st_unsigned_int;
-
-
-// Structure d'un entier non signée d'une liste
-// Il sert uniquement pour stocker les éléments 3D
-struct st_unsigned_int
-{
-    unsigned int value;
-    st_unsigned_int *next;
-
-    int nb_face;
-    int nb_vert;
-};
-
-
-// Structure de la liste d'entier non signée
-typedef struct{
-    st_unsigned_int *first;
-    int size;
-} st_unsigned_int_list;
 
 //structures qui regroupent tout les meshs et les shader
 typedef struct st_mesh st_mesh;
@@ -49,6 +21,10 @@ struct st_mesh
     int nb_face;
     float *vert_pos;
     int *face_pos;
+
+    unsigned int VAO;
+    unsigned int VBO;
+    unsigned int EBO;
 
 };
 
@@ -97,14 +73,12 @@ typedef struct{
  */
 typedef struct{
 
-    unsigned int nb_shader;
+    int nb_shader;
+    int nb_mesh;
 
-    st_unsigned_int_list *VAOs;
-    st_unsigned_int_list *VBOs;
-    st_unsigned_int_list *EBOs;
-
-
+    st_mesh *meshs;
     st_shader *shader_programs;
+
     st_camera camera;
 
 }st_render_data;

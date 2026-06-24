@@ -166,7 +166,7 @@ void unload_data(st_engine *engine_state)
 void destroy_render_data(st_render_data *render)
 {
 
-    if(render == NULL || render->VAOs == NULL)
+    if(render == NULL || render->meshs == NULL)
         return;
 
     glBindVertexArray(0);
@@ -176,36 +176,22 @@ void destroy_render_data(st_render_data *render)
 
     int i;
     // On détruit tout les éléments de la liste
-    for(i = 0; i < render->VAOs->size; i ++)
+    for(i = 0; i < render->nb_mesh; i ++)
     {
-        unsigned int vao = get_unsigned_int(render->VAOs, i);
-        glDeleteVertexArrays(1, &vao);
-    }
-    
-    for(i = 0; i < render->VBOs->size; i ++)
-    {
-        unsigned int vbo = get_unsigned_int(render->VBOs, i);
-        glDeleteBuffers(1, &vbo);
-    }
-    
-    for(i = 0; i < render->EBOs->size; i ++)
-    {
-        unsigned int ebo = get_unsigned_int(render->EBOs, i);
-        glDeleteBuffers(1, &ebo);
+        glDeleteVertexArrays(1, &render->meshs[i].VAO);
+        glDeleteBuffers(1, &render->meshs[i].VBO);
+        glDeleteBuffers(1, &render->meshs[i].EBO);
     }
     
     for(i = 0; i < render->nb_shader; i ++)
     {
         glDeleteProgram(render->shader_programs[i].shader);
     }
-    destroy_unsigned_lst(render->VAOs);
-    destroy_unsigned_lst(render->VBOs);
-    destroy_unsigned_lst(render->EBOs);
-
-    render->VAOs = NULL;
-    render->VBOs = NULL;
-    render->EBOs = NULL;
     
+    free(render->meshs);
+    render->meshs = NULL;
+    render->nb_mesh = 0;
+
     // On reset les données au sein des shaders
     free(render->shader_programs);
     render->shader_programs = NULL;
