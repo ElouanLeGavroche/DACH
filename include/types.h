@@ -60,7 +60,12 @@ typedef struct
  * @brief Structure qui contient les informations de la caméra
  */
 typedef struct{
-    mat4 view_point;
+    mat4 view;
+
+    vec3 camera_pos;
+    vec3 camera_front;
+    vec3 camera_up;
+
 }st_camera;
 
 /**

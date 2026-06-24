@@ -35,5 +35,10 @@
 #define INP_TO_GAME 4
 /* Autres paramètres */
 #define INP_CHANGE_RENDER_DEBUG 5
+/* Entre camera */
+#define INP_FORWARD 6
+#define INP_BACKWARD 7
+#define INP_LEFT 8
+#define INP_RIGHT 9
 
 #endif 

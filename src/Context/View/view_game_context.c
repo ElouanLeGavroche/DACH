@@ -43,6 +43,20 @@ void update_render_game(st_render_data *render){
     
     //glm_mat4_mulv(trans, vec, result);
     //printf("%f %f %f\n", result[0], result[1], result[2]);
+
+
+        float cameraSpeed = 0.05f; // adjust accordingly
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera_pos += cameraSpeed * camera_front;
+
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera_pos -= cameraSpeed * camera_front;
+
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera_pos -= glm::normalize(glm::cross(camera_front, camera_up)) * cameraSpeed;
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+
+        camera_pos += glm::normalize(glm::cross(camera_front, camera_up)) * cameraSpeed;
     
     
     glClearColor(num_to_01(24), num_to_01(32), num_to_01(61), 1.0f);
