@@ -75,9 +75,6 @@ int input_context_main_menu(st_input *inputs)
     else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
         return INP_TO_GAME;
     }
-    else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-        return INP_OLD_CONTEXT;
-    }
     else if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
         return INP_CHANGE_RENDER_DEBUG;
     }

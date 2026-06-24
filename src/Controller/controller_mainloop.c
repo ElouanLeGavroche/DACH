@@ -74,7 +74,6 @@ void controller_mainloop_management(st_engine *engine_state){
 
 
         // Voir à quoi peuvent servir ces entrée dans ce context (si l'une d'entre elle est appuyé)
-
         input_res = engine_state->stack_context.current_state->input_context(&engine_state->input);
         if(input_res != 0)
         {
@@ -86,7 +85,18 @@ void controller_mainloop_management(st_engine *engine_state){
                 break;
 
             case INP_OLD_CONTEXT:
-                engine_state->context_tool.remove_context(&engine_state->stack_context);
+
+                unload_data(engine_state);
+                st_state *old_state = engine_state->stack_context.current_state;
+                
+                engine_state->stack_context.current_state = old_state->upper;
+                engine_state->stack_context.level_of_depth --;
+
+                old_state->upper = NULL;
+                //engine_state->context_tool.remove_context(&engine_state->stack_context);
+                //engine_state->stack_context.current_state->init_state(engine_state->stack_context.current_state);
+
+                level_tampon = engine_state->stack_context.level_of_depth;
                 break;
 
             case INP_TO_GAME:
@@ -97,13 +107,6 @@ void controller_mainloop_management(st_engine *engine_state){
                 break;
             }
         }
-            
-        view_clear();
-        
-        //Actual context
-        engine_state->stack_context.current_state->update_render_context(&engine_state->stack_context.current_state->render);
-
-        view_swap();
 
         // Voir si un nouveau context est entré
         if(engine_state->next_state != 0)
@@ -112,13 +115,14 @@ void controller_mainloop_management(st_engine *engine_state){
             new_context(engine_state);
             level_tampon = engine_state->stack_context.level_of_depth;
         }
-        else if(level_tampon > engine_state->stack_context.level_of_depth)
-        {
-            // Déchargement du context actuel et rechargement du précédent
-            level_tampon = engine_state->stack_context.level_of_depth;
-            unload_data(engine_state);
-            engine_state->stack_context.current_state->init_state(engine_state->stack_context.current_state);
-        }
+
+            
+        view_clear();
+        
+        //Actual context
+        engine_state->stack_context.current_state->update_render_context(&engine_state->stack_context.current_state->render);
+
+        view_swap();
 
         //Time fin de boucle
         clock_gettime(CLOCK_MONOTONIC, &ts_end);
@@ -138,13 +142,9 @@ void controller_mainloop_management(st_engine *engine_state){
 
 void new_context(st_engine *engine_state)
 {
-    unload_data(engine_state);
-
-    //Initialiser le contenu de la State
-    engine_state->next_state->init_state(engine_state->next_state);
-
+    
     // L'on initialise le nouveau context
-    engine_state->next_state->init_state(engine_state->stack_context.current_state);
+    engine_state->next_state->init_state(engine_state->next_state);
 
     // L'on envoie le context suivant pour remplacer l'actuel
     engine_state->context_tool.put_context(&engine_state->stack_context, engine_state->next_state);
@@ -166,7 +166,15 @@ void unload_data(st_engine *engine_state)
 void destroy_render_data(st_render_data *render)
 {
 
-     int i;
+    if(render == NULL || render->VAOs == NULL)
+        return;
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glUseProgram(0);
+
+    int i;
     // On détruit tout les éléments de la liste
     for(i = 0; i < render->VAOs->size; i ++)
     {
@@ -186,6 +194,10 @@ void destroy_render_data(st_render_data *render)
         glDeleteBuffers(1, &ebo);
     }
     
+    for(i = 0; i < render->nb_shader; i ++)
+    {
+        glDeleteShader(render->shader_programs[i].shader);
+    }
     destroy_unsigned_lst(render->VAOs);
     destroy_unsigned_lst(render->VBOs);
     destroy_unsigned_lst(render->EBOs);
@@ -193,6 +205,7 @@ void destroy_render_data(st_render_data *render)
     render->VAOs = NULL;
     render->VBOs = NULL;
     render->EBOs = NULL;
-    render->shader_programs = NULL;
+    
+    printf("%d\n", &render->shader_programs);
 
 }
