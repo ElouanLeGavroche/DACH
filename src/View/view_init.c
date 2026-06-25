@@ -39,7 +39,7 @@ int init_View(st_loaded_windows_data *window_data)
 
 void init_camera(st_render_data *render)
 {
-    glm_mat4_identity(render->camera.view_point);
+    glm_mat4_identity(render->camera.view);
     float radius = 10.0f;
     float cam_x = sin(glfwGetTime()) * radius;
     float cam_z = cos(glfwGetTime()) * radius;
@@ -49,5 +49,5 @@ void init_camera(st_render_data *render)
 
     glm_lookat((vec3){cam_x, 0.0, cam_z}, (vec3){0.0, 0.0, 0.0}, (vec3){0.0, 1.0, 0.0}, view);
     
-    glm_mat4_copy(view, render->camera.view_point);
+    glm_mat4_copy(view, render->camera.view);
 }

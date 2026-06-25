@@ -47,6 +47,8 @@ void init_game(st_state *state)
     init_a_3d_loaded_element(&state->render, &seconde_square, 0);
     init_a_3d_loaded_element(&state->render, &first_square, 1);
 
+    init_render_game(&state->render);
+    
     printf("Context jeu initier\n");
 }
 
@@ -63,36 +65,10 @@ int input_context_game(st_input *inputs)
     else if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
         return INP_CHANGE_RENDER_DEBUG;
     }
-    else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    {
-        return INP_FORWARD;
-    }
-    else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    {
-        return INP_BACKWARD;
-    }
-    else if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-    {
-        return INP_LEFT;
-    }
-    else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    {
-        return INP_RIGHT;
-    }
 
     return 0;
 }
-void controller_update_camera_pos(int dir)
-{
-    if (dir == INP_FORWARD)
-        cameraPos += cameraSpeed * cameraFront;
-    if (dir == INP_FORWARD)
-        cameraPos -= cameraSpeed * cameraFront;
-    if (dir == INP_FORWARD)
-        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-    if (dir == INP_FORWARD)
-        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-}
+
 void controller_update_logic_game(st_engine *engine_state)
 {
     update_logic_game(engine_state);

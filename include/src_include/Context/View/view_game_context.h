@@ -18,5 +18,6 @@
 #define BASIC_HOUSE_PATH "ressources/houses/house.obj"
 
 void update_render_game(st_render_data *render);
+void init_render_game(st_render_data *render);
 
 #endif

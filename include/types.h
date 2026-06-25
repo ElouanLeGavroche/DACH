@@ -61,6 +61,7 @@ typedef struct
  */
 typedef struct{
     mat4 view;
+    mat4 projection;
 
     vec3 camera_pos;
     vec3 camera_front;
