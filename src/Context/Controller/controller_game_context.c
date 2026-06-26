@@ -4,7 +4,7 @@ struct st_state game_state =
 {
     init_game,
     controller_update_logic_game,
-    controller_update_render_game
+    controller_update_render_game,
 };
 
 void init_game(st_state *state)

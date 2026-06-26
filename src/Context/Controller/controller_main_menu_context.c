@@ -4,7 +4,7 @@ struct st_state main_menu_state =
 {
     init_menu,
     controller_update_logic_main_menu,
-    controller_update_render_main_menu
+    controller_update_render_main_menu,
 };
 
 void init_menu(st_state *state)

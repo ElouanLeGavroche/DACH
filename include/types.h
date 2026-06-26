@@ -16,7 +16,7 @@ typedef enum
 {
     C_NONE,
     C_BACK,
-    
+
     C_MAIN_MENU,
     C_GAME,
 
@@ -137,11 +137,13 @@ typedef struct st_state
     st_input inputs;
     actions context_action;
 
-    // Permet de savoir si un nouvel etat est attendu
-    atomic_int next_context;
-
     struct st_state *upper;
     st_render_data render;
+
+    // Permet de savoir si un nouvel etat est attendu
+    atomic_int ev_next_context;
+    // Permet de savoir si on doit fermet le jeu
+    atomic_bool ev_must_close;
     
 }st_state;
 /**

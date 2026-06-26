@@ -28,7 +28,6 @@ void *logical_loop(void *data_engine)
 }
 
 
-
 void controller_mainloop_management(st_engine *engine_state){
     ////////////////////////////////////////////
     //                                        //
@@ -70,16 +69,19 @@ void controller_mainloop_management(st_engine *engine_state){
         // récupéré les entrées //
         glfwPollEvents();
         read_input(&engine_state->stack_context.current_state->inputs);
-        
-        // Gestion des entrés qui ont des actions hors scope des contextes
-        if(engine_state->stack_context.current_state->inputs.release[KEY_ESCAPE] == true)
+
+        ////////////////////////////////////////////////////////////////////
+        // Gestion des entrés qui ont des actions hors scope des contextes//
+        ////////////////////////////////////////////////////////////////////
+
+        if(engine_state->stack_context.current_state->ev_must_close == true)
         {
             engine_state->running = false;
         }
-        if(engine_state->stack_context.current_state->next_context != C_NONE)
+        if(engine_state->stack_context.current_state->ev_next_context != C_NONE)
         {
             st_state *new_state;
-            atomic_int *who = &engine_state->stack_context.current_state->next_context;
+            atomic_int *who = &engine_state->stack_context.current_state->ev_next_context;
             
             // L'on va observer vers quelle context évoluer
             switch (*who)
@@ -111,16 +113,21 @@ void controller_mainloop_management(st_engine *engine_state){
                 fprintf(stderr, "Context inconnu\n");
                 break;
             }
-
+            
             // Si le nouveau context est l'ancien, pas la peine d'en crée un nouveau, ce serai con.
             if(*who != C_BACK)
             {
                 new_context(engine_state, new_state);
                 level_tampon = engine_state->stack_context.level_of_depth;
             }
-
+            // On reset la valeur, sinon on retourne en boucle sur le context précédent
             *who = C_NONE;
         }
+
+        //////////////////////////////////////////////////////////////////////////////
+        // Fin de la Gestion des entrés qui ont des actions hors scope des contextes//
+        //////////////////////////////////////////////////////////////////////////////
+        
 
         view_clear();
         
@@ -155,7 +162,7 @@ void new_context(st_engine *engine_state, st_state *new_state)
     engine_state->context_tool.put_context(&engine_state->stack_context, new_state);
     
     // L'on supprime le context suivant qui est déjà placé
-    engine_state->stack_context.current_state->next_context = C_NONE;
+    engine_state->stack_context.current_state->ev_next_context = C_NONE;
 
 }
 
