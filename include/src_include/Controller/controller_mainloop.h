@@ -15,12 +15,15 @@
 #include "../../types.h"
 #include "../Config/constantes.h"
 
-//Include du model et de la view
+// Include du model et de la view
 #include "../View/view_render_loop.h"
 #include "../Model/model_mainloop.h"
 
-//Chargement des structures du jeu
+// Chargement des structures du jeu
 #include "../../types.h"
+
+// Système des entrées
+#include "controller_input.h"
 
 //Pages du jeu
 #include "../Context/Controller/controller_main_menu_context.h"

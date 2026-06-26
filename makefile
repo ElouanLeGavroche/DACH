@@ -49,6 +49,7 @@ $(SAVE_EXEC)$(EXEC):\
 	\
 	$(CONTROLLER)controller_mainloop.o\
 	$(CONTROLLER)callback_controller.o\
+	$(CONTROLLER)controller_input.o\
 	\
 	$(MODEL)model_mainloop.o\
 	\

@@ -16,9 +16,9 @@ typedef struct st_state st_state;
 // Tableau qui contient tout les touches utilisable par le jeu
 typedef enum
 {
-    ESCAPE,
-    UP,
-    DOWN,
+    KEY_ESCAPE,
+    KEY_UP,
+    KEY_DOWN,
 
     KEY_NUM
 }e_key;
@@ -119,7 +119,10 @@ typedef struct st_state
     void (*update_logic_context)(st_engine *engine_state);
     // Le rendu ne connait que les données liée au rendu
     void (*update_render_context)(st_render_data *render);
-    
+    // Permet de stocker les inputs qui gérerons les actions en conséquent
+    st_input inputs;
+    actions context_action;
+
     struct st_state *upper;
     st_render_data render;
     

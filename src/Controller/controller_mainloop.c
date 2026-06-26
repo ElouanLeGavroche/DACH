@@ -70,8 +70,7 @@ void controller_mainloop_management(st_engine *engine_state){
 
         // récupéré les entrées //
         glfwPollEvents();
-
-
+        read_input(&engine_state->stack_context.current_state->inputs);
         // Voir à quoi peuvent servir ces entrée dans ce context (si l'une d'entre elle est appuyé)
         /*
         if(input_res != 0)
