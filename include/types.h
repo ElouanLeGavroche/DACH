@@ -11,8 +11,30 @@
 typedef struct st_engine st_engine;
 typedef struct st_state st_state;
 
+// Gestion des structures pour les inputs
 
-//structures qui regroupent tout les meshs et les shader
+// Tableau qui contient tout les touches utilisable par le jeu
+typedef enum
+{
+    ESCAPE,
+    UP,
+    DOWN,
+
+    KEY_NUM
+}e_key;
+
+// Structure qui sert à chaque context à quoi sert quelle touche
+typedef unsigned int actions;
+
+// Savoir quand une touche est pressé ou relacher( permet de géré des entrer du type CTRL+C)
+typedef struct
+{
+    bool pressed[KEY_NUM];
+    bool release[KEY_NUM];
+
+}st_input;
+
+// structures qui regroupent tout les meshs et les shader
 typedef struct st_mesh st_mesh;
 
 struct st_mesh
