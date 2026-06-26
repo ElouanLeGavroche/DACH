@@ -6,5 +6,5 @@
 #include "../../../types.h"
 
 void update_logic_main_menu(st_engine *engine_state);
-void init_data_main_menu(st_engine *engine);
+void init_data_main_menu(st_state *state);
 #endif

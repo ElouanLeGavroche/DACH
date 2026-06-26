@@ -27,35 +27,93 @@ void *logical_loop(void *data_engine)
     printf("Thread logique mené à bien\n");
 }
 
+void input_loop(st_engine *engine_state){
+    // Ce tampon permet de savoir si le jeu est revenu à un etat entérieur
+    // Et donc de recharger les éléments qui lui y étais associé
+    int level_tampon = engine_state->stack_context.level_of_depth;
 
+
+    // récupéré les entrées //
+    glfwPollEvents();
+    read_input(&engine_state->stack_context.current_state->inputs);
+    
+    if(engine_state->stack_context.current_state->ev_must_close == true)
+    {
+        engine_state->running = false;
+    }
+    if(engine_state->stack_context.current_state->ev_next_context != C_NONE)
+    {
+        st_state *new_state;
+        atomic_int *who = &engine_state->stack_context.current_state->ev_next_context;
+        
+        // L'on va observer vers quelle context évoluer
+        switch (*who)
+        {
+        case C_BACK:
+
+            unload_data(engine_state);
+            st_state *old_state = engine_state->stack_context.current_state;
+            
+            engine_state->stack_context.current_state = old_state->upper;
+            engine_state->stack_context.level_of_depth --;
+
+            old_state->upper = NULL;
+            //engine_state->context_tool.remove_context(&engine_state->stack_context);
+            //engine_state->stack_context.current_state->init_state(engine_state->stack_context.current_state);
+
+            level_tampon = engine_state->stack_context.level_of_depth;
+
+            break;
+        case C_GAME:
+            new_state = &game_state;
+            break;
+
+        case C_MAIN_MENU:
+            new_state = &main_menu_state;
+            break;
+        
+        default:
+            fprintf(stderr, "Context inconnu\n");
+            break;
+        }
+        
+        // Si le nouveau context est l'ancien, pas la peine d'en crée un nouveau, ce serai con.
+        if(*who != C_BACK)
+        {
+            new_context(engine_state, new_state);
+            level_tampon = engine_state->stack_context.level_of_depth;
+        }
+        // On reset la valeur, sinon on retourne en boucle sur le context précédent
+        *who = C_NONE;
+    }
+
+}
+
+
+/**
+ * @brief Simplement la mainloop qui tourne sur le thread principale et qui orchestre le rendu
+ * @param engin_state le moteur
+ */
 void controller_mainloop_management(st_engine *engine_state){
-    ////////////////////////////////////////////
-    //                                        //
-    //  Initialisations des divers variables  //
-    //                                        //
-    ////////////////////////////////////////////
 
     // Thread qui tournera en parralèlle pour la logique. En outre
     // Il ne s'actualisera que 20 fois par seconde au le de 60
     // comme les graphismes
     pthread_t logical_thread;
-    
+
     // Affichage du premier State (TEMP Main_menu)
     engine_state->context_tool.put_context(&engine_state->stack_context, &main_menu_state);
 
     //Initialiser le contenu de la State
     engine_state->stack_context.current_state->init_state(engine_state->stack_context.current_state);
     
-    // Création du thread et passage de la structure engine
+    // Création des threads et passage de la structure engine
     pthread_create(&logical_thread, NULL, logical_loop, engine_state);
 
     //Définition des variables pour accorder la clock
     struct timespec ts_start, ts_end;
     double elapsed;
 
-    // Ce tampon permet de savoir si le jeu est revenu à un etat entérieur
-    // Et donc de recharger les éléments qui lui y étais associé
-    int level_tampon = engine_state->stack_context.level_of_depth;
     ////////////////////////////////////////////
     //                                        //
     //                Boucle                  //
@@ -65,74 +123,11 @@ void controller_mainloop_management(st_engine *engine_state){
     while(engine_state->running && !glfwWindowShouldClose(glfwGetCurrentContext())){
         // Time au début de la boucle
         clock_gettime(CLOCK_MONOTONIC, &ts_start);
-
-        // récupéré les entrées //
-        glfwPollEvents();
-        read_input(&engine_state->stack_context.current_state->inputs);
-
-        ////////////////////////////////////////////////////////////////////
-        // Gestion des entrés qui ont des actions hors scope des contextes//
-        ////////////////////////////////////////////////////////////////////
-
-        if(engine_state->stack_context.current_state->ev_must_close == true)
-        {
-            engine_state->running = false;
-        }
-        if(engine_state->stack_context.current_state->ev_next_context != C_NONE)
-        {
-            st_state *new_state;
-            atomic_int *who = &engine_state->stack_context.current_state->ev_next_context;
-            
-            // L'on va observer vers quelle context évoluer
-            switch (*who)
-            {
-            case C_BACK:
-
-                unload_data(engine_state);
-                st_state *old_state = engine_state->stack_context.current_state;
-                
-                engine_state->stack_context.current_state = old_state->upper;
-                engine_state->stack_context.level_of_depth --;
-
-                old_state->upper = NULL;
-                //engine_state->context_tool.remove_context(&engine_state->stack_context);
-                //engine_state->stack_context.current_state->init_state(engine_state->stack_context.current_state);
-
-                level_tampon = engine_state->stack_context.level_of_depth;
-
-                break;
-            case C_GAME:
-                new_state = &game_state;
-                break;
-
-            case C_MAIN_MENU:
-                new_state = &main_menu_state;
-                break;
-            
-            default:
-                fprintf(stderr, "Context inconnu\n");
-                break;
-            }
-            
-            // Si le nouveau context est l'ancien, pas la peine d'en crée un nouveau, ce serai con.
-            if(*who != C_BACK)
-            {
-                new_context(engine_state, new_state);
-                level_tampon = engine_state->stack_context.level_of_depth;
-            }
-            // On reset la valeur, sinon on retourne en boucle sur le context précédent
-            *who = C_NONE;
-        }
-
-        //////////////////////////////////////////////////////////////////////////////
-        // Fin de la Gestion des entrés qui ont des actions hors scope des contextes//
-        //////////////////////////////////////////////////////////////////////////////
-        
-
         view_clear();
         
         //Actual context
         engine_state->stack_context.current_state->update_render_context(&engine_state->stack_context.current_state->render);
+        input_loop(engine_state);
 
         view_swap();
 

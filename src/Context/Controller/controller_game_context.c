@@ -46,7 +46,11 @@ void init_game(st_state *state)
     init_a_3d_loaded_element(&state->render, &seconde_square, 0);
     init_a_3d_loaded_element(&state->render, &first_square, 1);
 
+    // Initialiser la perspective --------------------------------------------------------------------------------------------
     init_render_game(&state->render);
+
+    // Initialiser le model --------------------------------------------------------------------------------------------
+    init_data_game(state);
     
     printf("Context jeu initier\n");
 }

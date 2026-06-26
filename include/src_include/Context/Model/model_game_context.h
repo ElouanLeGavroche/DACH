@@ -6,5 +6,5 @@
 #include "../../../types.h"
 
 void update_logic_game(st_engine *engine_state);
-
+void init_data_game(st_state *state);
 #endif

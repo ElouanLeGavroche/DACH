@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdatomic.h>
+#include <pthread.h>
 
 #include <cglm/cglm.h>
 #include <cglm/types.h>
@@ -44,6 +45,10 @@ typedef struct
 {
     bool pressed[KEY_NUM];
     bool release[KEY_NUM];
+
+    pthread_mutex_t mutex;
+    // Permet de savoir si l'autre thread a lu les informations
+    atomic_bool ok;
 
 }st_input;
 
