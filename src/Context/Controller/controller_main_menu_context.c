@@ -3,7 +3,6 @@
 struct st_state main_menu_state =
 {
     init_menu,
-    input_context_main_menu,
     controller_update_logic_main_menu,
     controller_update_render_main_menu
 };
@@ -50,21 +49,6 @@ void init_menu(st_state *state)
     printf("Context menu initier\n");
 }
 
-int input_context_main_menu(st_input *inputs)
-{
-    // Système temporaire pour traiter les entrées
-    GLFWwindow *window = glfwGetCurrentContext();
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-        return INP_CLOSE_GAME;
-    }
-    else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-        return INP_TO_GAME;
-    }
-    else if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
-        return INP_CHANGE_RENDER_DEBUG;
-    }
-    return 0;
-}
 
 void controller_update_logic_main_menu(st_engine *engine_state)
 {

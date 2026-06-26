@@ -12,5 +12,4 @@
 #include <GLFW/glfw3.h>
 
 int init_View(st_loaded_windows_data *window_data);
-void init_camera(st_render_data *render);
 #endif

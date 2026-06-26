@@ -28,18 +28,6 @@ struct st_mesh
 
 };
 
-// Le bool "one of them" sert à verifier s'il y en a
-// au moins un d'actionner. Pour éviter de parcourir
-// un switch pour rien.
-typedef struct
-{
-    atomic_bool escape;
-    atomic_bool up_arrow;
-    atomic_bool down_arrow;
-    atomic_bool enter;
-    atomic_bool one_of_them;
-}st_input;
-
 
 /**
  * @brief Structure qui stock le contenu d'un shader
@@ -98,7 +86,6 @@ typedef struct{
  * 2 - Un pointeur vers (s'il y en à un) un parent. Ex : je suis sur le menu pause, le parent est le jeu) 
  * 
  * @param st_state fonction qui initialisera la fenêtre
- * @param input_context fonction qui donne le context de que font tel ou tel touches
  * @param update_logic_context fonction qui déroulera à chaque tick la logique du canva
  * @param update_render_context fonction qui déroulera le rendu à chaque frame le rendu de la page
  */
@@ -106,8 +93,6 @@ typedef struct st_state
 {
     // L'initialiseur connait tout
     void (*init_state)(st_state *state);
-    // L'input ne connait que les entrée clavier
-    int (*input_context)(st_input *inputs);
     // La logique ne connaitra que les model
     void (*update_logic_context)(st_engine *engine_state);
     // Le rendu ne connait que les données liée au rendu
@@ -163,7 +148,6 @@ typedef struct st_engine
 {
     // éléments général
     atomic_bool running;
-    st_input input;
     
     // élément liées au context et à la stack
     stack stack_context;

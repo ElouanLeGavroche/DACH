@@ -22,13 +22,6 @@ int load_screen_data(st_loaded_windows_data *screen_data, st_engine *engine_stat
     // Initialisation des premières variables du moteur
     engine_state->running = true;
 
-    engine_state->input.escape = false;
-    engine_state->input.down_arrow = false;
-    engine_state->input.up_arrow = false;
-    engine_state->input.enter = false;
-
-    engine_state->input.one_of_them = false;
-
 
     // Initialisation des outils de context
     engine_state->context_tool.put_context = put_context;
