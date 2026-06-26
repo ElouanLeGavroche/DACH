@@ -6,10 +6,18 @@ void init_render_game(st_render_data *render)
 
     glm_mat4_identity(render->camera.view);
 
-
     /* Projection en perspective */
     glm_mat4_identity(render->camera.projection);
     glm_perspective(glm_rad(45.0f), (float)1280/(float)720, 0.1f, 100.0f, render->camera.projection);
+
+    // On initialise la position de la caméra
+    glm_vec3_copy((vec3){1.0f, 0.0f, 1.0f} , render->camera.camera_pos);
+    glm_vec3_copy((vec3){0.0, 0.0, -1.0} , render->camera.camera_front);
+
+    vec3 center;
+
+    glm_vec3_sub(render->camera.camera_pos, render->camera.camera_front, center);
+    glm_lookat((vec3){1.0, 0.0, 1.0}, center,(vec3){0.0, 1.0, 0.0}, render->camera.view);
 
     //glm_translate(trans, (vec3){1.0f, 1.0f, 0.0f});
     //vec4 result;
@@ -27,25 +35,19 @@ void update_render_game(st_render_data *render)
     mat4 trans;
     glm_mat4_identity(trans);
 
-    glm_rotate(trans, (float)glfwGetTime(), (vec3){1.0, 1.0, 1.0});
-    glm_scale(trans, (vec3){0.5, 0.5, 0.5});
 
         /* Model */
     mat4 model;
     glm_mat4_identity(model);
     glm_rotate(model, (float)glfwGetTime()*10, (vec3){0.0f, 0.0f, 1.0f});
-
-
-        /* View */
-    float radius = 10.0f;
-    float cam_x = sin(glfwGetTime()) * radius;
-    float cam_z = cos(glfwGetTime()) * radius;
-
-    glm_lookat((vec3){cam_x, 0.0, cam_z}, (vec3){0.0, 0.0, 0.0}, (vec3){0.0, 1.0, 0.0}, render->camera.view);
-
+  
     unsigned int transfrom_loc;
     
-    
+    vec3 center;
+
+    glm_vec3_sub(render->camera.camera_pos, render->camera.camera_front, center);
+    glm_lookat(render->camera.camera_pos, center, (vec3){0.0, 1.0, 0.0}, render->camera.view);
+
     glClearColor(num_to_01(24), num_to_01(32), num_to_01(61), 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     

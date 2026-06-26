@@ -7,4 +7,6 @@
 
 void update_logic_game(st_engine *engine_state);
 void init_data_game(st_state *state);
+
+void move_camera(st_camera *camera, int dir);
 #endif

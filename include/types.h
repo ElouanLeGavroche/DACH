@@ -29,7 +29,7 @@ typedef enum
 
 // Tableau qui contient tout les touches utilisable par le jeu
 // Note : Si on veux mapper les touchent, ça va être compliqué avec ce système... à voir, à voir...
-typedef enum
+typedef enum e_key
 {
     KEY_ESCAPE,
     KEY_UP,
@@ -103,6 +103,14 @@ typedef struct{
     vec3 camera_up;
 
 }st_camera;
+
+// Permet de savoir vers quelle direction va la caméra
+typedef enum e_dir{
+    UP,
+    LEFT,
+    DOWN,
+    RIGHT
+}e_dir;
 
 /**
  * @brief Structure qui stock les informations de rendu du context
