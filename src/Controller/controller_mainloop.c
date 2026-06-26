@@ -4,7 +4,6 @@ void *logical_loop(void *data_engine)
 {
     // Partie Logique
     st_engine *engine_state = data_engine;
-    
     //Définition des variables pour accorder la clock
     struct timespec ts_start, ts_end;
     double elapsed;
@@ -71,7 +70,12 @@ void controller_mainloop_management(st_engine *engine_state){
         // récupéré les entrées //
         glfwPollEvents();
         read_input(&engine_state->stack_context.current_state->inputs);
-        // Voir à quoi peuvent servir ces entrée dans ce context (si l'une d'entre elle est appuyé)
+        
+        // Gestion des entrés qui ont des actions hors scope des contextes
+        if(engine_state->stack_context.current_state->inputs.release[KEY_ESCAPE] == true)
+        {
+            engine_state->running = false;
+        }
         /*
         if(input_res != 0)
         {
