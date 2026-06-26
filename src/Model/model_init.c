@@ -29,7 +29,6 @@ int load_screen_data(st_loaded_windows_data *screen_data, st_engine *engine_stat
 
     engine_state->stack_context.level_of_depth = 0;
     engine_state->stack_context.current_state = NULL;
-    engine_state->next_state = NULL;
 
     fp = fopen(PATH_LOAD_GAME_DATA, "r");
     if(fp == NULL){

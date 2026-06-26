@@ -11,6 +11,19 @@
 typedef struct st_engine st_engine;
 typedef struct st_state st_state;
 
+// Enumération des différent context
+typedef enum
+{
+    C_NONE,
+    C_BACK,
+    
+    C_MAIN_MENU,
+    C_GAME,
+
+    C_NUM
+}e_context;
+
+
 // Gestion des structures pour les inputs
 
 // Tableau qui contient tout les touches utilisable par le jeu
@@ -119,9 +132,13 @@ typedef struct st_state
     void (*update_logic_context)(st_engine *engine_state);
     // Le rendu ne connait que les données liée au rendu
     void (*update_render_context)(st_render_data *render);
+
     // Permet de stocker les inputs qui gérerons les actions en conséquent
     st_input inputs;
     actions context_action;
+
+    // Permet de savoir si un nouvel etat est attendu
+    atomic_int next_context;
 
     struct st_state *upper;
     st_render_data render;
@@ -177,7 +194,6 @@ typedef struct st_engine
     // élément liées au context et à la stack
     stack stack_context;
     st_context_tool context_tool;
-    st_state *next_state;
 
 } st_engine;
 

@@ -76,17 +76,15 @@ void controller_mainloop_management(st_engine *engine_state){
         {
             engine_state->running = false;
         }
-        /*
-        if(input_res != 0)
+        if(engine_state->stack_context.current_state->next_context != C_NONE)
         {
-            // Ici on traite les actions à faire à l'échelle global, et non pas à l'échelle des context eux même
-            switch (input_res)
+            st_state *new_state;
+            atomic_int *who = &engine_state->stack_context.current_state->next_context;
+            
+            // L'on va observer vers quelle context évoluer
+            switch (*who)
             {
-            case INP_CLOSE_GAME:
-                engine_state->running = false;
-                break;
-
-            case INP_OLD_CONTEXT:
+            case C_BACK:
 
                 unload_data(engine_state);
                 st_state *old_state = engine_state->stack_context.current_state;
@@ -99,27 +97,31 @@ void controller_mainloop_management(st_engine *engine_state){
                 //engine_state->stack_context.current_state->init_state(engine_state->stack_context.current_state);
 
                 level_tampon = engine_state->stack_context.level_of_depth;
+
+                break;
+            case C_GAME:
+                new_state = &game_state;
                 break;
 
-            case INP_TO_GAME:
-                engine_state->next_state = &game_state;
+            case C_MAIN_MENU:
+                new_state = &main_menu_state;
                 break;
-
+            
             default:
+                fprintf(stderr, "Context inconnu\n");
                 break;
             }
-        }
-        */
 
-        // Voir si un nouveau context est entré
-        if(engine_state->next_state != 0)
-        {
-            // Chargement du nouveau context et déchargement de celui-ci
-            new_context(engine_state);
-            level_tampon = engine_state->stack_context.level_of_depth;
+            // Si le nouveau context est l'ancien, pas la peine d'en crée un nouveau, ce serai con.
+            if(*who != C_BACK)
+            {
+                new_context(engine_state, new_state);
+                level_tampon = engine_state->stack_context.level_of_depth;
+            }
+
+            *who = C_NONE;
         }
 
-            
         view_clear();
         
         //Actual context
@@ -143,17 +145,17 @@ void controller_mainloop_management(st_engine *engine_state){
     view_close_window();
 }
 
-void new_context(st_engine *engine_state)
+void new_context(st_engine *engine_state, st_state *new_state)
 {
     
     // L'on initialise le nouveau context
-    engine_state->next_state->init_state(engine_state->next_state);
+    new_state->init_state(new_state);
 
     // L'on envoie le context suivant pour remplacer l'actuel
-    engine_state->context_tool.put_context(&engine_state->stack_context, engine_state->next_state);
+    engine_state->context_tool.put_context(&engine_state->stack_context, new_state);
     
     // L'on supprime le context suivant qui est déjà placé
-    engine_state->next_state = 0;
+    engine_state->stack_context.current_state->next_context = C_NONE;
 
 }
 

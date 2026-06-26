@@ -3,9 +3,9 @@
 void update_logic_main_menu(st_engine *engine_state)
 {
     // Géré les inputs
-    if(engine_state->stack_context.current_state->inputs.release[KEY_ESCAPE] == true)
+    if(engine_state->stack_context.current_state->inputs.release[KEY_UP] == true)
     {
-        printf("Adieu\n");
+        engine_state->stack_context.current_state->next_context = C_GAME;   
     }
 }
 
