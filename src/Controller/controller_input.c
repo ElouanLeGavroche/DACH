@@ -17,6 +17,21 @@ void read_input(st_input *input)
         input->release[KEY_DOWN] = (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_RELEASE && input->pressed[KEY_DOWN] == GLFW_PRESS);
         input->pressed[KEY_DOWN] = (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS);
 
+
+        // Caméra
+        input->release[KEY_Z] = (glfwGetKey(window, GLFW_KEY_Z) == GLFW_RELEASE && input->pressed[KEY_Z] == GLFW_PRESS);
+        input->pressed[KEY_Z] = (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS);
+
+        input->release[KEY_Q] = (glfwGetKey(window, GLFW_KEY_Q) == GLFW_RELEASE && input->pressed[KEY_Q] == GLFW_PRESS);
+        input->pressed[KEY_Q] = (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS);
+
+        input->release[KEY_S] = (glfwGetKey(window, GLFW_KEY_S) == GLFW_RELEASE && input->pressed[KEY_S] == GLFW_PRESS);
+        input->pressed[KEY_S] = (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS);
+
+        input->release[KEY_D] = (glfwGetKey(window, GLFW_KEY_D) == GLFW_RELEASE && input->pressed[KEY_D] == GLFW_PRESS);
+        input->pressed[KEY_D] = (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS);
+
+
         pthread_mutex_unlock(&input->mutex); // Déverrouillage
 
         // on met à jour le signal

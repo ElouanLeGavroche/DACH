@@ -10,9 +10,26 @@ void update_logic_game(st_engine *engine_state)
     {
         engine_state->stack_context.current_state->ev_next_context = C_BACK;   
     }
-    if(engine_state->stack_context.current_state->inputs.release[KEY_ESCAPE] == true)
+    else if(engine_state->stack_context.current_state->inputs.release[KEY_ESCAPE] == true)
     {
         engine_state->stack_context.current_state->ev_must_close = true;   
+    }
+    // Déplacement de la caméra
+    else if(engine_state->stack_context.current_state->inputs.release[KEY_Z])
+    {
+
+    }
+    else if(engine_state->stack_context.current_state->inputs.release[KEY_Q])
+    {
+        
+    }
+    else if(engine_state->stack_context.current_state->inputs.release[KEY_S])
+    {
+        
+    }
+    else if(engine_state->stack_context.current_state->inputs.release[KEY_D])
+    {
+        
     }
 
     pthread_mutex_unlock(&engine_state->stack_context.current_state->inputs.mutex); // Déverrouillage

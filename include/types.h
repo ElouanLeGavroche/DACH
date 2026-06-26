@@ -28,11 +28,18 @@ typedef enum
 // Gestion des structures pour les inputs
 
 // Tableau qui contient tout les touches utilisable par le jeu
+// Note : Si on veux mapper les touchent, ça va être compliqué avec ce système... à voir, à voir...
 typedef enum
 {
     KEY_ESCAPE,
     KEY_UP,
     KEY_DOWN,
+
+    // Caméra
+    KEY_Z,
+    KEY_Q,
+    KEY_S,
+    KEY_D,
 
     KEY_NUM
 }e_key;
