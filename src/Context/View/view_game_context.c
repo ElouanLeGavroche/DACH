@@ -13,12 +13,18 @@ void init_render_game(st_render_data *render)
     glm_mat4_identity(render->camera.view);
 
     /* Projection en perspective */
+    /*
     glm_mat4_identity(render->camera.projection);
     glm_perspective(glm_rad(render->camera.fov), (float)1280/(float)720, 0.1f, 100.0f, render->camera.projection);
+    */
 
-    // On initialise la position de la caméra
-    glm_vec3_copy((vec3){1.0f, 0.0f, 1.0f} , render->camera.pos);
-    glm_vec3_copy((vec3){1.0, 0.0, -1.0} , render->camera.front);
+    float size = 10.0f; // Taille de la zone visible (à ajuster selon ta scène)
+    glm_ortho(-size, size, -size, size, -100.0f, 100.0f, render->camera.projection);
+
+
+    // On initialise la position de la caméra à une vue isométrique
+    glm_vec3_copy((vec3){2.0f, 2.0f, 2.0f} , render->camera.pos);
+    glm_vec3_copy((vec3){0.45, 0.45, 0.45} , render->camera.front);
     glm_vec3_copy((vec3){0.0, 1.0, 0.0} , render->camera.up);
 
     vec3 center;
@@ -26,24 +32,14 @@ void init_render_game(st_render_data *render)
     glm_vec3_sub(render->camera.pos, render->camera.front, center);
     glm_lookat(render->camera.pos, center, render->camera.up, render->camera.view);
 
-    render->delta_time = 0.0f;
-    render->last_time = 0.0f;
-
 
     // On va associé la caméra dans Opengl, car on peut-en avoir besoin dans les callbacks
     GLFWwindow *window = glfwGetCurrentContext();
 
     st_window_user_data *data = glfwGetWindowUserPointer(window);
     data->camera = &render->camera;
-
-    //glm_translate(trans, (vec3){1.0f, 1.0f, 0.0f});
-    //vec4 result;
-    
-    //glm_mat4_mulv(trans, vec, result);
-    //printf("%f %f %f\n", result[0], result[1], result[2]);
-    printf("%f\n", render->camera.fov);
-
 }
+
 void update_render_game(st_render_data *render)
 {
     float current_frame = glfwGetTime();
@@ -62,7 +58,7 @@ void update_render_game(st_render_data *render)
         /* Model */
     mat4 model;
     glm_mat4_identity(model);
-    glm_rotate(model, (float)glfwGetTime()*2, (vec3){0.0f, 0.0f, 1.0f});
+    //glm_rotate(model, (float)glfwGetTime()*2, (vec3){0.0f, 0.0f, 1.0f});
   
     unsigned int transfrom_loc;
     

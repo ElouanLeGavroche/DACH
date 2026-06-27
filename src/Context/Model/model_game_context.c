@@ -60,7 +60,7 @@ void move_camera(st_camera *camera, int dir)
     switch (dir)
     {
     case DOWN:
-        glm_vec3_muladds(camera->front, camera->speed, camera->pos);
+        glm_vec3_mulsubs(camera->up, camera->speed, camera->pos);
         break;
 
     case RIGHT:
@@ -73,8 +73,7 @@ void move_camera(st_camera *camera, int dir)
         break;
 
     case UP:
-        glm_vec3_mulsubs(camera->front, camera->speed, camera->pos);
-
+        glm_vec3_muladds(camera->up, camera->speed, camera->pos);
         break;
     case LEFT:
         
