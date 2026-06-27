@@ -32,6 +32,7 @@ void update_logic_game(st_state *state)
     {
         move_camera(&state->render.camera, RIGHT);
     }
+    
 
     pthread_mutex_unlock(&state->inputs.mutex); // Déverrouillage
 
@@ -46,6 +47,15 @@ void init_data_game(st_state *state)
     pthread_mutex_init(&state->inputs.mutex, NULL);
 }
 
+void zoom_camera(st_camera *camera, float yoffset)
+{
+    if(camera->fov >= 1.0f && camera->fov <= 45.0f)
+        camera->fov -= yoffset;
+    if(camera->fov <= 1.0f)
+        camera->fov = 1.0f;
+    if(camera->fov >= 45.0f)
+        camera->fov = 45.0f;
+    }
 void move_camera(st_camera *camera, int dir)
 {
     vec3 res;

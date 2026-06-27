@@ -6,6 +6,6 @@
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 
-void read_input(st_input *input);
+void pressed_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
 
 #endif

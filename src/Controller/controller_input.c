@@ -1,11 +1,11 @@
 #include "../../include/src_include/Controller/controller_input.h"
 
-void read_input(st_input *input)
+void pressed_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
-    GLFWwindow *window = glfwGetCurrentContext();
-
+    st_input *input = glfwGetWindowUserPointer(window);
     if(input->ok == true)
     {
+        
         pthread_mutex_lock(&input->mutex); // Verrouillage
 
         input->release[KEY_ESCAPE] = (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_RELEASE && input->pressed[KEY_ESCAPE] == GLFW_PRESS);

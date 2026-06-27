@@ -44,9 +44,6 @@ typedef enum e_key
     KEY_NUM
 }e_key;
 
-// Structure qui sert à chaque context à quoi sert quelle touche
-typedef unsigned int actions;
-
 // Savoir quand une touche est pressé ou relacher( permet de géré des entrer du type CTRL+C)
 typedef struct
 {
@@ -97,6 +94,8 @@ typedef struct
 typedef struct{
     mat4 view;
     mat4 projection;
+
+    float fov;
 
     vec3 pos;
     vec3 front;
@@ -161,7 +160,6 @@ typedef struct st_state
 
     // Permet de stocker les inputs qui gérerons les actions en conséquent
     st_input inputs;
-    actions context_action;
 
     struct st_state *upper;
     st_render_data render;

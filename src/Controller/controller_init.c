@@ -24,8 +24,12 @@ int controller_init(){
     }
 
     // -3- Mise en place des Callbacks
+
+    
     GLFWwindow *window = glfwGetCurrentContext();
-    glfwSetKeyCallback(window, pressed_key_callback);
+
+
+    glfwSetScrollCallback(window, scroll_callback);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  
 
     /* Etape 2 : entrer dans les mains loops */

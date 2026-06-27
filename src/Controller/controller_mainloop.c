@@ -34,8 +34,13 @@ void input_loop(st_engine *engine_state){
 
 
     // récupéré les entrées //
+    int i;
+    for(i = 0; i < KEY_NUM; i ++)
+    {
+        engine_state->stack_context.current_state->inputs.release[i] = false;
+    }
     glfwPollEvents();
-    read_input(&engine_state->stack_context.current_state->inputs);
+    
     
     if(engine_state->stack_context.current_state->ev_must_close == true)
     {
@@ -62,6 +67,9 @@ void input_loop(st_engine *engine_state){
             //engine_state->stack_context.current_state->init_state(engine_state->stack_context.current_state);
 
             level_tampon = engine_state->stack_context.level_of_depth;
+
+            // On relie le clavier au nouveau context
+            link_input(engine_state);
 
             break;
         case C_GAME:
@@ -106,7 +114,11 @@ void controller_mainloop_management(st_engine *engine_state){
 
     //Initialiser le contenu de la State
     engine_state->stack_context.current_state->init_state(engine_state->stack_context.current_state);
-    
+
+    // On relie le clavier au nouveau context
+    link_input(engine_state);
+
+
     // Création des threads et passage de la structure engine
     pthread_create(&logical_thread, NULL, logical_loop, engine_state);
 
@@ -159,6 +171,10 @@ void new_context(st_engine *engine_state, st_state *new_state)
     // L'on supprime le context suivant qui est déjà placé
     engine_state->stack_context.current_state->ev_next_context = C_NONE;
 
+    // On relie le clavier au nouveau context
+    link_input(engine_state);
+
+
 }
 
 void unload_data(st_engine *engine_state)
@@ -209,4 +225,13 @@ void destroy_render_data(st_render_data *render)
     // ça permet de forcer la cg à mettre à jour son utilisation de la mémoire.
     glFinish();
 
+}
+
+
+void link_input(st_engine *engine_state)
+{
+    // Liée la strucures des entrée dans la fnêtre pour le callback
+    GLFWwindow *window = glfwGetCurrentContext();
+    glfwSetWindowUserPointer(window, &engine_state->stack_context.current_state->inputs);
+    glfwSetKeyCallback(window, pressed_key_callback);
 }

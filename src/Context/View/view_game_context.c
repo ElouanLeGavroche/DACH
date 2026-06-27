@@ -23,6 +23,11 @@ void init_render_game(st_render_data *render)
     render->delta_time = 0.0f;
     render->last_time = 0.0f;
 
+
+    // On va associé la caméra dans Opengl, car on peut-en avoir besoin dans les callbacks
+    GLFWwindow *window = glfwGetCurrentContext();
+    glfwSetWindowUserPointer(window, &render->camera);
+
     //glm_translate(trans, (vec3){1.0f, 1.0f, 0.0f});
     //vec4 result;
     
