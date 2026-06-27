@@ -48,22 +48,34 @@ void init_data_game(st_state *state)
 
 void move_camera(st_camera *camera, int dir)
 {
+    vec3 res;
+
     switch (dir)
     {
     case UP:
-        glm_vec3_addadd((vec3){0.05f}, camera->camera_front, camera->camera_pos);
+        glm_vec3_muladds(camera->camera_front, 0.06f, camera->camera_pos);
         break;
 
     case LEFT:
-        glm_vec3_addadd((vec3){0.05f}, camera->camera_front, camera->camera_pos);
+
+        glm_cross(camera->camera_front, camera->camera_up, res);
+
+        glm_vec3_normalize(res);
+        glm_vec3_mulsubs(res, 0.06f, camera->camera_pos);
+
         break;
 
     case DOWN:
-        glm_vec3_addadd((vec3){0.05f}, camera->camera_front, camera->camera_pos);
+        glm_vec3_mulsubs(camera->camera_front, 0.06f, camera->camera_pos);
 
         break;
     case RIGHT:
-        glm_vec3_addadd((vec3){0.05f}, camera->camera_front, camera->camera_pos);
+        
+        glm_cross(camera->camera_front, camera->camera_up, res);
+
+        glm_vec3_normalize(res);
+        glm_vec3_muladds(res, 0.06f, camera->camera_pos);
+
         break;
     
     default:

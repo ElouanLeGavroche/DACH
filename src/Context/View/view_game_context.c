@@ -13,6 +13,7 @@ void init_render_game(st_render_data *render)
     // On initialise la position de la caméra
     glm_vec3_copy((vec3){1.0f, 0.0f, 1.0f} , render->camera.camera_pos);
     glm_vec3_copy((vec3){0.0, 0.0, -1.0} , render->camera.camera_front);
+    glm_vec3_copy((vec3){0.0, 1.0, 0.0} , render->camera.camera_up);
 
     vec3 center;
 
@@ -39,14 +40,19 @@ void update_render_game(st_render_data *render)
         /* Model */
     mat4 model;
     glm_mat4_identity(model);
-    glm_rotate(model, (float)glfwGetTime()*10, (vec3){0.0f, 0.0f, 1.0f});
+    glm_rotate(model, (float)glfwGetTime()*2, (vec3){0.0f, 0.0f, 1.0f});
   
     unsigned int transfrom_loc;
     
     vec3 center;
 
     glm_vec3_sub(render->camera.camera_pos, render->camera.camera_front, center);
-    glm_lookat(render->camera.camera_pos, center, (vec3){0.0, 1.0, 0.0}, render->camera.view);
+    glm_lookat(
+        render->camera.camera_pos, 
+        center, 
+        render->camera.camera_up, 
+        render->camera.view
+    );
 
     glClearColor(num_to_01(24), num_to_01(32), num_to_01(61), 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
