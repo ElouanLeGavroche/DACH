@@ -53,9 +53,9 @@ void init_menu(st_state *state)
 }
 
 
-void controller_update_logic_main_menu(st_engine *engine_state)
+void controller_update_logic_main_menu(st_state *state)
 {
-    update_logic_main_menu(engine_state);
+    update_logic_main_menu(state);
 }
 
 void controller_update_render_main_menu(st_render_data *render)

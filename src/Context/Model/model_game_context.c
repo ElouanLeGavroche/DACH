@@ -1,42 +1,42 @@
 #include "../../../include/src_include/Context/Model/model_game_context.h"
 
 
-void update_logic_game(st_engine *engine_state)
+void update_logic_game(st_state *state)
 {
 
-    pthread_mutex_lock(&engine_state->stack_context.current_state->inputs.mutex); // Verrouillage
+    pthread_mutex_lock(&state->inputs.mutex); // Verrouillage
     // Géré les inputs
-    if(engine_state->stack_context.current_state->inputs.release[KEY_DOWN] == true)
+    if(state->inputs.release[KEY_DOWN] == true)
     {
-        engine_state->stack_context.current_state->ev_next_context = C_BACK;   
+        state->ev_next_context = C_BACK;   
     }
-    if(engine_state->stack_context.current_state->inputs.release[KEY_ESCAPE] == true)
+    if(state->inputs.release[KEY_ESCAPE] == true)
     {
-        engine_state->stack_context.current_state->ev_must_close = true;   
+        state->ev_must_close = true;   
     }
 
     // Déplacement de la caméra
-    if(engine_state->stack_context.current_state->inputs.release[KEY_Z] || engine_state->stack_context.current_state->inputs.pressed[KEY_Z])
+    if(state->inputs.release[KEY_Z] || state->inputs.pressed[KEY_Z])
     {
-        move_camera(&engine_state->stack_context.current_state->render.camera, UP);
+        move_camera(&state->render.camera, UP);
     }
-    if(engine_state->stack_context.current_state->inputs.release[KEY_Q] || engine_state->stack_context.current_state->inputs.pressed[KEY_Q])
+    if(state->inputs.release[KEY_Q] || state->inputs.pressed[KEY_Q])
     {
-        move_camera(&engine_state->stack_context.current_state->render.camera, LEFT);
+        move_camera(&state->render.camera, LEFT);
     }
-    if(engine_state->stack_context.current_state->inputs.release[KEY_S] || engine_state->stack_context.current_state->inputs.pressed[KEY_S])
+    if(state->inputs.release[KEY_S] || state->inputs.pressed[KEY_S])
     {
-        move_camera(&engine_state->stack_context.current_state->render.camera, DOWN);
+        move_camera(&state->render.camera, DOWN);
     }
-    if(engine_state->stack_context.current_state->inputs.release[KEY_D] || engine_state->stack_context.current_state->inputs.pressed[KEY_D])
+    if(state->inputs.release[KEY_D] || state->inputs.pressed[KEY_D])
     {
-        move_camera(&engine_state->stack_context.current_state->render.camera, RIGHT);
+        move_camera(&state->render.camera, RIGHT);
     }
 
-    pthread_mutex_unlock(&engine_state->stack_context.current_state->inputs.mutex); // Déverrouillage
+    pthread_mutex_unlock(&state->inputs.mutex); // Déverrouillage
 
     /* On préviens l'autre thread que la lecture à bien été faite*/
-    engine_state->stack_context.current_state->inputs.ok = true;
+    state->inputs.ok = true;
     
 }
 
@@ -48,17 +48,27 @@ void init_data_game(st_state *state)
 
 void move_camera(st_camera *camera, int dir)
 {
-    if(dir == UP)
+    switch (dir)
+    {
+    case UP:
         glm_vec3_addadd((vec3){0.05f}, camera->camera_front, camera->camera_pos);
+        break;
+
+    case LEFT:
+        glm_vec3_addadd((vec3){0.05f}, camera->camera_front, camera->camera_pos);
+        break;
+
+    case DOWN:
+        glm_vec3_addadd((vec3){0.05f}, camera->camera_front, camera->camera_pos);
+
+        break;
+    case RIGHT:
+        glm_vec3_addadd((vec3){0.05f}, camera->camera_front, camera->camera_pos);
+        break;
     
-    else if(dir == LEFT)
-        glm_vec3_addadd((vec3){0.05f}, camera->camera_front, camera->camera_pos);
-    
-    else if(dir == DOWN)
-        glm_vec3_addadd((vec3){0.05f}, camera->camera_front, camera->camera_pos);
-    
-    else if(dir == RIGHT)
-        glm_vec3_addadd((vec3){0.05f}, camera->camera_front, camera->camera_pos);
+    default:
+        break;
+    }
     
 }
 

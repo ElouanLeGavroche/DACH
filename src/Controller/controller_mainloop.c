@@ -15,7 +15,7 @@ void *logical_loop(void *data_engine)
         clock_gettime(CLOCK_MONOTONIC, &ts_start);
         
         // Contenu //
-        engine_state->stack_context.current_state->update_logic_context(engine_state);
+        engine_state->stack_context.current_state->update_logic_context(engine_state->stack_context.current_state);
         
         //Time fin de boucle
         clock_gettime(CLOCK_MONOTONIC, &ts_end);

@@ -149,7 +149,7 @@ typedef struct st_state
     // L'initialiseur connait tout
     void (*init_state)(st_state *state);
     // La logique ne connaitra que les model
-    void (*update_logic_context)(st_engine *engine_state);
+    void (*update_logic_context)(st_state *state);
     // Le rendu ne connait que les données liée au rendu
     void (*update_render_context)(st_render_data *render);
 
