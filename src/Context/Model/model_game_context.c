@@ -9,27 +9,33 @@ void update_logic_game(st_state *state)
     if(state->inputs.release[KEY_DOWN] == true)
     {
         state->ev_next_context = C_BACK;   
+        state->inputs.release[KEY_DOWN] = false;
     }
     if(state->inputs.release[KEY_ESCAPE] == true)
     {
-        state->ev_must_close = true;   
+        state->ev_must_close = true;  
+        state->inputs.release[KEY_ESCAPE] = false; 
     }
 
     // Déplacement de la caméra
     if(state->inputs.release[KEY_Z] || state->inputs.pressed[KEY_Z])
     {
+        state->inputs.release[KEY_Z] = false; 
         move_camera(&state->render.camera, UP);
     }
     if(state->inputs.release[KEY_Q] || state->inputs.pressed[KEY_Q])
     {
+        state->inputs.release[KEY_Q] = false; 
         move_camera(&state->render.camera, LEFT);
     }
     if(state->inputs.release[KEY_S] || state->inputs.pressed[KEY_S])
     {
+        state->inputs.release[KEY_S] = false; 
         move_camera(&state->render.camera, DOWN);
     }
     if(state->inputs.release[KEY_D] || state->inputs.pressed[KEY_D])
     {
+        state->inputs.release[KEY_D] = false; 
         move_camera(&state->render.camera, RIGHT);
     }
     

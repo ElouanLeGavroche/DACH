@@ -8,11 +8,14 @@ void update_logic_main_menu(st_state *state)
     if(state->inputs.release[KEY_UP] == true)
     {
         state->ev_next_context = C_GAME;   
+        state->inputs.release[KEY_UP] = false;
     }
     if(state->inputs.release[KEY_ESCAPE] == true)
     {
         state->ev_must_close = true;   
+        state->inputs.release[KEY_ESCAPE] = false;
     }
+   
 
     pthread_mutex_unlock(&state->inputs.mutex); // Déverrouillage
 

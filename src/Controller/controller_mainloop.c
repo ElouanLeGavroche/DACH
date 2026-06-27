@@ -34,11 +34,7 @@ void input_loop(st_engine *engine_state){
 
 
     // récupéré les entrées //
-    int i;
-    for(i = 0; i < KEY_NUM; i ++)
-    {
-        engine_state->stack_context.current_state->inputs.release[i] = false;
-    }
+
     glfwPollEvents();
     
     
