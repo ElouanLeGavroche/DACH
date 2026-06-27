@@ -46,6 +46,9 @@ void init_menu(st_state *state)
     init_a_3d_loaded_element(&state->render, &seconde_square, 0);
     init_a_3d_loaded_element(&state->render, &first_square, 1);
 
+    // Initialiser la perspective --------------------------------------------------------------------------------------------
+    init_render_main_menu(&state->render);
+
     // Initialiser le model --------------------------------------------------------------------------------------------
     init_data_main_menu(state);
 

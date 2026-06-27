@@ -13,6 +13,8 @@
 
 #include "../../../state.h"
 
+#include "../../Controller/callback_controller.h"
+
 void controller_update_render_game(st_render_data *render);
 void init_game(st_state *state);
 void controller_update_logic_game(st_state *state);

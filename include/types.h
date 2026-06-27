@@ -231,4 +231,12 @@ typedef struct {
     float frame_rate;
 }st_loaded_windows_data;
 
+
+// Structure qui englobe les éléments qui ont besoin d'être envoyé à la fenêtre
+typedef struct
+{
+    st_camera *camera;
+    st_input *input;
+}st_window_user_data;
+
 #endif

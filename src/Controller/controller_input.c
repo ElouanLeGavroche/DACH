@@ -2,7 +2,10 @@
 
 void pressed_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
-    st_input *input = glfwGetWindowUserPointer(window);
+    
+    st_window_user_data *data = glfwGetWindowUserPointer(window); 
+    st_input *input = data->input;
+
     if(input->ok == true)
     {
         
@@ -37,4 +40,5 @@ void pressed_key_callback(GLFWwindow *window, int key, int scancode, int action,
         // on met à jour le signal
         input->ok = false;
     }
+    
 }

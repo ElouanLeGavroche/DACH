@@ -151,7 +151,6 @@ void controller_mainloop_management(st_engine *engine_state){
     pthread_join(logical_thread, NULL);
 
     unload_data(engine_state);
-
     view_close_window();
 }
 
@@ -228,6 +227,9 @@ void link_input(st_engine *engine_state)
 {
     // Liée la strucures des entrée dans la fnêtre pour le callback
     GLFWwindow *window = glfwGetCurrentContext();
-    glfwSetWindowUserPointer(window, &engine_state->stack_context.current_state->inputs);
+    st_window_user_data *data = glfwGetWindowUserPointer(window);
+    data->input = &engine_state->stack_context.current_state->inputs;
+    
     glfwSetKeyCallback(window, pressed_key_callback);
+  
 }

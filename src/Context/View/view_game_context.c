@@ -4,11 +4,17 @@
 void init_render_game(st_render_data *render)
 {
 
+    render->delta_time = 0.0f;
+    render->last_time = 0.0f;
+
+    render->camera.fov = 45.0f;
+    render->camera.speed = 0.0f;
+    
     glm_mat4_identity(render->camera.view);
 
     /* Projection en perspective */
     glm_mat4_identity(render->camera.projection);
-    glm_perspective(glm_rad(45.0f), (float)1280/(float)720, 0.1f, 100.0f, render->camera.projection);
+    glm_perspective(glm_rad(render->camera.fov), (float)1280/(float)720, 0.1f, 100.0f, render->camera.projection);
 
     // On initialise la position de la caméra
     glm_vec3_copy((vec3){1.0f, 0.0f, 1.0f} , render->camera.pos);
@@ -26,13 +32,16 @@ void init_render_game(st_render_data *render)
 
     // On va associé la caméra dans Opengl, car on peut-en avoir besoin dans les callbacks
     GLFWwindow *window = glfwGetCurrentContext();
-    glfwSetWindowUserPointer(window, &render->camera);
+
+    st_window_user_data *data = glfwGetWindowUserPointer(window);
+    data->camera = &render->camera;
 
     //glm_translate(trans, (vec3){1.0f, 1.0f, 0.0f});
     //vec4 result;
     
     //glm_mat4_mulv(trans, vec, result);
     //printf("%f %f %f\n", result[0], result[1], result[2]);
+    printf("%f\n", render->camera.fov);
 
 }
 void update_render_game(st_render_data *render)
