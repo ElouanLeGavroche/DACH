@@ -98,9 +98,11 @@ typedef struct{
     mat4 view;
     mat4 projection;
 
-    vec3 camera_pos;
-    vec3 camera_front;
-    vec3 camera_up;
+    vec3 pos;
+    vec3 front;
+    vec3 up;
+
+    float speed;
 
 }st_camera;
 
@@ -129,6 +131,10 @@ typedef struct{
     st_shader *shader_programs;
 
     st_camera camera;
+
+    // Variables qui me permettront de géré le déplacement de la caméra indépendamment de la clock
+    float delta_time;
+    float last_time;
 
 }st_render_data;
 

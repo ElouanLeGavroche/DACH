@@ -11,14 +11,17 @@ void init_render_game(st_render_data *render)
     glm_perspective(glm_rad(45.0f), (float)1280/(float)720, 0.1f, 100.0f, render->camera.projection);
 
     // On initialise la position de la caméra
-    glm_vec3_copy((vec3){1.0f, 0.0f, 1.0f} , render->camera.camera_pos);
-    glm_vec3_copy((vec3){0.0, 0.0, -1.0} , render->camera.camera_front);
-    glm_vec3_copy((vec3){0.0, 1.0, 0.0} , render->camera.camera_up);
+    glm_vec3_copy((vec3){1.0f, 0.0f, 1.0f} , render->camera.pos);
+    glm_vec3_copy((vec3){1.0, 0.0, -1.0} , render->camera.front);
+    glm_vec3_copy((vec3){0.0, 1.0, 0.0} , render->camera.up);
 
     vec3 center;
 
-    glm_vec3_sub(render->camera.camera_pos, render->camera.camera_front, center);
-    glm_lookat((vec3){1.0, 0.0, 1.0}, center,(vec3){0.0, 1.0, 0.0}, render->camera.view);
+    glm_vec3_sub(render->camera.pos, render->camera.front, center);
+    glm_lookat(render->camera.pos, center, render->camera.up, render->camera.view);
+
+    render->delta_time = 0.0f;
+    render->last_time = 0.0f;
 
     //glm_translate(trans, (vec3){1.0f, 1.0f, 0.0f});
     //vec4 result;
@@ -29,6 +32,11 @@ void init_render_game(st_render_data *render)
 }
 void update_render_game(st_render_data *render)
 {
+    float current_frame = glfwGetTime();
+    render->delta_time = current_frame - render->last_time;
+    render->last_time = current_frame;
+
+    render->camera.speed = 2.5f *render->delta_time;
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -46,11 +54,11 @@ void update_render_game(st_render_data *render)
     
     vec3 center;
 
-    glm_vec3_sub(render->camera.camera_pos, render->camera.camera_front, center);
+    glm_vec3_sub(render->camera.pos, render->camera.front, center);
     glm_lookat(
-        render->camera.camera_pos, 
+        render->camera.pos, 
         center, 
-        render->camera.camera_up, 
+        render->camera.up, 
         render->camera.view
     );
 
