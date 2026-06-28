@@ -56,8 +56,23 @@ typedef struct
 
 }st_input;
 
-// structures qui regroupent tout les meshs et les shader
-typedef struct st_mesh st_mesh;
+/**
+ * @brief strucutre qui regroupe les informations d'une image
+ * @param width largeur de l'image
+ * @param height hauteur de l'image
+ * @param nr_channels
+ * @param path chemin de l'image 
+ * @param data données de l'image
+ */
+typedef struct
+{
+    int width;
+    int height;
+    int nr_channels;
+
+    const char *path;
+    unsigned char *data;
+}st_image;
 
 /**
  * @brief La structure qui permet de stocker un élément 3D
@@ -68,8 +83,9 @@ typedef struct st_mesh st_mesh;
  * @param VAO valeur des sommets à envoyé à la carte graphique
  * @param VBO buffer de sommets
  * @param EBO buffer de sommets
+ * @param texture image de l'élément
  */
-struct st_mesh
+typedef struct
 {
     int nb_vert;
     int nb_face;
@@ -80,7 +96,9 @@ struct st_mesh
     unsigned int VBO;
     unsigned int EBO;
 
-};
+    st_image texture;
+
+}st_mesh;
 
 
 /**
@@ -173,9 +191,14 @@ typedef struct{
  * 
  * 2 - Un pointeur vers (s'il y en à un) un parent. Ex : je suis sur le menu pause, le parent est le jeu) 
  * 
- * @param st_state fonction qui initialisera la fenêtre
- * @param update_logic_context fonction qui déroulera à chaque tick la logique du canva
- * @param update_render_context fonction qui déroulera le rendu à chaque frame le rendu de la page
+ * @param st_state fonction qui initialisera la fenêtre.
+ * @param update_logic_context fonction qui déroulera à chaque tick la logique du canva.
+ * @param update_render_context fonction qui déroulera le rendu à chaque frame le rendu de la page.
+ * @param inputs structure des entrée clavier.
+ * @param upper sont parent s'il en à un.
+ * @param render données de rendu du context.
+ * @param ev_next_context variable qui sera lu par le moteur et qui passera à un état suivant.
+ * @param ev_ev_close_close varibale qui sera lu par le moteur et qui quittera le jeu.
  */
 typedef struct st_state
 {
@@ -198,12 +221,15 @@ typedef struct st_state
     atomic_bool ev_must_close;
     
 }st_state;
+
+
 /**
  * @brief   Le stack permet de hierachisé l'ordre d'apparition des page.
  * 
  * Si on et le jeu en pause, le canva pause prend le dessus sur le jeu, et quand on la quitte, le jeu reprend.
  * 
  * @param st_state Est une structure simple. Pour en savoir plus, cliquer dessus.
+ * @param level_of_depth Niveau de profondeur de la state.
  */
 typedef struct {
     st_state *current_state;
@@ -238,7 +264,9 @@ typedef struct
  * 
  * A voir si je la split en plusieurs structure à l'avenir pour des question de lisibilité.
  * 
- * @param render Ici les information qui servent au rendu (les VBO, VAO...).
+ * @param running pour savoir si le jeu tourne
+ * @param stack_context structure des contexts du moteur
+ * @param context_tool petite boite à outil pour géré les contexts
  */
 typedef struct st_engine
 {

@@ -73,7 +73,7 @@ void update_render_game(st_render_data *render)
         /* Model */
     mat4 model;
     glm_mat4_identity(model);
-    glm_rotate(model, (float)glfwGetTime()*2, (vec3){0.0f, 0.0f, 1.0f});
+    //glm_rotate(model, (float)glfwGetTime()*2, (vec3){0.0f, 0.0f, 1.0f});
   
     unsigned int transfrom_loc;
     

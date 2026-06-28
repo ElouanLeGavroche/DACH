@@ -42,7 +42,7 @@ $(SAVE_EXEC)$(EXEC):\
 	\
 	$(LOAD_TOOLS)load_shader.o\
 	$(LOAD_TOOLS)load_obj_format.o\
-	$(LOAD_TOOLS)stb_image_implementation.o\
+	$(LOAD_TOOLS)load_image.o\
 	\
 	$(CONTROLLER)controller_init.o\
 	$(MODEL)model_init.o\
