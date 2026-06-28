@@ -59,6 +59,16 @@ typedef struct
 // structures qui regroupent tout les meshs et les shader
 typedef struct st_mesh st_mesh;
 
+/**
+ * @brief La structure qui permet de stocker un élément 3D
+ * @param nb_vert le nombre de vertrices dans le modèle
+ * @param nb_face le nombre de face dans le modèle
+ * @param vert_pos la position de ecs vertrices
+ * @param face_pos l'ordre dans lequel il faut former les face avec les vertrices
+ * @param VAO valeur des sommets à envoyé à la carte graphique
+ * @param VBO buffer de sommets
+ * @param EBO buffer de sommets
+ */
 struct st_mesh
 {
     int nb_vert;
@@ -75,6 +85,10 @@ struct st_mesh
 
 /**
  * @brief Structure qui stock le contenu d'un shader
+ * @param shader id du shader
+ * @param set_int_uniform permet de faire passer une valeur entier dans le shader de la CG 
+ * @param set_float_uniform permet de faire passer une valeur flotante dans le shader de la CG
+ * @param set_bool_uniform permet de faire passer une valeur booleenne dans le shader de la CG
  */
 
 typedef struct
@@ -82,7 +96,7 @@ typedef struct
     unsigned int shader;
 
     void(* set_int_uniform)();
-    void(* set_flaot_uniform)();
+    void(* set_float_uniform)();
     void(* set_bool_uniform)();
 
 }st_shader;
@@ -90,6 +104,16 @@ typedef struct
 
 /**
  * @brief Structure qui contient les informations de la caméra
+ * @param view ce que voit la caméra
+ * @param projection le type de projection à appliquer (ortho, perspective...)
+ * @param fov le champ de vision de la caméra
+ * @param pos la position de la caméra
+ * @param front ce que regarde la caméra
+ * @param up l'inclinaison de la caméra
+ * @param speed la valeur absolu (inchangé au cours du code) de la vitesse de la caméra
+ * @param actual_speed la valeur relative de la caméra en fonction de la vitesse de rendu du jeu
+ * @param near_z au plus proche que va rendre la caméra
+ * @param far_z au plus loin que va voir la caméré
  */
 typedef struct{
     mat4 view;
