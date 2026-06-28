@@ -38,6 +38,11 @@ https://github.com/recp/cglm
 
 make && ./out/DACH && make clean
 
+
+## Commits
+
+Afin d'effectuer des commits clairs et lisibles, je vais essayer de les rédiger avec Gitmoji pour observer immédiatement de quoi les modifications apportées en retournent.
+
 ## Contribution
 
 N'hésitez pas à me faire remonter des problèmes ou des conseils via GitHub. Je prendrais vos demandes au sérieux et m'appliquerais à les mettre en oeuvre. Je vous remercie d'avance de toute aide que vous pourrez m'apporter dans les "Issues".
