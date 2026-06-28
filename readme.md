@@ -41,7 +41,7 @@ make && ./out/DACH && make clean
 
 ## Commits
 
-Afin d'effectuer des commits clairs et lisibles, je vais essayer de les rédiger avec Gitmoji pour observer immédiatement de quoi les modifications apportées en retournent.
+Afin d'effectuer des commits clairs et lisibles, je vais essayer de les catégoriser avec les emoji de Gitmoji pour observer immédiatement de quoi les modifications apportées en retournent.
 
 ## Contribution
 
