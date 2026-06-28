@@ -12,7 +12,7 @@ out vec3 our_color;             // Nous définirons la couleur dans cette variab
 
 void main()
 {
-    gl_Position =  projection * view * vec4(a_pos, 1.0);
+    gl_Position =  projection * view * model *vec4(a_pos, 1.0);
     //gl_Position = transform * vec4(a_pos, 1.0); // un vec3 est utilisé pour construire un vec4
     our_color = a_color;
 }

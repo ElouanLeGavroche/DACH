@@ -2,7 +2,6 @@
 
 void pressed_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
-    
     st_window_user_data *data = glfwGetWindowUserPointer(window); 
     if(data != NULL || data->input != NULL)
     {

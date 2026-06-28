@@ -102,6 +102,10 @@ typedef struct{
     vec3 up;
 
     float speed;
+    float actual_speed;
+
+    float near_z;
+    float far_z;
 
 }st_camera;
 

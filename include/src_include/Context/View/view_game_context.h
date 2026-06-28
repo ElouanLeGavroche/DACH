@@ -19,5 +19,6 @@
 
 void update_render_game(st_render_data *render);
 void init_render_game(st_render_data *render);
+void init_game_camera(st_camera *camera);
 
 #endif
