@@ -9,6 +9,9 @@
 #include <cglm/cglm.h>
 #include <cglm/types.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+
+
 typedef struct st_engine st_engine;
 typedef struct st_state st_state;
 

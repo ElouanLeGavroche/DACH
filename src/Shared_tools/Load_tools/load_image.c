@@ -1,7 +1,7 @@
 #include "../../../include/src_include/Shared_tools/Load_tools/load_image.h"
 
 
-st_image load_texture(const char path, int width, int height, int nr_channels)
+st_image load_texture(const char *path, int width, int height, int nr_channels)
 {
     st_image image;
  

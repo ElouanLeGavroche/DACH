@@ -25,8 +25,8 @@ void init_game_camera(st_camera *camera)
     // Rendu le plus proche
     camera->near_z = -100.0f;
     // Rendu le plus loin
-    camera->far_z = 100.0f;  
-    
+    camera->far_z = 100.0f; 
+
     vec3 center;
 
     // initialisation du point de vue
@@ -47,9 +47,9 @@ void init_game_camera(st_camera *camera)
     // On paramètre la Position de la caméra
     glm_vec3_copy((vec3){2.0f, 2.0f, 2.0f} , camera->pos);
     // Vecteur qui correspond à ce que regarde la caméra
-    glm_vec3_copy((vec3){0.45, 0.45, 0.45} , camera->front);
+    glm_vec3_copy((vec3){0.125, 0.125, 0.125} , camera->front);
     // Vecteur haut
-    glm_vec3_copy((vec3){0.0, 1.0, 0.0} , camera->up);
+    glm_vec3_copy((vec3){0.0, 0.25, 0.0} , camera->up);
 
     /* Définition du LookAt*/
     glm_vec3_sub(camera->pos, camera->front, center);

@@ -153,7 +153,7 @@ int parse_vertext(char line[], st_mesh *tile, int i_v)
     }
     int i;
 
-    for(i = 0; i < 6; i ++)
+    for(i = 0; i < 8; i ++)
     {
         letter = strtok( NULL, " " );
         if(letter == NULL)

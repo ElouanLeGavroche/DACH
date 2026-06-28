@@ -25,15 +25,34 @@ void init_game(st_state *state)
     }
     
     // CHARGER LES ELEMENTS --------------------------------------------------------------------------------------------
-    st_mesh first_square;
-    load_file(BASIC_HOUSE_PATH, &first_square);
+    //st_mesh first_square;
+    //load_file(BASIC_HOUSE_PATH, &first_square);
 
     st_mesh seconde_square;
     load_file(BASIC_TILE_PATH, &seconde_square);
     
-
     state->render.nb_mesh = 2;
 
+    // CHARGER LES TEXTURES DES ELEMENTS --------------------------------------------------------------------------------------------
+    st_image first_square_texture = load_texture("ressources/images/grass_test.jpg", 736, 552, 0);
+    
+
+    // GENÉRÉ LES TEXTURES --------------------------------------------------------------------------------------------
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexImage2D(GL_TEXTURE_2D, 1, GL_RGB, first_square_texture.width, first_square_texture.height, 0, GL_RGB, GL_UNSIGNED_BYTE, first_square_texture.data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    
+    stbi_image_free(first_square_texture.data);
+    
     // Mallocs --------------------------------------------------------------------------------------------
 
     state->render.meshs = malloc(sizeof(st_mesh) * state->render.nb_mesh);
@@ -44,7 +63,7 @@ void init_game(st_state *state)
 
     // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
     init_a_3d_loaded_element(&state->render, &seconde_square, 0);
-    init_a_3d_loaded_element(&state->render, &first_square, 1);
+    //init_a_3d_loaded_element(&state->render, &first_square, 1);
 
     // Initialiser la perspective --------------------------------------------------------------------------------------------
     init_render_game(&state->render);
