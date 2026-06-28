@@ -51,14 +51,22 @@ void init_game(st_state *state)
 
     // Initialiser le model --------------------------------------------------------------------------------------------
     init_data_game(state);
+
+    // On passe la caméra dans la fenêtre pour les callbacks
+    GLFWwindow *window = glfwGetCurrentContext();
+
+    st_window_user_data *data = glfwGetWindowUserPointer(window);
+    data->camera = &state->render.camera;
+
+    glfwSetScrollCallback(window, scroll_callback);
     
     printf("Context jeu initier\n");
 }
 
 
-void controller_update_logic_game(st_engine *engine_state)
+void controller_update_logic_game(st_state *state)
 {
-    update_logic_game(engine_state);
+    update_logic_game(state);
 }
 
 void controller_update_render_game(st_render_data *render)

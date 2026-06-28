@@ -4,65 +4,108 @@
 void init_render_game(st_render_data *render)
 {
 
-    glm_mat4_identity(render->camera.view);
+    init_game_camera(&render->camera);
 
 
-    /* Projection en perspective */
-    glm_mat4_identity(render->camera.projection);
-    glm_perspective(glm_rad(45.0f), (float)1280/(float)720, 0.1f, 100.0f, render->camera.projection);
+    // On va associé la caméra dans Opengl, car on peut-en avoir besoin dans les callbacks
+    GLFWwindow *window = glfwGetCurrentContext();
 
-    //glm_translate(trans, (vec3){1.0f, 1.0f, 0.0f});
-    //vec4 result;
+    st_window_user_data *data = glfwGetWindowUserPointer(window);
+    data->camera = &render->camera;
+}
+
+void init_game_camera(st_camera *camera)
+{
+    // Vitesse absolue de la caméra
+    camera->speed = 4.0f;
+    // Vitesse relative de la caméra
+    camera->actual_speed = 0.0f;
+    // Taille du champ de vision (N 15; S 15, E 15, W 15)
+    camera->fov = 15.0f;
+    // Rendu le plus proche
+    camera->near_z = -100.0f;
+    // Rendu le plus loin
+    camera->far_z = 100.0f;  
     
-    //glm_mat4_mulv(trans, vec, result);
-    //printf("%f %f %f\n", result[0], result[1], result[2]);
+    vec3 center;
+
+    // initialisation du point de vue
+    glm_mat4_identity(camera->view);
+
+    // Création de la vue Orthogonale avec les paramètres déclarer plus haut
+    glm_ortho(
+        //Champ de vue
+        -camera->fov, camera->fov, -camera->fov, camera->fov, 
+        // Profondeur de champ
+        camera->near_z, camera->far_z, 
+        // Matrice de projection
+        camera->projection
+    );
+
+    /* On initialise la position de la caméra à une vue isométrique */
+    
+    // On paramètre la Position de la caméra
+    glm_vec3_copy((vec3){2.0f, 2.0f, 2.0f} , camera->pos);
+    // Vecteur qui correspond à ce que regarde la caméra
+    glm_vec3_copy((vec3){0.45, 0.45, 0.45} , camera->front);
+    // Vecteur haut
+    glm_vec3_copy((vec3){0.0, 1.0, 0.0} , camera->up);
+
+    /* Définition du LookAt*/
+    glm_vec3_sub(camera->pos, camera->front, center);
+    glm_lookat(camera->pos, center, camera->up, camera->view);
 
 }
+
 void update_render_game(st_render_data *render)
 {
+    /* 
+    On va en premier lieu calculer le temps que prend une frame à être fait
+    ainsi, la caméra ne dépendant plus de la vitesse du jeu .
+    */
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    float current_frame = glfwGetTime();
+    render->delta_time = current_frame - render->last_time;
+    render->last_time = current_frame;
 
-    /* Ici l'on actualise = tout les éléments du menu */
-    mat4 trans;
-    glm_mat4_identity(trans);
-
-    glm_rotate(trans, (float)glfwGetTime(), (vec3){1.0, 1.0, 1.0});
-    glm_scale(trans, (vec3){0.5, 0.5, 0.5});
+    render->camera.actual_speed = render->camera.speed *render->delta_time;
 
         /* Model */
     mat4 model;
     glm_mat4_identity(model);
-    glm_rotate(model, (float)glfwGetTime()*10, (vec3){0.0f, 0.0f, 1.0f});
-
-
-        /* View */
-    float radius = 10.0f;
-    float cam_x = sin(glfwGetTime()) * radius;
-    float cam_z = cos(glfwGetTime()) * radius;
-
-    glm_lookat((vec3){cam_x, 0.0, cam_z}, (vec3){0.0, 0.0, 0.0}, (vec3){0.0, 1.0, 0.0}, render->camera.view);
-
+    glm_rotate(model, (float)glfwGetTime()*2, (vec3){0.0f, 0.0f, 1.0f});
+  
     unsigned int transfrom_loc;
     
-    
+    vec3 center;
+
+    glm_vec3_sub(render->camera.pos, render->camera.front, center);
+    glm_lookat(
+        render->camera.pos, 
+        center, 
+        render->camera.up, 
+        render->camera.view
+    );
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     glClearColor(num_to_01(24), num_to_01(32), num_to_01(61), 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     
     glUseProgram(render->shader_programs[0].shader);
     
+    /* Application de la rotation */
     int model_loc = glGetUniformLocation(render->shader_programs[0].shader, "model");
     glUniformMatrix4fv(model_loc, 1, GL_FALSE, *model);
 
+    /* Application du point de vue */
     int view_loc = glGetUniformLocation(render->shader_programs[0].shader, "view");
     glUniformMatrix4fv(view_loc, 1, GL_FALSE, *render->camera.view);
     
+    /* Application de la projection*/
     int proj_loc = glGetUniformLocation(render->shader_programs[0].shader, "projection");
     glUniformMatrix4fv(proj_loc, 1, GL_FALSE, *render->camera.projection);
 
-
-    transfrom_loc = glGetUniformLocation(render->shader_programs[0].shader, "transform");
-    glUniformMatrix4fv(transfrom_loc, 1, GL_FALSE, *trans);
     
     int i;
     for(i = 0; i < render->nb_mesh; i ++)

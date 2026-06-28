@@ -1,12 +1,22 @@
 #include "../../include/src_include/Controller/callback_controller.h"
 
-void pressed_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-    printf("touche entrée : %d\n", key);
-    fflush(stdout);
+  st_window_user_data *data = glfwGetWindowUserPointer(window);
+  st_camera *camera = data->camera;
+  
+  printf("%f\n", camera->fov);
+  if(camera->fov >= 1.0f && camera->fov <= 45.0f)
+        camera->fov -= yoffset;
+  if(camera->fov <= 1.0f)
+        camera->fov = 1.0f;
+  if(camera->fov >= 45.0f)
+        camera->fov = 45.0f;
 
+  float size = 10.0;
+  glm_ortho(-camera->fov, camera->fov, -camera->fov, camera->fov, -100.0f, 100.0f, camera->projection);
+  //glm_perspective(glm_rad(camera->fov), (float)1280/(float)720, 0.1f, 100.0f, camera->projection);
 }
-
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height){
     glViewport(0, 0, width, height);

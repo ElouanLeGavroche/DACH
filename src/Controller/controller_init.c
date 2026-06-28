@@ -7,6 +7,10 @@ int controller_init(){
     // Stock des informations pour le moteur
     st_engine engine_state;
 
+    // Variables pour les callbacks
+    st_window_user_data *data = malloc(sizeof(st_window_user_data));
+    GLFWwindow *window;
+
     /* Etape 1 : Création de la fenêtre et de son context */
     
     // -1- Charger les donnée propre à la fenêtre
@@ -24,13 +28,19 @@ int controller_init(){
     }
 
     // -3- Mise en place des Callbacks
-    GLFWwindow *window = glfwGetCurrentContext();
-    glfwSetKeyCallback(window, pressed_key_callback);
+    window = glfwGetCurrentContext();
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  
+
+    glfwSetWindowUserPointer(window, data);
+
 
     /* Etape 2 : entrer dans les mains loops */
     controller_mainloop_management(&engine_state);
 
+
+    // Free
+    free(data);
+    
     return EXIT_SUCCESS;
     
 }

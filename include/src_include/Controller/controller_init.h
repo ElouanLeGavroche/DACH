@@ -12,6 +12,7 @@
 #include "../Controller/callback_controller.h"
 #include "../Controller/controller_mainloop.h"
 
+#include "controller_input.h"
 
 int controller_init();
 

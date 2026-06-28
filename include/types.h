@@ -29,7 +29,7 @@ typedef enum
 
 // Tableau qui contient tout les touches utilisable par le jeu
 // Note : Si on veux mapper les touchent, ça va être compliqué avec ce système... à voir, à voir...
-typedef enum
+typedef enum e_key
 {
     KEY_ESCAPE,
     KEY_UP,
@@ -43,9 +43,6 @@ typedef enum
 
     KEY_NUM
 }e_key;
-
-// Structure qui sert à chaque context à quoi sert quelle touche
-typedef unsigned int actions;
 
 // Savoir quand une touche est pressé ou relacher( permet de géré des entrer du type CTRL+C)
 typedef struct
@@ -98,11 +95,27 @@ typedef struct{
     mat4 view;
     mat4 projection;
 
-    vec3 camera_pos;
-    vec3 camera_front;
-    vec3 camera_up;
+    float fov;
+
+    vec3 pos;
+    vec3 front;
+    vec3 up;
+
+    float speed;
+    float actual_speed;
+
+    float near_z;
+    float far_z;
 
 }st_camera;
+
+// Permet de savoir vers quelle direction va la caméra
+typedef enum e_dir{
+    UP,
+    LEFT,
+    DOWN,
+    RIGHT
+}e_dir;
 
 /**
  * @brief Structure qui stock les informations de rendu du context
@@ -121,6 +134,10 @@ typedef struct{
     st_shader *shader_programs;
 
     st_camera camera;
+
+    // Variables qui me permettront de géré le déplacement de la caméra indépendamment de la clock
+    float delta_time;
+    float last_time;
 
 }st_render_data;
 
@@ -141,13 +158,12 @@ typedef struct st_state
     // L'initialiseur connait tout
     void (*init_state)(st_state *state);
     // La logique ne connaitra que les model
-    void (*update_logic_context)(st_engine *engine_state);
+    void (*update_logic_context)(st_state *state);
     // Le rendu ne connait que les données liée au rendu
     void (*update_render_context)(st_render_data *render);
 
     // Permet de stocker les inputs qui gérerons les actions en conséquent
     st_input inputs;
-    actions context_action;
 
     struct st_state *upper;
     st_render_data render;
@@ -218,5 +234,13 @@ typedef struct {
     int size_y;
     float frame_rate;
 }st_loaded_windows_data;
+
+
+// Structure qui englobe les éléments qui ont besoin d'être envoyé à la fenêtre
+typedef struct
+{
+    st_camera *camera;
+    st_input *input;
+}st_window_user_data;
 
 #endif

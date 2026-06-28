@@ -24,6 +24,7 @@
 
 // Système des entrées
 #include "controller_input.h"
+#include "callback_controller.h"
 
 //Pages du jeu
 #include "../Context/Controller/controller_main_menu_context.h"
@@ -34,5 +35,7 @@ void* logical_loop(void *data_engine);
 void new_context(st_engine *engine_state, st_state *new_state);
 void unload_data(st_engine *engine_state);
 void destroy_render_data(st_render_data *render);
+
+void link_input(st_engine *engine_state);
 
 #endif
