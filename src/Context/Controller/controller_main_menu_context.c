@@ -36,6 +36,12 @@ void init_menu(st_state *state)
     // CHARGER LES TEXTURES DES ELEMENTS --------------------------------------------------------------------------------------------
     st_image first_square_texture = load_texture("ressources/images/grass_test.jpg", 736, 552, 0);
 
+    // Initialiser les Texuture des elements --------------------------------------------------------------------------------------------
+    first_square.texture_id = init_a_loaded_texture(&first_square_texture);
+    seconde_square.texture_id = init_a_loaded_texture(&first_square_texture);
+    stbi_image_free(first_square_texture.data);
+
+
     // Mallocs --------------------------------------------------------------------------------------------
 
     state->render.meshs = malloc(sizeof(st_mesh) * state->render.nb_mesh);
@@ -45,13 +51,12 @@ void init_menu(st_state *state)
     // Faire une fonction propre pour les charger individuellement ou par liste
     init_a_loaded_shader(&state->render, vertex_shader_source, fragment_shader_source);
 
+    glUseProgram(state->render.shader_programs[0].shader);
+    glUniform1i(glGetUniformLocation(state->render.shader_programs[0].shader, "our_texture"), 0);
+
     // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
     init_a_3d_loaded_element(&state->render, &seconde_square, 0);
     init_a_3d_loaded_element(&state->render, &first_square, 1);
-
-    // Initialiser les Texuture des elements --------------------------------------------------------------------------------------------
-    first_square.texture_id = init_a_loaded_texture(&first_square_texture);
-    stbi_image_free(first_square_texture.data);
 
     // Initialiser la perspective --------------------------------------------------------------------------------------------
     init_render_main_menu(&state->render);

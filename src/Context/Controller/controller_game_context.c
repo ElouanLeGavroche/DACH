@@ -38,26 +38,9 @@ void init_game(st_state *state)
     
 
     // GENÉRÉ LES TEXTURES --------------------------------------------------------------------------------------------
-    unsigned int texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    seconde_square.texture_id = init_a_loaded_texture(&first_square_texture);
+    stbi_image_free(first_square_texture.data);
     
-    // définit les options de la texture actuellement liée
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // charge et génère la texture
-    if (first_square_texture.data != NULL)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, first_square_texture.width, first_square_texture.height, 0, GL_RGB, GL_UNSIGNED_BYTE, first_square_texture.data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        fprintf(stderr, "erreur lors de la création de la texture\n");
-        stbi_image_free(first_square_texture.data);
-    }
     // Mallocs --------------------------------------------------------------------------------------------
 
     state->render.meshs = malloc(sizeof(st_mesh) * state->render.nb_mesh);
@@ -65,6 +48,9 @@ void init_game(st_state *state)
     
     // Initialiser les shaders --------------------------------------------------------------------------------------------
     init_a_loaded_shader(&state->render, vertex_shader_source, fragment_shader_source);
+
+    glUseProgram(state->render.shader_programs[0].shader);
+    glUniform1i(glGetUniformLocation(state->render.shader_programs[0].shader, "our_texture"), 0);
 
     // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
     init_a_3d_loaded_element(&state->render, &seconde_square, 0);
