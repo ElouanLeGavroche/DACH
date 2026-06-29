@@ -1,3 +1,7 @@
+#ifndef STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_IMPLEMENTATION
+#endif
+
 #include "../../../include/src_include/Shared_tools/Load_tools/load_image.h"
 
 

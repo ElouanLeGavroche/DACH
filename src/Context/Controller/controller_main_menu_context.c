@@ -25,10 +25,10 @@ void init_menu(st_state *state)
     }
     
     // CHARGER LES ELEMENTS --------------------------------------------------------------------------------------------
-    st_mesh first_square;
+    st_mesh first_square = {0};
     load_file(BASIC_HOUSE_PATH, &first_square);
 
-    st_mesh seconde_square;
+    st_mesh seconde_square = {0};
     load_file(BASIC_TILE_PATH, &seconde_square);
 
     state->render.nb_mesh = 2;

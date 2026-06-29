@@ -28,10 +28,10 @@ void init_game(st_state *state)
     //st_mesh first_square;
     //load_file(BASIC_HOUSE_PATH, &first_square);
 
-    st_mesh seconde_square;
+    st_mesh seconde_square = {0};
     load_file(BASIC_TILE_PATH, &seconde_square);
     
-    state->render.nb_mesh = 2;
+    state->render.nb_mesh = 1;
 
     // CHARGER LES TEXTURES DES ELEMENTS --------------------------------------------------------------------------------------------
     st_image first_square_texture = load_texture("ressources/images/grass_test.jpg", 736, 552, 0);
@@ -47,11 +47,10 @@ void init_game(st_state *state)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    glTexImage2D(GL_TEXTURE_2D, 1, GL_RGB, first_square_texture.width, first_square_texture.height, 0, GL_RGB, GL_UNSIGNED_BYTE, first_square_texture.data);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, first_square_texture.width, first_square_texture.height, 0, GL_RGB, GL_UNSIGNED_BYTE, first_square_texture.data);
     glGenerateMipmap(GL_TEXTURE_2D);
 
-    
-    stbi_image_free(first_square_texture.data);
+    seconde_square.texture_id = texture;
     
     // Mallocs --------------------------------------------------------------------------------------------
 
