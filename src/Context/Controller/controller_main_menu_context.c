@@ -31,7 +31,10 @@ void init_menu(st_state *state)
     st_mesh seconde_square = {0};
     load_file(BASIC_TILE_PATH, &seconde_square);
 
-    state->render.nb_mesh = 2;
+    state->render.nb_mesh = 2;   
+
+    // CHARGER LES TEXTURES DES ELEMENTS --------------------------------------------------------------------------------------------
+    st_image first_square_texture = load_texture("ressources/images/grass_test.jpg", 736, 552, 0);
 
     // Mallocs --------------------------------------------------------------------------------------------
 
@@ -45,6 +48,10 @@ void init_menu(st_state *state)
     // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
     init_a_3d_loaded_element(&state->render, &seconde_square, 0);
     init_a_3d_loaded_element(&state->render, &first_square, 1);
+
+    // Initialiser les Texuture des elements --------------------------------------------------------------------------------------------
+    first_square.texture_id = init_a_loaded_texture(&first_square_texture);
+    stbi_image_free(first_square_texture.data);
 
     // Initialiser la perspective --------------------------------------------------------------------------------------------
     init_render_main_menu(&state->render);

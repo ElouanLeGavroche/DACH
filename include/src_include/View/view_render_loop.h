@@ -8,6 +8,7 @@
 #include "../Config/constantes.h"
 #include "../../../extern_lib/glad/glad.h"
 
+
 #include <GLFW/glfw3.h>
 #include <stdlib.h>
 
@@ -18,6 +19,8 @@ int window_should_close();
 
 void init_a_loaded_shader(st_render_data *render, const char vertex_shader_source[], const char fragment_shader_source[]);
 void init_a_3d_loaded_element(st_render_data *render, st_mesh *elt, int indice);
+int init_a_loaded_texture(st_image *image);
+
 
 
 #endif

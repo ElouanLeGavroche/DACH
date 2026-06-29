@@ -8,6 +8,8 @@
 
 #include "../../Shared_tools/Load_tools/load_shader.h"
 #include "../../Shared_tools/Load_tools/load_obj_format.h"
+#include "../../Shared_tools/Load_tools/load_image.h"
+
 
 #include "../../../types.h"
 

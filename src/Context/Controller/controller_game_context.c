@@ -41,17 +41,23 @@ void init_game(st_state *state)
     unsigned int texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-
+    
+    // définit les options de la texture actuellement liée
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, first_square_texture.width, first_square_texture.height, 0, GL_RGB, GL_UNSIGNED_BYTE, first_square_texture.data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-
-    seconde_square.texture_id = texture;
-    
+    // charge et génère la texture
+    if (first_square_texture.data != NULL)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, first_square_texture.width, first_square_texture.height, 0, GL_RGB, GL_UNSIGNED_BYTE, first_square_texture.data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        fprintf(stderr, "erreur lors de la création de la texture\n");
+        stbi_image_free(first_square_texture.data);
+    }
     // Mallocs --------------------------------------------------------------------------------------------
 
     state->render.meshs = malloc(sizeof(st_mesh) * state->render.nb_mesh);

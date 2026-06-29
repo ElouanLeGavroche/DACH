@@ -198,6 +198,7 @@ void destroy_render_data(st_render_data *render)
         glDeleteVertexArrays(1, &render->meshs[i].VAO);
         glDeleteBuffers(1, &render->meshs[i].VBO);
         glDeleteBuffers(1, &render->meshs[i].EBO);
+        glDeleteTextures(1, &render->meshs[i].texture_id);
 
         free(render->meshs[i].face_pos);
         free(render->meshs[i].vert_pos);

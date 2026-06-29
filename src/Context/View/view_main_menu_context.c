@@ -75,6 +75,8 @@ void update_render_main_menu(st_render_data *render)
     int i;
     for(i = 0; i < render->nb_mesh; i ++)
     {
+        // Pour les texture
+        glBindTexture(GL_TEXTURE_2D, render->meshs->texture_id);
 
         glBindVertexArray(render->meshs[i].VAO);
         glDrawElements(GL_TRIANGLES, render->meshs[i].nb_face, GL_UNSIGNED_INT, 0);

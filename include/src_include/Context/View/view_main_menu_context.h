@@ -18,7 +18,7 @@
 #include "../../../../include/src_include/Shared_tools/Transform_openGL_values/colors.h"
 
 // Les chemins des éléments du menu
-#define BASIC_TILE_PATH "ressources/tiles/basic_tile.obj"
+#define BASIC_TILE_PATH "ressources/tiles/tile.obj"
 #define BASIC_HOUSE_PATH "ressources/houses/house.obj"
 
 void update_render_main_menu(st_render_data *render);

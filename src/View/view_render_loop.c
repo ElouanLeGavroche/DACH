@@ -91,7 +91,7 @@ void init_a_loaded_shader(st_render_data *render, const char vertex_shader_sourc
     if(!success)
     {
         glGetShaderInfoLog(vertex_shader, 512, NULL, infoLog);
-        printf("Erreur lors de la compilation du Vertex Shader\n");
+        printf("Erreur lors de la compilation du Vertex Shader : %s\n", infoLog);
     }
 
     fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -103,7 +103,7 @@ void init_a_loaded_shader(st_render_data *render, const char vertex_shader_sourc
     if(!success)
     {
         glGetShaderInfoLog(fragment_shader, 512, NULL, infoLog);
-        printf("Erreur lors de la compilation du Frag Shader\n");
+        printf("Erreur lors de la compilation du Frag Shader : %s\n", infoLog);
     }
 
     
@@ -117,7 +117,7 @@ void init_a_loaded_shader(st_render_data *render, const char vertex_shader_sourc
     glGetProgramiv(shader_program, GL_LINK_STATUS, &success);
     if(!success) {
         glGetProgramInfoLog(shader_program, 512, NULL, infoLog);
-        printf("Erreur lors de la création du programe shader\n");
+        printf("Erreur lors de la création du programe shader : %s\n", infoLog);
     }
     
     // Une fois lié, l'on peux les supprimer
@@ -129,4 +129,40 @@ void init_a_loaded_shader(st_render_data *render, const char vertex_shader_sourc
     free((void *)fragment_shader_source);
 
     render->shader_programs[0].shader = shader_program;
+}
+
+int init_a_loaded_texture(st_image *image)
+{
+    /* Variables de debug */
+    int  success;
+    char infoLog[512];
+
+    // GENÉRÉ LES TEXTURES --------------------------------------------------------------------------------------------
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    
+    // définit les options de la texture actuellement liée
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // charge et génère la texture
+    if (image->data != NULL)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->width, image->height, 0, GL_RGB, GL_UNSIGNED_BYTE, image->data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        glGetProgramiv(texture, GL_LINK_STATUS, &success);
+        if(!success) {
+            glGetProgramInfoLog(texture, 512, NULL, infoLog);
+            printf("Erreur lors de la création du programe shader : %s\n", infoLog);
+        }
+    }
+    else
+    {
+        fprintf(stderr, "erreur lors de la création de la texture\n");
+    }
+
+    return texture;
 }
