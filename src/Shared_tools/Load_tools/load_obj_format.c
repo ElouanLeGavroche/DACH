@@ -175,9 +175,9 @@ int parse_vertext(char line[], st_mesh *tile, int i_v)
         i++;
     }
     // Diag de la ligne
-    if(i != 9 || i != 8)
+    if(i != 9 && i != 8)
     {
-        fprintf(stderr, "Attention, il n'y a %d élément dans la ligne du vert, comportement indéfini\n");
+        fprintf(stderr, "Attention, il n'y a %d élément dans la ligne du vert, comportement indéfini\n", i);
         fprintf(stderr, "autoriser : \nTriangles : 8 \nCarrés 9");
         fprintf(stderr, "Ce message s'adresse au développeur, merci de demander à Paotr Neñvel de te donner la programme qui permet de "
                         "passer du format .obj au .obj personnaliser du projet.\n");

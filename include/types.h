@@ -149,6 +149,8 @@ typedef struct{
     float near_z;
     float far_z;
 
+    float ratio;
+
 }st_camera;
 
 // Permet de savoir vers quelle direction va la caméra
@@ -254,6 +256,14 @@ typedef struct
     
 }st_context_tool;
 
+// Structure pour la taille et le frame rate du contexte OpenGL
+typedef struct {
+    int size_x;
+    int size_y;
+
+    float frame_rate;
+}st_loaded_windows_data;
+
 /**
  * @brief Structure du moteur.
  * 
@@ -277,22 +287,16 @@ typedef struct st_engine
     stack stack_context;
     st_context_tool context_tool;
 
+    st_loaded_windows_data window;
+
 } st_engine;
-
-
-// Structure pour la taille et le frame rate du contexte OpenGL
-typedef struct {
-    int size_x;
-    int size_y;
-    float frame_rate;
-}st_loaded_windows_data;
-
 
 // Structure qui englobe les éléments qui ont besoin d'être envoyé à la fenêtre
 typedef struct
 {
     st_camera *camera;
     st_input *input;
+    st_loaded_windows_data *window;
 }st_window_user_data;
 
 #endif

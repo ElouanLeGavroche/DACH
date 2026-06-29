@@ -26,7 +26,8 @@ void init_game_camera(st_camera *camera)
     camera->near_z = -100.0f;
     // Rendu le plus loin
     camera->far_z = 100.0f; 
-
+    // Ratio de la fenêtre
+    camera->ratio = DEFAULT_RATIO;
     vec3 center;
 
     // initialisation du point de vue
@@ -35,7 +36,7 @@ void init_game_camera(st_camera *camera)
     // Création de la vue Orthogonale avec les paramètres déclarer plus haut
     glm_ortho(
         //Champ de vue
-        -camera->fov, camera->fov, -camera->fov, camera->fov, 
+        -camera->fov - camera->ratio, camera->fov + camera->ratio, -camera->fov, camera->fov, 
         // Profondeur de champ
         camera->near_z, camera->far_z, 
         // Matrice de projection
