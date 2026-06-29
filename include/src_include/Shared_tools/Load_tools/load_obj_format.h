@@ -15,6 +15,8 @@
 
 #include <regex.h>
 
+#include "../../Config/constantes.h"
+
 #define LINE_SIZE 30
 
 #include "../../../../include/types.h"

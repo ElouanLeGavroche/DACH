@@ -5,6 +5,9 @@ int load_file(char *path, st_mesh *tile)
     /* Variables pour la gestion du fichier */
     FILE *file = NULL;
     char *line = NULL;
+    
+    // Entier qui préviendra en cas d'erreur
+    int ok = 0;
 
     size_t cap = 0;
 
@@ -80,7 +83,7 @@ int load_file(char *path, st_mesh *tile)
             int i_f = 0;
             line = NULL;
 
-            while (getline(&line, &cap, file) != -1)
+            while (getline(&line, &cap, file) != -1 && ok != ERROR)
             {
 
                 if (ferror(file))
@@ -96,6 +99,10 @@ int load_file(char *path, st_mesh *tile)
                         if(line[0] == 'v') 
                         { 
                             i_v = parse_vertext(line, tile, i_v); 
+                            if(i_v == ERROR)
+                            {
+                                ok = ERROR;
+                            }
                         }
                         else if(line[0] == 'f') 
                         {
@@ -113,7 +120,7 @@ int load_file(char *path, st_mesh *tile)
 
     if(line != NULL)
         free(line);
-    return 0;
+    return ok;
 }
 
 int open_obj_file(FILE **file, char *path)
@@ -144,16 +151,17 @@ int open_obj_file(FILE **file, char *path)
 int parse_vertext(char line[], st_mesh *tile, int i_v)
 {
     float value;
-    
+    int i = 0;
     char * letter;
+
     letter = strtok ( line, " " );
     if(letter == NULL)
     {
         return -1;
     }
-    int i;
+    
 
-    for(i = 0; i < 8; i ++)
+    while(letter[i] != '\0' && letter[i] != '\n')
     {
         letter = strtok( NULL, " " );
         if(letter == NULL)
@@ -163,6 +171,18 @@ int parse_vertext(char line[], st_mesh *tile, int i_v)
         value = atof(letter);
         tile->vert_pos[i_v] = value;
         i_v ++;
+        
+        i++;
+    }
+    // Diag de la ligne
+    if(i != 9 || i != 8)
+    {
+        fprintf(stderr, "Attention, il n'y a %d élément dans la ligne du vert, comportement indéfini\n");
+        fprintf(stderr, "autoriser : \nTriangles : 8 \nCarrés 9");
+        fprintf(stderr, "Ce message s'adresse au développeur, merci de demander à Paotr Neñvel de te donner la programme qui permet de "
+                        "passer du format .obj au .obj personnaliser du projet.\n");
+        
+        return ERROR;
     }
     return i_v;
 }
