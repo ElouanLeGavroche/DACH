@@ -7,7 +7,7 @@ struct st_state game_state =
     controller_update_render_game,
 };
 
-void init_game(st_state *state)
+int init_game(st_state *state)
 {
     printf("début de l'initiation\n");
 
@@ -20,8 +20,10 @@ void init_game(st_state *state)
     // ""Gestion de l'erreur - lmao""
     if(!vertex_shader_source || !fragment_shader_source)
     {
-        printf("Attention, certains shaders n'ont pas élé chargé"
+        fprintf(stderr, "Attention, certains shaders n'ont pas élé chargé"
         "Le comportement du programme peux-être compromis.\n");
+
+        return ERROR;
     }
     
     // CHARGER LES ELEMENTS --------------------------------------------------------------------------------------------

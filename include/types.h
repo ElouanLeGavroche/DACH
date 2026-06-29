@@ -203,7 +203,7 @@ typedef struct{
 typedef struct st_state
 {
     // L'initialiseur connait tout
-    void (*init_state)(st_state *state);
+    int (*init_state)(st_state *state);
     // La logique ne connaitra que les model
     void (*update_logic_context)(st_state *state);
     // Le rendu ne connait que les données liée au rendu

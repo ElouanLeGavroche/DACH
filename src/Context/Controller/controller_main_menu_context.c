@@ -7,7 +7,7 @@ struct st_state main_menu_state =
     controller_update_render_main_menu,
 };
 
-void init_menu(st_state *state)
+int init_menu(st_state *state)
 {
     printf("début de l'initiation\n");
 

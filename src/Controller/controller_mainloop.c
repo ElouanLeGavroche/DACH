@@ -31,7 +31,7 @@ void input_loop(st_engine *engine_state){
     // Ce tampon permet de savoir si le jeu est revenu à un etat entérieur
     // Et donc de recharger les éléments qui lui y étais associé
     int level_tampon = engine_state->stack_context.level_of_depth;
-
+    int res = DONE;
 
     // récupéré les entrées //
 
@@ -84,7 +84,14 @@ void input_loop(st_engine *engine_state){
         // Si le nouveau context est l'ancien, pas la peine d'en crée un nouveau, ce serai con.
         if(*who != C_BACK)
         {
-            new_context(engine_state, new_state);
+            
+            res = new_context(engine_state, new_state);
+            if(res == ERROR)
+            {
+                // Gestion de l'erreur
+                engine_state->running = false;
+            }
+
             level_tampon = engine_state->stack_context.level_of_depth;
         }
         // On reset la valeur, sinon on retourne en boucle sur le context précédent
@@ -105,15 +112,8 @@ void controller_mainloop_management(st_engine *engine_state){
     // comme les graphismes
     pthread_t logical_thread;
 
-    // Affichage du premier State (TEMP Main_menu)
-    engine_state->context_tool.put_context(&engine_state->stack_context, &main_menu_state);
-
-    //Initialiser le contenu de la State
-    engine_state->stack_context.current_state->init_state(engine_state->stack_context.current_state);
-
-    // On relie le clavier au nouveau context
-    link_input(engine_state);
-
+    // On charge le premier context
+    new_context(engine_state, &main_menu_state);
 
     // Création des threads et passage de la structure engine
     pthread_create(&logical_thread, NULL, logical_loop, engine_state);
@@ -154,21 +154,24 @@ void controller_mainloop_management(st_engine *engine_state){
     view_close_window();
 }
 
-void new_context(st_engine *engine_state, st_state *new_state)
+int new_context(st_engine *engine_state, st_state *new_state)
 {
-    
+    int res;
+
     // L'on initialise le nouveau context
-    new_state->init_state(new_state);
+    res = new_state->init_state(new_state);
+    if(res == ERROR)
+    {
+        printf("Erreur lors de l'initialisation du context\n");
+        return ERROR;
+    }
 
     // L'on envoie le context suivant pour remplacer l'actuel
     engine_state->context_tool.put_context(&engine_state->stack_context, new_state);
-    
-    // L'on supprime le context suivant qui est déjà placé
     engine_state->stack_context.current_state->ev_next_context = C_NONE;
 
     // On relie le clavier au nouveau context
     link_input(engine_state);
-
 
 }
 
@@ -223,7 +226,10 @@ void destroy_render_data(st_render_data *render)
 
 }
 
-
+/**
+ * @brief Cette fonction permet de lié le callback au context actuel, 
+ * il est important de toujours l'initialiser à chaque nouveau context.
+ */
 void link_input(st_engine *engine_state)
 {
     // Liée la strucures des entrée dans la fnêtre pour le callback
