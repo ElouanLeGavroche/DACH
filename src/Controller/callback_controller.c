@@ -6,23 +6,23 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
       st_camera *camera = data->camera;
       st_loaded_windows_data *window_parametr = data->window;
 
-      printf("%f\n", camera->fov);
-      if(camera->fov >= 2.0f && camera->fov <= 25.0f)
-            camera->fov -= yoffset;
-      if(camera->fov <= 2.0f)
-            camera->fov = 2.0f;
-      if(camera->fov >= 25.0f)
-            camera->fov = 25.0f;
+      printf("%f\n", camera->ortho_size);
+      if(camera->ortho_size >= 2.0f && camera->ortho_size <= 25.0f)
+            camera->ortho_size -= yoffset;
+      if(camera->ortho_size <= 2.0f)
+            camera->ortho_size = 2.0f;
+      if(camera->ortho_size >= 25.0f)
+            camera->ortho_size = 25.0f;
       
       glm_ortho(
-            -camera->fov - camera->ratio,
-            camera->fov + camera->ratio,
-            -camera->fov, camera->fov, 
+            -camera->ortho_size - camera->ratio,
+            camera->ortho_size + camera->ratio,
+            -camera->ortho_size, camera->ortho_size, 
             -100.0f, 
             100.0f, 
             camera->projection
       );
-      //glm_perspective(glm_rad(camera->fov), (float)1280/(float)720, 0.1f, 100.0f, camera->projection);
+      //glm_perspective(glm_rad(camera->ratio), (float)1280/(float)720, 0.1f, 100.0f, camera->projection);
 }
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height){
@@ -36,17 +36,23 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height){
       window_parametr->size_x = width;
       window_parametr->size_y = height;
 
+
+      float cx, halfWidth = width*0.5f;
+      float aspect = (float)width/(float)height; 
+
+    //glFrustum(cx-halfWidth*aspect, cx+halfWidth*aspect, bottom, top, zNear, zFar);
+
       // Calcule du ration pour la projection : 
-      camera->ratio = ((float)window_parametr->size_x / (float)window_parametr->size_y) * (4.0f / 3.0f);
+      float aspect = ((float)window_parametr->size_x / (float)window_parametr->size_y);
+      float half_height = camera->ortho_size;
+      float half_widht = half_height * aspect;
 
       glm_ortho(
-            -camera->fov - camera->ratio,
-            camera->fov + camera->ratio,
-            -camera->fov,
-            camera->fov, 
-            -100.0f, 
-            100.0f, 
+            -half_widht, half_widht,
+            -camera->ortho_size, camera->ortho_size, 
+            -camera->near_z, 
+            camera->far_z, 
             camera->projection
       );
-      printf("%d, %d, %f\n", window_parametr->size_x, window_parametr->size_y, camera->ratio);
+      printf("%f, %f, %f\n", half_height, half_widht, camera->ortho_size);
 }

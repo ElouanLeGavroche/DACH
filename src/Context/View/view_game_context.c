@@ -20,14 +20,15 @@ void init_game_camera(st_camera *camera)
     camera->speed = 4.0f;
     // Vitesse relative de la caméra
     camera->actual_speed = 0.0f;
-    // Taille du champ de vision (N 15; S 15, E 15, W 15)
-    camera->fov = 15.0f;
+    // ortho_size de la fenêtre
+    camera->ratio = 3/4;
     // Rendu le plus proche
     camera->near_z = -100.0f;
     // Rendu le plus loin
     camera->far_z = 100.0f; 
-    // Ratio de la fenêtre
-    camera->ratio = DEFAULT_RATIO;
+    // Taille du champ de vision (N 15; S 15, E 15, W 15)
+    camera->ortho_size = 15.0f;
+
     vec3 center;
 
     // initialisation du point de vue
@@ -36,7 +37,7 @@ void init_game_camera(st_camera *camera)
     // Création de la vue Orthogonale avec les paramètres déclarer plus haut
     glm_ortho(
         //Champ de vue
-        -camera->fov - camera->ratio, camera->fov + camera->ratio, -camera->fov, camera->fov, 
+        -camera->ratio - camera->ortho_size, camera->ratio + camera->ortho_size, -camera->ratio, camera->ratio, 
         // Profondeur de champ
         camera->near_z, camera->far_z, 
         // Matrice de projection

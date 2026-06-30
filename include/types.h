@@ -127,7 +127,7 @@ typedef struct
  * @brief Structure qui contient les informations de la caméra
  * @param view ce que voit la caméra
  * @param projection le type de projection à appliquer (ortho, perspective...)
- * @param fov le champ de vision de la caméra
+ * @param ratio le champ de vision de la caméra
  * @param pos la position de la caméra
  * @param front ce que regarde la caméra
  * @param up l'inclinaison de la caméra
@@ -140,7 +140,7 @@ typedef struct{
     mat4 view;
     mat4 projection;
 
-    float fov;
+    float ratio;
 
     vec3 pos;
     vec3 front;
@@ -152,7 +152,7 @@ typedef struct{
     float near_z;
     float far_z;
 
-    float ratio;
+    float ortho_size;
 
 }st_camera;
 
