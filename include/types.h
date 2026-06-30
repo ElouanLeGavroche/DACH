@@ -277,6 +277,8 @@ typedef struct st_engine
     stack stack_context;
     st_context_tool context_tool;
 
+    pthread_mutex_t context_mutex;
+
 } st_engine;
 
 

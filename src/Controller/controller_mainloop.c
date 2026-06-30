@@ -14,9 +14,12 @@ void *logical_loop(void *data_engine)
         //Time au début de la boucle
         clock_gettime(CLOCK_MONOTONIC, &ts_start);
         
+        pthread_mutex_lock(&engine_state->context_mutex);
         // Contenu //
         engine_state->stack_context.current_state->update_logic_context(engine_state->stack_context.current_state);
         
+        pthread_mutex_unlock(&engine_state->context_mutex);
+
         //Time fin de boucle
         clock_gettime(CLOCK_MONOTONIC, &ts_end);
 
@@ -133,10 +136,12 @@ void controller_mainloop_management(st_engine *engine_state){
         clock_gettime(CLOCK_MONOTONIC, &ts_start);
         view_clear();
         
+        pthread_mutex_lock(&engine_state->context_mutex);
         //Actual context
         engine_state->stack_context.current_state->update_render_context(&engine_state->stack_context.current_state->render);
         input_loop(engine_state);
 
+        pthread_mutex_unlock(&engine_state->context_mutex);
         view_swap();
 
         //Time fin de boucle

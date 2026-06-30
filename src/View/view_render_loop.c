@@ -124,10 +124,6 @@ void init_a_loaded_shader(st_render_data *render, const char vertex_shader_sourc
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
 
-    // Libéré les shader qui sont compilé côté GPU à présent
-    free((void *)vertex_shader_source);
-    free((void *)fragment_shader_source);
-
     render->shader_programs[0].shader = shader_program;
 }
 
