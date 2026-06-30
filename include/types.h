@@ -47,9 +47,12 @@ typedef enum e_key
 // Savoir quand une touche est pressé ou relacher( permet de géré des entrer du type CTRL+C)
 typedef struct
 {
+    // Quand une touche est enfoncée
+    bool down[KEY_NUM];
+    // Quand une touche est appuyer momentanément
     bool pressed[KEY_NUM];
+    // Quand une touche est lachée
     bool release[KEY_NUM];
-
     pthread_mutex_t mutex;
     // Permet de savoir si l'autre thread a lu les informations
     atomic_bool ok;
@@ -287,7 +290,7 @@ typedef struct st_engine
     stack stack_context;
     st_context_tool context_tool;
 
-    st_loaded_windows_data window;
+    pthread_mutex_t context_mutex;
 
 } st_engine;
 

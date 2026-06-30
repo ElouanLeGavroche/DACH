@@ -33,7 +33,10 @@ int controller_init(){
 
     glfwSetWindowUserPointer(window, data);
 
-    /* Etape 2 : entrer dans les mains loops */
+    // -4- Mise en place du/des mutex de l'engine
+    pthread_mutex_init(&engine_state.context_mutex, NULL);
+    
+    /* -4- entrer dans les mains loops */
     controller_mainloop_management(&engine_state);
 
     // Free
