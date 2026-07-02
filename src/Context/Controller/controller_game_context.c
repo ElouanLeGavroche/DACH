@@ -10,7 +10,6 @@ struct st_state game_state =
 int init_game(st_state *state)
 {
     printf("début de l'initiation\n");
-
     // CHARGER LES SHADERS --------------------------------------------------------------------------------------------
     const char *vertex_shader_source = load_shader("src/Shaders/main_shader.vert");
     const char *fragment_shader_source = load_shader("src/Shaders/main_shader.frag");

@@ -82,7 +82,7 @@ typedef struct
  * @param nb_vert le nombre de vertrices dans le modèle
  * @param nb_face le nombre de face dans le modèle
  * @param vert_pos la position de ecs vertrices
- * @param face_pos l'ordre dans lequel il faut former les face avec les vertrices
+ * @param face_indice l'ordre dans lequel il faut former les face avec les vertrices
  * @param VAO valeur des sommets à envoyé à la carte graphique
  * @param VBO buffer de sommets
  * @param EBO buffer de sommets
@@ -93,7 +93,7 @@ typedef struct
     int nb_vert;
     int nb_face;
     float *vert_pos;
-    int *face_pos;
+    int *face_indice;
 
     unsigned int VAO;
     unsigned int VBO;

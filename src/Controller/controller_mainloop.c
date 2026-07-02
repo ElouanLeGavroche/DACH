@@ -62,9 +62,6 @@ void input_loop(st_engine *engine_state){
             engine_state->stack_context.level_of_depth --;
 
             old_state->upper = NULL;
-            //engine_state->context_tool.remove_context(&engine_state->stack_context);
-            //engine_state->stack_context.current_state->init_state(engine_state->stack_context.current_state);
-
             level_tampon = engine_state->stack_context.level_of_depth;
 
             // On relie le clavier au nouveau context
@@ -87,7 +84,6 @@ void input_loop(st_engine *engine_state){
         // Si le nouveau context est l'ancien, pas la peine d'en crée un nouveau, ce serai con.
         if(*who != C_BACK)
         {
-            
             res = new_context(engine_state, new_state);
             if(res == ERROR)
             {
@@ -117,51 +113,51 @@ void controller_mainloop_management(st_engine *engine_state){
     // Varibiable pour les erreurs
     int res;
 
-    // On charge le premier context
-    res = new_context(engine_state, &main_menu_state);
-    if(res == ERROR)
-    {
-        printf("Erreur lors du chargement du menu\n");
-        engine_state->running = false;
-    }
-    // Création des threads et passage de la structure engine
-    pthread_create(&logical_thread, NULL, logical_loop, engine_state);
-
     //Définition des variables pour accorder la clock
     struct timespec ts_start, ts_end;
     double elapsed;
 
-    ////////////////////////////////////////////
-    //                                        //
-    //                Boucle                  //
-    //                                        //
-    ////////////////////////////////////////////
+    // On charge le premier context
+    res = new_context(engine_state, &main_menu_state);
+    if(res != ERROR)
+    {
+        // Pas la peine de crée le nouveau thread si le menu n'a pas bien charger.
 
-    while(engine_state->running && !glfwWindowShouldClose(glfwGetCurrentContext())){
-        // Time au début de la boucle
-        clock_gettime(CLOCK_MONOTONIC, &ts_start);
-        view_clear();
+        // Création des threads et passage de la structure engine
+        pthread_create(&logical_thread, NULL, logical_loop, engine_state);
         
-        pthread_mutex_lock(&engine_state->context_mutex);
-        //Actual context
-        engine_state->stack_context.current_state->update_render_context(&engine_state->stack_context.current_state->render);
-        input_loop(engine_state);
+            ////////////////////////////////////////////
+            //                                        //
+            //                Boucle                  //
+            //                                        //
+            ////////////////////////////////////////////
 
-        pthread_mutex_unlock(&engine_state->context_mutex);
-        view_swap();
+        while(engine_state->running && !glfwWindowShouldClose(glfwGetCurrentContext())){
+            // Time au début de la boucle
+            clock_gettime(CLOCK_MONOTONIC, &ts_start);
+            view_clear();
+            
+            pthread_mutex_lock(&engine_state->context_mutex);
 
-        //Time fin de boucle
-        clock_gettime(CLOCK_MONOTONIC, &ts_end);
+            //Actual context
+            engine_state->stack_context.current_state->update_render_context(&engine_state->stack_context.current_state->render);
+            input_loop(engine_state);
 
-        //Gestion de des conditions au calcul d'un nouveau tick
-        wait_frame(ts_start, ts_end);
+            pthread_mutex_unlock(&engine_state->context_mutex);
+            view_swap();
 
+            //Time fin de boucle
+            clock_gettime(CLOCK_MONOTONIC, &ts_end);
+
+            //Gestion de des conditions au calcul d'un nouveau tick
+            wait_frame(ts_start, ts_end);
+
+        }
+
+        pthread_join(logical_thread, NULL);
+        unload_data(engine_state);
     }
 
-    engine_state->running = false;
-    pthread_join(logical_thread, NULL);
-
-    unload_data(engine_state);
     view_close_window();
 }
 
@@ -215,7 +211,7 @@ void destroy_render_data(st_render_data *render)
         glDeleteBuffers(1, &render->meshs[i].EBO);
         glDeleteTextures(1, &render->meshs[i].texture_id);
 
-        free(render->meshs[i].face_pos);
+        free(render->meshs[i].face_indice);
         free(render->meshs[i].vert_pos);
     }
     

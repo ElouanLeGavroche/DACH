@@ -10,7 +10,6 @@ struct st_state main_menu_state =
 int init_menu(st_state *state)
 {
     printf("début de l'initiation\n");
-
     // CHARGER LES SHADERS --------------------------------------------------------------------------------------------
     const char *vertex_shader_source = load_shader("src/Shaders/main_shader.vert");
     const char *fragment_shader_source = load_shader("src/Shaders/main_shader.frag");

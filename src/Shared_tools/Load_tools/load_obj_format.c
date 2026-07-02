@@ -60,8 +60,8 @@ int load_file(char *path, st_mesh *tile)
         }
 
 
-        tile->face_pos = malloc(sizeof(int) * tile->nb_face);
-        if(tile->face_pos == NULL)
+        tile->face_indice = malloc(sizeof(int) * tile->nb_face);
+        if(tile->face_indice == NULL)
         {
             free(line);
             return -1;
@@ -205,7 +205,7 @@ int parse_face(char line[], st_mesh *tile, int i_f)
             return -1;
         }
         value = atoi(letter);
-        tile->face_pos[i_f] = value - 1;
+        tile->face_indice[i_f] = value - 1;
         i_f ++;
 
         
