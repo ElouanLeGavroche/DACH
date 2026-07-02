@@ -21,7 +21,7 @@ void init_game_camera(st_camera *camera)
     // Vitesse relative de la caméra
     camera->actual_speed = 0.0f;
     // ortho_size de la fenêtre
-    camera->ratio = 3/4;
+    camera->ratio = ((float)SCREEN_WITH_DEFAULT / (float)SCREEN_HEIGHT_DEFAULT) * (4.0f / 3.0f);
     // Rendu le plus proche
     camera->near_z = -100.0f;
     // Rendu le plus loin
@@ -37,7 +37,10 @@ void init_game_camera(st_camera *camera)
     // Création de la vue Orthogonale avec les paramètres déclarer plus haut
     glm_ortho(
         //Champ de vue
-        -camera->ratio - camera->ortho_size, camera->ratio + camera->ortho_size, -camera->ratio, camera->ratio, 
+        -camera->ortho_size - camera->ratio, 
+        camera->ortho_size + camera->ratio, 
+        -camera->ortho_size, 
+        camera->ortho_size, 
         // Profondeur de champ
         camera->near_z, camera->far_z, 
         // Matrice de projection

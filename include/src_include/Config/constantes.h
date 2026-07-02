@@ -10,8 +10,8 @@
 
 /** Format des fichiers data **/
 // Window Info
-#define SCREEN_WITH_DEFAULT 1280
-#define SCREEN_HEIGHT_DEFAULT 720
+#define SCREEN_WITH_DEFAULT 1024
+#define SCREEN_HEIGHT_DEFAULT 768
 #define SCREEN_FRAME_RATE_DEFAUL 60
 #define DEFAULT_RATIO 3.0/4.0
 

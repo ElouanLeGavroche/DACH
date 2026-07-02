@@ -38,21 +38,20 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height){
 
 
       float cx, halfWidth = width*0.5f;
-      float aspect = (float)width/(float)height; 
+      //float aspect = (float)width/(float)height; 
 
     //glFrustum(cx-halfWidth*aspect, cx+halfWidth*aspect, bottom, top, zNear, zFar);
 
       // Calcule du ration pour la projection : 
-      float aspect = ((float)window_parametr->size_x / (float)window_parametr->size_y);
-      float half_height = camera->ortho_size;
-      float half_widht = half_height * aspect;
+      camera->ratio = ((float)window_parametr->size_x / (float)window_parametr->size_y) * (4.0f / 3.0f);
 
       glm_ortho(
-            -half_widht, half_widht,
-            -camera->ortho_size, camera->ortho_size, 
-            -camera->near_z, 
+            -camera->ortho_size - camera->ratio,
+            camera->ortho_size + camera->ratio,
+            -camera->ortho_size,
+            camera->ortho_size, 
+            camera->near_z, 
             camera->far_z, 
             camera->projection
       );
-      printf("%f, %f, %f\n", half_height, half_widht, camera->ortho_size);
 }
