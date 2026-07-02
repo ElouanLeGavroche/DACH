@@ -77,6 +77,7 @@ int init_game(st_state *state)
     glfwSetScrollCallback(window, scroll_callback);
     
     printf("Context jeu initier\n");
+    return DONE;
 }
 
 

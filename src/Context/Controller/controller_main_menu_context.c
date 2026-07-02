@@ -69,6 +69,7 @@ int init_menu(st_state *state)
     init_data_main_menu(state);
 
     printf("Context menu initier\n");
+    return DONE;
 }
 
 

@@ -114,10 +114,16 @@ void controller_mainloop_management(st_engine *engine_state){
     // Il ne s'actualisera que 20 fois par seconde au le de 60
     // comme les graphismes
     pthread_t logical_thread;
+    // Varibiable pour les erreurs
+    int res;
 
     // On charge le premier context
-    new_context(engine_state, &main_menu_state);
-
+    res = new_context(engine_state, &main_menu_state);
+    if(res == ERROR)
+    {
+        printf("Erreur lors du chargement du menu\n");
+        engine_state->running = false;
+    }
     // Création des threads et passage de la structure engine
     pthread_create(&logical_thread, NULL, logical_loop, engine_state);
 
@@ -177,6 +183,7 @@ int new_context(st_engine *engine_state, st_state *new_state)
 
     // On relie le clavier au nouveau context
     link_input(engine_state);
+    return DONE;
 
 }
 

@@ -36,12 +36,6 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height){
       window_parametr->size_x = width;
       window_parametr->size_y = height;
 
-
-      float cx, halfWidth = width*0.5f;
-      //float aspect = (float)width/(float)height; 
-
-    //glFrustum(cx-halfWidth*aspect, cx+halfWidth*aspect, bottom, top, zNear, zFar);
-
       // Calcule du ration pour la projection : 
       camera->ratio = ((float)window_parametr->size_x / (float)window_parametr->size_y) * (4.0f / 3.0f);
 
