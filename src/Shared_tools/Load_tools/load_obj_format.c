@@ -178,7 +178,7 @@ int parse_vertext(char line[], st_mesh *tile, int i_v)
     if(i != 9 && i != 8)
     {
         fprintf(stderr, "Attention, il n'y a %d élément dans la ligne du vert, comportement indéfini\n", i);
-        fprintf(stderr, "autoriser : \nTriangles : 8 \nCarrés 9");
+        fprintf(stderr, "autoriser : \nTriangles : 8 \nCarrés 9\n");
         fprintf(stderr, "Ce message s'adresse au développeur, merci de demander à Paotr Neñvel de te donner la programme qui permet de "
                         "passer du format .obj au .obj personnaliser du projet.\n");
         
@@ -190,25 +190,36 @@ int parse_vertext(char line[], st_mesh *tile, int i_v)
 int parse_face(char line[], st_mesh *tile, int i_f)
 {
     int value;
-    int i, y;
+    int i = 0;
 
     char *letter;
     letter = strtok( line, " ");
 
-    for(y = 0; y < 3; y ++)
+    //while(letter[i] != '\0' && letter[i] != '\n')
+    for(i = 0; i < 3; i ++)
     {
 
         letter = strtok(NULL, " ");
         
         if(letter == NULL)
         {
+            fprintf(stderr, "Erreur lors du strtok pour les indices des face.\n");
             return -1;
         }
         value = atoi(letter);
         tile->face_indice[i_f] = value - 1;
-        i_f ++;
-
+        i_f ++;        
         
+    }
+
+    if(i != 2 && i != 3)
+    {
+        fprintf(stderr, "Attention, il n'y a %d élément dans les indices des faces, comportement indéfini\n", i);
+        fprintf(stderr, "autoriser : \nTriangles : 2 \nCarrés 3\n");
+        fprintf(stderr, "Ce message s'adresse au développeur, merci de demander à Paotr Neñvel de te donner la programme qui permet de "
+                        "passer du format .obj au .obj personnaliser du projet.\n");
+        
+        return ERROR;
     }
     return i_f;
 }

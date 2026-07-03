@@ -7,10 +7,10 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
       st_loaded_windows_data *window_parametr = data->window;
 
       printf("%f\n", camera->ortho_size);
-      if(camera->ortho_size >= 2.0f && camera->ortho_size <= 25.0f)
+      if(camera->ortho_size >= 3.0f && camera->ortho_size <= 25.0f)
             camera->ortho_size -= yoffset;
-      if(camera->ortho_size <= 2.0f)
-            camera->ortho_size = 2.0f;
+      if(camera->ortho_size <= 3.0f)
+            camera->ortho_size = 3.0f;
       if(camera->ortho_size >= 25.0f)
             camera->ortho_size = 25.0f;
       

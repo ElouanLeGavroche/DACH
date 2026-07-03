@@ -48,15 +48,18 @@ void pressed_key_callback(GLFWwindow *window, int key, int scancode, int action,
         if(data == NULL)
         {
             fprintf(stderr, "La structure est null.\n");
+            return;
 
-            if(data->input == NULL)
-            {
-                fprintf(stderr, "La structure des inputs est null.\n");
-            }
+        }
+        else if(data->input == NULL)
+        {
+            fprintf(stderr, "La structure des inputs est null.\n");
+            return;
         }
         else
         {
             fprintf(stderr, "Je ne sais pas comment t'as fait ton affaire, je ne peux pas t'aider\n");
+            return;
         }
     }
 }

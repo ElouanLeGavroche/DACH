@@ -132,7 +132,7 @@ void controller_mainloop_management(st_engine *engine_state){
             //                                        //
             ////////////////////////////////////////////
 
-        while(engine_state->running && !glfwWindowShouldClose(glfwGetCurrentContext())){
+        while(engine_state->running && window_should_close() != -1){
             // Time au début de la boucle
             clock_gettime(CLOCK_MONOTONIC, &ts_start);
             view_clear();
@@ -153,7 +153,7 @@ void controller_mainloop_management(st_engine *engine_state){
             wait_frame(ts_start, ts_end);
 
         }
-
+        engine_state->running = false;
         pthread_join(logical_thread, NULL);
         unload_data(engine_state);
     }

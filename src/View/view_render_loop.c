@@ -22,11 +22,11 @@ void view_close_window(){
 int window_should_close(){
     if (glfwWindowShouldClose(glfwGetCurrentContext()))
     {
-        return 0;
+        return -1;
     }
     else
     {
-        return 1;
+        return 0;
     }
 }
 
