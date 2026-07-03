@@ -1,13 +1,12 @@
 #include "../../include/src_include/Model/model_group_context.h"
 
-int context_group_is_null(st_group_world_obj *group)
+bool context_group_is_null(st_group_world_obj *group)
 {
     if(group == NULL)
     {
-        fprintf(stderr, "Ce context possède déjà un groupe\n");
-        return ERROR;
+        return true;
     }
-    return DONE;
+    return false;
 }
 /**
  * @brief Permet de mettre les valeur clean d'un context.
@@ -167,4 +166,63 @@ st_group_world_obj* get_group(st_group_world_obj *group, int id, size_t max)
     }
 
     return &group[id];
+}
+
+// Partie pour les objects
+
+bool object_is_null(st_world_obj *object)
+{
+    if(!object)
+    {
+        return true;
+    }
+    return false;
+}
+
+int object_init(st_world_obj *object, int id)
+{
+    if(object != NULL)
+    {
+        fprintf(stderr, "L'object n'est pas nul, il est possible que certaines données soient perdu.\n");
+        return ERROR;
+    }
+    
+    object->ID = id;
+    return DONE;
+}
+
+int put_object_in_group(st_group_world_obj *group, st_world_obj *object)
+{
+    if(group == NULL)
+    {
+        fprintf(stderr, "Le groupe n'est pas initialiser !\n");
+        return ERROR;
+    }
+    if(object == NULL)
+    {
+        fprintf(stderr, "L'objet n'est pas initialiser\n");
+        return ERROR;
+    }
+
+    // Pour mettre le premier élément
+    if(group->nb_object == 0)
+    {
+        group->objects = malloc(sizeof(st_world_obj));
+        if(group->objects == NULL)
+        {
+            fprintf(stderr, "Echec, problème avec l'attribution de l'espace mémoire pour un object dans un groupe.\n");
+            return ERROR;
+        }
+        group->objects[0] = *object;
+        if(group->objects[0].ID != object->ID)
+        {
+            fprintf(stderr, "Erreur lors de l'assignation de l'objet dans le groupe\n");
+            return ERROR;
+        }
+    }
+    // Pour les autres
+    else
+    {
+        
+    }
 }
