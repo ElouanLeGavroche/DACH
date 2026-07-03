@@ -97,7 +97,7 @@ typedef enum e_dir{
  * @param shader_programs Liste des programe shaders
  * @param camera structure de données de la camera
  */
-typedef struct{
+typedef struct st_render_data{
 
     int nb_shader;
     int nb_mesh;
@@ -106,6 +106,9 @@ typedef struct{
     st_shader *shader_programs;
 
     st_camera camera;
+
+    st_group_world_obj *groups;
+    int nb_group;
 
     // Variables qui me permettront de géré le déplacement de la caméra indépendamment de la clock
     float delta_time;

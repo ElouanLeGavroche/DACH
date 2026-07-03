@@ -89,6 +89,8 @@ typedef struct st_mesh
  */
 typedef struct st_world_obj
 {
+    int ID;
+    
     st_mesh mesh_obj;
     int x_pos;
     int y_pos;
@@ -102,24 +104,18 @@ typedef struct st_world_obj
  * @brief liste des objet se trouvant dans un group
  * ils partagerons alors certaine infos, pour simplifier le rendu et rendre le tout plus lisible.
  * 
- * @param group_objects liste des objets du groupe
- * @param group_shaders liste des shaders du groupe
+ * @param objects liste des objets du groupe
+ * @param shaders liste des shaders du groupe
  */
 typedef struct st_group_world_obj
 {
-    st_world_obj *group_objects;
-    st_shader *group_shaders;
+    int ID;
+
+    int nb_object;
+    int nb_shader;
+    
+    st_world_obj *objects;
+    st_shader *shaders;
 }st_group_world_obj;
-
-/**
- * @brief tout les group propre à un context
- * 
- * @param groups liste des groupes
- */
-typedef struct st_context_groups
-{
-    st_group_world_obj *groups;
-}st_context_groups;
-
 
 #endif

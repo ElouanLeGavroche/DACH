@@ -83,9 +83,3 @@ int load_screen_data(st_loaded_windows_data *screen_data, st_engine *engine_stat
 
     return DONE;
 }
-
-
-void create_group()
-{
-    
-}

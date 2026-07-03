@@ -53,6 +53,7 @@ $(SAVE_EXEC)$(EXEC):\
 	$(CONTROLLER)controller_input.o\
 	\
 	$(MODEL)model_mainloop.o\
+	$(MODEL)model_group_context.c\
 	\
 	$(VIEW)view_render_loop.o\
 	\

@@ -11,6 +11,16 @@ struct st_state main_menu_state =
 int init_menu(st_state *state)
 {
     printf("début de l'initiation\n");
+
+    // Initialiser la perspective --------------------------------------------------------------------------------------------
+    init_render_main_menu(&state->render);
+
+    ////// ZONE DE TEST AVEC LES GROUPES
+
+
+    //////
+
+
     // CHARGER LES SHADERS --------------------------------------------------------------------------------------------
     const char *vertex_shader_source = load_shader("src/Shaders/main_shader.vert");
     const char *fragment_shader_source = load_shader("src/Shaders/main_shader.frag");
@@ -61,9 +71,6 @@ int init_menu(st_state *state)
     // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
     init_a_3d_loaded_element(&state->render, &seconde_square, 0);
     init_a_3d_loaded_element(&state->render, &first_square, 1);
-
-    // Initialiser la perspective --------------------------------------------------------------------------------------------
-    init_render_main_menu(&state->render);
 
     // Initialiser le model --------------------------------------------------------------------------------------------
     init_data_main_menu(state);
