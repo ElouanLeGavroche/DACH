@@ -9,6 +9,8 @@
 #include <cglm/cglm.h>
 #include <cglm/types.h>
 
+#include "src_include/Context/game_types.h"
+
 typedef struct st_engine st_engine;
 typedef struct st_state st_state;
 
@@ -45,27 +47,6 @@ typedef struct
     atomic_bool ok;
 
 }st_input;
-
-
-
-/**
- * @brief Structure qui stock le contenu d'un shader
- * @param shader id du shader
- * @param set_int_uniform permet de faire passer une valeur entier dans le shader de la CG 
- * @param set_float_uniform permet de faire passer une valeur flotante dans le shader de la CG
- * @param set_bool_uniform permet de faire passer une valeur booleenne dans le shader de la CG
- */
-
-typedef struct
-{
-    unsigned int shader;
-
-    void(* set_int_uniform)();
-    void(* set_float_uniform)();
-    void(* set_bool_uniform)();
-
-}st_shader;
-
 
 /**
  * @brief Structure qui contient les informations de la caméra

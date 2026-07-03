@@ -1,11 +1,19 @@
 #ifndef GAME_TYPES
-#define GAMEE_TYPES
+#define GAME_TYPES
 
-#include "../../types.h"
 /**
  * @brief ici le développeur doit indiqué TOUT les context de son jeu.
  * En sachant que le premier sera celui qui sera charger... En premier.
  */
+typedef enum e_context_list{
+    C_NONE,
+    C_BACK,
+
+    C_MAIN_MENU,
+    C_GAME,
+
+    C_NUM
+} e_context_list;
 
 /**
  * @brief strucutre qui regroupe les informations d'une image
@@ -15,7 +23,7 @@
  * @param path chemin de l'image 
  * @param data données de l'image
  */
-typedef struct
+typedef struct st_image
 {
     int width;
     int height;
@@ -24,6 +32,24 @@ typedef struct
     const char *path;
     unsigned char *data;
 }st_image;
+
+/**
+ * @brief Structure qui stock le contenu d'un shader
+ * @param shader id du shader
+ * @param set_int_uniform permet de faire passer une valeur entier dans le shader de la CG 
+ * @param set_float_uniform permet de faire passer une valeur flotante dans le shader de la CG
+ * @param set_bool_uniform permet de faire passer une valeur booleenne dans le shader de la CG
+ */
+
+typedef struct
+{
+    unsigned int shader;
+
+    void(* set_int_uniform)();
+    void(* set_float_uniform)();
+    void(* set_bool_uniform)();
+
+}st_shader;
 
 /**
  * @brief La structure qui permet de stocker un élément 3D
@@ -36,7 +62,7 @@ typedef struct
  * @param EBO buffer de sommets
  * @param texture image de l'élément
  */
-typedef struct
+typedef struct st_mesh
 {
     int vertex_float_count;
     int index_count;
@@ -51,33 +77,28 @@ typedef struct
 
 }st_mesh;
 
-
-#ifndef context_list
-#define context_list
-typedef enum e_context_list{
-    C_NONE,
-    C_BACK,
-
-    C_MAIN_MENU,
-    C_GAME,
-
-    C_NUM
-} e_context_list;
-#endif
-
-extern st_state main_menu_state;
-extern st_state game_state;
-
-
-typedef struct{
+typedef struct st_world_obj
+{
     st_mesh mesh_obj;
     int x_pos;
     int y_pos;
     int z_pos;
+
+    st_image texture;
+    unsigned int texture_id;
 }st_world_obj;
 
-typedef struct{
-    st_world_obj *world_obj;
-}st_all_word_obj;
+typedef struct st_group_world_obj
+{
+    st_world_obj *group_objects;
+    st_shader *group_shaders;
+}st_group_world_obj;
+
+
+typedef struct st_context_groups
+{
+    st_group_world_obj groups;
+}st_context_groups;
+
 
 #endif

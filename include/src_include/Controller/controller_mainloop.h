@@ -13,7 +13,6 @@
 #include <stdatomic.h>
 
 #include "../../types.h"
-#include "../Context/game_types.h"
 
 #include "../Config/constantes.h"
 
