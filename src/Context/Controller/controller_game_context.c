@@ -2,9 +2,11 @@
 
 struct st_state game_state =
 {
+    C_GAME,
     init_game,
     controller_update_logic_game,
     controller_update_render_game,
+    
 };
 
 int init_game(st_state *state)

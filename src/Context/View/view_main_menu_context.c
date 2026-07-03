@@ -80,7 +80,7 @@ void update_render_main_menu(st_render_data *render)
         glBindTexture(GL_TEXTURE_2D, render->meshs[i].texture_id);
 
         glBindVertexArray(render->meshs[i].VAO);
-        glDrawElements(GL_TRIANGLES, render->meshs[i].nb_face, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, render->meshs[i].index_count, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     }
     

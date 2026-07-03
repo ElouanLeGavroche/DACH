@@ -48,9 +48,9 @@ void init_a_3d_loaded_element(st_render_data *render, st_mesh *elt, int indice)
     // 2.Mettre les sommet dans le VBO et EBO
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    glBufferData(GL_ARRAY_BUFFER, sizeof(*elt->vert_pos)*elt->nb_vert, elt->vert_pos, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(*elt->vert_pos)*elt->vertex_float_count, elt->vert_pos, GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(*elt->face_indice)*elt->nb_face, elt->face_indice, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(*elt->face_indice)*elt->index_count, elt->face_indice, GL_STATIC_DRAW);
 
 
     elt->VAO = VAO;

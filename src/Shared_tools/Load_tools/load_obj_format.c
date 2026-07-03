@@ -13,8 +13,8 @@ int load_file(char *path, st_mesh *tile)
 
 
     /* */
-    tile->nb_vert = 0;
-    tile->nb_face = 0;
+    tile->vertex_float_count = 0;
+    tile->index_count = 0;
     
     if(open_obj_file(&file, path) != -1)
     {
@@ -36,7 +36,7 @@ int load_file(char *path, st_mesh *tile)
                     {
                         if(line[y] == ' ')
                         {
-                            tile->nb_vert ++;
+                            tile->vertex_float_count ++;
                         } 
                         y ++;
                     }
@@ -48,7 +48,7 @@ int load_file(char *path, st_mesh *tile)
                     {
                         if(line[y] == ' ')
                         {
-                            tile->nb_face ++;
+                            tile->index_count ++;
                         }
                         y ++;
                             
@@ -60,7 +60,7 @@ int load_file(char *path, st_mesh *tile)
         }
 
 
-        tile->face_indice = malloc(sizeof(int) * tile->nb_face);
+        tile->face_indice = malloc(sizeof(int) * tile->index_count);
         if(tile->face_indice == NULL)
         {
             free(line);
@@ -68,7 +68,7 @@ int load_file(char *path, st_mesh *tile)
         }
         else
         {
-            tile->vert_pos = malloc(sizeof(float) * tile->nb_vert);
+            tile->vert_pos = malloc(sizeof(float) * tile->vertex_float_count);
             if(tile->vert_pos == NULL)
             {
                 free(line);

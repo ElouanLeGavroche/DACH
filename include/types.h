@@ -12,19 +12,6 @@
 typedef struct st_engine st_engine;
 typedef struct st_state st_state;
 
-// Enumération des différent context
-typedef enum
-{
-    C_NONE,
-    C_BACK,
-
-    C_MAIN_MENU,
-    C_GAME,
-
-    C_NUM
-}e_context;
-
-
 // Gestion des structures pour les inputs
 
 // Tableau qui contient tout les touches utilisable par le jeu
@@ -79,8 +66,8 @@ typedef struct
 
 /**
  * @brief La structure qui permet de stocker un élément 3D
- * @param nb_vert le nombre de vertrices dans le modèle
- * @param nb_face le nombre de face dans le modèle
+ * @param vertex_float_count le nombre de vertrices dans le modèle
+ * @param index_count le nombre de face dans le modèle
  * @param vert_pos la position de ecs vertrices
  * @param face_indice l'ordre dans lequel il faut former les face avec les vertrices
  * @param VAO valeur des sommets à envoyé à la carte graphique
@@ -90,15 +77,15 @@ typedef struct
  */
 typedef struct
 {
-    int nb_vert;
-    int nb_face;
+    int vertex_float_count;
+    int index_count;
+
     float *vert_pos;
     int *face_indice;
 
     unsigned int VAO;
     unsigned int VBO;
     unsigned int EBO;
-
     unsigned int texture_id;
 
 }st_mesh;
@@ -196,6 +183,7 @@ typedef struct{
  * 
  * 2 - Un pointeur vers (s'il y en à un) un parent. Ex : je suis sur le menu pause, le parent est le jeu) 
  * 
+ * @param id permet de savoir de quelle context il s'agit aisémment
  * @param st_state fonction qui initialisera la fenêtre.
  * @param update_logic_context fonction qui déroulera à chaque tick la logique du canva.
  * @param update_render_context fonction qui déroulera le rendu à chaque frame le rendu de la page.
@@ -207,6 +195,9 @@ typedef struct{
  */
 typedef struct st_state
 {
+    // l'id du context
+    atomic_int id;
+
     // L'initialiseur connait tout
     int (*init_state)(st_state *state);
     // La logique ne connaitra que les model
@@ -224,6 +215,7 @@ typedef struct st_state
     atomic_int ev_next_context;
     // Permet de savoir si on doit fermet le jeu
     atomic_bool ev_must_close;
+
     
 }st_state;
 
