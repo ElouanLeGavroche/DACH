@@ -77,6 +77,16 @@ typedef struct st_mesh
 
 }st_mesh;
 
+/**
+ * @brief Un object quelquonce du monde
+ * 
+ * @param mesh_obj le mesh lié à l'élément
+ * @param x_pos position en x dans le monde
+ * @param y_pos position en y dans le monde
+ * @param y_pos position en z dans le monde
+ * @param texture la texture coté CPU lié à l'objet (pas forcément pertinent, on verra après)
+ * @param texture_id l'id de la texture côté GPU
+ */
 typedef struct st_world_obj
 {
     st_mesh mesh_obj;
@@ -88,16 +98,27 @@ typedef struct st_world_obj
     unsigned int texture_id;
 }st_world_obj;
 
+/**
+ * @brief liste des objet se trouvant dans un group
+ * ils partagerons alors certaine infos, pour simplifier le rendu et rendre le tout plus lisible.
+ * 
+ * @param group_objects liste des objets du groupe
+ * @param group_shaders liste des shaders du groupe
+ */
 typedef struct st_group_world_obj
 {
     st_world_obj *group_objects;
     st_shader *group_shaders;
 }st_group_world_obj;
 
-
+/**
+ * @brief tout les group propre à un context
+ * 
+ * @param groups liste des groupes
+ */
 typedef struct st_context_groups
 {
-    st_group_world_obj groups;
+    st_group_world_obj *groups;
 }st_context_groups;
 
 
