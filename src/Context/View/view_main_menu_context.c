@@ -72,16 +72,20 @@ void update_render_main_menu(st_render_data *render)
     transfrom_loc = glGetUniformLocation(render->shader_programs[0].shader, "transform");
     glUniformMatrix4fv(transfrom_loc, 1, GL_FALSE, *trans);
 
-    int i;
-    for(i = 0; i < render->nb_mesh; i ++)
+    int i, y;
+    for(i = 0; i < render->nb_groups; i ++)
     {
-        // Pour les texture
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, render->meshs[i].texture_id);
+        for(y = 0; y < render->groups[i].nb_object; i ++)
+        {
+            // Pour les texture
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, render->groups[i].objects[y].texture_id);
 
-        glBindVertexArray(render->meshs[i].VAO);
-        glDrawElements(GL_TRIANGLES, render->meshs[i].index_count, GL_UNSIGNED_INT, 0);
-        glBindVertexArray(0);
+            glBindVertexArray(render->groups[i].objects[y].mesh_obj.VAO);
+            glDrawElements(GL_TRIANGLES, render->groups[i].objects[y].mesh_obj.index_count, GL_UNSIGNED_INT, 0);
+            glBindVertexArray(0);
+        }
+
     }
     
 }

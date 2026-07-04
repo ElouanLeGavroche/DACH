@@ -46,10 +46,6 @@ int init_menu(st_state *state)
     // CHARGER LES ELEMENTS --------------------------------------------------------------------------------------------
     st_mesh first_square = {0};
     load_file(BASIC_HOUSE_PATH, &first_square);
-    
-    st_world_obj square;
-    square.mesh_obj = first_square;
-    object_init(&square, SQUARE);
 
     st_mesh seconde_square = {0};
     load_file(BASIC_TILE_PATH, &seconde_square);
@@ -84,6 +80,12 @@ int init_menu(st_state *state)
     // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
     init_a_3d_loaded_element(&state->render, &seconde_square, 0);
     init_a_3d_loaded_element(&state->render, &first_square, 1);
+
+
+    // Définir l'objet
+    st_group_world_obj *group = get_group(state->render.groups, TEST_GROUP, state->render.nb_groups);
+    create_an_object(SQUARE, first_square, init_a_loaded_texture(&first_square_texture), group);
+    create_an_object(SQUARE, seconde_square, init_a_loaded_texture(&first_square_texture), group);
 
     // Initialiser le model --------------------------------------------------------------------------------------------
     init_data_main_menu(state);
