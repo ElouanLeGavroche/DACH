@@ -6,6 +6,11 @@ typedef enum
     TEST_GROUP
 }e_group_name;
 
+typedef enum
+{
+    SQUARE
+}e_elt_name;
+
 struct st_state main_menu_state =
 {
     C_MAIN_MENU,
@@ -41,6 +46,10 @@ int init_menu(st_state *state)
     // CHARGER LES ELEMENTS --------------------------------------------------------------------------------------------
     st_mesh first_square = {0};
     load_file(BASIC_HOUSE_PATH, &first_square);
+    
+    st_world_obj square;
+    square.mesh_obj = first_square;
+    object_init(&square, SQUARE);
 
     st_mesh seconde_square = {0};
     load_file(BASIC_TILE_PATH, &seconde_square);
