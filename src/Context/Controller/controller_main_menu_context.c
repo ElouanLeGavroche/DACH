@@ -8,6 +8,7 @@ typedef enum
 
 typedef enum
 {
+    HOUSE,
     SQUARE
 }e_elt_name;
 
@@ -84,7 +85,7 @@ int init_menu(st_state *state)
 
     // Définir l'objet
     st_group_world_obj *group = get_group(state->render.groups, TEST_GROUP, state->render.nb_groups);
-    create_an_object(SQUARE, first_square, init_a_loaded_texture(&first_square_texture), group);
+    create_an_object(HOUSE, first_square, init_a_loaded_texture(&first_square_texture), group);
     create_an_object(SQUARE, seconde_square, init_a_loaded_texture(&first_square_texture), group);
 
     // Initialiser le model --------------------------------------------------------------------------------------------
