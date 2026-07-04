@@ -60,34 +60,26 @@ int add_group(st_render_data *render, int nb)
     // Valeur tampon pour faire une backup de la liste en cas d'échec de l'agrandissement
     st_group_world_obj *temp;
 
+    if(render == NULL)
+    {
+        fprintf(stderr, "Render est null\n");
+        return ERROR;
+    }
+
+    temp = render->groups;
+    render->groups = realloc(render->groups, sizeof(st_group_world_obj) * (to_add + render->nb_groups));
+    
+    // Si l'allocation à échouer, alors on attribue le tampon qui à sauvgarder le reste 
+    // De la liste. cela évite les fuite de mémoire.
     if(render->groups == NULL)
     {
-        // Ajout du premier groupe au context
-        render->groups = calloc(to_add, sizeof(st_group_world_obj));
-
-        if(render->groups == NULL)
-        {
-            fprintf(stderr, "Erreur lors de l'allocation de la mémoir pour le groupe\n");
-            return ERROR;
-        }
+        fprintf(stderr, "échec de l'agrandissement, retour à la liste de base\n");
+        render->groups = temp;
+        return ERROR;
     }
-    else
-    {
-        temp = render->groups;
-        render->groups = realloc(render->groups, sizeof(st_group_world_obj) * (to_add + render->nb_groups));
-        
-        // Si l'allocation à échouer, alors on attribue le tampon qui à sauvgarder le reste 
-        // De la liste. cela évite les fuite de mémoire.
-        if(render->groups == NULL)
-        {
-            fprintf(stderr, "échec de l'agrandissement, retour à la liste de base\n");
-            render->groups = temp;
-            return ERROR;
-        }
-    
-    }     
+         
     render->nb_groups += to_add;
-    for(i = render->nb_groups; i < (render->nb_groups); i++)
+    for(i = render->nb_groups - to_add; i < (render->nb_groups); i++)
     {
         res = context_group_init(&render->groups[i], i);
         if(res == ERROR)
@@ -194,7 +186,7 @@ int delete_object_list(st_group_world_obj *group)
 st_group_world_obj* get_group(st_group_world_obj *groups, int id, size_t max)
 {
     int where = 0;
-    while(groups[where].ID != id && where != max)
+    while(where < max && groups[where].ID != id)
     {
         where ++;
     }
@@ -259,74 +251,40 @@ int put_object_in_group(st_group_world_obj *group, st_world_obj *object)
         return ERROR;
     }
 
-    // Pour mettre le premier élément
-    if(group->nb_object == 0)
-    {
-        // Allocation de la mémoire
-        group->objects = malloc(sizeof(st_world_obj));
-        
-        // Test de l'allocation
-        if(group->objects == NULL)
-        {
-            fprintf(stderr, "Echec, problème avec l'attribution de l'espace mémoire pour un object dans un groupe.\n");
-            return ERROR;
-        }
-        else
-        {
-            // On ajout ce nouvel élément à la base du group
-            group->objects[0] = *object;
-            
-            // On vérifie bien que l'objet c'est bien mis à la base
-            if(group->objects[0].ID != object->ID)
-            {
-                fprintf(stderr, "Erreur lors de l'assignation de l'objet dans le groupe\n");
-                return ERROR;
-            }
-            else
-            {
-                // On valide que l'ajout de l'élément
-                group->nb_object ++;
-            }
-        }
 
+    temp = group->objects;
+
+    // On ajout une case mémoire
+    group->objects = realloc(group->objects, (sizeof(st_world_obj) * (group->nb_object + ADD_CASE)));
+    
+    // Si la reallocation à échouer, alors on revient au pointeur tampon
+    if(group->objects == NULL)
+    {
+        group->objects = temp;
+        fprintf(stderr, "Allocation mémoire à la liste object échouer, attention\n");
+        return ERROR;
     }
-    // Pour les autres
     else
     {
-        temp = group->objects;
+        /*
+        L'espace mémoire est alloué, mais pas encore officialiser, donc on recherche
+        celle-ci avec un + 1 pour lui appliquer l'objet.
+        */
+        group->objects[group->nb_object] = *object;
 
-        // On ajout une case mémoire
-        group->objects = realloc(group->objects, sizeof(st_world_obj)* (group->nb_object + ADD_CASE));
-        
-        // Si la reallocation à échouer, alors on revient au pointeur tampon
-        if(object == NULL)
+        if(group->objects[group->nb_object].ID != object->ID)
         {
-            group->objects = temp;
-            fprintf(stderr, "Allocation mémoire à la liste object échouer, attention\n");
+            fprintf(stderr, "Erreur lors de l'insertion de la valeur dans la liste\n");                
             return ERROR;
         }
         else
         {
-            /*
-            L'espace mémoire est alloué, mais pas encore officialiser, donc on recherche
-            celle-ci avec un + 1 pour lui appliquer l'objet.
-            */
-            group->objects[group->nb_object + 1] = *object;
-
-            if(group->objects[group->nb_object + 1].ID != object->ID)
-            {
-                fprintf(stderr, "Erreur lors de l'insertion de la valeur dans la liste\n");                
-                return ERROR;
-            }
-            else
-            {
-                // On officilise l'ajout de la valeur
-                group->nb_object ++;
-            }
-
+            // On officilise l'ajout de la valeur
+            group->nb_object ++;
         }
 
     }
+    
     return DONE;
 }
 
@@ -443,74 +401,40 @@ int put_shader_in_group(st_group_world_obj *group, st_shader *shader)
         return ERROR;
     }
 
-    // Pour mettre le premier élément
-    if(group->nb_shader == 0)
-    {
-        // Allocation de la mémoire
-        group->shaders = malloc(sizeof(st_shader));
-        
-        // Test de l'allocation
-        if(group->shaders == NULL)
-        {
-            fprintf(stderr, "Echec, problème avec l'attribution de l'espace mémoire pour un object dans un groupe.\n");
-            return ERROR;
-        }
-        else
-        {
-            // On ajout ce nouvel élément à la base du group
-            group->shaders[0] = *shader;
-            
-            // On vérifie bien que l'objet c'est bien mis à la base
-            if(group->shaders[0].shader != shader->shader)
-            {
-                fprintf(stderr, "Erreur lors de l'assignation de l'objet dans le groupe\n");
-                return ERROR;
-            }
-            else
-            {
-                // On valide que l'ajout de l'élément
-                group->nb_shader ++;
-            }
-        }
+    temp = group->shaders;
 
+    // On ajout une case mémoire
+    group->shaders = realloc(group->shaders, sizeof(st_world_obj)* (group->nb_shader + ADD_CASE));
+    
+    // Si la reallocation à échouer, alors on revient au pointeur tampon
+    if(group->shaders == NULL)
+    {
+        group->shaders = temp;
+        fprintf(stderr, "Allocation mémoire à la liste object échouer, attention\n");
+        return ERROR;
     }
-    // Pour les autres
     else
     {
-        temp = group->shaders;
+        /*
+        L'espace mémoire est alloué, mais pas encore officialiser, donc on recherche
+        celle-ci avec un + 1 pour lui appliquer l'objet.
+        */
+        group->shaders[group->nb_shader + 1] = *shader;
 
-        // On ajout une case mémoire
-        group->shaders = realloc(group->shaders, sizeof(st_world_obj)* (group->nb_shader + ADD_CASE));
-        
-        // Si la reallocation à échouer, alors on revient au pointeur tampon
-        if(shader == NULL)
+        if(group->shaders[group->nb_shader + 1].shader != shader->shader)
         {
-            group->shaders = temp;
-            fprintf(stderr, "Allocation mémoire à la liste object échouer, attention\n");
+            fprintf(stderr, "Erreur lors de l'insertion de la valeur dans la liste\n");                
             return ERROR;
         }
         else
         {
-            /*
-            L'espace mémoire est alloué, mais pas encore officialiser, donc on recherche
-            celle-ci avec un + 1 pour lui appliquer l'objet.
-            */
-            group->shaders[group->nb_shader + 1] = *shader;
-
-            if(group->shaders[group->nb_shader + 1].shader != shader->shader)
-            {
-                fprintf(stderr, "Erreur lors de l'insertion de la valeur dans la liste\n");                
-                return ERROR;
-            }
-            else
-            {
-                // On officilise l'ajout de la valeur
-                group->nb_shader ++;
-            }
-
+            // On officilise l'ajout de la valeur
+            group->nb_shader ++;
         }
 
     }
+
+    
     return DONE;
 }
 
