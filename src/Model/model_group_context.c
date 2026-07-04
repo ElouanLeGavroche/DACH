@@ -367,7 +367,6 @@ int remove_object_of_a_group(st_world_obj **objects, int object_id, int *nb_obje
         {
             // Sauvegarde via une variable tampon
             temp = *objects;
-
             *objects = realloc(*objects, (sizeof(st_world_obj) * (*nb_objects + SUB_CASE)));
 
             if(*objects == NULL)
@@ -382,6 +381,8 @@ int remove_object_of_a_group(st_world_obj **objects, int object_id, int *nb_obje
                 
                 return ERROR;
             }
+
+            temp = NULL;
         }
         
         *nb_objects += SUB_CASE;

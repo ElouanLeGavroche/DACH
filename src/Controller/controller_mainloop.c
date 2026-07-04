@@ -176,7 +176,6 @@ int new_context(st_engine *engine_state, st_state *new_state)
     // L'on envoie le context suivant pour remplacer l'actuel
     engine_state->context_tool.put_context(&engine_state->stack_context, new_state);
     engine_state->stack_context.current_state->ev_next_context = C_NONE;
-
     // On relie le clavier au nouveau context
     link_input(engine_state);
     return DONE;
@@ -192,7 +191,7 @@ void unload_data(st_engine *engine_state)
 
 void destroy_render_data(st_render_data *render)
 {
-    if(render == NULL || render->groups)
+    if(render == NULL || render->groups == NULL)
             return;
     int y;
 
@@ -214,8 +213,8 @@ void destroy_render_data(st_render_data *render)
             glDeleteBuffers(1, &group->objects[i].mesh_obj.EBO);
             glDeleteTextures(1, &group->objects[i].texture_id);
             
-            //free(group->objects[i].mesh_obj.face_indice);
-            //free(group->objects[i].mesh_obj.vert_pos);
+            free(group->objects[i].mesh_obj.face_indice);
+            free(group->objects[i].mesh_obj.vert_pos);
             group->objects[i].mesh_obj.face_indice = NULL;
             group->objects[i].mesh_obj.vert_pos = NULL;
         }
