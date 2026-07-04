@@ -17,6 +17,8 @@ int init_menu(st_state *state)
 
     ////// ZONE DE TEST AVEC LES GROUPES
 
+    state->render.groups;
+    state->render.nb_groups;
 
     //////
 

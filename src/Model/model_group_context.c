@@ -10,34 +10,21 @@ bool context_group_is_null(st_group_world_obj *group)
 }
 /**
  * @brief Permet de mettre les valeur clean d'un context.
- * ATTENTION, il faut passer en paramètre l'ensembre du groupe, c'est qui qui se chargera
- * de le récupéré.
+ * ATTENTION, vous devez récupéré le groupe via get_groupe au préalable !
  */
-int context_group_init(st_group_world_obj *groups, int id)
+int context_group_init(st_group_world_obj *group, int id)
 {
  
     
-    if(groups == NULL)
+    if(group == NULL)
     {
         fprintf(stderr, "Le groupe n'est pas prêt à être initialiser\n");
         return ERROR;
-    }
-    st_group_world_obj *group = get_group(groups, id, id);
-    
+    }    
     
     // Mettre les paramètre par defaut du group
     group->ID = id;
     
-    /*
-    Cette erreur va se déclarer si quelqu'un cherche à initialiser un group
-    seul, sans liste. (il fait passer groups[i] au lieu de groups ex.)
-    */
-    if(group->ID != id)
-    {
-        fprintf(stderr, "Vous devez initialiser un groupe dans une liste, pas seul\n");
-        return ERROR;
-    }
-
     group->nb_object = 0;
     group->nb_shader = 0;
 
@@ -63,10 +50,16 @@ int context_group_init(st_group_world_obj *groups, int id)
  */
 int add_group(st_render_data *render, int nb)
 {   
+    // Nombre de cellule à ajouter dans la liste
     int to_add = (nb == 0) ? 1 : nb;
+    // Variable d'indice pour les liste
     int i;
+    // Resultat des fonctions lancé depuis ici
     int res;
+    // Calcule le nombre de fois qu'une allocation à échouer pour ajouter la vrai différence
     int nb_fails = 0;
+    // Valeur tampon pour faire une backup de la liste en cas d'échec de l'agrandissement
+    st_group_world_obj *temp;
 
     if(render->groups == NULL)
     {
@@ -81,67 +74,83 @@ int add_group(st_render_data *render, int nb)
     }
     else
     {
-        st_group_world_obj *tamp = render->groups;
-        render->groups = realloc(render->groups, sizeof(st_group_world_obj) * (to_add + render->nb_group));
+        temp = render->groups;
+        render->groups = realloc(render->groups, sizeof(st_group_world_obj) * (to_add + render->nb_groups));
         
         // Si l'allocation à échouer, alors on attribue le tampon qui à sauvgarder le reste 
         // De la liste. cela évite les fuite de mémoire.
         if(render->groups == NULL)
         {
             fprintf(stderr, "échec de l'agrandissement, retour à la liste de base\n");
-            render->groups = tamp;
+            render->groups = temp;
             return ERROR;
         }
     
     }     
-    for(i = render->nb_group; i < (to_add + render->nb_group); i++)
+    for(i = render->nb_groups; i < (to_add + render->nb_groups); i++)
     {
-        res = context_group_init(render->groups, i);
+        res = context_group_init(&render->groups[i], i);
         if(res == ERROR)
         {            
             // Si l'initialisation à échoué, on supprime cet éléments.
             fprintf(stderr, "L'élément à mal été initaliser\n");
             st_group_world_obj *group = render->groups;
-            remove_group(&group, i, render->nb_group + to_add);
+            remove_group(&group, i, render->nb_groups + to_add);
             nb_fails ++;
         }
     }
     // On y soustrait le nombre d'erreur pour ne pas fausser la liste
-    render->nb_group = render->nb_group + to_add - nb_fails;
+    render->nb_groups = render->nb_groups + to_add - nb_fails;
+
+    // Si il y a eu des fails, on redimentionne la liste en conséquent
+    if(nb_fails != 0)
+    {
+        render->groups = realloc(render->groups, sizeof(st_group_world_obj) * render->nb_groups);
+        
+        // En cas d'échec on revient au temp précédent, et on ignore toute les modif,
+        // Je considère que c'est trop la merde à ce stade xD
+        if(render->groups == NULL)
+        {
+            fprintf(stderr, "Erreur lors du resize de la liste des groupe\n");
+            render->groups = temp;
+            return ERROR;
+        }
+    }
     
     return DONE;
 }
 
-int remove_group(st_group_world_obj **group, int id, size_t max)
+int remove_group(st_group_world_obj **groups, int id, size_t max)
 {
     int i;
     int tamp_value;
-  
-    if(id > max)
+    int where = 0;
+
+    if(max != 0)
     {
-        fprintf(stderr, "Cet éléments n'existe pas\n");
-        return ERROR;
-    }
-    else if(max != 0)
-    {
-        if(id != max)
+        while((*groups)[where].ID != id && where != max)
         {
-            tamp_value = (*group)[id + 1].ID;
+            where ++;
+        }
+
+        if(where != max - 1)
+        {
+            tamp_value = (*groups)[where + 1].ID;
         }
         
-        for(i = id; i < max; i ++) (*group)[i] = (*group)[i + 1];
+        for(i = where; i < max; i ++) (*groups)[i] = (*groups)[i + 1];
 
-        *group = realloc(*group, sizeof(st_group_world_obj) * (max - 1));
+        *groups = realloc(*groups, sizeof(st_group_world_obj) * (max + SUB_CASE));
      
-        if(id != max)
+        if(id != max - 1)
         {
-            if((*group)[id].ID != tamp_value)
+            if((*groups)[where].ID != tamp_value)
             {
+                free(groups);
                 fprintf(stderr, "Erreur lors de la suppression de l'élément.\n");
                 return ERROR;
             }
         }
-        max --;
     }
     else
     {
@@ -149,26 +158,52 @@ int remove_group(st_group_world_obj **group, int id, size_t max)
         return ERROR;
     }
     
-    return max;
+    return max - 1;
 }
 
-st_group_world_obj* get_group(st_group_world_obj *group, int id, size_t max)
+int delete_group(){
+    return DONE;
+}
+
+int delete_object_list(st_group_world_obj *group)
 {
-    if(id > max)
+    int i;
+
+    if(group == NULL)
     {
-        fprintf(stderr, "Vous avez demander un group qui se trouve plus loin que la liste.\n");
-        return NULL;
+        fprintf(stderr, "Vous avez rentrée un group NULL\n");
+        return ERROR;
     }
-    if(id < 0)
+    if(group->nb_object == 0)
     {
-        fprintf(stderr, "Vous ne pouvez pas supprimer un élément d'une liste dans le négative.\n");
-        return NULL;
+        fprintf(stderr, "Liste déjà vide\n");
+        return ERROR;
     }
 
-    return &group[id];
+    free(group->objects);
+    return DONE;
 }
 
-// Partie pour les objects
+st_group_world_obj* get_group(st_group_world_obj *groups, int id, size_t max)
+{
+    int where = 0;
+    while(groups[where].ID != id && where != max)
+    {
+        where ++;
+    }
+    
+    if(groups[where].ID != id)
+    {
+        fprintf(stderr, "Vous avez demander un group qui se trouve plus loin que la liste ou qui n'existe pas.\n");
+        return NULL;
+    }
+
+
+    return &groups[where];
+}
+  /////////////////////////////
+ // Partie pour les objects //
+/////////////////////////////
 
 bool object_is_null(st_world_obj *object)
 {
@@ -181,7 +216,7 @@ bool object_is_null(st_world_obj *object)
 
 int object_init(st_world_obj *object, int id)
 {
-    if(object != NULL)
+    if(object == NULL)
     {
         fprintf(stderr, "L'object n'est pas nul, il est possible que certaines données soient perdu.\n");
         return ERROR;
@@ -191,11 +226,24 @@ int object_init(st_world_obj *object, int id)
     return DONE;
 }
 
+/**
+ * @brief Fonction qui permet d'ajouter un élément à un group déjà défini.
+ * @param group le groups seul déjà initialiser, pas la liste de groupe.
+ * @param object l'objet seul, déjà initialiser.
+ * @return ERROR ou DONE en fonction du résultat de l'allocation
+ */
 int put_object_in_group(st_group_world_obj *group, st_world_obj *object)
 {
+    st_world_obj *temp;
+
     if(group == NULL)
     {
         fprintf(stderr, "Le groupe n'est pas initialiser !\n");
+        return ERROR;
+    }
+    if(group->nb_object == -1)
+    {
+        fprintf(stderr, "Nombre d'objets incohérents\n");
         return ERROR;
     }
     if(object == NULL)
@@ -207,22 +255,131 @@ int put_object_in_group(st_group_world_obj *group, st_world_obj *object)
     // Pour mettre le premier élément
     if(group->nb_object == 0)
     {
+        // Allocation de la mémoire
         group->objects = malloc(sizeof(st_world_obj));
+        
+        // Test de l'allocation
         if(group->objects == NULL)
         {
             fprintf(stderr, "Echec, problème avec l'attribution de l'espace mémoire pour un object dans un groupe.\n");
             return ERROR;
         }
-        group->objects[0] = *object;
-        if(group->objects[0].ID != object->ID)
+        else
         {
-            fprintf(stderr, "Erreur lors de l'assignation de l'objet dans le groupe\n");
-            return ERROR;
+            // On ajout ce nouvel élément à la base du group
+            group->objects[0] = *object;
+            
+            // On vérifie bien que l'objet c'est bien mis à la base
+            if(group->objects[0].ID != object->ID)
+            {
+                fprintf(stderr, "Erreur lors de l'assignation de l'objet dans le groupe\n");
+                return ERROR;
+            }
+            else
+            {
+                // On valide que l'ajout de l'élément
+                group->nb_object ++;
+            }
         }
+
     }
     // Pour les autres
     else
     {
+        temp = group->objects;
+
+        // On ajout une case mémoire
+        group->objects = realloc(group->objects, sizeof(st_group_world_obj)* (group->nb_object + ADD_CASE));
         
+        // Si la reallocation à échouer, alors on revient au pointeur tampon
+        if(object == NULL)
+        {
+            group->objects = temp;
+            fprintf(stderr, "Allocation mémoire à la liste object échouer, attention\n");
+            return ERROR;
+        }
+        else
+        {
+            /*
+            L'espace mémoire est alloué, mais pas encore officialiser, donc on recherche
+            celle-ci avec un + 1 pour lui appliquer l'objet.
+            */
+            group->objects[group->nb_object + 1] = *object;
+
+            if(group->objects[group->nb_object + 1].ID != object->ID)
+            {
+                fprintf(stderr, "Erreur lors de l'insertion de la valeur dans la liste\n");
+                return ERROR;
+            }
+            else
+            {
+                // On officilise l'ajout de la valeur
+                group->nb_object ++;
+            }
+
+        }
+
     }
+    return DONE;
+}
+
+int remove_object_of_a_group(st_group_world_obj **group, int object_id)
+{
+    int where = 0;
+    int i;
+    st_world_obj *temp;
+
+    // Test des entrées avant suppression
+    if(*group == NULL)
+    {
+        fprintf(stderr, "Le groupe passé en paramètre est soit pas initier, soit inéxistant\n");
+        return ERROR;
+    }
+    
+    // On va chercher l'objet dans la liste grâce à son ID
+    while((*group)->objects[where].ID != object_id && where < (*group)->nb_object)
+    {
+        where ++;
+    }
+    
+    if((*group)->objects[where].ID != object_id)
+    {
+        fprintf(stderr, "Impossible de trouver l'objet dans la liste. Pas de suppression\n");
+
+        // On libère tout
+        free((*group)->objects);
+        (*group)->nb_object = 0;
+
+        return ERROR;
+    }
+    else
+    {
+        // On décale tout les éléments dans la mémoire
+        for(i = where; i < (*group)->nb_object - 1; i ++) (*group)->objects[i] = (*group)->objects[i + 1];
+        
+        // Sauvegarde via une variable tampon
+        temp = (*group)->objects;
+
+        // Réallocation de la mémoire 
+        (*group)->objects = realloc((*group)->objects, (sizeof(st_world_obj) * ((*group)->nb_object + SUB_CASE)));
+
+        if((*group)->objects == NULL)
+        {
+            fprintf(stderr, "Echec de l'allocation mémoire\n");
+
+            // On remet la valeur tampon pour récupéré les valeurs
+            (*group)->objects = temp;
+
+            // On libère tout
+            free((*group)->objects);
+            (*group)->nb_object = 0;
+            
+            return ERROR;
+        }
+        else
+        {
+            (*group)->nb_object += SUB_CASE;
+        }
+    }
+    return DONE;
 }
