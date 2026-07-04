@@ -126,7 +126,7 @@ int remove_group(st_group_world_obj **groups, int id, int *max)
     printf("ID : %d %d %d\n", (*groups)[where].ID, id, *max);
     if(*max != 1)
     {
-        while((*groups)[where].ID != id && where != *max)
+        while((*groups)[where].ID != id && where != *max - 1)
         {
             where ++;
         }
@@ -144,7 +144,6 @@ int remove_group(st_group_world_obj **groups, int id, int *max)
         {
             if((*groups)[where].ID != tamp_value)
             {
-                free(groups);
                 fprintf(stderr, "Erreur lors de la suppression de l'élément.\n");
                 return ERROR;
             }
@@ -221,17 +220,20 @@ int delete_object_list(st_group_world_obj *group)
 st_group_world_obj* get_group(st_group_world_obj *groups, int id, size_t max)
 {
     int where = 0;
+    if(groups == NULL)
+    {
+        fprintf(stderr, "Liste des groupes, null\n");
+        return NULL;
+    }
     while(where < max && groups[where].ID != id)
     {
         where ++;
     }
-    
-    if(groups[where].ID != id)
+    if(where == max)
     {
-        fprintf(stderr, "Vous avez demander un group qui se trouve plus loin que la liste ou qui n'existe pas.\n");
+        fprintf(stderr, "Groupe introuvable.\n");
         return NULL;
     }
-
 
     return &groups[where];
 }
@@ -341,7 +343,7 @@ int remove_object_of_a_group(st_world_obj **objects, int object_id, int *nb_obje
     {
         where ++;
     }
-    if((*objects)[where].ID != object_id)
+    if(where == *nb_objects)
     {
         fprintf(stderr, "Impossible de trouver l'objet dans la liste. Pas de suppression\n");
         return ERROR;
@@ -473,25 +475,25 @@ int put_shader_in_group(st_group_world_obj *group, st_shader *shader)
     return DONE;
 }
 
-int remove_shader_of_a_group(st_world_obj **objects, int object_id, int *nb_objects)
+int remove_shader_of_a_group(st_shader **shaders, int object_id, int *nb_shaders)
 {
     int where = 0;
     int i;
-    st_world_obj *temp;
+    st_shader *temp;
     
     // Test des entrées avant suppression
-    if((*objects) == NULL)
+    if((*shaders) == NULL)
     {
         fprintf(stderr, "Le groupe passé en paramètre est soit pas initier, soit inéxistant\n");
         return ERROR;
     }
     
     // On va chercher l'objet dans la liste grâce à son ID
-    while(where < *nb_objects && (*objects)[where].ID != object_id)
+    while(where < *nb_shaders && (*shaders)[where].shader != object_id)
     {
         where ++;
     }
-    if((*objects)[where].ID != object_id)
+    if(where == *nb_shaders)
     {
         fprintf(stderr, "Impossible de trouver l'objet dans la liste. Pas de suppression\n");
         return ERROR;
@@ -499,40 +501,40 @@ int remove_shader_of_a_group(st_world_obj **objects, int object_id, int *nb_obje
     else
     {
         // On décale tout les éléments dans la mémoire
-        for(i = where; i < *nb_objects - 1; i ++) 
-            (*objects)[i] = (*objects)[i + 1];
+        for(i = where; i < *nb_shaders - 1; i ++) 
+            (*shaders)[i] = (*shaders)[i + 1];
         
         // Réallocation de la mémoire
         
-        printf("next size : %ld\n", (sizeof(st_world_obj) * (*nb_objects)));
-        printf("next size : %ld\n", (sizeof(st_world_obj) * (*nb_objects + SUB_CASE)));
+        printf("next size : %ld\n", (sizeof(st_shader) * (*nb_shaders)));
+        printf("next size : %ld\n", (sizeof(st_shader) * (*nb_shaders + SUB_CASE)));
 
-        if(*nb_objects + SUB_CASE == 0)
+        if(*nb_shaders + SUB_CASE == 0)
         {
-            free(*objects);
+            free(*shaders);
         }
         else
         {
             // Sauvegarde via une variable tampon
-            temp = *objects;
+            temp = *shaders;
 
-            *objects = realloc(*objects, (sizeof(st_world_obj) * (*nb_objects + SUB_CASE)));
+            *shaders = realloc(*shaders, (sizeof(st_shader) * (*nb_shaders + SUB_CASE)));
 
-            if(*objects == NULL)
+            if(*shaders == NULL)
             {
                 fprintf(stderr, "Echec de l'allocation mémoire\n");
 
                 // On remet la valeur tampon pour récupéré les valeurs
-                *objects = temp;
+                *shaders = temp;
 
                 // On libère tout
-                *nb_objects = 0;
+                *nb_shaders = 0;
                 
                 return ERROR;
             }
         }
         
-        *nb_objects += SUB_CASE;
+        *nb_shaders += SUB_CASE;
         
     }
     return DONE;
