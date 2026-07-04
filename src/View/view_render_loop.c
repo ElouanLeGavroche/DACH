@@ -33,7 +33,7 @@ int window_should_close(){
 /**
  * @brief Cette fonction va me servir à initialiser les différent éléments graphique de la page
  */
-void init_a_3d_loaded_element(st_render_data *render, st_mesh *elt, int indice)
+st_mesh init_a_3d_loaded_element(st_mesh *elt, int indice)
 {
 
     unsigned int VAO, VBO, EBO;
@@ -71,11 +71,10 @@ void init_a_3d_loaded_element(st_render_data *render, st_mesh *elt, int indice)
     
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
 
-    render->meshs[indice] = *elt;
-
+    return *elt;
 }
 
-void init_a_loaded_shader(st_render_data *render, const char vertex_shader_source[], const char fragment_shader_source[])
+int init_a_loaded_shader(const char vertex_shader_source[], const char fragment_shader_source[])
 {
     /* Variables de debug */
     int  success;
@@ -124,7 +123,7 @@ void init_a_loaded_shader(st_render_data *render, const char vertex_shader_sourc
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
 
-    render->shader_programs[0].shader = shader_program;
+    return shader_program;
 }
 
 int init_a_loaded_texture(st_image *image)

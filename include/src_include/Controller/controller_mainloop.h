@@ -39,5 +39,4 @@ void unload_data(st_engine *engine_state);
 void destroy_render_data(st_render_data *render);
 
 void link_input(st_engine *engine_state);
-
 #endif

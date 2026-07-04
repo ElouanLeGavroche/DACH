@@ -384,7 +384,7 @@ int shader_init(st_shader *shader, int id)
 int put_shader_in_group(st_group_world_obj *group, st_shader *shader)
 {
     st_shader *temp;
-
+    
     if(group == NULL)
     {
         fprintf(stderr, "Le groupe n'est pas initialiser !\n");
@@ -404,7 +404,7 @@ int put_shader_in_group(st_group_world_obj *group, st_shader *shader)
     temp = group->shaders;
 
     // On ajout une case mémoire
-    group->shaders = realloc(group->shaders, sizeof(st_world_obj)* (group->nb_shader + ADD_CASE));
+    group->shaders = realloc(group->shaders, sizeof(st_shader)* (group->nb_shader + ADD_CASE));
     
     // Si la reallocation à échouer, alors on revient au pointeur tampon
     if(group->shaders == NULL)
@@ -419,9 +419,9 @@ int put_shader_in_group(st_group_world_obj *group, st_shader *shader)
         L'espace mémoire est alloué, mais pas encore officialiser, donc on recherche
         celle-ci avec un + 1 pour lui appliquer l'objet.
         */
-        group->shaders[group->nb_shader + 1] = *shader;
+        group->shaders[group->nb_shader] = *shader;
 
-        if(group->shaders[group->nb_shader + 1].shader != shader->shader)
+        if(group->shaders[group->nb_shader].shader != shader->shader)
         {
             fprintf(stderr, "Erreur lors de l'insertion de la valeur dans la liste\n");                
             return ERROR;
@@ -513,4 +513,11 @@ void create_an_object(int name, st_mesh mesh, int texture_id, st_group_world_obj
 
     put_object_in_group(dest, &obj);
 
+}
+
+void create_a_shader(unsigned int id, st_group_world_obj *dest)
+{
+    st_shader shader;
+    shader_init(&shader, id);
+    put_shader_in_group(dest, &shader);
 }

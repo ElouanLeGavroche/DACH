@@ -87,4 +87,5 @@ int remove_shader_of_a_group(st_world_obj **objects, int object_id, int *nb_obje
 
 
 void create_an_object(int name, st_mesh mesh, int texture_id, st_group_world_obj *dest);
+void create_a_shader(unsigned int id, st_group_world_obj *dest);
 #endif

@@ -20,73 +20,74 @@ struct st_state main_menu_state =
     controller_update_render_main_menu
 };
 
+st_mesh new_object(char *path)
+{
+    st_mesh mesh = {0};
+    load_file(path, &mesh);
 
+    mesh = init_a_3d_loaded_element(&mesh, 0);
+
+    return mesh;
+}
+
+unsigned int new_texture(char *path)
+{
+    // CHARGER LES TEXTURES DES ELEMENTS --------------------------------------------------------------------------------------------
+    st_image texture = load_texture(path, 736, 552, 0);
+
+    // Initialiser les Texutures des elements --------------------------------------------------------------------------------------------
+    int texture_id = init_a_loaded_texture(&texture);
+    stbi_image_free(texture.data);
+
+    return texture_id;
+}
+
+unsigned int new_shader(char *path_vert, char *path_frag)
+{
+    const char *vert = load_shader(path_vert);
+    const char *frag = load_shader(path_frag);
+
+    // ""Gestion de l'erreur - lmao""
+    if(!vert || !frag)
+    {
+        printf("Attention, certains shaders n'ont pas élé chargé"
+        "Le comportement du programme peux-être compromis.\n");
+    }
+    // Initialiser les shaders --------------------------------------------------------------------------------------------
+    unsigned int shader = init_a_loaded_shader(vert, frag);
+
+    free((void *)vert);
+    free((void *)frag);
+
+    return shader;
+}
 
 int init_menu(st_state *state)
 {
     printf("début de l'initiation\n");
 
     init_render_main_menu(&state->render);
+    
+    // CHARGER LES SHADERS --------------------------------------------------------------------------------------------
+    unsigned int shader = new_shader("src/Shaders/main_shader.vert", "src/Shaders/main_shader.frag");
+
+    // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
+    st_mesh house = new_object(BASIC_HOUSE_PATH);
+    st_mesh tile = new_object(BASIC_TILE_PATH);
+
+    unsigned int grass_texture = new_texture("ressources/images/grass_test.jpg");
 
     // Creation du groupe
     add_group(&state->render, TEST_GROUP);
-    
-    // CHARGER LES SHADERS --------------------------------------------------------------------------------------------
-    const char *vertex_shader_source = load_shader("src/Shaders/main_shader.vert");
-    const char *fragment_shader_source = load_shader("src/Shaders/main_shader.frag");
-    
-    state->render.nb_shader = 1;
-
-    // ""Gestion de l'erreur - lmao""
-    if(!vertex_shader_source || !fragment_shader_source)
-    {
-        printf("Attention, certains shaders n'ont pas élé chargé"
-        "Le comportement du programme peux-être compromis.\n");
-    }
-    
-    // CHARGER LES ELEMENTS --------------------------------------------------------------------------------------------
-    st_mesh first_square = {0};
-    load_file(BASIC_HOUSE_PATH, &first_square);
-
-    st_mesh seconde_square = {0};
-    load_file(BASIC_TILE_PATH, &seconde_square);
-
-    state->render.nb_mesh = 2;   
-
-    // CHARGER LES TEXTURES DES ELEMENTS --------------------------------------------------------------------------------------------
-    st_image first_square_texture = load_texture("ressources/images/grass_test.jpg", 736, 552, 0);
-
-    // Initialiser les Texuture des elements --------------------------------------------------------------------------------------------
-    first_square.texture_id = init_a_loaded_texture(&first_square_texture);
-    seconde_square.texture_id = init_a_loaded_texture(&first_square_texture);
-    stbi_image_free(first_square_texture.data);
-
-
-    // Mallocs --------------------------------------------------------------------------------------------
-
-    state->render.meshs = malloc(sizeof(st_mesh) * state->render.nb_mesh);
-    state->render.shader_programs = malloc(sizeof(st_shader) * state->render.nb_shader);
-
-    // Initialiser les shaders --------------------------------------------------------------------------------------------
-    // Faire une fonction propre pour les charger individuellement ou par liste
-    init_a_loaded_shader(&state->render, vertex_shader_source, fragment_shader_source);
-    
-    // Libéré les shader qui sont compilé côté GPU à présent
-    free((void *)vertex_shader_source);
-    free((void *)fragment_shader_source);
-    
-    glUseProgram(state->render.shader_programs[0].shader);
-    glUniform1i(glGetUniformLocation(state->render.shader_programs[0].shader, "our_texture"), 0);
-
-    // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
-    init_a_3d_loaded_element(&state->render, &seconde_square, 0);
-    init_a_3d_loaded_element(&state->render, &first_square, 1);
-
-
-    // Définir l'objet
     st_group_world_obj *group = get_group(state->render.groups, TEST_GROUP, state->render.nb_groups);
-    create_an_object(HOUSE, first_square, init_a_loaded_texture(&first_square_texture), group);
-    create_an_object(SQUARE, seconde_square, init_a_loaded_texture(&first_square_texture), group);
+
+
+    // Définir les objets
+    create_an_object(HOUSE, house, grass_texture, group);
+    create_an_object(SQUARE, tile, grass_texture, group);
+
+    // Définir les shaders
+    create_a_shader(shader, group);
 
     // Initialiser le model --------------------------------------------------------------------------------------------
     init_data_main_menu(state);

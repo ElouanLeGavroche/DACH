@@ -240,7 +240,7 @@ void destroy_render_data(st_render_data *render)
  */
 void link_input(st_engine *engine_state)
 {
-    // Liée la strucures des entrée dans la fnêtre pour le callback
+    // Liée la strucures des entrée dans la fenêtre pour le callback
     GLFWwindow *window = glfwGetCurrentContext();
     st_window_user_data *data = glfwGetWindowUserPointer(window);
     data->input = &engine_state->stack_context.current_state->inputs;

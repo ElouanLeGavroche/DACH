@@ -50,7 +50,7 @@ int init_game(st_state *state)
     state->render.shader_programs = malloc(sizeof(st_shader) * state->render.nb_shader);
     
     // Initialiser les shaders --------------------------------------------------------------------------------------------
-    init_a_loaded_shader(&state->render, vertex_shader_source, fragment_shader_source);
+    init_a_loaded_shader(vertex_shader_source, fragment_shader_source);
 
     // Libéré les shader qui sont compilé côté GPU à présent
     free((void *)vertex_shader_source);
@@ -60,7 +60,7 @@ int init_game(st_state *state)
     glUniform1i(glGetUniformLocation(state->render.shader_programs[0].shader, "our_texture"), 0);
 
     // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
-    init_a_3d_loaded_element(&state->render, &seconde_square, 0);
+    init_a_3d_loaded_element(&seconde_square, 0);
     //init_a_3d_loaded_element(&state->render, &first_square, 1);
 
     // Initialiser la perspective --------------------------------------------------------------------------------------------

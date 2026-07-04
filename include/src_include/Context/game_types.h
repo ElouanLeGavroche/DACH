@@ -40,7 +40,6 @@ typedef struct st_image
  * @param set_float_uniform permet de faire passer une valeur flotante dans le shader de la CG
  * @param set_bool_uniform permet de faire passer une valeur booleenne dans le shader de la CG
  */
-
 typedef struct
 {
     unsigned int shader;
