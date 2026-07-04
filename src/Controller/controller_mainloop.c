@@ -186,48 +186,51 @@ int new_context(st_engine *engine_state, st_state *new_state)
 void unload_data(st_engine *engine_state)
 {
     // Effacer les données de rendu
-    destroy_render_data(&engine_state->stack_context.current_state->render);
-    
+    destroy_render_data(&engine_state->stack_context.current_state->render.groups[0]);
+    free(engine_state->stack_context.current_state->render.groups);
+    //delete_group(engine_state->stack_context.current_state->render.groups, engine_state->stack_context.current_state->render.nb_groups);
     // Effacer les données de model
 }
 
-void destroy_render_data(st_render_data *render)
+void destroy_group_data(st_group_world_obj *groups, int nb_groups)
+{
+    delete_group(groups, nb_groups);
+}
+
+void destroy_render_data(st_group_world_obj *group)
 {
 
-    if(render == NULL || render->meshs == NULL)
+    if(group == NULL)
         return;
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glUseProgram(0);
-
+    
     int i;
     // On détruit tout les éléments de la liste
-    for(i = 0; i < render->nb_mesh; i ++)
+    for(i = 0; i < group->nb_object; i ++)
     {
-        glDeleteVertexArrays(1, &render->meshs[i].VAO);
-        glDeleteBuffers(1, &render->meshs[i].VBO);
-        glDeleteBuffers(1, &render->meshs[i].EBO);
-        glDeleteTextures(1, &render->meshs[i].texture_id);
-
-        free(render->meshs[i].face_indice);
-        free(render->meshs[i].vert_pos);
+        glDeleteVertexArrays(1, &group->objects[i].mesh_obj.VAO);
+        glDeleteBuffers(1, &group->objects[i].mesh_obj.VBO);
+        glDeleteBuffers(1, &group->objects[i].mesh_obj.EBO);
+        glDeleteTextures(1, &group->objects[i].mesh_obj.texture_id);
+        
+        free(group->objects[i].mesh_obj.face_indice);
+        free(group->objects[i].mesh_obj.vert_pos);
     }
-    
-    for(i = 0; i < render->nb_shader; i ++)
+    free(group->objects);
+    group->nb_object = 0;
+
+    for(i = 0; i < group->nb_shader; i ++)
     {
-        glDeleteProgram(render->shader_programs[i].shader);
+        glDeleteProgram(group->shaders[i].shader);
     }
-    
-    free(render->meshs);
-    render->meshs = NULL;
-    render->nb_mesh = 0;
+    free(group->shaders);
+    group->nb_shader = 0;
 
-    // On reset les données au sein des shaders
-    free(render->shader_programs);
-    render->shader_programs = NULL;
-    render->nb_shader = 0;
+    free(group);
 
     // ça permet de forcer la cg à mettre à jour son utilisation de la mémoire.
     glFinish();

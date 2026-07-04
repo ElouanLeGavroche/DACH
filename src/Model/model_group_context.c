@@ -162,7 +162,41 @@ int remove_group(st_group_world_obj **groups, int id, int *max)
     
 }
 
-int delete_group(){
+int delete_group(st_group_world_obj *groups, int nb_groups){
+    int i;
+
+    for(i = 0; i < nb_groups; i ++)
+    {
+        if(delete_object_list(&groups[i]) == ERROR)
+        {
+            fprintf(stderr, "Erreur lors de la suppression de l'élément\n");
+            return ERROR;
+        }
+        if(delete_shader_list(&groups[i]) == ERROR)
+        {
+            fprintf(stderr, "Erreur lors de la suppression de l'élément\n");
+            return ERROR;
+        }
+    }
+    free(groups);
+    return DONE;
+}
+
+int delete_shader_list(st_group_world_obj *group)
+{
+    if(group == NULL)
+    {
+        fprintf(stderr, "Vous avez rentrée un group NULL\n");
+        return ERROR;
+    }
+    if(group->nb_object == 0)
+    {
+        fprintf(stderr, "Liste déjà vide\n");
+        return ERROR;
+    }
+
+    free(group->shaders);
+    group->nb_shader = 0;
     return DONE;
 }
 
@@ -180,6 +214,7 @@ int delete_object_list(st_group_world_obj *group)
     }
 
     free(group->objects);
+    group->nb_object = 0;
     return DONE;
 }
 

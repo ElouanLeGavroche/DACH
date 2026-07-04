@@ -36,7 +36,7 @@ void input_loop(st_engine *engine_state);
 
 int new_context(st_engine *engine_state, st_state *new_state);
 void unload_data(st_engine *engine_state);
-void destroy_render_data(st_render_data *render);
+void destroy_render_data(st_group_world_obj *group);
 
 void link_input(st_engine *engine_state);
 #endif

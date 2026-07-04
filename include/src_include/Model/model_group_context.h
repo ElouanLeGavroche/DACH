@@ -66,25 +66,20 @@ int remove_group(st_group_world_obj **groups, int id, int *max);
  */
 st_group_world_obj* get_group(st_group_world_obj *groups, int id, size_t max);
 
-/**
- * @brief permet de supprimer tout les objet d'un groupe
- * 
- * @param group le group en question
- */
-int delete_object_list(st_group_world_obj *group);
-
 
 bool object_is_null(st_world_obj *object);
 int object_init(st_world_obj *object, int id);
 int put_object_in_group(st_group_world_obj *group, st_world_obj *object);
 int remove_object_of_a_group(st_world_obj **objects, int object_id, int *nb_objects);
 
-
 bool shader_is_null(st_shader *shader);
 int shader_init(st_shader *shader, int id);
 int put_shader_in_group(st_group_world_obj *group, st_shader *shader);
 int remove_shader_of_a_group(st_world_obj **objects, int object_id, int *nb_objects);
 
+int delete_shader_list(st_group_world_obj *group);
+int delete_object_list(st_group_world_obj *group);
+int delete_group(st_group_world_obj *groups, int nb_groups);
 
 void create_an_object(int name, st_mesh mesh, int texture_id, st_group_world_obj *dest);
 void create_a_shader(unsigned int id, st_group_world_obj *dest);
