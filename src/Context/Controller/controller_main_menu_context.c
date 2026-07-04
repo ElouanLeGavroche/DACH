@@ -1,28 +1,30 @@
 #include "../../../include/src_include/Context/Controller/controller_main_menu_context.h"
 
+
+typedef enum
+{
+    TEST_GROUP
+}e_group_name;
+
 struct st_state main_menu_state =
 {
     C_MAIN_MENU,
     init_menu,
     controller_update_logic_main_menu,
-    controller_update_render_main_menu,
+    controller_update_render_main_menu
 };
+
+
 
 int init_menu(st_state *state)
 {
     printf("début de l'initiation\n");
 
-    // Initialiser la perspective --------------------------------------------------------------------------------------------
     init_render_main_menu(&state->render);
 
-    ////// ZONE DE TEST AVEC LES GROUPES
-
-    state->render.groups;
-    state->render.nb_groups;
-
-    //////
-
-
+    // Creation du groupe
+    add_group(&state->render, TEST_GROUP);
+    
     // CHARGER LES SHADERS --------------------------------------------------------------------------------------------
     const char *vertex_shader_source = load_shader("src/Shaders/main_shader.vert");
     const char *fragment_shader_source = load_shader("src/Shaders/main_shader.frag");

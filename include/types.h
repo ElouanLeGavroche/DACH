@@ -99,6 +99,9 @@ typedef enum e_dir{
  */
 typedef struct st_render_data{
 
+        st_group_world_obj *groups;
+    int nb_groups;
+    
     int nb_shader;
     int nb_mesh;
 
@@ -107,8 +110,7 @@ typedef struct st_render_data{
 
     st_camera camera;
 
-    st_group_world_obj *groups;
-    int nb_groups;
+
 
     // Variables qui me permettront de géré le déplacement de la caméra indépendamment de la clock
     float delta_time;

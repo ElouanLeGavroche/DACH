@@ -15,7 +15,6 @@ bool context_group_is_null(st_group_world_obj *group)
 int context_group_init(st_group_world_obj *group, int id)
 {
  
-    
     if(group == NULL)
     {
         fprintf(stderr, "Le groupe n'est pas prêt à être initialiser\n");
@@ -51,7 +50,7 @@ int context_group_init(st_group_world_obj *group, int id)
 int add_group(st_render_data *render, int nb)
 {   
     // Nombre de cellule à ajouter dans la liste
-    int to_add = (nb == 0) ? 1 : nb;
+    int to_add = (nb <= 0) ? ADD_CASE : nb;
     // Variable d'indice pour les liste
     int i;
     // Resultat des fonctions lancé depuis ici
@@ -87,7 +86,8 @@ int add_group(st_render_data *render, int nb)
         }
     
     }     
-    for(i = render->nb_groups; i < (to_add + render->nb_groups); i++)
+    render->nb_groups += to_add;
+    for(i = render->nb_groups; i < (render->nb_groups); i++)
     {
         res = context_group_init(&render->groups[i], i);
         if(res == ERROR)
@@ -95,12 +95,12 @@ int add_group(st_render_data *render, int nb)
             // Si l'initialisation à échoué, on supprime cet éléments.
             fprintf(stderr, "L'élément à mal été initaliser\n");
             st_group_world_obj *group = render->groups;
-            remove_group(&group, i, render->nb_groups + to_add);
+            remove_group(&group, i, &render->nb_groups);
             nb_fails ++;
         }
     }
     // On y soustrait le nombre d'erreur pour ne pas fausser la liste
-    render->nb_groups = render->nb_groups + to_add - nb_fails;
+    render->nb_groups = render->nb_groups - nb_fails;
 
     // Si il y a eu des fails, on redimentionne la liste en conséquent
     if(nb_fails != 0)
@@ -120,29 +120,35 @@ int add_group(st_render_data *render, int nb)
     return DONE;
 }
 
-int remove_group(st_group_world_obj **groups, int id, size_t max)
+int remove_group(st_group_world_obj **groups, int id, int *max)
 {
     int i;
     int tamp_value;
     int where = 0;
-
-    if(max != 0)
+    if(*groups == NULL)
     {
-        while((*groups)[where].ID != id && where != max)
+        printf("Le groupe est NULL\n");
+        return ERROR;
+    }
+
+    printf("ID : %d %d %d\n", (*groups)[where].ID, id, *max);
+    if(*max != 1)
+    {
+        while((*groups)[where].ID != id && where != *max)
         {
             where ++;
         }
 
-        if(where != max - 1)
+        if(where != *max - 1)
         {
             tamp_value = (*groups)[where + 1].ID;
         }
         
-        for(i = where; i < max; i ++) (*groups)[i] = (*groups)[i + 1];
+        for(i = where; i < *max; i ++) (*groups)[i] = (*groups)[i + 1];
 
-        *groups = realloc(*groups, sizeof(st_group_world_obj) * (max + SUB_CASE));
-     
-        if(id != max - 1)
+        *groups = realloc(*groups, sizeof(st_group_world_obj) * (*max + SUB_CASE));
+    
+        if(id != *max - 1)
         {
             if((*groups)[where].ID != tamp_value)
             {
@@ -154,11 +160,14 @@ int remove_group(st_group_world_obj **groups, int id, size_t max)
     }
     else
     {
-        fprintf(stderr, "Impossible de supprimer, la liste est déjà vide\n");
-        return ERROR;
+        // On free la variable si tout est supprimer
+        free(*groups);
+        *groups = NULL;
+        return DONE;
     }
     
-    return max - 1;
+    return DONE;
+    
 }
 
 int delete_group(){
@@ -167,8 +176,6 @@ int delete_group(){
 
 int delete_object_list(st_group_world_obj *group)
 {
-    int i;
-
     if(group == NULL)
     {
         fprintf(stderr, "Vous avez rentrée un group NULL\n");
@@ -241,14 +248,14 @@ int put_object_in_group(st_group_world_obj *group, st_world_obj *object)
         fprintf(stderr, "Le groupe n'est pas initialiser !\n");
         return ERROR;
     }
-    if(group->nb_object == -1)
+    if(group->nb_object < 0)
     {
-        fprintf(stderr, "Nombre d'objets incohérents\n");
+        fprintf(stderr, "Nombre d'objets incohérents !\n");
         return ERROR;
     }
     if(object == NULL)
     {
-        fprintf(stderr, "L'objet n'est pas initialiser\n");
+        fprintf(stderr, "L'objet n'est pas initialiser !\n");
         return ERROR;
     }
 
@@ -289,7 +296,7 @@ int put_object_in_group(st_group_world_obj *group, st_world_obj *object)
         temp = group->objects;
 
         // On ajout une case mémoire
-        group->objects = realloc(group->objects, sizeof(st_group_world_obj)* (group->nb_object + ADD_CASE));
+        group->objects = realloc(group->objects, sizeof(st_world_obj)* (group->nb_object + ADD_CASE));
         
         // Si la reallocation à échouer, alors on revient au pointeur tampon
         if(object == NULL)
@@ -308,7 +315,7 @@ int put_object_in_group(st_group_world_obj *group, st_world_obj *object)
 
             if(group->objects[group->nb_object + 1].ID != object->ID)
             {
-                fprintf(stderr, "Erreur lors de l'insertion de la valeur dans la liste\n");
+                fprintf(stderr, "Erreur lors de l'insertion de la valeur dans la liste\n");                
                 return ERROR;
             }
             else
@@ -323,63 +330,251 @@ int put_object_in_group(st_group_world_obj *group, st_world_obj *object)
     return DONE;
 }
 
-int remove_object_of_a_group(st_group_world_obj **group, int object_id)
+int remove_object_of_a_group(st_world_obj **objects, int object_id, int *nb_objects)
 {
     int where = 0;
     int i;
     st_world_obj *temp;
-
+    
     // Test des entrées avant suppression
-    if(*group == NULL)
+    if((*objects) == NULL)
     {
         fprintf(stderr, "Le groupe passé en paramètre est soit pas initier, soit inéxistant\n");
         return ERROR;
     }
     
     // On va chercher l'objet dans la liste grâce à son ID
-    while((*group)->objects[where].ID != object_id && where < (*group)->nb_object)
+    while(where < *nb_objects && (*objects)[where].ID != object_id)
     {
         where ++;
     }
-    
-    if((*group)->objects[where].ID != object_id)
+    if((*objects)[where].ID != object_id)
     {
         fprintf(stderr, "Impossible de trouver l'objet dans la liste. Pas de suppression\n");
-
-        // On libère tout
-        free((*group)->objects);
-        (*group)->nb_object = 0;
-
         return ERROR;
     }
     else
     {
         // On décale tout les éléments dans la mémoire
-        for(i = where; i < (*group)->nb_object - 1; i ++) (*group)->objects[i] = (*group)->objects[i + 1];
+        for(i = where; i < *nb_objects - 1; i ++) 
+            (*objects)[i] = (*objects)[i + 1];
         
-        // Sauvegarde via une variable tampon
-        temp = (*group)->objects;
+        // Réallocation de la mémoire
+        
+        printf("next size : %ld\n", (sizeof(st_world_obj) * (*nb_objects)));
+        printf("next size : %ld\n", (sizeof(st_world_obj) * (*nb_objects + SUB_CASE)));
 
-        // Réallocation de la mémoire 
-        (*group)->objects = realloc((*group)->objects, (sizeof(st_world_obj) * ((*group)->nb_object + SUB_CASE)));
-
-        if((*group)->objects == NULL)
+        if(*nb_objects + SUB_CASE == 0)
         {
-            fprintf(stderr, "Echec de l'allocation mémoire\n");
+            free(*objects);
+        }
+        else
+        {
+            // Sauvegarde via une variable tampon
+            temp = *objects;
 
-            // On remet la valeur tampon pour récupéré les valeurs
-            (*group)->objects = temp;
+            *objects = realloc(*objects, (sizeof(st_world_obj) * (*nb_objects + SUB_CASE)));
 
-            // On libère tout
-            free((*group)->objects);
-            (*group)->nb_object = 0;
-            
+            if(*objects == NULL)
+            {
+                fprintf(stderr, "Echec de l'allocation mémoire\n");
+
+                // On remet la valeur tampon pour récupéré les valeurs
+                *objects = temp;
+
+                // On libère tout
+                *nb_objects = 0;
+                
+                return ERROR;
+            }
+        }
+        
+        *nb_objects += SUB_CASE;
+        
+    }
+    return DONE;
+}
+
+
+
+  /////////////////////////////
+ // Partie pour les sharers //
+/////////////////////////////
+
+bool shader_is_null(st_shader *shader)
+{
+    if(!shader)
+    {
+        return true;
+    }
+    return false;
+}
+
+int shader_init(st_shader *shader, int id)
+{
+    if(shader == NULL)
+    {
+        fprintf(stderr, "L'object n'est pas nul, il est possible que certaines données soient perdu.\n");
+        return ERROR;
+    }
+    
+    shader->shader = id;
+    return DONE;
+}
+
+
+int put_shader_in_group(st_group_world_obj *group, st_shader *shader)
+{
+    st_shader *temp;
+
+    if(group == NULL)
+    {
+        fprintf(stderr, "Le groupe n'est pas initialiser !\n");
+        return ERROR;
+    }
+    if(group->nb_shader < 0)
+    {
+        fprintf(stderr, "Nombre de shaders incohérents !\n");
+        return ERROR;
+    }
+    if(shader == NULL)
+    {
+        fprintf(stderr, "Le shader n'est pas initialiser !\n");
+        return ERROR;
+    }
+
+    // Pour mettre le premier élément
+    if(group->nb_shader == 0)
+    {
+        // Allocation de la mémoire
+        group->shaders = malloc(sizeof(st_shader));
+        
+        // Test de l'allocation
+        if(group->shaders == NULL)
+        {
+            fprintf(stderr, "Echec, problème avec l'attribution de l'espace mémoire pour un object dans un groupe.\n");
             return ERROR;
         }
         else
         {
-            (*group)->nb_object += SUB_CASE;
+            // On ajout ce nouvel élément à la base du group
+            group->shaders[0] = *shader;
+            
+            // On vérifie bien que l'objet c'est bien mis à la base
+            if(group->shaders[0].shader != shader->shader)
+            {
+                fprintf(stderr, "Erreur lors de l'assignation de l'objet dans le groupe\n");
+                return ERROR;
+            }
+            else
+            {
+                // On valide que l'ajout de l'élément
+                group->nb_shader ++;
+            }
         }
+
+    }
+    // Pour les autres
+    else
+    {
+        temp = group->shaders;
+
+        // On ajout une case mémoire
+        group->shaders = realloc(group->shaders, sizeof(st_world_obj)* (group->nb_shader + ADD_CASE));
+        
+        // Si la reallocation à échouer, alors on revient au pointeur tampon
+        if(shader == NULL)
+        {
+            group->shaders = temp;
+            fprintf(stderr, "Allocation mémoire à la liste object échouer, attention\n");
+            return ERROR;
+        }
+        else
+        {
+            /*
+            L'espace mémoire est alloué, mais pas encore officialiser, donc on recherche
+            celle-ci avec un + 1 pour lui appliquer l'objet.
+            */
+            group->shaders[group->nb_shader + 1] = *shader;
+
+            if(group->shaders[group->nb_shader + 1].shader != shader->shader)
+            {
+                fprintf(stderr, "Erreur lors de l'insertion de la valeur dans la liste\n");                
+                return ERROR;
+            }
+            else
+            {
+                // On officilise l'ajout de la valeur
+                group->nb_shader ++;
+            }
+
+        }
+
+    }
+    return DONE;
+}
+
+int remove_shader_of_a_group(st_world_obj **objects, int object_id, int *nb_objects)
+{
+    int where = 0;
+    int i;
+    st_world_obj *temp;
+    
+    // Test des entrées avant suppression
+    if((*objects) == NULL)
+    {
+        fprintf(stderr, "Le groupe passé en paramètre est soit pas initier, soit inéxistant\n");
+        return ERROR;
+    }
+    
+    // On va chercher l'objet dans la liste grâce à son ID
+    while(where < *nb_objects && (*objects)[where].ID != object_id)
+    {
+        where ++;
+    }
+    if((*objects)[where].ID != object_id)
+    {
+        fprintf(stderr, "Impossible de trouver l'objet dans la liste. Pas de suppression\n");
+        return ERROR;
+    }
+    else
+    {
+        // On décale tout les éléments dans la mémoire
+        for(i = where; i < *nb_objects - 1; i ++) 
+            (*objects)[i] = (*objects)[i + 1];
+        
+        // Réallocation de la mémoire
+        
+        printf("next size : %ld\n", (sizeof(st_world_obj) * (*nb_objects)));
+        printf("next size : %ld\n", (sizeof(st_world_obj) * (*nb_objects + SUB_CASE)));
+
+        if(*nb_objects + SUB_CASE == 0)
+        {
+            free(*objects);
+        }
+        else
+        {
+            // Sauvegarde via une variable tampon
+            temp = *objects;
+
+            *objects = realloc(*objects, (sizeof(st_world_obj) * (*nb_objects + SUB_CASE)));
+
+            if(*objects == NULL)
+            {
+                fprintf(stderr, "Echec de l'allocation mémoire\n");
+
+                // On remet la valeur tampon pour récupéré les valeurs
+                *objects = temp;
+
+                // On libère tout
+                *nb_objects = 0;
+                
+                return ERROR;
+            }
+        }
+        
+        *nb_objects += SUB_CASE;
+        
     }
     return DONE;
 }
