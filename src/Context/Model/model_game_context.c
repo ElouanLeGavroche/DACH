@@ -86,3 +86,8 @@ void move_camera(st_camera *camera, int dir)
     
 }
 
+void translate_world(mat4 *model, float x, float y, float z)
+{
+    glm_mat4_identity(model);
+    glm_translate(model, (vec3){x, y, z});
+}
