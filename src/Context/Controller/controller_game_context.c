@@ -1,5 +1,16 @@
 #include "../../../include/src_include/Context/Controller/controller_game_context.h"
 
+
+typedef enum
+{
+    GROUP
+}e_group_name;
+
+typedef enum
+{
+    TILE
+}e_elt_name;
+
 struct st_state game_state =
 {
     C_GAME,
@@ -12,58 +23,24 @@ struct st_state game_state =
 int init_game(st_state *state)
 {
     printf("début de l'initiation\n");
+    
     // CHARGER LES SHADERS --------------------------------------------------------------------------------------------
-    const char *vertex_shader_source = load_shader("src/Shaders/main_shader.vert");
-    const char *fragment_shader_source = load_shader("src/Shaders/main_shader.frag");
+    unsigned int shader = new_shader("src/Shaders/main_shader.vert", "src/Shaders/main_shader.frag");
     
-    state->render.nb_shader = 1;
-    
-    // ""Gestion de l'erreur - lmao""
-    if(!vertex_shader_source || !fragment_shader_source)
-    {
-        fprintf(stderr, "Attention, certains shaders n'ont pas élé chargé"
-        "Le comportement du programme peux-être compromis.\n");
-
-        return ERROR;
-    }
-    
-    // CHARGER LES ELEMENTS --------------------------------------------------------------------------------------------
-    //st_mesh first_square;
-    //load_file(BASIC_HOUSE_PATH, &first_square);
-
-    st_mesh seconde_square = {0};
-    load_file(BASIC_TILE_PATH, &seconde_square);
-    
-    state->render.nb_mesh = 1;
-
-    // CHARGER LES TEXTURES DES ELEMENTS --------------------------------------------------------------------------------------------
-    st_image first_square_texture = load_texture("ressources/images/grass_test.jpg", 736, 552, 0);
-    
-
-    // GENÉRÉ LES TEXTURES --------------------------------------------------------------------------------------------
-    seconde_square.texture_id = init_a_loaded_texture(&first_square_texture);
-    stbi_image_free(first_square_texture.data);
-    
-    // Mallocs --------------------------------------------------------------------------------------------
-
-    state->render.meshs = malloc(sizeof(st_mesh) * state->render.nb_mesh);
-    state->render.shader_programs = malloc(sizeof(st_shader) * state->render.nb_shader);
-    
-    // Initialiser les shaders --------------------------------------------------------------------------------------------
-    init_a_loaded_shader(vertex_shader_source, fragment_shader_source);
-
-    // Libéré les shader qui sont compilé côté GPU à présent
-    free((void *)vertex_shader_source);
-    free((void *)fragment_shader_source);
-
-    glUseProgram(state->render.shader_programs[0].shader);
-    glUniform1i(glGetUniformLocation(state->render.shader_programs[0].shader, "our_texture"), 0);
-
     // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
-    init_a_3d_loaded_element(&seconde_square, 0);
-    //init_a_3d_loaded_element(&state->render, &first_square, 1);
+    st_mesh tile = new_object(BASIC_TILE_PATH);
 
-    // Initialiser la perspective --------------------------------------------------------------------------------------------
+    unsigned int grass_texture = new_texture("ressources/images/grass_test.jpg");
+
+    // Creation du groupe
+    add_group(&state->render, GROUP);
+    st_group_world_obj *group = get_group(state->render.groups, GROUP, state->render.nb_groups);
+    
+    // Définir les objets
+    create_an_object(TILE, tile, grass_texture, group);
+
+    // Définir les shaders
+    create_a_shader(shader, group);
     init_render_game(&state->render);
 
     // Initialiser le model --------------------------------------------------------------------------------------------

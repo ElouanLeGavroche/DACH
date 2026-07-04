@@ -97,31 +97,35 @@ void update_render_game(st_render_data *render)
     glClearColor(num_to_01(24), num_to_01(32), num_to_01(61), 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     
-    glUseProgram(render->shader_programs[0].shader);
+    glUseProgram(render->groups->shaders[0].shader);
     
     /* Application de la rotation */
-    int model_loc = glGetUniformLocation(render->shader_programs[0].shader, "model");
+    int model_loc = glGetUniformLocation(render->groups->shaders[0].shader, "model");
     glUniformMatrix4fv(model_loc, 1, GL_FALSE, *model);
 
     /* Application du point de vue */
-    int view_loc = glGetUniformLocation(render->shader_programs[0].shader, "view");
+    int view_loc = glGetUniformLocation(render->groups->shaders[0].shader, "view");
     glUniformMatrix4fv(view_loc, 1, GL_FALSE, *render->camera.view);
     
     /* Application de la projection*/
-    int proj_loc = glGetUniformLocation(render->shader_programs[0].shader, "projection");
+    int proj_loc = glGetUniformLocation(render->groups->shaders[0].shader, "projection");
     glUniformMatrix4fv(proj_loc, 1, GL_FALSE, *render->camera.projection);
 
     
-    int i;
-    for(i = 0; i < render->nb_mesh; i ++)
+    int i, y;
+    for(i = 0; i < render->nb_groups; i ++)
     {
-        // Pour les texture
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, render->meshs[i].texture_id);
-        
-        glBindVertexArray(render->meshs[i].VAO);
-        glDrawElements(GL_TRIANGLES, render->meshs[i].index_count, GL_UNSIGNED_INT, 0);
-        glBindVertexArray(0);
+        for(y = 0; y < render->groups[i].nb_object; y ++)
+        {
+            // Pour les texture
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, render->groups[i].objects[y].texture_id);
+
+            glBindVertexArray(render->groups[i].objects[y].mesh_obj.VAO);
+            glDrawElements(GL_TRIANGLES, render->groups[i].objects[y].mesh_obj.index_count, GL_UNSIGNED_INT, 0);
+            glBindVertexArray(0);
+        }
+
     }
 
 }

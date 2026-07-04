@@ -8,11 +8,7 @@
 
 #include "../../Model/model_group_context.h"
 
-
-
-#include "../../Shared_tools/Load_tools/load_shader.h"
-#include "../../Shared_tools/Load_tools/load_obj_format.h"
-#include "../../Shared_tools/Load_tools/load_image.h"
+#include "controller_init_context.h"
 
 
 #include "../../../types.h"
