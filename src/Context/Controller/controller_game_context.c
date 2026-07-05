@@ -38,11 +38,12 @@ int init_game(st_state *state)
     
     // Définir les objets
     int i, y;
-    for(i = 25; i > 0; i --)
+    int size_map = 52;
+    for(i = size_map; i > 0; i --)
     {
-        for(y = 0; y < i; y ++)
+        for(y = size_map; y > 0; y --)
         {
-            create_an_object(TILE + i, tile, grass_texture, (float)i*2.0f, (float)y*2.0f, 0, group);
+            create_an_object(TILE + i, tile, grass_texture, ((float)i * 2.0f) - size_map, 0.0, ((float)y * 2.0f) - size_map, group);
         }
     }
 

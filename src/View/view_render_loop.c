@@ -7,7 +7,7 @@ void view_clear(){
 void view_swap(){
     // Récupéré le context openGL
     GLFWwindow *window = glfwGetCurrentContext();
-
+    
     // Actualisation du swap
     glfwSwapBuffers(window);
 }

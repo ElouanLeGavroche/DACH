@@ -68,7 +68,7 @@ void update_render_game(st_render_data *render)
     On va en premier lieu calculer le temps que prend une frame à être fait
     ainsi, la caméra ne dépendant plus de la vitesse du jeu .
     */
-
+    glDepthFunc(GL_LESS);  
     float current_frame = glfwGetTime();
     render->delta_time = current_frame - render->last_time;
     render->last_time = current_frame;
