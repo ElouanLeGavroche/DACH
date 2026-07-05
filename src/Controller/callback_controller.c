@@ -49,16 +49,7 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height){
       window_parametr->size_x = width;
       window_parametr->size_y = height;
 
-      // Calcule du ration pour la projection : 
-      camera->ratio = ((float)window_parametr->size_x / (float)window_parametr->size_y) * (4.0f / 3.0f);
 
-      glm_ortho(
-            -camera->ortho_size - camera->ratio,
-            camera->ortho_size + camera->ratio,
-            -camera->ortho_size,
-            camera->ortho_size, 
-            camera->near_z, 
-            camera->far_z, 
-            camera->projection
-      );
+      //resize_cam(data);
+
 }
