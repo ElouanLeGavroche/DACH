@@ -14,7 +14,7 @@ out vec2 text_coord;
 
 void main()
 {
-    gl_Position =  projection * view * model *vec4(a_pos, 1.0);
+    gl_Position =  projection * view * model * vec4(a_pos, 1.0);
     our_color = a_color;
     text_coord = a_tex_coord;
 }

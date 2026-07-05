@@ -176,7 +176,6 @@ int new_context(st_engine *engine_state, st_state *new_state)
     // L'on envoie le context suivant pour remplacer l'actuel
     engine_state->context_tool.put_context(&engine_state->stack_context, new_state);
     engine_state->stack_context.current_state->ev_next_context = C_NONE;
-
     // On relie le clavier au nouveau context
     link_input(engine_state);
     return DONE;
@@ -187,47 +186,53 @@ void unload_data(st_engine *engine_state)
 {
     // Effacer les données de rendu
     destroy_render_data(&engine_state->stack_context.current_state->render);
-    
-    // Effacer les données de model
+
 }
 
 void destroy_render_data(st_render_data *render)
 {
-
-    if(render == NULL || render->meshs == NULL)
-        return;
+    if(render == NULL || render->groups == NULL)
+            return;
+    int y;
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glUseProgram(0);
 
-    int i;
-    // On détruit tout les éléments de la liste
-    for(i = 0; i < render->nb_mesh; i ++)
+    for(y = 0; y < render->nb_groups; y ++)
     {
-        glDeleteVertexArrays(1, &render->meshs[i].VAO);
-        glDeleteBuffers(1, &render->meshs[i].VBO);
-        glDeleteBuffers(1, &render->meshs[i].EBO);
-        glDeleteTextures(1, &render->meshs[i].texture_id);
-
-        free(render->meshs[i].face_indice);
-        free(render->meshs[i].vert_pos);
+        st_group_world_obj *group = &render->groups[y];
+        
+        int i;
+        // On détruit tout les éléments de la liste
+        for(i = 0; i < group->nb_object; i ++)
+        {
+            glDeleteVertexArrays(1, &group->objects[i].mesh_obj.VAO);
+            glDeleteBuffers(1, &group->objects[i].mesh_obj.VBO);
+            glDeleteBuffers(1, &group->objects[i].mesh_obj.EBO);
+            glDeleteTextures(1, &group->objects[i].texture_id);
+            
+            //free(group->objects[i].mesh_obj.face_indice);
+            //free(group->objects[i].mesh_obj.vert_pos);
+            group->objects[i].mesh_obj.face_indice = NULL;
+            group->objects[i].mesh_obj.vert_pos = NULL;
+        }
+        free(group->objects);
+        group->objects = NULL;
+        group->nb_object = 0;
+        
+        for(i = 0; i < group->nb_shader; i ++)
+        {
+            glDeleteProgram(group->shaders[i].shader);
+        }
+        free(group->shaders);
+        group->shaders = NULL;
+        group->nb_shader = 0;
     }
-    
-    for(i = 0; i < render->nb_shader; i ++)
-    {
-        glDeleteProgram(render->shader_programs[i].shader);
-    }
-    
-    free(render->meshs);
-    render->meshs = NULL;
-    render->nb_mesh = 0;
-
-    // On reset les données au sein des shaders
-    free(render->shader_programs);
-    render->shader_programs = NULL;
-    render->nb_shader = 0;
+    free(render->groups);
+    render->groups = NULL;
+    render->nb_groups = 0;
 
     // ça permet de forcer la cg à mettre à jour son utilisation de la mémoire.
     glFinish();
@@ -240,7 +245,7 @@ void destroy_render_data(st_render_data *render)
  */
 void link_input(st_engine *engine_state)
 {
-    // Liée la strucures des entrée dans la fnêtre pour le callback
+    // Liée la strucures des entrée dans la fenêtre pour le callback
     GLFWwindow *window = glfwGetCurrentContext();
     st_window_user_data *data = glfwGetWindowUserPointer(window);
     data->input = &engine_state->stack_context.current_state->inputs;

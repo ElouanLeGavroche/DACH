@@ -56,7 +56,7 @@ void move_camera(st_camera *camera, int dir)
     switch (dir)
     {
     case DOWN:
-        glm_vec3_mulsubs(camera->up, camera->actual_speed, camera->pos);
+        glm_vec3_mulsubs(camera->up, camera->actual_speed * 3, camera->pos);
         break;
 
     case RIGHT:
@@ -69,7 +69,7 @@ void move_camera(st_camera *camera, int dir)
         break;
 
     case UP:
-        glm_vec3_muladds(camera->up, camera->actual_speed, camera->pos);
+        glm_vec3_muladds(camera->up, camera->actual_speed * 3, camera->pos);
         break;
     case LEFT:
         
@@ -86,3 +86,8 @@ void move_camera(st_camera *camera, int dir)
     
 }
 
+void translate_world(mat4 *model, float x, float y, float z)
+{
+    glm_mat4_identity(&model);
+    glm_translate(model, (vec3){x, y, z});
+}

@@ -17,8 +17,8 @@ void view_swap();
 void view_clear();
 int window_should_close();
 
-void init_a_loaded_shader(st_render_data *render, const char vertex_shader_source[], const char fragment_shader_source[]);
-void init_a_3d_loaded_element(st_render_data *render, st_mesh *elt, int indice);
+st_mesh init_a_3d_loaded_element(st_mesh *elt, int indice);
+int init_a_loaded_shader(const char vertex_shader_source[], const char fragment_shader_source[]);
 int init_a_loaded_texture(st_image *image);
 
 

@@ -4,7 +4,6 @@
 #include <stdio.h>
 
 #include "../../../types.h"
-#include "../game_types.h"
 
 void update_logic_game(st_state *state);
 void init_data_game(st_state *state);

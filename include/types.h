@@ -9,6 +9,8 @@
 #include <cglm/cglm.h>
 #include <cglm/types.h>
 
+#include "src_include/Context/game_types.h"
+
 typedef struct st_engine st_engine;
 typedef struct st_state st_state;
 
@@ -45,70 +47,6 @@ typedef struct
     atomic_bool ok;
 
 }st_input;
-
-/**
- * @brief strucutre qui regroupe les informations d'une image
- * @param width largeur de l'image
- * @param height hauteur de l'image
- * @param nr_channels
- * @param path chemin de l'image 
- * @param data données de l'image
- */
-typedef struct
-{
-    int width;
-    int height;
-    int nr_channels;
-
-    const char *path;
-    unsigned char *data;
-}st_image;
-
-/**
- * @brief La structure qui permet de stocker un élément 3D
- * @param vertex_float_count le nombre de vertrices dans le modèle
- * @param index_count le nombre de face dans le modèle
- * @param vert_pos la position de ecs vertrices
- * @param face_indice l'ordre dans lequel il faut former les face avec les vertrices
- * @param VAO valeur des sommets à envoyé à la carte graphique
- * @param VBO buffer de sommets
- * @param EBO buffer de sommets
- * @param texture image de l'élément
- */
-typedef struct
-{
-    int vertex_float_count;
-    int index_count;
-
-    float *vert_pos;
-    int *face_indice;
-
-    unsigned int VAO;
-    unsigned int VBO;
-    unsigned int EBO;
-    unsigned int texture_id;
-
-}st_mesh;
-
-
-/**
- * @brief Structure qui stock le contenu d'un shader
- * @param shader id du shader
- * @param set_int_uniform permet de faire passer une valeur entier dans le shader de la CG 
- * @param set_float_uniform permet de faire passer une valeur flotante dans le shader de la CG
- * @param set_bool_uniform permet de faire passer une valeur booleenne dans le shader de la CG
- */
-
-typedef struct
-{
-    unsigned int shader;
-
-    void(* set_int_uniform)();
-    void(* set_float_uniform)();
-    void(* set_bool_uniform)();
-
-}st_shader;
-
 
 /**
  * @brief Structure qui contient les informations de la caméra
@@ -159,8 +97,11 @@ typedef enum e_dir{
  * @param shader_programs Liste des programe shaders
  * @param camera structure de données de la camera
  */
-typedef struct{
+typedef struct st_render_data{
 
+    st_group_world_obj *groups;
+    int nb_groups;
+    
     int nb_shader;
     int nb_mesh;
 

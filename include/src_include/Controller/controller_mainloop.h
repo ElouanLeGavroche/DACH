@@ -13,7 +13,6 @@
 #include <stdatomic.h>
 
 #include "../../types.h"
-#include "../Context/game_types.h"
 
 #include "../Config/constantes.h"
 
@@ -40,5 +39,4 @@ void unload_data(st_engine *engine_state);
 void destroy_render_data(st_render_data *render);
 
 void link_input(st_engine *engine_state);
-
 #endif
