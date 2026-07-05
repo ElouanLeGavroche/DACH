@@ -542,11 +542,15 @@ int remove_shader_of_a_group(st_shader **shaders, int object_id, int *nb_shaders
 }
 
 
-void create_an_object(int name, st_mesh mesh, int texture_id, st_group_world_obj *dest)
+void create_an_object(int name, st_mesh mesh, int texture_id, float x, float y, float z, st_group_world_obj *dest)
 {
     st_world_obj obj;
     obj.mesh_obj = mesh;
     obj.texture_id = texture_id;
+    obj.x_pos = x;
+    obj.y_pos = y;
+    obj.z_pos = z;
+    
     object_init(&obj, name);
 
     put_object_in_group(dest, &obj);

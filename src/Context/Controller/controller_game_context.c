@@ -37,7 +37,14 @@ int init_game(st_state *state)
     st_group_world_obj *group = get_group(state->render.groups, GROUP, state->render.nb_groups);
     
     // Définir les objets
-    create_an_object(TILE, tile, grass_texture, group);
+    int i, y;
+    for(i = 25; i > 0; i --)
+    {
+        for(y = 0; y < i; y ++)
+        {
+            create_an_object(TILE + i, tile, grass_texture, (float)i*2.0f, (float)y*2.0f, 0, group);
+        }
+    }
 
     // Définir les shaders
     create_a_shader(shader, group);

@@ -81,6 +81,6 @@ int delete_shader_list(st_group_world_obj *group);
 int delete_object_list(st_group_world_obj *group);
 int delete_group(st_group_world_obj *groups, int nb_groups);
 
-void create_an_object(int name, st_mesh mesh, int texture_id, st_group_world_obj *dest);
+void create_an_object(int name, st_mesh mesh, int texture_id, float x, float y, float z, st_group_world_obj *dest);
 void create_a_shader(unsigned int id, st_group_world_obj *dest);
 #endif

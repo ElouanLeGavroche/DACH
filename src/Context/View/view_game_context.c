@@ -118,9 +118,17 @@ void update_render_game(st_render_data *render)
     {
         for(y = 0; y < render->groups[i].nb_object; y ++)
         {
+            st_world_obj *obj = &render->groups[i].objects[y];
+
             // Pour les texture
             glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, render->groups[i].objects[y].texture_id);
+            glBindTexture(GL_TEXTURE_2D, obj->texture_id);
+            
+            glm_mat4_identity(model);
+            glm_translate(model, (vec3){obj->x_pos, obj->y_pos, obj->z_pos});
+
+            int model_loc = glGetUniformLocation(render->groups->shaders[0].shader, "model");
+            glUniformMatrix4fv(model_loc, 1, GL_FALSE, *model);
 
             glBindVertexArray(render->groups[i].objects[y].mesh_obj.VAO);
             glDrawElements(GL_TRIANGLES, render->groups[i].objects[y].mesh_obj.index_count, GL_UNSIGNED_INT, 0);

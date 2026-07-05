@@ -91,9 +91,9 @@ typedef struct st_world_obj
     int ID;
     
     st_mesh mesh_obj;
-    int x_pos;
-    int y_pos;
-    int z_pos;
+    float x_pos;
+    float y_pos;
+    float z_pos;
 
     st_image texture;
     unsigned int texture_id;

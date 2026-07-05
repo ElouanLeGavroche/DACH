@@ -41,8 +41,8 @@ int init_menu(st_state *state)
 
 
     // Définir les objets
-    create_an_object(HOUSE, house, grass_texture, group);
-    create_an_object(SQUARE, tile, grass_texture, group);
+    create_an_object(HOUSE, house, grass_texture, 0, 0, 0, group);
+    create_an_object(SQUARE, tile, grass_texture, 0, 0, 0, group);
 
     // Définir les shaders
     create_a_shader(shader, group);

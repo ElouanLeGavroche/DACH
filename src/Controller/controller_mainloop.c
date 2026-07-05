@@ -213,8 +213,8 @@ void destroy_render_data(st_render_data *render)
             glDeleteBuffers(1, &group->objects[i].mesh_obj.EBO);
             glDeleteTextures(1, &group->objects[i].texture_id);
             
-            free(group->objects[i].mesh_obj.face_indice);
-            free(group->objects[i].mesh_obj.vert_pos);
+            //free(group->objects[i].mesh_obj.face_indice);
+            //free(group->objects[i].mesh_obj.vert_pos);
             group->objects[i].mesh_obj.face_indice = NULL;
             group->objects[i].mesh_obj.vert_pos = NULL;
         }
