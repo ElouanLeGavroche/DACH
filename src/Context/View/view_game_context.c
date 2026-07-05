@@ -11,7 +11,7 @@ void init_render_game(st_render_data *render)
     GLFWwindow *window = glfwGetCurrentContext();
 
     st_window_user_data *data = glfwGetWindowUserPointer(window);
-    data->camera = &render->camera;
+    data->camera = &render->camera; 
 }
 
 void init_game_camera(st_camera *camera)
@@ -112,7 +112,7 @@ void update_render_game(st_render_data *render)
     int proj_loc = glGetUniformLocation(render->groups->shaders[0].shader, "projection");
     glUniformMatrix4fv(proj_loc, 1, GL_FALSE, *render->camera.projection);
 
-    
+
     int i, y;
     for(i = 0; i < render->nb_groups; i ++)
     {
