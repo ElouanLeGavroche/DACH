@@ -113,7 +113,35 @@ void update_render_game(st_render_data *render)
     glUniformMatrix4fv(proj_loc, 1, GL_FALSE, *render->camera.projection);
 
 
-    int i, y;
+    int i, y, index = 0;
+
+    vec2 translations[52*52];
+    glm_mat2_identity(translations);
+
+    for(i = 0; i < render->nb_groups; i ++)
+    {
+        for(y = 0; y < render->groups[i].nb_object; y ++)
+        {
+            st_world_obj *obj = &render->groups[i].objects[y];
+
+            glm_mat4_identity(model);
+            glm_translate(model, (vec3){obj->x_pos, obj->y_pos, obj->z_pos});
+
+            glm_vec4_copy(*model, translations[index]);
+            index ++;
+        }
+    }
+    
+    for(i = 0; i < render->nb_groups; i ++)
+    {
+        for(y = 0; y < render->groups[i].nb_object; y ++)
+        {
+            int model_loc = glGetUniformLocation(render->groups->shaders[0].shader, "model");
+            glUniformMatrix4fv(model_loc, 1, GL_FALSE, translations[i]);
+        }
+    }
+    
+
     for(i = 0; i < render->nb_groups; i ++)
     {
         for(y = 0; y < render->groups[i].nb_object; y ++)

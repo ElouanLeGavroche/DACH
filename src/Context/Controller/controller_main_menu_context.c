@@ -27,7 +27,7 @@ int init_menu(st_state *state)
     init_render_main_menu(&state->render);
     
     // CHARGER LES SHADERS --------------------------------------------------------------------------------------------
-    unsigned int shader = new_shader("src/Shaders/main_shader.vert", "src/Shaders/main_shader.frag");
+    unsigned int shader = new_shader("src/Shaders/shader_menu.vert", "src/Shaders/main_shader.frag");
 
     // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
     st_mesh house = new_object(BASIC_HOUSE_PATH);
