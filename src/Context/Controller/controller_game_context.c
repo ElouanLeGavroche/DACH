@@ -3,7 +3,7 @@
 
 typedef enum
 {
-    GROUP
+    WORLD
 }e_group_name;
 
 typedef enum
@@ -32,10 +32,12 @@ int init_game(st_state *state)
 
     unsigned int grass_texture = new_texture("ressources/images/grass_test.jpg");
 
-    // Creation du groupe
-    add_group(&state->render, GROUP);
-    st_group_world_obj *group = get_group(state->render.groups, GROUP, state->render.nb_groups);
-    
+    // Creation du groupe du monde
+    add_group(&state->render, WORLD);
+    st_group_world_obj *group = get_group(state->render.groups, WORLD, state->render.nb_groups);
+    mat4 *world_tile;
+    init_world(&state->render, world_tile, 52*52);
+
     // Définir les objets
     int i, y;
     int size_map = 52;

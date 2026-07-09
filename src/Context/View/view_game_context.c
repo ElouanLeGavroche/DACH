@@ -14,6 +14,45 @@ void init_render_game(st_render_data *render)
     data->camera = &render->camera; 
 }
 
+void init_world(st_render_data *render, mat4 *models, int amount)
+{
+    int i, y, index = 0;
+    models = malloc(sizeof(mat4) * (amount));
+    if(models == NULL)
+    {
+        fprintf(stderr, "erreur lors de l'allocation mémoire de models\n");
+        return;
+    }
+    glm_mat4_identity_array(models, amount);
+
+    for(i = 0; i < render->nb_groups; i ++)
+    {
+        for(y = 0; y < render->groups[i].nb_object; y ++)
+        {
+            mat4 model;
+            glm_mat4_identity(model);
+            st_world_obj *obj = &render->groups[i].objects[y];
+
+            glm_translate(model, (vec3){obj->x_pos, obj->y_pos, obj->z_pos});
+
+            glm_mat4_copy(model, models[index]);
+            index ++;
+        }
+    }
+    unsigned int instance_vbo;
+    glGenBuffers(1, &instance_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, instance_vbo);
+    glBufferData(GL_ARRAY_BUFFER, amount * sizeof(mat4), &models[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // Alors là, je comprend rien, mais c'est comme ça dans le cours xD
+    glEnableVertexAttribArray(3);
+    glBindBuffer(GL_ARRAY_BUFFER, instance_vbo);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glVertexAttribDivisor(2, 1);
+}
+
 void init_game_camera(st_camera *camera)
 {
     // Vitesse absolue de la caméra
@@ -64,6 +103,7 @@ void init_game_camera(st_camera *camera)
 
 void update_render_game(st_render_data *render)
 {
+    int i, y;
     /* 
     On va en premier lieu calculer le temps que prend une frame à être fait
     ainsi, la caméra ne dépendant plus de la vitesse du jeu .
@@ -113,35 +153,10 @@ void update_render_game(st_render_data *render)
     glUniformMatrix4fv(proj_loc, 1, GL_FALSE, *render->camera.projection);
 
 
-    int i, y, index = 0;
-
-    vec2 translations[52*52];
-    glm_mat2_identity(translations);
-
-    for(i = 0; i < render->nb_groups; i ++)
-    {
-        for(y = 0; y < render->groups[i].nb_object; y ++)
-        {
-            st_world_obj *obj = &render->groups[i].objects[y];
-
-            glm_mat4_identity(model);
-            glm_translate(model, (vec3){obj->x_pos, obj->y_pos, obj->z_pos});
-
-            glm_vec4_copy(*model, translations[index]);
-            index ++;
-        }
-    }
-    
-    for(i = 0; i < render->nb_groups; i ++)
-    {
-        for(y = 0; y < render->groups[i].nb_object; y ++)
-        {
-            int model_loc = glGetUniformLocation(render->groups->shaders[0].shader, "model");
-            glUniformMatrix4fv(model_loc, 1, GL_FALSE, translations[i]);
-        }
-    }
-    
-
+    glBindVertexArray(render->groups[0].all_matrices);
+    glDrawArraysInstanced(GL_TRIANGLES, 0, render->groups[0].objects[0].mesh_obj.index_count, render->groups[0].nb_object);
+    glBindVertexArray(0);
+    /*
     for(i = 0; i < render->nb_groups; i ++)
     {
         for(y = 0; y < render->groups[i].nb_object; y ++)
@@ -158,11 +173,12 @@ void update_render_game(st_render_data *render)
             int model_loc = glGetUniformLocation(render->groups->shaders[0].shader, "model");
             glUniformMatrix4fv(model_loc, 1, GL_FALSE, *model);
 
-            glBindVertexArray(render->groups[i].objects[y].mesh_obj.VAO);
-            glDrawElements(GL_TRIANGLES, render->groups[i].objects[y].mesh_obj.index_count, GL_UNSIGNED_INT, 0);
+            glBindVertexArray(obj->mesh_obj.VAO);
+            glDrawElementsInstanced(GL_TRIANGLES, obj->mesh_obj.index_count, GL_UNSIGNED_INT, 0, (float *)render->groups[0].all_matrices);
             glBindVertexArray(0);
         }
 
     }
+        */
 
 }

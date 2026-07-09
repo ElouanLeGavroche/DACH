@@ -81,6 +81,7 @@ typedef struct st_mesh
 /**
  * @brief Un object quelquonce du monde
  * 
+ * @param ID l'id du groupe
  * @param mesh_obj le mesh lié à l'élément
  * @param x_pos position en x dans le monde
  * @param y_pos position en y dans le monde
@@ -91,7 +92,7 @@ typedef struct st_mesh
 typedef struct st_world_obj
 {
     int ID;
-    
+
     st_mesh mesh_obj;
     float x_pos;
     float y_pos;
@@ -105,18 +106,24 @@ typedef struct st_world_obj
  * @brief liste des objet se trouvant dans un group
  * ils partagerons alors certaine infos, pour simplifier le rendu et rendre le tout plus lisible.
  * 
+ * @param instencied si le groupe instensie ces éléments 
  * @param objects liste des objets du groupe
  * @param shaders liste des shaders du groupe
+ * @param all_matrices matrice des éléments qui seront envoyé en groupe au GPU
  */
 typedef struct st_group_world_obj
 {
     int ID;
+    bool instencied;
 
     int nb_object;
     int nb_shader;
     
     st_world_obj *objects;
     st_shader *shaders;
+
+    mat4 *all_matrices;
+
 }st_group_world_obj;
 
 #endif
