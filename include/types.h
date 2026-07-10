@@ -101,12 +101,7 @@ typedef struct st_render_data{
 
     st_render_group *groups;
     int nb_groups;
-    
-    int nb_shader;
-    int nb_mesh;
-
-    st_mesh *meshs;
-    st_shader *shader_programs;
+    int nb_total_groups;
 
     st_camera camera;
 

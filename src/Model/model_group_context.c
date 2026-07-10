@@ -58,7 +58,7 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
         group->get_element = get_render_data_of_a_group;
 
         group->delete_group = delete_mesh_group;
-        
+
         break;
     
     case RENDER_GROUP_INSTANCED_MESH:
@@ -71,16 +71,83 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
         break;
     }
 
-    return DONE;
-    
+    return DONE;   
 }
-
-int add_group(st_render_data *render, e_render_group_type type, int name)
+int test_render(st_render_data *render)
 {
+    if(render == NULL)
+    {
+        fprintf(stderr, "Rendu NULL\n");
+        return ERROR;
+    }
+    if(render->groups == NULL && render->nb_groups != 0)
+    {
+        fprintf(stderr, "Désyncronisation entre le nombre de groupe et le pointeur.\n");
+    }
+    if(render->nb_groups < 0)
+    {
+        fprintf(stderr, "Nombre de group incohérent.\n");
+        return ERROR;
+    }
+}
+
+int add_group(st_render_data *render, e_render_group_type type)
+{
+    // Définition des variables
+    int res;
+
+    st_render_group *new_group;
+    st_mesh_group *new_mesh_group;
+    st_instanced_mesh_group *new_instanced_group;
+
+    // Test des valeurs entrées
+    if(test_render(render) == ERROR)
+        return ERROR;
+
+
+    // On initialise new_group
+    res = context_group_init(new_group, render->nb_total_groups, type);
+
+    // Test de l'allocation mémoire
+    if(new_group == NULL)
+    {
+        fprintf(stderr, "Erreur lors de l'allocation mémoire de new_group.\n");
+        return ERROR;
+    }
+
+    switch (type)
+    {
+    case RENDER_GROUP_MESH:
+        new_mesh_group = malloc(sizeof(st_mesh_group));
+
+        // Test de l'allocation mémoire
+        if(new_mesh_group == NULL)
+        {
+            fprintf(stderr, "Erreur lors de l'allocation mémoire de new_mesh_group.\n");
+            return ERROR;
+        }
+
+        // Initialisation 
+        new_mesh_group->nb_objects = 0;
+        new_mesh_group->objects = NULL;
+
+        break;
+    
+    case RENDER_GROUP_INSTANCED_MESH:
+        fprintf(stderr, "Pas encore développer.\n");
+        break;
+
+    default:
+        fprintf(stderr, "Type de groupe invalide.\n");
+        return ERROR;
+        break;
+    }    
+
+    return DONE;
 
 }
 
-void create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader shader, st_transform transform, st_mesh_group *dest)
+void create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader shader, st_transform transform, st_render_group *dest)
 {
     st_render_object obj;
 
@@ -90,25 +157,32 @@ void create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader s
     obj.material->shader = shader;
     obj.transform = transform;
 
+    // Ici l'on vient vérifier dans quelle type on envoie l'élément
+    switch (dest->type)
+    {
+    case RENDER_GROUP_MESH:
+        // Autrement, on ajout l'élément au sein du groupe
+        printf("Ajout d'un mesh au group mesh.\n");
+        break;
+    
+    case RENDER_GROUP_INSTANCED_MESH:
+
+        // Si la fonction ne nous retourne pas NULL, c'est qu'il y a déjà quelque chose à l'intérieur, et 
+        // On ne peux pas avoir deux mesh dans un groupe d'instances.
+        if(dest->get_element == NULL)
+        {
+            fprintf(stderr, "Vous avez déjà un mesh dans cet instance.\n");
+            return ERROR;
+        }
+        printf("Ajout d'un mesh au group d'instance.\n");
+        break;
+    
+    default:
+        fprintf(stderr, "Type de groupe invalide.\n");
+        break;
+    }
+
+    dest->add_element(dest, dest->data, obj);
     put_object_in_a_mesh_group(dest, &obj);
 
-}
-
-void create_a_shader(unsigned int id, st_mesh_group *dest)
-{
-    st_shader shader;
-    shader_init(&shader, id);
-    put_shader_in_mesh_group(dest, &shader);
-}
-
-
-
-
-// INSTANCED
-
-void create_a_shared_shader(unsigned int id, st_mesh_group *dest)
-{
-    st_shader shader;
-    shader_init(&shader, id);
-    put_shader_in_mesh_group(dest, &shader);
 }

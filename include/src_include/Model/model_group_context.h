@@ -39,15 +39,19 @@ bool context_group_is_null(st_render_group *group);
 int context_group_init(st_render_group *group, int id, e_render_group_type type);
 
 /**
+ * @brief permet de tester certaine chose dans render pour voir si les valeurs sont cohérente.
+ * @param render pointeur du rendu.
+ */
+int test_render(st_render_data *render);
+
+/**
  * @brief permet d'ajouter un groupe à la liste de groupe
  * @param render structure qui contient la liste de groupe et le nombre d'elt dans celle-ci
  * @param nb le nombre d'élément à ajouter à la liste. Si 0 ou autre valeur incohérente, ce sera
- * @param name le nom du groupe (a définir dans un enum)
- * mis automatiquement à 1
  * 
  * @return ERROR si echec | DONE si reussi
  */
-int add_group(st_render_data *render, e_render_group_type type, int name);
+int add_group(st_render_data *render, e_render_group_type type);
 
 /**
  * @brief permet de supprimer un groupe dans la liste
@@ -68,10 +72,12 @@ int remove_group(st_render_group **groups, int id, int *max);
 st_render_group* get_group(st_render_group *groups, int id, size_t max);
 
 // Partie pour les mesh group
-int add_render_data_in_group();
-int remove_render_data_of_group();
-int remove_all_render_data_of_a_group();
-st_render_object get_render_data_of_a_group();
-int delete_mesh_group();
+int add_render_data_in_group(st_render_group *group, void *data, st_render_object object);
+int remove_render_data_of_group(st_render_group *group);
+int remove_all_render_data_of_a_group(st_render_group *group);
+st_render_object get_render_data_of_a_group(st_render_group *group);
+int delete_mesh_group(st_render_group *group);
+
+void create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader shader, st_transform transform, st_render_group *dest);
 
 #endif
