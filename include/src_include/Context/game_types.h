@@ -42,11 +42,10 @@ typedef struct st_image
 
 /**
  * @brief strucutre qui regroupe les informations d'une image côté GPU
+ * @param id identifiant de la texture
+ * @param data information de la texture
  * @param width largeur de l'image
  * @param height hauteur de l'image
- * @param nr_channels
- * @param path chemin de l'image 
- * @param data données de l'image
  */
 typedef struct st_texture
 {
@@ -66,15 +65,10 @@ typedef struct st_shader
 } st_shader;
 
 /**
- * @brief La structure qui permet de stocker un élément 3D
- * @param vertex_count le nombre de vertrices dans le modèle
- * @param index_count le nombre de face dans le modèle
- * @param vert_pos la position de ecs vertrices
- * @param face_indice l'ordre dans lequel il faut former les face avec les vertrices
+ * @brief La structure qui permet de stocker un élément 3D côté GPU
  * @param VAO valeur des sommets à envoyé à la carte graphique
  * @param VBO buffer de sommets
  * @param EBO buffer de sommets
- * @param texture image de l'élément
  */
 typedef struct st_mesh
 {
@@ -84,6 +78,13 @@ typedef struct st_mesh
 
 }st_mesh;
 
+/**
+ * @brief information d'un mesh côté CPU
+ * @param vertex_count le nombre de vertex
+ * @param index_count le nombre de face total
+ * @param vert_pos information sur les vertex(px, py, pz, cx, cy, cz, tx, ty, tz)
+ * @param face_indice comment sont relier les vertex entre-eux (v1, v2, v3)
+ */
 typedef struct st_mesh_data
 {
     unsigned int vertex_count;
@@ -94,7 +95,9 @@ typedef struct st_mesh_data
 
 }st_mesh_data;
 
-
+/**
+ * @brief structure de 3 flotant
+ */
 typedef struct st_vec3
 {
     float x;
@@ -102,6 +105,12 @@ typedef struct st_vec3
     float z;
 }st_vec3;
 
+/**
+ * @brief permet de regroupper dans la même structure, divers paramètre d'un élément du monde
+ * @param position la position de l'élément dans le monde
+ * @param rotation la rotation de celui-ci
+ * @param transformation si on modifie ça taille ou ce genre de choses
+ */
 typedef struct st_transform
 {
     st_vec3 position;
@@ -109,6 +118,11 @@ typedef struct st_transform
     st_vec3 transformation;
 }st_transform;
 
+/**
+ * @brief permet de regroupper au même endroit les information propore à l'apparence d'un éléments
+ * @param shader est donc le shader lié à cet élément
+ * @param texture la texture de celui-ci
+ */
 typedef struct st_material
 {
     st_shader shader;
@@ -137,6 +151,18 @@ typedef struct st_render_object
     int visible;
 }st_render_object;
 
+/**
+ * @brief structure principal d'un group
+ * @param ID identifaint du groupe
+ * @param type type du groupe, cela affecte ça méthode de rendu
+ * @param data redirige vers le strucutre qui contiennent les éléments du groupe en fonction de son type
+ * @param init_group permet d'initialiser les informations de bases d'un groupe
+ * @param add_element permet d'ajouter un élément au groupe
+ * @param remove_element permet de supprimer un élément de ce groupe
+ * @param get_element permet de récupéré un élément
+ * @param remove_all_element supprime tout ces élément
+ * @param delete_group supprime le groupes
+ */
 typedef struct st_render_group
 {
     int ID;
@@ -145,7 +171,7 @@ typedef struct st_render_group
 
     void (* init_group)(st_render_group *group);
 
-    void (* add_element)(st_render_group *group);
+    void (* add_element)(st_render_group *group, void *data, st_render_object object);
     void (* remove_element)(st_render_group *group);
     st_render_object* (* get_element)(st_render_group *group);
     void (* remove_all_elements)(st_render_group *group);
@@ -153,11 +179,22 @@ typedef struct st_render_group
 
 }st_render_group;
 
+/**
+ * @brief permet d'apporter des modification à des mesh instancier de manière individuel
+ * @param model matrice model
+ */
 typedef struct st_instance_data
 {
     float model[16]
 }st_instance_data;
 
+/**
+ * @brief structure d'élément instencier
+ * @param cpu_data les donnée de celle-ci
+ * @param count le nombre de donnée actives
+ * @param capacity le nombre max de données
+ * @param vbo buffer de ces données côté GPU
+ */
 typedef struct st_instanced
 {
     st_instance_data *cpu_data;
@@ -167,15 +204,23 @@ typedef struct st_instanced
 
 }st_instanced;
 
+/**
+ * @brief groupe d'objets pour un rendu conventionnel
+ * @param objects liste des objects
+ * @param nb_objects nombre d'ojbjet dans la liste
+ */
 typedef struct st_mesh_group
 {
     st_render_object *objects;
     int nb_objects;
-    st_shader *shaders;
-    int nb_shaders;
 
 }st_mesh_group;
 
+/**
+ * @brief groupe d'objets à instancier
+ * @param shared_render_object le mesh à instancier
+ * @param st_instanced données de l'instanciation
+ */
 typedef struct st_instanced_mesh_group
 {
     st_render_object *shared_render_object;
