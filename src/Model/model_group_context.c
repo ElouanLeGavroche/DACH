@@ -1,6 +1,6 @@
 #include "../../include/src_include/Model/model_group_context.h"
 
-bool context_group_is_null(st_group_world_obj *group)
+bool context_group_is_null(st_render_group *group)
 {
     if(group == NULL)
     {
@@ -12,7 +12,7 @@ bool context_group_is_null(st_group_world_obj *group)
  * @brief Permet de mettre les valeur clean d'un context.
  * ATTENTION, vous devez récupéré le groupe via get_groupe au préalable !
  */
-int context_group_init(st_group_world_obj *group, int id)
+int context_group_init(st_render_group *group, int id, e_render_group_type type)
 {
  
     if(group == NULL)
@@ -23,13 +23,23 @@ int context_group_init(st_group_world_obj *group, int id)
     
     // Mettre les paramètre par defaut du group
     group->ID = id;
+    group->type = type;
+    // Ici l'on va pouvoir dire au moteur comment considéré ce groupe
+    switch (type)
+    {
+    case RENDER_GROUP_MESH:
+        st_mesh_group *rgm_data;
+        group->data = rgm_data;
+        break;
+
+    case RENDER_GROUP_INSTANCED_MESH:
+        st_instanced_mesh_group *rgim_data;
+        group->data = rgim_data;
+        break;
     
-    group->nb_object = 0;
-    group->nb_shader = 0;
-
-    group->objects = NULL;
-    group->shaders = NULL;
-
+    default:
+        break;
+    }
     return DONE;
 }
 
@@ -47,7 +57,7 @@ int context_group_init(st_group_world_obj *group, int id)
  * @param nb Le nombre de groupe à crée (Si null, il n'y en aura qu'un seul de fait).
  * 
  */
-int add_group(st_render_data *render, int nb)
+int add_group(st_render_data *render, int nb, e_render_group_type type)
 {   
     // Nombre de cellule à ajouter dans la liste
     int to_add = (nb <= 0) ? ADD_CASE : nb;
@@ -58,7 +68,7 @@ int add_group(st_render_data *render, int nb)
     // Calcule le nombre de fois qu'une allocation à échouer pour ajouter la vrai différence
     int nb_fails = 0;
     // Valeur tampon pour faire une backup de la liste en cas d'échec de l'agrandissement
-    st_group_world_obj *temp;
+    st_render_group *temp;
 
     if(render == NULL)
     {
@@ -67,7 +77,7 @@ int add_group(st_render_data *render, int nb)
     }
 
     temp = render->groups;
-    render->groups = realloc(render->groups, sizeof(st_group_world_obj) * (to_add + render->nb_groups));
+    render->groups = realloc(render->groups, sizeof(st_render_group) * (to_add + render->nb_groups));
     
     // Si l'allocation à échouer, alors on attribue le tampon qui à sauvgarder le reste 
     // De la liste. cela évite les fuite de mémoire.
@@ -81,12 +91,12 @@ int add_group(st_render_data *render, int nb)
     render->nb_groups += to_add;
     for(i = render->nb_groups - to_add; i < (render->nb_groups); i++)
     {
-        res = context_group_init(&render->groups[i], i);
+        res = context_group_init(&render->groups[i], i, type);
         if(res == ERROR)
         {            
             // Si l'initialisation à échoué, on supprime cet éléments.
             fprintf(stderr, "L'élément à mal été initaliser\n");
-            st_group_world_obj *group = render->groups;
+            st_render_group *group = render->groups;
             remove_group(&group, i, &render->nb_groups);
             nb_fails ++;
         }
@@ -97,7 +107,7 @@ int add_group(st_render_data *render, int nb)
     // Si il y a eu des fails, on redimentionne la liste en conséquent
     if(nb_fails != 0)
     {
-        render->groups = realloc(render->groups, sizeof(st_group_world_obj) * render->nb_groups);
+        render->groups = realloc(render->groups, sizeof(st_render_group) * render->nb_groups);
         
         // En cas d'échec on revient au temp précédent, et on ignore toute les modif,
         // Je considère que c'est trop la merde à ce stade xD
@@ -112,7 +122,7 @@ int add_group(st_render_data *render, int nb)
     return DONE;
 }
 
-int remove_group(st_group_world_obj **groups, int id, int *max)
+int remove_group(st_render_group **groups, int id, int *max)
 {
     int i;
     int tamp_value;
@@ -138,7 +148,7 @@ int remove_group(st_group_world_obj **groups, int id, int *max)
         
         for(i = where; i < *max; i ++) (*groups)[i] = (*groups)[i + 1];
 
-        *groups = realloc(*groups, sizeof(st_group_world_obj) * (*max + SUB_CASE));
+        *groups = realloc(*groups, sizeof(st_render_group) * (*max + SUB_CASE));
     
         if(id != *max - 1)
         {
@@ -161,17 +171,17 @@ int remove_group(st_group_world_obj **groups, int id, int *max)
     
 }
 
-int delete_group(st_group_world_obj *groups, int nb_groups){
+int delete_groups(st_render_group *groups, int nb_groups){
     int i;
 
     for(i = 0; i < nb_groups; i ++)
     {
-        if(delete_object_list(&groups[i]) == ERROR)
+        if(delete_object_list_mesh_shader(groups[i].data)  == ERROR)
         {
             fprintf(stderr, "Erreur lors de la suppression de l'élément\n");
             return ERROR;
         }
-        if(delete_shader_list(&groups[i]) == ERROR)
+        if(delete_shader_list_mesh_group(groups[i].data) == ERROR)
         {
             fprintf(stderr, "Erreur lors de la suppression de l'élément\n");
             return ERROR;
@@ -181,43 +191,7 @@ int delete_group(st_group_world_obj *groups, int nb_groups){
     return DONE;
 }
 
-int delete_shader_list(st_group_world_obj *group)
-{
-    if(group == NULL)
-    {
-        fprintf(stderr, "Vous avez rentrée un group NULL\n");
-        return ERROR;
-    }
-    if(group->nb_object == 0)
-    {
-        fprintf(stderr, "Liste déjà vide\n");
-        return ERROR;
-    }
-
-    free(group->shaders);
-    group->nb_shader = 0;
-    return DONE;
-}
-
-int delete_object_list(st_group_world_obj *group)
-{
-    if(group == NULL)
-    {
-        fprintf(stderr, "Vous avez rentrée un group NULL\n");
-        return ERROR;
-    }
-    if(group->nb_object == 0)
-    {
-        fprintf(stderr, "Liste déjà vide\n");
-        return ERROR;
-    }
-
-    free(group->objects);
-    group->nb_object = 0;
-    return DONE;
-}
-
-st_group_world_obj* get_group(st_group_world_obj *groups, int id, size_t max)
+st_render_group* get_group(st_render_group *groups, int id, size_t max)
 {
     int where = 0;
     if(groups == NULL)
@@ -262,13 +236,14 @@ int object_init(st_world_obj *object, int id)
     return DONE;
 }
 
+
 /**
  * @brief Fonction qui permet d'ajouter un élément à un group déjà défini.
  * @param group le groups seul déjà initialiser, pas la liste de groupe.
  * @param object l'objet seul, déjà initialiser.
  * @return ERROR ou DONE en fonction du résultat de l'allocation
  */
-int put_object_in_group(st_group_world_obj *group, st_world_obj *object)
+int put_object_in_a_mesh_group(st_mesh_group *group, st_world_obj *object)
 {
     st_world_obj *temp;
 
@@ -277,7 +252,7 @@ int put_object_in_group(st_group_world_obj *group, st_world_obj *object)
         fprintf(stderr, "Le groupe n'est pas initialiser !\n");
         return ERROR;
     }
-    if(group->nb_object < 0)
+    if(group->nb_objects < 0)
     {
         fprintf(stderr, "Nombre d'objets incohérents !\n");
         return ERROR;
@@ -292,7 +267,7 @@ int put_object_in_group(st_group_world_obj *group, st_world_obj *object)
     temp = group->objects;
 
     // On ajout une case mémoire
-    group->objects = realloc(group->objects, (sizeof(st_world_obj) * (group->nb_object + ADD_CASE)));
+    group->objects = realloc(group->objects, (sizeof(st_world_obj) * (group->nb_objects + ADD_CASE)));
     
     // Si la reallocation à échouer, alors on revient au pointeur tampon
     if(group->objects == NULL)
@@ -303,13 +278,13 @@ int put_object_in_group(st_group_world_obj *group, st_world_obj *object)
     }
     else
     {
-        /*
-        L'espace mémoire est alloué, mais pas encore officialiser, donc on recherche
-        celle-ci avec un + 1 pour lui appliquer l'objet.
-        */
-        group->objects[group->nb_object] = *object;
+        
+        //L'espace mémoire est alloué, mais pas encore officialiser, donc on recherche
+        //celle-ci avec un + 1 pour lui appliquer l'objet.
+        
+        group->objects[group->nb_objects] = *object;
 
-        if(group->objects[group->nb_object].ID != object->ID)
+        if(group->objects[group->nb_objects].ID != object->ID)
         {
             fprintf(stderr, "Erreur lors de l'insertion de la valeur dans la liste\n");                
             return ERROR;
@@ -317,7 +292,7 @@ int put_object_in_group(st_group_world_obj *group, st_world_obj *object)
         else
         {
             // On officilise l'ajout de la valeur
-            group->nb_object ++;
+            group->nb_objects ++;
         }
 
     }
@@ -391,8 +366,6 @@ int remove_object_of_a_group(st_world_obj **objects, int object_id, int *nb_obje
     return DONE;
 }
 
-
-
   /////////////////////////////
  // Partie pour les sharers //
 /////////////////////////////
@@ -405,6 +378,8 @@ bool shader_is_null(st_shader *shader)
     }
     return false;
 }
+
+
 
 int shader_init(st_shader *shader, int id)
 {
@@ -419,7 +394,8 @@ int shader_init(st_shader *shader, int id)
 }
 
 
-int put_shader_in_group(st_group_world_obj *group, st_shader *shader)
+
+int put_shader_in_mesh_group(st_mesh_group *group, st_shader *shader)
 {
     st_shader *temp;
     
@@ -428,7 +404,7 @@ int put_shader_in_group(st_group_world_obj *group, st_shader *shader)
         fprintf(stderr, "Le groupe n'est pas initialiser !\n");
         return ERROR;
     }
-    if(group->nb_shader < 0)
+    if(group->nb_shaders < 0)
     {
         fprintf(stderr, "Nombre de shaders incohérents !\n");
         return ERROR;
@@ -442,7 +418,7 @@ int put_shader_in_group(st_group_world_obj *group, st_shader *shader)
     temp = group->shaders;
 
     // On ajout une case mémoire
-    group->shaders = realloc(group->shaders, sizeof(st_shader)* (group->nb_shader + ADD_CASE));
+    group->shaders = realloc(group->shaders, sizeof(st_shader)* (group->nb_shaders + ADD_CASE));
     
     // Si la reallocation à échouer, alors on revient au pointeur tampon
     if(group->shaders == NULL)
@@ -453,13 +429,13 @@ int put_shader_in_group(st_group_world_obj *group, st_shader *shader)
     }
     else
     {
-        /*
-        L'espace mémoire est alloué, mais pas encore officialiser, donc on recherche
-        celle-ci avec un + 1 pour lui appliquer l'objet.
-        */
-        group->shaders[group->nb_shader] = *shader;
+        
+        //L'espace mémoire est alloué, mais pas encore officialiser, donc on recherche
+        //celle-ci avec un + 1 pour lui appliquer l'objet.
+        
+        group->shaders[group->nb_shaders] = *shader;
 
-        if(group->shaders[group->nb_shader].shader != shader->shader)
+        if(group->shaders[group->nb_shaders].shader != shader->shader)
         {
             fprintf(stderr, "Erreur lors de l'insertion de la valeur dans la liste\n");                
             return ERROR;
@@ -467,12 +443,48 @@ int put_shader_in_group(st_group_world_obj *group, st_shader *shader)
         else
         {
             // On officilise l'ajout de la valeur
-            group->nb_shader ++;
+            group->nb_shaders ++;
         }
 
     }
 
     
+    return DONE;
+}
+
+int delete_shader_list_mesh_group(st_mesh_group *group)
+{
+    if(group == NULL)
+    {
+        fprintf(stderr, "Vous avez rentrée un group NULL\n");
+        return ERROR;
+    }
+    if(group->nb_shaders == 0)
+    {
+        fprintf(stderr, "Liste déjà vide\n");
+        return ERROR;
+    }
+
+    free(group->shaders);
+    group->nb_shaders = 0;
+    return DONE;
+}
+
+int delete_object_list_mesh_shader(st_mesh_group *group)
+{
+    if(group == NULL)
+    {
+        fprintf(stderr, "Vous avez rentrée un group NULL\n");
+        return ERROR;
+    }
+    if(group->nb_objects == 0)
+    {
+        fprintf(stderr, "Liste déjà vide\n");
+        return ERROR;
+    }
+
+    free(group->objects);
+    group->nb_objects = 0;
     return DONE;
 }
 
@@ -541,8 +553,7 @@ int remove_shader_of_a_group(st_shader **shaders, int object_id, int *nb_shaders
     return DONE;
 }
 
-
-void create_an_object(int name, st_mesh mesh, int texture_id, float x, float y, float z, st_group_world_obj *dest)
+void create_an_object(int name, st_mesh mesh, int texture_id, float x, float y, float z, st_mesh_group *dest)
 {
     st_world_obj obj;
     obj.mesh_obj = mesh;
@@ -553,13 +564,25 @@ void create_an_object(int name, st_mesh mesh, int texture_id, float x, float y, 
     
     object_init(&obj, name);
 
-    put_object_in_group(dest, &obj);
+    put_object_in_a_mesh_group(dest, &obj);
 
 }
 
-void create_a_shader(unsigned int id, st_group_world_obj *dest)
+void create_a_shader(unsigned int id, st_mesh_group *dest)
 {
     st_shader shader;
     shader_init(&shader, id);
-    put_shader_in_group(dest, &shader);
+    put_shader_in_mesh_group(dest, &shader);
+}
+
+
+
+
+// INSTANCED
+
+void create_a_shared_shader(unsigned int id, st_mesh_group *dest)
+{
+    st_shader shader;
+    shader_init(&shader, id);
+    put_shader_in_mesh_group(dest, &shader);
 }

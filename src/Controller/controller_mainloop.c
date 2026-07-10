@@ -199,27 +199,29 @@ void destroy_render_data(st_render_data *render)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glUseProgram(0);
-
+    /*
     for(y = 0; y < render->nb_groups; y ++)
     {
-        st_group_world_obj *group = &render->groups[y];
+        st_render_group *group = &render->groups[y];
         
         int i;
         // On détruit tout les éléments de la liste
+        
         for(i = 0; i < group->nb_object; i ++)
         {
-            glDeleteVertexArrays(1, &group->objects[i].mesh_obj.VAO);
-            glDeleteBuffers(1, &group->objects[i].mesh_obj.VBO);
-            glDeleteBuffers(1, &group->objects[i].mesh_obj.EBO);
-            glDeleteTextures(1, &group->objects[i].texture_id);
+            glDeleteVertexArrays(1, &group->data[i].mesh_obj.VAO);
+            glDeleteBuffers(1, &group->data[i].mesh_obj.VBO);
+            glDeleteBuffers(1, &group->data[i].mesh_obj.EBO);
+            glDeleteTextures(1, &group->data[i].texture_id);
             
             //free(group->objects[i].mesh_obj.face_indice);
             //free(group->objects[i].mesh_obj.vert_pos);
-            group->objects[i].mesh_obj.face_indice = NULL;
-            group->objects[i].mesh_obj.vert_pos = NULL;
+            group->data[i].mesh_obj.face_indice = NULL;
+            group->data[i].mesh_obj.vert_pos = NULL;
         }
-        free(group->objects);
-        group->objects = NULL;
+            
+        free(group->data);
+        group->data = NULL;
         group->nb_object = 0;
         
         for(i = 0; i < group->nb_shader; i ++)
@@ -230,6 +232,7 @@ void destroy_render_data(st_render_data *render)
         group->shaders = NULL;
         group->nb_shader = 0;
     }
+        */
     free(render->groups);
     render->groups = NULL;
     render->nb_groups = 0;

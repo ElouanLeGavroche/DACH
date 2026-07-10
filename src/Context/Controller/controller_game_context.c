@@ -26,18 +26,16 @@ int init_game(st_state *state)
     
     // CHARGER LES SHADERS --------------------------------------------------------------------------------------------
     unsigned int shader = new_shader("src/Shaders/main_shader.vert", "src/Shaders/main_shader.frag");
-    
+
     // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
     st_mesh tile = new_object(BASIC_TILE_PATH);
 
     unsigned int grass_texture = new_texture("ressources/images/grass_test.jpg");
-
+    
     // Creation du groupe du monde
-    add_group(&state->render, WORLD);
-    st_group_world_obj *group = get_group(state->render.groups, WORLD, state->render.nb_groups);
-    mat4 *world_tile;
-    init_world(&state->render, world_tile, 52*52);
-
+    add_group(&state->render, state->render.nb_groups, WORLD);
+    st_render_group *group = get_group(state->render.groups, WORLD, state->render.nb_groups);
+    
     // Définir les objets
     int i, y;
     int size_map = 52;
@@ -51,6 +49,10 @@ int init_game(st_state *state)
 
     // Définir les shaders
     create_a_shader(shader, group);
+
+    mat4 world_tile;
+    init_world(&state->render, world_tile, 52*52);
+
     init_render_game(&state->render);
 
     // Initialiser le model --------------------------------------------------------------------------------------------

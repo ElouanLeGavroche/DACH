@@ -21,6 +21,7 @@ st_mesh init_a_3d_loaded_element(st_mesh *elt, int indice);
 int init_a_loaded_shader(const char vertex_shader_source[], const char fragment_shader_source[]);
 int init_a_loaded_texture(st_image *image);
 
+void render_mesh_group(st_mesh_group *group);
 
 
 #endif

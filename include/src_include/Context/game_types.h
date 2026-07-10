@@ -15,6 +15,13 @@ typedef enum e_context_list{
     C_NUM
 } e_context_list;
 
+
+typedef enum e_render_group_type
+{
+    RENDER_GROUP_MESH,
+    RENDER_GROUP_INSTANCED_MESH
+} e_render_group_type;
+
 /**
  * @brief strucutre qui regroupe les informations d'une image
  * @param width largeur de l'image
@@ -107,11 +114,12 @@ typedef struct st_world_obj
  * ils partagerons alors certaine infos, pour simplifier le rendu et rendre le tout plus lisible.
  * 
  * @param instencied si le groupe instensie ces éléments 
- * @param objects liste des objets du groupe
+ * @param data liste des objets du groupe
  * @param shaders liste des shaders du groupe
  * @param all_matrices matrice des éléments qui seront envoyé en groupe au GPU
  */
-typedef struct st_group_world_obj
+/*
+typedef struct st_render_group
 {
     int ID;
     bool instencied;
@@ -119,11 +127,39 @@ typedef struct st_group_world_obj
     int nb_object;
     int nb_shader;
     
-    st_world_obj *objects;
     st_shader *shaders;
 
-    mat4 *all_matrices;
+    void *data;
 
-}st_group_world_obj;
+}st_render_group;
+*/
+typedef struct st_render_group
+{
+    int ID;
+    e_render_group_type type;
+    void *data;
+
+}st_render_group;
+
+
+typedef struct st_mesh_group
+{
+    st_world_obj *objects;
+    int nb_objects;
+    st_shader *shaders;
+    int nb_shaders;
+
+}st_mesh_group;
+
+typedef struct st_instanced_mesh_group
+{
+    st_mesh shared_mesh;
+    int shared_texture;
+    st_shader shared_shader;
+
+    mat4 *instances;
+    mat4 *instances_vbo;
+
+}st_instanced_mesh_group;
 
 #endif

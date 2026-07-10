@@ -2,7 +2,7 @@
 layout (location = 0) in vec2 a_pos; // La variable position a l'attribut de position 0
 layout (location = 1) in vec3 a_color; // Variable color à la pos 1
 layout (location = 2) in vec2 a_tex_coord; // Les textures
-layout (location = 3) in vec2 a_offset;
+layout (location = 3) in mat4 instance_model;
 
 uniform mat4 view;
 uniform mat4 projection;
@@ -14,7 +14,7 @@ out vec2 text_coord;
 void main()
 {
 
-    gl_Position =  projection * view * vec4(a_pos + a_offset, 0.0, 1.0);
+    gl_Position =  projection * view * instance_model * vec4(a_pos , 0.0, 1.0);
     our_color = a_color;
     text_coord = a_tex_coord;
 }

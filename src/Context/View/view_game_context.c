@@ -16,6 +16,7 @@ void init_render_game(st_render_data *render)
 
 void init_world(st_render_data *render, mat4 *models, int amount)
 {
+    /*
     int i, y, index = 0;
     models = malloc(sizeof(mat4) * (amount));
     if(models == NULL)
@@ -31,7 +32,7 @@ void init_world(st_render_data *render, mat4 *models, int amount)
         {
             mat4 model;
             glm_mat4_identity(model);
-            st_world_obj *obj = &render->groups[i].objects[y];
+            st_world_obj *obj = &render->groups[i].data[y];
 
             glm_translate(model, (vec3){obj->x_pos, obj->y_pos, obj->z_pos});
 
@@ -48,9 +49,10 @@ void init_world(st_render_data *render, mat4 *models, int amount)
     // Alors là, je comprend rien, mais c'est comme ça dans le cours xD
     glEnableVertexAttribArray(3);
     glBindBuffer(GL_ARRAY_BUFFER, instance_vbo);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glVertexAttribDivisor(2, 1);
+    glVertexAttribDivisor(3, 1);
+    */
 }
 
 void init_game_camera(st_camera *camera)
@@ -138,24 +140,25 @@ void update_render_game(st_render_data *render)
     glClearColor(num_to_01(24), num_to_01(32), num_to_01(61), 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     
-    glUseProgram(render->groups->shaders[0].shader);
+    //glUseProgram(render->groups->shaders[0].shader);
     
     /* Application de la rotation */
-    int model_loc = glGetUniformLocation(render->groups->shaders[0].shader, "model");
-    glUniformMatrix4fv(model_loc, 1, GL_FALSE, *model);
+    //int model_loc = glGetUniformLocation(render->groups->shaders[0].shader, "model");
+    //glUniformMatrix4fv(model_loc, 1, GL_FALSE, *model);
 
     /* Application du point de vue */
-    int view_loc = glGetUniformLocation(render->groups->shaders[0].shader, "view");
-    glUniformMatrix4fv(view_loc, 1, GL_FALSE, *render->camera.view);
+    //int view_loc = glGetUniformLocation(render->groups->shaders[0].shader, "view");
+    //glUniformMatrix4fv(view_loc, 1, GL_FALSE, *render->camera.view);
     
     /* Application de la projection*/
-    int proj_loc = glGetUniformLocation(render->groups->shaders[0].shader, "projection");
-    glUniformMatrix4fv(proj_loc, 1, GL_FALSE, *render->camera.projection);
+    //int proj_loc = glGetUniformLocation(render->groups->shaders[0].shader, "projection");
+    //glUniformMatrix4fv(proj_loc, 1, GL_FALSE, *render->camera.projection);
 
-
+    /*
     glBindVertexArray(render->groups[0].all_matrices);
     glDrawArraysInstanced(GL_TRIANGLES, 0, render->groups[0].objects[0].mesh_obj.index_count, render->groups[0].nb_object);
     glBindVertexArray(0);
+    */
     /*
     for(i = 0; i < render->nb_groups; i ++)
     {

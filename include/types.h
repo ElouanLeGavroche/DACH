@@ -99,7 +99,7 @@ typedef enum e_dir{
  */
 typedef struct st_render_data{
 
-    st_group_world_obj *groups;
+    st_render_group *groups;
     int nb_groups;
     
     int nb_shader;

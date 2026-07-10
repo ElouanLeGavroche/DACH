@@ -161,3 +161,28 @@ int init_a_loaded_texture(st_image *image)
 
     return texture;
 }
+
+
+void render_mesh_group(st_mesh_group *group)
+{
+
+    unsigned int transfrom_loc;
+    
+    glUseProgram(group->shaders[0].shader);
+
+    int i;
+
+    for(i = 0; i < group[i].nb_objects; i ++)
+    {
+        // Pour les texture
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, group->objects[i].texture_id);
+
+        // Pour les éléments
+        glBindVertexArray(group->objects[i].mesh_obj.VAO);
+        glDrawElements(GL_TRIANGLES, group->objects[i].mesh_obj.index_count, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+    
+    }
+
+}
