@@ -38,30 +38,34 @@ void update_render_main_menu(st_render_data *render)
 
     glClearColor(num_to_01(0), num_to_01(0), num_to_01(0), 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    
     for(i = 0; i < render->nb_groups; i ++)
     {
         st_render_group *group = &render->groups[i];
 
-        switch (render->groups->type)
+        switch (group->type)
         {
         case RENDER_GROUP_MESH:
-            
+            printf("okkk\n");
             st_mesh_group *mesh_group = group->data;
+            int y;
+            for(y = 0; y < mesh_group->nb_objects; y ++)
+            {
+                
+                int model_loc = glGetUniformLocation(mesh_group->objects[y].material->shader.shader, "model");
+                glUniformMatrix4fv(model_loc, 1, GL_FALSE, *model);
 
-            int model_loc = glGetUniformLocation(mesh_group->shaders[0].shader, "model");
-            glUniformMatrix4fv(model_loc, 1, GL_FALSE, *model);
+                int view_loc = glGetUniformLocation(mesh_group->objects[y].material->shader.shader, "view");
+                glUniformMatrix4fv(view_loc, 1, GL_FALSE, *view);
 
-            int view_loc = glGetUniformLocation(mesh_group->shaders[0].shader, "view");
-            glUniformMatrix4fv(view_loc, 1, GL_FALSE, *view);
+                int proj_loc = glGetUniformLocation(mesh_group->objects[y].material->shader.shader, "projection");
+                glUniformMatrix4fv(proj_loc, 1, GL_FALSE, *proj);
 
-            int proj_loc = glGetUniformLocation(mesh_group->shaders[0].shader, "projection");
-            glUniformMatrix4fv(proj_loc, 1, GL_FALSE, *proj);
-
-            transform_loc = glGetUniformLocation(mesh_group->shaders[0].shader, "transform");
-            glUniformMatrix4fv(transform_loc, 1, GL_FALSE, *trans);
-            
-            render_mesh_group(mesh_group);
+                transform_loc = glGetUniformLocation(mesh_group->objects[y].material->shader.shader, "transform");
+                glUniformMatrix4fv(transform_loc, 1, GL_FALSE, *trans);
+                
+                render_mesh_group(mesh_group);
+            }
             break;
         
         default:

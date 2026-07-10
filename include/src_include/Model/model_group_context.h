@@ -36,7 +36,7 @@ bool context_group_is_null(st_render_group *group);
  * 
  * @return ERROR si echec | DONE si reussi
  */
-int context_group_init(st_render_group *group, int id, e_render_group_type type);
+int context_group_init(st_render_group **group, int id, e_render_group_type type);
 
 /**
  * @brief permet de tester certaine chose dans render pour voir si les valeurs sont cohérente.
@@ -61,7 +61,7 @@ int add_group(st_render_data *render, e_render_group_type type);
  * 
  * @return ERROR si echec | DONE si reussi
  */
-int remove_group(st_render_group **groups, int id, int *max);
+int remove_group(st_render_data *render, int id);
 
 /**
  * @brief Permet de récuperer le pointeur d'un des groupe de la liste
@@ -72,12 +72,17 @@ int remove_group(st_render_group **groups, int id, int *max);
 st_render_group* get_group(st_render_group *groups, int id, size_t max);
 
 // Partie pour les mesh group
-int add_render_data_in_group(st_render_group *group, void *data, st_render_object object);
+int add_render_data_in_group(st_render_group *group, st_render_object object);
 int remove_render_data_of_group(st_render_group *group);
 int remove_all_render_data_of_a_group(st_render_group *group);
-st_render_object get_render_data_of_a_group(st_render_group *group);
-int delete_mesh_group(st_render_group *group);
+st_render_object* get_render_data_of_a_group(st_render_group *group);
+int delete_mesh_group(st_render_group **group);
 
-void create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader shader, st_transform transform, st_render_group *dest);
+
+int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader shader, st_transform transform, st_render_group *dest);
+
+st_texture create_texture(unsigned int image);
+st_shader create_shader(unsigned int shader);
+st_transform configure_transform(st_vec3 pos, st_vec3 rotation, st_vec3 transformation);
 
 #endif

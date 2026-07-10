@@ -5,33 +5,33 @@ bool context_group_is_null(st_render_group *group)
     return (group == NULL)? true : false;
 }
 
-int context_group_init(st_render_group *group, int id, e_render_group_type type)
+int context_group_init(st_render_group **group, int id, e_render_group_type type)
 {
     // Vérification si le group est null ou non
-    if(context_group_is_null(group))
+    if(context_group_is_null(*group))
     {
         fprintf(stderr, "Le groupe n'est pas vide.\n");
         return ERROR;
     }
 
     // Allocation de la mémoire pour le groupe
-    group = malloc(sizeof(st_render_group));
+    *group = malloc(sizeof(st_render_group));
 
     // Vérification de l'allocation mémoire
-    if(context_group_is_null(group))
+    if(context_group_is_null(*group))
     {
         fprintf(stderr, "Echec de l'allocation mémoire pour le groupe.\n");
         return ERROR;
     }
 
     // Création de l'id
-    group->ID = id;
+    (*group)->ID = id;
 
     // Application du type à la structure
-    group->type = type;
+    (*group)->type = type;
 
     // Création du type de groupe
-    switch (group->type)
+    switch ((*group)->type)
     {
     case RENDER_GROUP_MESH:
         
@@ -49,15 +49,15 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
         }
 
         // Ajout du pointeur dans la structure groupe
-        group->data = group_type;
+        (*group)->data = group_type;
 
         // On applique les fonction correspondantes
-        group->add_element = add_render_data_in_group;
-        group->remove_element = remove_render_data_of_group;
-        group->remove_all_elements = remove_all_render_data_of_a_group;
-        group->get_element = get_render_data_of_a_group;
+        (*group)->add_element = add_render_data_in_group;
+        (*group)->remove_element = remove_render_data_of_group;
+        (*group)->remove_all_elements = remove_all_render_data_of_a_group;
+        (*group)->get_element = get_render_data_of_a_group;
 
-        group->delete_group = delete_mesh_group;
+        (*group)->delete_group = delete_mesh_group;
 
         break;
     
@@ -104,9 +104,9 @@ int add_group(st_render_data *render, e_render_group_type type)
     if(test_render(render) == ERROR)
         return ERROR;
 
-
+    
     // On initialise new_group
-    res = context_group_init(new_group, render->nb_total_groups, type);
+    res = context_group_init(&new_group, render->nb_total_groups, type);
 
     // Test de l'allocation mémoire
     if(new_group == NULL)
@@ -126,11 +126,11 @@ int add_group(st_render_data *render, e_render_group_type type)
             fprintf(stderr, "Erreur lors de l'allocation mémoire de new_mesh_group.\n");
             return ERROR;
         }
-
+        
         // Initialisation 
         new_mesh_group->nb_objects = 0;
         new_mesh_group->objects = NULL;
-
+        
         break;
     
     case RENDER_GROUP_INSTANCED_MESH:
@@ -143,14 +143,98 @@ int add_group(st_render_data *render, e_render_group_type type)
         break;
     }    
 
+
+    // Re allouer de la place pour le nouveau groupe
+    render->groups = realloc(render->groups, sizeof(st_render_group)* render->nb_groups);
+    
+    // Vérifier l'allocation
+    if(render->groups == NULL)
+    {
+        fprintf(stderr, "Erreur lors de l'allocation mémoire\n");
+        return ERROR;
+    }
+
+    // Allouer le nouveau group, au... groupe
+    render->groups[render->nb_groups] = *new_group;
+    render->nb_groups ++;
+    render->nb_total_groups ++;
+
     return DONE;
 
 }
 
-void create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader shader, st_transform transform, st_render_group *dest)
+st_render_group* get_group(st_render_group *groups, int id, size_t max)
+{
+    if(groups == NULL)
+    {
+        fprintf(stderr, "Liste NULL\n");
+        return NULL;
+    }   
+    int i = 0;
+    while(i < max && groups[i].ID != id)
+    {
+        i ++;
+    }
+    if(i == max && groups[i].ID != id)
+    {
+        fprintf(stderr, "Élément non trouvé\n");
+        return NULL;
+    }
+    return &groups[i];
+}
+
+int remove_group(st_render_data *render, int id)
+{
+    /* On va parcourir la liste pour trouver grâce à l'id, le group à supprimer */
+    int i = 0;
+    int res;
+
+    while(i < render->nb_groups && render->groups[i].ID != id)
+    {
+        i ++;
+    }
+    
+    if (i == render->nb_groups && render->groups[i].ID != id)
+    {
+        fprintf(stderr, "Groupe non trouvé dans la liste.\n");
+        return ERROR;
+    }
+    
+    // On supprime le groupe
+    st_render_group * tamp = &render->groups[i];
+    st_render_group ** tamptamp = &tamp;
+    res = render->groups[i].delete_group(tamptamp);
+
+    // On vérifie que la suppression c'est bien passer
+    if(res == ERROR)
+    {
+        fprintf(stderr, "Erreur lors de la suppression du groupe.\n");
+        return ERROR;
+    }
+
+    // Faire un décalage pour "resize" la liste
+    for(i = i; i < render->nb_groups; i ++) render->groups[i] = render->groups[i + 1];
+
+    render->nb_groups --;
+
+    // Realocation de la liste
+    render->groups = realloc(render->groups, sizeof(st_render_group) * render->nb_groups);
+    
+    // Vérifier que la réallocation c'est bien passer
+    if(render->groups == NULL && render->nb_groups != 0)
+    {
+        fprintf(stderr, "Erreur lors de la suppression du groupe.\n");
+        return ERROR;
+    }
+
+    return DONE;
+
+}
+
+int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader shader, st_transform transform, st_render_group *dest)
 {
     st_render_object obj;
-
+    obj.material = malloc(sizeof(st_material));
     obj.id = name;
     obj.mesh = &mesh;
     obj.material->texture = texture_id;
@@ -182,7 +266,61 @@ void create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader s
         break;
     }
 
-    dest->add_element(dest, dest->data, obj);
-    put_object_in_a_mesh_group(dest, &obj);
+    dest->add_element(dest, obj);
+
+}
+
+st_shader create_shader(unsigned int shader)
+{
+    st_shader t_shader;
+    t_shader.shader = shader;
+
+    return t_shader;
+}
+
+st_texture create_texture(unsigned int image)
+{
+    st_texture texture;
+    texture.id = image;
+
+    return texture;
+}
+
+st_transform configure_transform(st_vec3 pos, st_vec3 rotation, st_vec3 transformation)
+{
+    st_transform transform;
+    transform.position = pos;
+    transform.rotation = rotation;
+    transform.transformation = transformation;
+
+    return transform;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int add_render_data_in_group(st_render_group *group, st_render_object object)
+{
+
+}
+
+int remove_render_data_of_group(st_render_group *group)
+{
+
+}
+
+int remove_all_render_data_of_a_group(st_render_group *group)
+{
+
+}
+
+st_render_object* get_render_data_of_a_group(st_render_group *group)
+{
+
+}
+
+int delete_mesh_group(st_render_group **group)
+{
 
 }

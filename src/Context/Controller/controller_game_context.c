@@ -31,10 +31,11 @@ int init_game(st_state *state)
     st_mesh tile = new_object(BASIC_TILE_PATH);
 
     unsigned int grass_texture = new_texture("ressources/images/grass_test.jpg");
-    
+    /*
     // Creation du groupe du monde
     add_group(&state->render, state->render.nb_groups, WORLD);
     st_render_group *group = get_group(state->render.groups, WORLD, state->render.nb_groups);
+    
     
     // Définir les objets
     int i, y;
@@ -65,7 +66,7 @@ int init_game(st_state *state)
     data->camera = &state->render.camera;
 
     glfwSetScrollCallback(window, scroll_callback);
-    
+    */
     printf("Context jeu initier\n");
     return DONE;
 }

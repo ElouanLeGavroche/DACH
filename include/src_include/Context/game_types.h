@@ -50,9 +50,6 @@ typedef struct st_image
 typedef struct st_texture
 {
     unsigned int id;
-    unsigned char *data;
-    int widht;
-    int height;
 }st_texture;
 
 /**
@@ -171,11 +168,11 @@ struct st_render_group
     e_render_group_type type;
     void *data;
 
-    int (* add_element)(st_render_group *group, void *data, st_render_object object);
+    int (* add_element)(st_render_group *group, st_render_object object);
     int (* remove_element)(st_render_group *group);
     st_render_object* (* get_element)(st_render_group *group);
     int (* remove_all_elements)(st_render_group *group);
-    int (* delete_group)(st_render_group *group); 
+    int (* delete_group)(st_render_group **group); 
 
 };
 
