@@ -2,10 +2,12 @@
 
 st_mesh new_object(char *path)
 {
-    st_mesh mesh = {0};
-    load_file(path, &mesh);
+    st_mesh_data mesh_data = {0};
+    st_mesh mesh;
 
-    mesh = init_a_3d_loaded_element(&mesh, 0);
+    load_file(path, &mesh_data);
+
+    mesh = init_a_3d_loaded_element(&mesh_data, 0);
 
     return mesh;
 }

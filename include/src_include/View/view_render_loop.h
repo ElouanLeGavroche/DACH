@@ -17,7 +17,7 @@ void view_swap();
 void view_clear();
 int window_should_close();
 
-st_mesh init_a_3d_loaded_element(st_mesh *elt, int indice);
+st_mesh init_a_3d_loaded_element(st_mesh_data *elt, int indice);
 int init_a_loaded_shader(const char vertex_shader_source[], const char fragment_shader_source[]);
 int init_a_loaded_texture(st_image *image);
 

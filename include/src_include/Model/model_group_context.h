@@ -67,54 +67,11 @@ int remove_group(st_render_group **groups, int id, int *max);
  */
 st_render_group* get_group(st_render_group *groups, int id, size_t max);
 
-/**
- * @brief Permet de supprimer tout les group d'un context
- * @param groups la liste des groupes
- * @param nb_groups nombre de groupes
- */
-int delete_groups(st_render_group *groups, int nb_groups);
-
-
-/* Pour les mesh group */
-// IS NULL
-// IS NULL object
-bool object_is_null(st_render_object *object);
-// IS NULL shader
-bool shader_is_null(st_shader *shader);
-
-// Init
-// Init object
-int object_init(st_render_object *object, int id);
-// Init shader
-int shader_init(st_shader *shader, int id);
-
-// Put
-// Put object
-int put_object_in_a_mesh_group(st_mesh_group *group, st_render_object *object);
-// Put shader
-int put_shader_in_mesh_group(st_mesh_group *group, st_shader *shader);
-
-// Remove //
-// Remove object
-int remove_object_of_a_group(st_render_object **objects, int object_id, int *nb_objects);
-// Remove shader
-int remove_shader_of_a_group(st_shader **shaders, int object_id, int *nb_shaders);
-
-// Delete //
-// Delete object
-int delete_object_list_mesh_shader(st_mesh_group *group);
-// Delete shader
-int delete_shader_list_mesh_group(st_mesh_group *group);
-
-// Create //
-// Create object
-void create_an_object(int name, st_mesh mesh, int texture_id, float x, float y, float z, st_mesh_group *dest);
-// Create shader
-void create_a_shader(unsigned int id, st_mesh_group *dest);
-/*                   */
-
-
-/* pour les mesh instensier */
-void create_a_shared_shader(unsigned int id, st_mesh_group *dest);
+// Partie pour les mesh group
+int add_render_data_in_group();
+int remove_render_data_of_group();
+int remove_all_render_data_of_a_group();
+st_render_object get_render_data_of_a_group();
+int delete_mesh_group();
 
 #endif

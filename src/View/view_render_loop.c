@@ -33,9 +33,10 @@ int window_should_close(){
 /**
  * @brief Cette fonction va me servir à initialiser les différent éléments graphique de la page
  */
-st_mesh init_a_3d_loaded_element(st_mesh *elt, int indice)
+st_mesh init_a_3d_loaded_element(st_mesh_data *elt, int indice)
 {
 
+    st_mesh mesh;
     unsigned int VAO, VBO, EBO;
     // Tampon où l'on stock les sommets
     glGenVertexArrays(1, &VAO);
@@ -53,9 +54,9 @@ st_mesh init_a_3d_loaded_element(st_mesh *elt, int indice)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(*elt->face_indice)*elt->index_count, elt->face_indice, GL_STATIC_DRAW);
 
 
-    elt->VAO = VAO;
-    elt->VBO = VBO;
-    elt->EBO = EBO;
+    mesh.VAO = VAO;
+    mesh.VBO = VBO;
+    mesh.EBO = EBO;
     
     // Positition des polygones
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -71,7 +72,7 @@ st_mesh init_a_3d_loaded_element(st_mesh *elt, int indice)
     
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
 
-    return *elt;
+    return mesh;
 }
 
 int init_a_loaded_shader(const char vertex_shader_source[], const char fragment_shader_source[])
@@ -165,22 +166,21 @@ int init_a_loaded_texture(st_image *image)
 
 void render_mesh_group(st_mesh_group *group)
 {
-
     unsigned int transfrom_loc;
-    
-    glUseProgram(group->shaders[0].shader);
-
     int i;
 
     for(i = 0; i < group[i].nb_objects; i ++)
     {
+        // Pour le shader
+        glUseProgram(group->objects[i].material->shader.shader);
+
         // Pour les texture
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, group->objects[i].texture_id);
+        glBindTexture(GL_TEXTURE_2D, group->objects[i].material->texture.id);
 
         // Pour les éléments
-        glBindVertexArray(group->objects[i].mesh_obj.VAO);
-        glDrawElements(GL_TRIANGLES, group->objects[i].mesh_obj.index_count, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(group->objects[i].mesh->VAO);
+        glDrawElements(GL_TRIANGLES, group->objects[i].data->index_count, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     
     }

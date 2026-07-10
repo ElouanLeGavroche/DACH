@@ -145,6 +145,7 @@ typedef struct st_render_object
     int id;
 
     st_mesh *mesh;
+    st_mesh_data *data;
     st_material *material;
     st_transform transform;
 
@@ -163,21 +164,20 @@ typedef struct st_render_object
  * @param remove_all_element supprime tout ces élément
  * @param delete_group supprime le groupes
  */
-typedef struct st_render_group
+typedef struct st_render_group st_render_group;
+struct st_render_group
 {
     int ID;
     e_render_group_type type;
     void *data;
 
-    void (* init_group)(st_render_group *group);
-
-    void (* add_element)(st_render_group *group, void *data, st_render_object object);
-    void (* remove_element)(st_render_group *group);
+    int (* add_element)(st_render_group *group, void *data, st_render_object object);
+    int (* remove_element)(st_render_group *group);
     st_render_object* (* get_element)(st_render_group *group);
-    void (* remove_all_elements)(st_render_group *group);
-    void (* delete_group)(st_render_group *group); 
+    int (* remove_all_elements)(st_render_group *group);
+    int (* delete_group)(st_render_group *group); 
 
-}st_render_group;
+};
 
 /**
  * @brief permet d'apporter des modification à des mesh instancier de manière individuel
@@ -185,7 +185,7 @@ typedef struct st_render_group
  */
 typedef struct st_instance_data
 {
-    float model[16]
+    float model[16];
 }st_instance_data;
 
 /**
