@@ -42,11 +42,12 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
  * @brief permet d'ajouter un groupe à la liste de groupe
  * @param render structure qui contient la liste de groupe et le nombre d'elt dans celle-ci
  * @param nb le nombre d'élément à ajouter à la liste. Si 0 ou autre valeur incohérente, ce sera
+ * @param name le nom du groupe (a définir dans un enum)
  * mis automatiquement à 1
  * 
  * @return ERROR si echec | DONE si reussi
  */
-int add_group(st_render_data *render, int nb, e_render_group_type type);
+int add_group(st_render_data *render, e_render_group_type type, int name);
 
 /**
  * @brief permet de supprimer un groupe dans la liste
@@ -77,25 +78,25 @@ int delete_groups(st_render_group *groups, int nb_groups);
 /* Pour les mesh group */
 // IS NULL
 // IS NULL object
-bool object_is_null(st_world_obj *object);
+bool object_is_null(st_render_object *object);
 // IS NULL shader
 bool shader_is_null(st_shader *shader);
 
 // Init
 // Init object
-int object_init(st_world_obj *object, int id);
+int object_init(st_render_object *object, int id);
 // Init shader
 int shader_init(st_shader *shader, int id);
 
 // Put
 // Put object
-int put_object_in_a_mesh_group(st_mesh_group *group, st_world_obj *object);
+int put_object_in_a_mesh_group(st_mesh_group *group, st_render_object *object);
 // Put shader
 int put_shader_in_mesh_group(st_mesh_group *group, st_shader *shader);
 
 // Remove //
 // Remove object
-int remove_object_of_a_group(st_world_obj **objects, int object_id, int *nb_objects);
+int remove_object_of_a_group(st_render_object **objects, int object_id, int *nb_objects);
 // Remove shader
 int remove_shader_of_a_group(st_shader **shaders, int object_id, int *nb_shaders);
 

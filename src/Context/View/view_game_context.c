@@ -32,7 +32,7 @@ void init_world(st_render_data *render, mat4 *models, int amount)
         {
             mat4 model;
             glm_mat4_identity(model);
-            st_world_obj *obj = &render->groups[i].data[y];
+            st_render_object *obj = &render->groups[i].data[y];
 
             glm_translate(model, (vec3){obj->x_pos, obj->y_pos, obj->z_pos});
 
@@ -164,7 +164,7 @@ void update_render_game(st_render_data *render)
     {
         for(y = 0; y < render->groups[i].nb_object; y ++)
         {
-            st_world_obj *obj = &render->groups[i].objects[y];
+            st_render_object *obj = &render->groups[i].objects[y];
 
             // Pour les texture
             glActiveTexture(GL_TEXTURE0);

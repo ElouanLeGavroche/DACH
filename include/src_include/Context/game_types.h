@@ -23,7 +23,7 @@ typedef enum e_render_group_type
 } e_render_group_type;
 
 /**
- * @brief strucutre qui regroupe les informations d'une image
+ * @brief strucutre qui regroupe les informations d'une image côté CPU
  * @param width largeur de l'image
  * @param height hauteur de l'image
  * @param nr_channels
@@ -41,27 +41,33 @@ typedef struct st_image
 }st_image;
 
 /**
+ * @brief strucutre qui regroupe les informations d'une image côté GPU
+ * @param width largeur de l'image
+ * @param height hauteur de l'image
+ * @param nr_channels
+ * @param path chemin de l'image 
+ * @param data données de l'image
+ */
+typedef struct st_texture
+{
+    unsigned int id;
+    unsigned char *data;
+    int widht;
+    int height;
+}st_texture;
+
+/**
  * @brief Structure qui stock le contenu d'un shader
  * @param shader id du shader
- * @param set_int_uniform permet de faire passer une valeur entier dans le shader de la CG 
- * @param set_float_uniform permet de faire passer une valeur flotante dans le shader de la CG
- * @param set_bool_uniform permet de faire passer une valeur booleenne dans le shader de la CG
  */
-typedef struct st_shader st_shader;
-struct st_shader
+typedef struct st_shader
 {
     unsigned int shader;
-
-    void(* set_int_uniform)(struct st_shader shader);
-    void(* set_float_uniform)(struct st_shader shader);
-    void(* set_bool_uniform)(struct st_shader shader);
-    void(* use)(struct st_shader shader);
-
-};
+} st_shader;
 
 /**
  * @brief La structure qui permet de stocker un élément 3D
- * @param vertex_float_count le nombre de vertrices dans le modèle
+ * @param vertex_count le nombre de vertrices dans le modèle
  * @param index_count le nombre de face dans le modèle
  * @param vert_pos la position de ecs vertrices
  * @param face_indice l'ordre dans lequel il faut former les face avec les vertrices
@@ -72,18 +78,42 @@ struct st_shader
  */
 typedef struct st_mesh
 {
-    int vertex_float_count;
-    int index_count;
+    unsigned int VAO;
+    unsigned int VBO;
+    unsigned int EBO;
+
+}st_mesh;
+
+typedef struct st_mesh_data
+{
+    unsigned int vertex_count;
+    unsigned int index_count;
 
     float *vert_pos;
     int *face_indice;
 
-    unsigned int VAO;
-    unsigned int VBO;
-    unsigned int EBO;
-    unsigned int texture_id;
+}st_mesh_data;
 
-}st_mesh;
+
+typedef struct st_vec3
+{
+    float x;
+    float y;
+    float z;
+}st_vec3;
+
+typedef struct st_transform
+{
+    st_vec3 position;
+    st_vec3 rotation;
+    st_vec3 transformation;
+}st_transform;
+
+typedef struct st_material
+{
+    st_shader shader;
+    st_texture texture;
+}st_material;
 
 /**
  * @brief Un object quelquonce du monde
@@ -96,55 +126,50 @@ typedef struct st_mesh
  * @param texture la texture coté CPU lié à l'objet (pas forcément pertinent, on verra après)
  * @param texture_id l'id de la texture côté GPU
  */
-typedef struct st_world_obj
+typedef struct st_render_object
 {
-    int ID;
+    int id;
 
-    st_mesh mesh_obj;
-    float x_pos;
-    float y_pos;
-    float z_pos;
+    st_mesh *mesh;
+    st_material *material;
+    st_transform transform;
 
-    st_image texture;
-    unsigned int texture_id;
-}st_world_obj;
+    int visible;
+}st_render_object;
 
-/**
- * @brief liste des objet se trouvant dans un group
- * ils partagerons alors certaine infos, pour simplifier le rendu et rendre le tout plus lisible.
- * 
- * @param instencied si le groupe instensie ces éléments 
- * @param data liste des objets du groupe
- * @param shaders liste des shaders du groupe
- * @param all_matrices matrice des éléments qui seront envoyé en groupe au GPU
- */
-/*
-typedef struct st_render_group
-{
-    int ID;
-    bool instencied;
-
-    int nb_object;
-    int nb_shader;
-    
-    st_shader *shaders;
-
-    void *data;
-
-}st_render_group;
-*/
 typedef struct st_render_group
 {
     int ID;
     e_render_group_type type;
     void *data;
 
+    void (* init_group)(st_render_group *group);
+
+    void (* add_element)(st_render_group *group);
+    void (* remove_element)(st_render_group *group);
+    st_render_object* (* get_element)(st_render_group *group);
+    void (* remove_all_elements)(st_render_group *group);
+    void (* delete_group)(st_render_group *group); 
+
 }st_render_group;
 
+typedef struct st_instance_data
+{
+    float model[16]
+}st_instance_data;
+
+typedef struct st_instanced
+{
+    st_instance_data *cpu_data;
+    int count;
+    int capacity;
+    unsigned int vbo;
+
+}st_instanced;
 
 typedef struct st_mesh_group
 {
-    st_world_obj *objects;
+    st_render_object *objects;
     int nb_objects;
     st_shader *shaders;
     int nb_shaders;
@@ -153,12 +178,8 @@ typedef struct st_mesh_group
 
 typedef struct st_instanced_mesh_group
 {
-    st_mesh shared_mesh;
-    int shared_texture;
-    st_shader shared_shader;
-
-    mat4 *instances;
-    mat4 *instances_vbo;
+    st_render_object *shared_render_object;
+    st_instanced st_instanced;
 
 }st_instanced_mesh_group;
 
