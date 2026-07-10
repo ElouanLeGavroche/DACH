@@ -1,6 +1,6 @@
 #include "../../../include/src_include/Shared_tools/Load_tools/load_obj_format.h"
 
-int load_file(char *path, st_mesh *tile)
+int load_file(char *path, st_mesh_data *tile)
 {
     /* Variables pour la gestion du fichier */
     FILE *file = NULL;
@@ -148,7 +148,7 @@ int open_obj_file(FILE **file, char *path)
     }
     return 0;
 }
-int parse_vertext(char line[], st_mesh *tile, int i_v)
+int parse_vertext(char line[], st_mesh_data *tile, int i_v)
 {
     float value;
     int i = 0;
@@ -187,7 +187,7 @@ int parse_vertext(char line[], st_mesh *tile, int i_v)
     return i_v;
 }
 
-int parse_face(char line[], st_mesh *tile, int i_f)
+int parse_face(char line[], st_mesh_data *tile, int i_f)
 {
     int value;
     int i = 0;

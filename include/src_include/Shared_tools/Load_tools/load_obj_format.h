@@ -20,9 +20,9 @@
 #define LINE_SIZE 30
 
 #include "../../../../include/types.h"
-int parse_vertext(char line[], st_mesh *tile, int i_v);
-int parse_face(char line[], st_mesh *tile, int i_f);
-int load_file(char *path, st_mesh *tile);
+int parse_vertext(char line[], st_mesh_data *tile, int i_v);
+int parse_face(char line[], st_mesh_data *tile, int i_f);
+int load_file(char *path, st_mesh_data *tile);
 int open_obj_file(FILE **file, char *path);
 
 /*
