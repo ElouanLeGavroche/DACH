@@ -13,6 +13,7 @@
 #include "../Config/constantes.h"
 
 #include <string.h>
+#include <errno.h>
 
 // Permet d'expliciter que le +1 lors de l'allocation mémoire correspond bien à
 // une nouvelle case dans la mémoire de la liste.
@@ -36,7 +37,7 @@ bool context_group_is_null(st_render_group *group);
  * 
  * @return ERROR si echec | DONE si reussi
  */
-int context_group_init(st_render_group **group, int id, e_render_group_type type);
+int context_group_init(st_render_group *group, int id, e_render_group_type type);
 
 /**
  * @brief permet de tester certaine chose dans render pour voir si les valeurs sont cohérente.
@@ -72,11 +73,11 @@ int remove_group(st_render_data *render, int id);
 st_render_group* get_group(st_render_group *groups, int id, size_t max);
 
 // Partie pour les mesh group
-int add_render_data_in_group(st_render_group *group, st_render_object object);
-int remove_render_data_of_group(st_mesh_group *group, int id);
-int remove_all_render_data_of_a_group(st_mesh_group *group);
-st_render_object* get_render_data_of_a_group(st_mesh_group *group, int id);
-int delete_mesh_group(st_render_group *group);
+int generic_func_add_render_objectobject(st_render_group *group, st_render_object object);
+int generic_func_remove_render_datadata(st_mesh_group *group, int id);
+int generic_func_remove_all_render_objectject(st_mesh_group *group);
+st_render_object* generic_func_get_render_objectject(st_mesh_group *group, int id);
+int delete_groupender_group *group);
 
 int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader shader, st_transform transform, st_render_group *dest);
 

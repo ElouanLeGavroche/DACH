@@ -198,6 +198,7 @@ typedef struct st_instanced_mesh_group
 
 }st_instanced_mesh_group;
 
+
 /**
  * @brief structure principal d'un group
  * @param ID identifaint du groupe
@@ -208,20 +209,27 @@ typedef struct st_instanced_mesh_group
  * @param remove_element permet de supprimer un élément de ce groupe
  * @param get_element permet de récupéré un élément
  * @param remove_all_element supprime tout ces élément
- * @param delete_group supprime le groupes
+ * @param generic_func_delete_group_object supprime le groupes
  */
 typedef struct st_render_group st_render_group;
+
+typedef struct vt_group_virtual_table
+{
+    int (* add_element)(st_render_group *group, st_render_object object);
+    int (* remove_element)(st_mesh_group *group, int id);
+    st_render_object* (* get_element)(st_mesh_group *group, int id);
+    int (* remove_all_elements)(st_mesh_group *group);
+    int (* generic_func_delete_group_object)(st_render_group *group); 
+}vt_group_virtual_table;
+
+
 struct st_render_group
 {
     int ID;
     e_render_group_type type;
     void *data;
 
-    int (* add_element)(st_render_group *group, st_render_object object);
-    int (* remove_element)(st_mesh_group *group, int id);
-    st_render_object* (* get_element)(st_mesh_group *group, int id);
-    int (* remove_all_elements)(st_mesh_group *group);
-    int (* delete_group)(st_render_group *group); 
+    vt_group_virtual_table *tables;
 
 };
 

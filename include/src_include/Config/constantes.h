@@ -3,6 +3,9 @@
 
 #define DONE 0
 #define ERROR -1
+#define SUCCES 1
+#define FAILED_MALLOC 2
+#define NULL_POINTER 3
 
 // Path vers fichiers
 #define PATH_LOAD_GAME_DATA "data/configuration.json"

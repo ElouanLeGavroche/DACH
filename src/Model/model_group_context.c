@@ -5,33 +5,16 @@ bool context_group_is_null(st_render_group *group)
     return (group == NULL)? true : false;
 }
 
-int context_group_init(st_render_group **group, int id, e_render_group_type type)
+int context_group_init(st_render_group *group, int id, e_render_group_type type)
 {
-    // Vérification si le group est null ou non
-    if(context_group_is_null(*group))
-    {
-        fprintf(stderr, "Le groupe n'est pas vide.\n");
-        return ERROR;
-    }
-
-    // Allocation de la mémoire pour le groupe
-    *group = malloc(sizeof(st_render_group));
-
-    // Vérification de l'allocation mémoire
-    if(context_group_is_null(*group))
-    {
-        fprintf(stderr, "Echec de l'allocation mémoire pour le groupe.\n");
-        return ERROR;
-    }
-
     // Création de l'id
-    (*group)->ID = id;
+    group->ID = id;
 
     // Application du type à la structure
-    (*group)->type = type;
+    group->type = type;
 
     // Création du type de groupe
-    switch ((*group)->type)
+    switch (group->type)
     {
     case RENDER_GROUP_MESH:
         
@@ -42,10 +25,10 @@ int context_group_init(st_render_group **group, int id, e_render_group_type type
         group_type = malloc(sizeof(st_mesh_group));
 
         // Tester l'allocation mémoire
-        if(group_type == NULL)
+        if(!group_type)
         {
-            fprintf(stderr, "Allocation du groupe st_mesh_group au groupe, échouer.\n");
-            return ERROR;
+            fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
+            return FAILED_MALLOC;
         }
 
         // Initialiser les valeur de base de group_type
@@ -53,15 +36,15 @@ int context_group_init(st_render_group **group, int id, e_render_group_type type
         group_type->objects = NULL;
 
         // Ajout du pointeur dans la structure groupe
-        (*group)->data = group_type;
+        group->data = group_type;
 
         // On applique les fonction correspondantes
-        (*group)->add_element = add_render_data_in_group;
-        (*group)->remove_element = remove_render_data_of_group;
-        (*group)->remove_all_elements = remove_all_render_data_of_a_group;
-        (*group)->get_element = get_render_data_of_a_group;
+        group->tables->add_element = generic_func_add_render_object;
+        group->tables->remove_element = generic_func_remove_render_object;
+        group->tables->remove_all_elements = generic_func_remove_all_render_object;
+        group->tables->get_element = generic_func_get_render_object;
 
-        (*group)->delete_group = delete_mesh_group;
+        group->tables->generic_func_delete_group_object = generic_func_delete_group_object;
 
         break;
     
@@ -87,6 +70,7 @@ int test_render(st_render_data *render)
     if(render->groups == NULL && render->nb_groups != 0)
     {
         fprintf(stderr, "Désyncronisation entre le nombre de groupe et le pointeur.\n");
+        return ERROR;
     }
     if(render->nb_groups < 0)
     {
@@ -100,9 +84,9 @@ int add_group(st_render_data *render, e_render_group_type type)
     // Définition des variables
     int res;
 
-    st_render_group *new_group;
-    st_mesh_group *new_mesh_group;
-    st_instanced_mesh_group *new_instanced_group;
+    st_render_group new_group;
+    st_mesh_group *new_mesh_group = NULL;
+    st_instanced_mesh_group *new_instanced_group = NULL;
 
     // Test des valeurs entrées
     if(test_render(render) == ERROR)
@@ -113,7 +97,7 @@ int add_group(st_render_data *render, e_render_group_type type)
     res = context_group_init(&new_group, render->nb_total_groups, type);
 
     // Test de l'allocation mémoire
-    if(new_group == NULL)
+    if(&new_group == NULL)
     {
         fprintf(stderr, "Erreur lors de l'allocation mémoire de new_group.\n");
         return ERROR;
@@ -125,10 +109,10 @@ int add_group(st_render_data *render, e_render_group_type type)
         new_mesh_group = malloc(sizeof(st_mesh_group));
 
         // Test de l'allocation mémoire
-        if(new_mesh_group == NULL)
+        if(!new_mesh_group)
         {
-            fprintf(stderr, "Erreur lors de l'allocation mémoire de new_mesh_group.\n");
-            return ERROR;
+            fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
+            return FAILED_MALLOC;
         }
         
         // Initialisation 
@@ -152,14 +136,14 @@ int add_group(st_render_data *render, e_render_group_type type)
     render->groups = realloc(render->groups, sizeof(st_render_group)* (render->nb_groups + 1));
     
     // Vérifier l'allocation
-    if(render->groups == NULL)
+    if(!render->groups)
     {
-        fprintf(stderr, "Erreur lors de l'allocation mémoire\n");
-        return ERROR;
+        fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
+        return FAILED_MALLOC;
     }
 
     // Allouer le nouveau group, au... groupe
-    render->groups[render->nb_groups] = *new_group;
+    render->groups[render->nb_groups] = new_group;
     render->nb_groups ++;
     render->nb_total_groups ++;
 
@@ -179,7 +163,7 @@ st_render_group* get_group(st_render_group *groups, int id, size_t max)
     {
         i ++;
     }
-    if(i == max && groups[i].ID != id)
+    if(i == max)
     {
         fprintf(stderr, "Élément non trouvé\n");
         return NULL;
@@ -190,7 +174,7 @@ st_render_group* get_group(st_render_group *groups, int id, size_t max)
 int remove_group(st_render_data *render, int id)
 {
     /* On va parcourir la liste pour trouver grâce à l'id, le group à supprimer */
-    int i = 0;
+    int i, y = 0;
     int res;
 
     while(i < render->nb_groups && render->groups[i].ID != id)
@@ -198,14 +182,14 @@ int remove_group(st_render_data *render, int id)
         i ++;
     }
     
-    if (i == render->nb_groups && render->groups[i].ID != id)
+    if (i == render->nb_groups)
     {
         fprintf(stderr, "Groupe non trouvé dans la liste.\n");
         return ERROR;
     }
     
     // On supprime le groupe
-    res = render->groups[i].delete_group(&render->groups[i]);
+    res = render->groups[i].tables->generic_func_delete_group_object(&render->groups[i]);
 
     // On vérifie que la suppression c'est bien passer
     if(res == ERROR)
@@ -215,18 +199,28 @@ int remove_group(st_render_data *render, int id)
     }
 
     // Faire un décalage pour "resize" la liste
-    for(i = i; i < render->nb_groups; i ++) render->groups[i] = render->groups[i + 1];
+    for(y = i; y < render->nb_groups; y ++) render->groups[y] = render->groups[y + 1];
 
     render->nb_groups --;
 
-    // Realocation de la liste
-    render->groups = realloc(render->groups, sizeof(st_render_group) * render->nb_groups);
-    
-    // Vérifier que la réallocation c'est bien passer
-    if(render->groups == NULL && render->nb_groups != 0)
+    if(render->nb_groups == 1)
     {
-        fprintf(stderr, "Erreur lors de la suppression du groupe.\n");
-        return ERROR;
+        free(&render->groups[0]);
+        free(render->groups);
+        render->groups = 0;
+        render->nb_groups = 0;
+    }
+    else
+    {
+        // Realocation de la liste
+        render->groups = realloc(render->groups, sizeof(st_render_group) * render->nb_groups);
+
+            // Vérifier l'allocation
+        if(!render->groups)
+        {
+            fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
+            return FAILED_MALLOC;
+        }
     }
 
     return DONE;
@@ -237,9 +231,20 @@ int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader sh
 {
     st_render_object obj;
     obj.material = malloc(sizeof(st_material));
-    obj.id = name;
+    if(!obj.material)
+    {
+        fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
+        return FAILED_MALLOC;
+    }
 
     obj.mesh = malloc(sizeof(st_mesh));
+    if(!obj.mesh)
+    {
+        fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
+        return FAILED_MALLOC;
+    }
+
+    obj.id = name;
     *obj.mesh = mesh;
     obj.material->texture = texture_id;
     obj.material->shader = shader;
@@ -257,7 +262,7 @@ int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader sh
 
         // Si la fonction ne nous retourne pas NULL, c'est qu'il y a déjà quelque chose à l'intérieur, et 
         // On ne peux pas avoir deux mesh dans un groupe d'instances.
-        if(dest->get_element != NULL)
+        if(dest->tables->get_element != NULL)
         {
             fprintf(stderr, "Vous avez déjà un mesh dans cet instance.\n");
             return ERROR;
@@ -270,7 +275,7 @@ int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader sh
         break;
     }
 
-    dest->add_element(dest, obj);
+    dest->tables->add_element(dest, obj);
 
 }
 
@@ -278,7 +283,7 @@ int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader sh
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int add_render_data_in_group(st_render_group *group, st_render_object object)
+int generic_func_add_render_object(st_render_group *group, st_render_object object)
 {
     
     // Vérification des données entrés
@@ -295,11 +300,11 @@ int add_render_data_in_group(st_render_group *group, st_render_object object)
         st_mesh_group *object_list = group->data;
         object_list->objects = realloc(object_list->objects, sizeof(st_render_object) * (object_list->nb_objects + 1));
         
-        // Vérification de l'allocation
-        if(object_list->objects == NULL)
+        // Vérifier l'allocation
+        if(!object_list->objects)
         {
-            fprintf(stderr, "Allocation dans la liste échouer.\n");
-            return ERROR;
+            fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
+            return FAILED_MALLOC;
         }
         
         object_list->objects[object_list->nb_objects] = object;
@@ -314,7 +319,7 @@ int add_render_data_in_group(st_render_group *group, st_render_object object)
     return DONE;
 }
 
-int remove_render_data_of_group(st_mesh_group *group, int id)
+int generic_func_remove_render_object(st_mesh_group *group, int id)
 {
     int i = 0;
 
@@ -359,20 +364,29 @@ int remove_render_data_of_group(st_mesh_group *group, int id)
     // Loop de décalage
     for(i = i; i < group->nb_objects; i ++) group->objects[i] = group->objects[i + 1];
 
-    // Re Allocation de la nouvelle taille
-    group->objects = realloc(group->objects, sizeof(st_render_group) * group->nb_objects - 1);
-    
-    // Vérification de l'allocation
-    if(group->objects == NULL)
+    // S'il ne reste plus rien, c'est équivalent au free
+    if(group->nb_objects - 1 == 0)
     {
-        fprintf(stderr, "Erreur lors de la réallocation de mémoire.\n");
-        return ERROR;
+        free(group->objects);
+        group->objects == NULL;
+    }
+    else
+    {
+        // Re Allocation de la nouvelle taille
+        group->objects = realloc(group->objects, sizeof(st_render_object) * group->nb_objects - 1);
+    }
+
+    // Vérifier l'allocation
+    if(!group->objects)
+    {
+        fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
+        return FAILED_MALLOC;
     }
     
     group->nb_objects --;
 }
 
-int remove_all_render_data_of_a_group(st_mesh_group *group)
+int generic_func_remove_all_render_object(st_mesh_group *group)
 {
     int i;
     for(i = 0; i < group->nb_objects; i ++)
@@ -389,9 +403,9 @@ int remove_all_render_data_of_a_group(st_mesh_group *group)
     group->nb_objects = 0;
 }
 
-st_render_object* get_render_data_of_a_group(st_mesh_group *group, int id)
+st_render_object* generic_func_get_render_object(st_mesh_group *group, int id)
 {
-    int i;
+    int i = 0;
 
     if(group == NULL)
     {
@@ -413,20 +427,22 @@ st_render_object* get_render_data_of_a_group(st_mesh_group *group, int id)
     return &group->objects[i];
 }
 
-int delete_mesh_group(st_render_group *group)
+int generic_func_delete_group_object(st_render_group *group)
 {   
-    /*
-    note : 
-        Il est important de savoir que vous devez supprimer le contenant de data avant de la supprimer.
-        étant un pointeur void, je sais pas trop comment vérifier le contenant.
-    */
+    
     if(group == NULL)
     {
         fprintf(stderr, "Le groupe est null, impossible de la supprimer.\n");
         return ERROR;
     }
     
-    free((group)->data);
+    if(group->type == RENDER_GROUP_MESH)
+    {
+        st_mesh_group *mesh_group = (st_mesh_group *)group->data;
+        generic_func_remove_all_render_object(mesh_group);
+        free(group->data);
+    } 
+    free(group);
 
     printf("delete\n");
 }
