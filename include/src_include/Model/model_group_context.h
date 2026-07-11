@@ -73,11 +73,10 @@ st_render_group* get_group(st_render_group *groups, int id, size_t max);
 
 // Partie pour les mesh group
 int add_render_data_in_group(st_render_group *group, st_render_object object);
-int remove_render_data_of_group(st_render_group *group);
-int remove_all_render_data_of_a_group(st_render_group *group);
-st_render_object* get_render_data_of_a_group(st_render_group *group);
-int delete_mesh_group(st_render_group **group);
-
+int remove_render_data_of_group(st_mesh_group *group, int id);
+int remove_all_render_data_of_a_group(st_mesh_group *group);
+st_render_object* get_render_data_of_a_group(st_mesh_group *group, int id);
+int delete_mesh_group(st_render_group *group);
 
 int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader shader, st_transform transform, st_render_group *dest);
 

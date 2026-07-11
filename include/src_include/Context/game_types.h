@@ -150,33 +150,6 @@ typedef struct st_render_object
 }st_render_object;
 
 /**
- * @brief structure principal d'un group
- * @param ID identifaint du groupe
- * @param type type du groupe, cela affecte ça méthode de rendu
- * @param data redirige vers le strucutre qui contiennent les éléments du groupe en fonction de son type
- * @param init_group permet d'initialiser les informations de bases d'un groupe
- * @param add_element permet d'ajouter un élément au groupe
- * @param remove_element permet de supprimer un élément de ce groupe
- * @param get_element permet de récupéré un élément
- * @param remove_all_element supprime tout ces élément
- * @param delete_group supprime le groupes
- */
-typedef struct st_render_group st_render_group;
-struct st_render_group
-{
-    int ID;
-    e_render_group_type type;
-    void *data;
-
-    int (* add_element)(st_render_group *group, st_render_object object);
-    int (* remove_element)(st_render_group *group);
-    st_render_object* (* get_element)(st_render_group *group);
-    int (* remove_all_elements)(st_render_group *group);
-    int (* delete_group)(st_render_group **group); 
-
-};
-
-/**
  * @brief permet d'apporter des modification à des mesh instancier de manière individuel
  * @param model matrice model
  */
@@ -224,5 +197,33 @@ typedef struct st_instanced_mesh_group
     st_instanced st_instanced;
 
 }st_instanced_mesh_group;
+
+/**
+ * @brief structure principal d'un group
+ * @param ID identifaint du groupe
+ * @param type type du groupe, cela affecte ça méthode de rendu
+ * @param data redirige vers le strucutre qui contiennent les éléments du groupe en fonction de son type
+ * @param init_group permet d'initialiser les informations de bases d'un groupe
+ * @param add_element permet d'ajouter un élément au groupe
+ * @param remove_element permet de supprimer un élément de ce groupe
+ * @param get_element permet de récupéré un élément
+ * @param remove_all_element supprime tout ces élément
+ * @param delete_group supprime le groupes
+ */
+typedef struct st_render_group st_render_group;
+struct st_render_group
+{
+    int ID;
+    e_render_group_type type;
+    void *data;
+
+    int (* add_element)(st_render_group *group, st_render_object object);
+    int (* remove_element)(st_mesh_group *group, int id);
+    st_render_object* (* get_element)(st_mesh_group *group, int id);
+    int (* remove_all_elements)(st_mesh_group *group);
+    int (* delete_group)(st_render_group *group); 
+
+};
+
 
 #endif

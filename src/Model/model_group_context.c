@@ -205,9 +205,7 @@ int remove_group(st_render_data *render, int id)
     }
     
     // On supprime le groupe
-    st_render_group * tamp = &render->groups[i];
-    st_render_group ** tamptamp = &tamp;
-    res = render->groups[i].delete_group(tamptamp);
+    res = render->groups[i].delete_group(&render->groups[i]);
 
     // On vérifie que la suppression c'est bien passer
     if(res == ERROR)
@@ -307,7 +305,7 @@ int add_render_data_in_group(st_render_group *group, st_render_object object)
         object_list->objects[object_list->nb_objects] = object;
         object_list->nb_objects ++;
         break;
-    
+
     default:
         break;
     }
@@ -316,22 +314,119 @@ int add_render_data_in_group(st_render_group *group, st_render_object object)
     return DONE;
 }
 
-int remove_render_data_of_group(st_render_group *group)
+int remove_render_data_of_group(st_mesh_group *group, int id)
 {
-    printf("remove\n");
+    int i = 0;
+
+    if(group == NULL)
+    {
+        fprintf(stderr, "Le groupe est null, impossible de supprimer l'un de ces élément.\n");
+        return ERROR;
+    }
+    
+    // Recherche de l'élément dans la liste.
+    while (i < group->nb_objects && group->objects[i].id != id) i ++;
+    
+    if(i == group->nb_objects)
+    {
+        fprintf(stderr, "Element non trouvé.\n");
+        return ERROR;
+    }
+
+      /********************************/
+     // Free les info de cet élément //
+    /********************************/
+
+    /*
+    note : 
+        On ne supprime pas directement les ressources, car elles peuvent être partager.
+        On free simplement les structure qui les relie. Ainsi l'on sais que toute les ressources
+        sont encore charger quand tout est supprimer, et qu'il ne reste plus qu'à les supprimer.
+        Cela comprend le shader, la texture et le mesh.
+    */
+
+    // Free du pointeur vers ses matériaux
+    free(group->objects[i].material);
+    // Free du pointeur vers son mesh
+    free(group->objects[i].mesh);
+    
+    /*
+    note :
+        Il n'est pas nécéssaire de free l'object en lui même car c'est la liste qui possède ça mémoire.
+        Lorsque l'on realloc plus bas la liste, l'élément est finalement, automatiquement oublier, et libre.
+    */
+
+    // Loop de décalage
+    for(i = i; i < group->nb_objects; i ++) group->objects[i] = group->objects[i + 1];
+
+    // Re Allocation de la nouvelle taille
+    group->objects = realloc(group->objects, sizeof(st_render_group) * group->nb_objects - 1);
+    
+    // Vérification de l'allocation
+    if(group->objects == NULL)
+    {
+        fprintf(stderr, "Erreur lors de la réallocation de mémoire.\n");
+        return ERROR;
+    }
+    
+    group->nb_objects --;
 }
 
-int remove_all_render_data_of_a_group(st_render_group *group)
+int remove_all_render_data_of_a_group(st_mesh_group *group)
 {
-    printf("remove all\n");
+    int i;
+    for(i = 0; i < group->nb_objects; i ++)
+    {
+        // Free du pointeur vers ses matériaux
+        free(group->objects[i].material);
+        // Free du pointeur vers son mesh
+        free(group->objects[i].mesh);
+    }
+
+    free(group->objects);
+
+    group->objects = NULL;
+    group->nb_objects = 0;
 }
 
-st_render_object* get_render_data_of_a_group(st_render_group *group)
+st_render_object* get_render_data_of_a_group(st_mesh_group *group, int id)
 {
-    printf("get\n");
+    int i;
+
+    if(group == NULL)
+    {
+        fprintf(stderr, "Le groupe est null, impossible de récupéré l'un de ces éléments._n");
+        return NULL;
+    }
+
+    while (i < group->nb_objects && group->objects[i].id != id)
+    {
+        i ++;
+    }
+
+    if(i == group->nb_objects)
+    {
+        fprintf(stderr, "Element non trouvé.\n");
+        return NULL;
+    }
+
+    return &group->objects[i];
 }
 
-int delete_mesh_group(st_render_group **group)
+int delete_mesh_group(st_render_group *group)
 {   
+    /*
+    note : 
+        Il est important de savoir que vous devez supprimer le contenant de data avant de la supprimer.
+        étant un pointeur void, je sais pas trop comment vérifier le contenant.
+    */
+    if(group == NULL)
+    {
+        fprintf(stderr, "Le groupe est null, impossible de la supprimer.\n");
+        return ERROR;
+    }
+    
+    free((group)->data);
+
     printf("delete\n");
 }
