@@ -77,7 +77,7 @@ int generic_func_add_render_objectobject(st_render_group *group, st_render_objec
 int generic_func_remove_render_datadata(st_mesh_group *group, int id);
 int generic_func_remove_all_render_objectject(st_mesh_group *group);
 st_render_object* generic_func_get_render_objectject(st_mesh_group *group, int id);
-int delete_groupender_group *group);
+int generic_func_delete_group_object(st_render_group *group);
 
 int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader shader, st_transform transform, st_render_group *dest);
 
