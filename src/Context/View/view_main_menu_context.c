@@ -37,7 +37,6 @@ void update_render_main_menu(st_render_data *render)
     glm_lookat((vec3){cam_x, 0.0, cam_z}, (vec3){0.0, 0.0, 0.0}, (vec3){0.0, 1.0, 0.0}, view);
 
     glClearColor(num_to_01(0), num_to_01(0), num_to_01(0), 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     for(i = 0; i < render->nb_groups; i ++)
     {
@@ -50,6 +49,7 @@ void update_render_main_menu(st_render_data *render)
             int y;
             for(y = 0; y < mesh_group->nb_objects; y ++)
             {
+                
                 int model_loc = glGetUniformLocation(mesh_group->objects[y].material->shader.shader, "model");
                 glUniformMatrix4fv(model_loc, 1, GL_FALSE, *model);
 

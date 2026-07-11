@@ -12,19 +12,22 @@ st_mesh new_object(char *path)
     return mesh;
 }
 
-unsigned int new_texture(char *path)
+st_texture new_texture(char *path)
 {
     // CHARGER LES TEXTURES DES ELEMENTS --------------------------------------------------------------------------------------------
-    st_image texture = load_texture(path, 736, 552, 0);
+    st_image image = load_texture(path, 736, 552, 0);
 
     // Initialiser les Texutures des elements --------------------------------------------------------------------------------------------
-    int texture_id = init_a_loaded_texture(&texture);
-    stbi_image_free(texture.data);
+    int texture_id = init_a_loaded_texture(&image);
+    stbi_image_free(image.data);
 
-    return texture_id;
+    st_texture texture;
+    texture.id = texture_id;
+
+    return texture;
 }
 
-unsigned int new_shader(char *path_vert, char *path_frag)
+st_shader new_shader(char *path_vert, char *path_frag)
 {
     const char *vert = load_shader(path_vert);
     const char *frag = load_shader(path_frag);
@@ -41,5 +44,20 @@ unsigned int new_shader(char *path_vert, char *path_frag)
     free((void *)vert);
     free((void *)frag);
 
-    return shader;
+    // Définir les shaders
+    st_shader t_shader;
+    t_shader.shader = shader;
+
+    return t_shader;
+}
+
+
+st_transform configure_transform(st_vec3 pos, st_vec3 rotation, st_vec3 transformation)
+{
+    st_transform transform;
+    transform.position = pos;
+    transform.rotation = rotation;
+    transform.transformation = transformation;
+
+    return transform;
 }

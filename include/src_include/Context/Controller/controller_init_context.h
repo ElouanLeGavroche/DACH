@@ -7,6 +7,7 @@
 #include "../../View/view_render_loop.h"
 
 
-unsigned int new_texture(char *path);
+st_texture new_texture(char *path);
 st_mesh new_object(char *path);
-unsigned int new_shader(char *path_vert, char *path_frag);
+st_shader new_shader(char *path_vert, char *path_frag);
+st_transform configure_transform(st_vec3 pos, st_vec3 rotation, st_vec3 transformation);

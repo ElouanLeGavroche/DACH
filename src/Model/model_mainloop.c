@@ -12,7 +12,7 @@ void wait_time(struct timespec time_a, struct timespec time_b, double elapsed, d
 {
         // Temps de pause
         double sleep_sec =  time - elapsed;
-
+        
         struct timespec time_sleep;
         
         time_sleep.tv_sec = (time_t) sleep_sec;

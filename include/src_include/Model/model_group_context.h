@@ -81,8 +81,5 @@ int delete_mesh_group(st_render_group **group);
 
 int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader shader, st_transform transform, st_render_group *dest);
 
-st_texture create_texture(unsigned int image);
-st_shader create_shader(unsigned int shader);
-st_transform configure_transform(st_vec3 pos, st_vec3 rotation, st_vec3 transformation);
 
 #endif

@@ -276,32 +276,6 @@ int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader sh
 
 }
 
-st_shader create_shader(unsigned int shader)
-{
-    st_shader t_shader;
-    t_shader.shader = shader;
-
-    return t_shader;
-}
-
-st_texture create_texture(unsigned int image)
-{
-    st_texture texture;
-    texture.id = image;
-
-    return texture;
-}
-
-st_transform configure_transform(st_vec3 pos, st_vec3 rotation, st_vec3 transformation)
-{
-    st_transform transform;
-    transform.position = pos;
-    transform.rotation = rotation;
-    transform.transformation = transformation;
-
-    return transform;
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

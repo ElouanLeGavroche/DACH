@@ -135,10 +135,7 @@ void update_render_game(st_render_data *render)
     );
     
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     glClearColor(num_to_01(24), num_to_01(32), num_to_01(61), 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
     
     //glUseProgram(render->groups->shaders[0].shader);
     

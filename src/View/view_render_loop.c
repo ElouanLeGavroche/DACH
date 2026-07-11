@@ -1,7 +1,7 @@
 #include "../../include/src_include/View/view_render_loop.h"
 
 void view_clear(){
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void view_swap(){
@@ -162,29 +162,4 @@ int init_a_loaded_texture(st_image *image)
     }
 
     return texture;
-}
-
-
-void render_mesh_group(st_mesh_group *group)
-{
-    unsigned int transfrom_loc;
-    int i;
-
-    for(i = 0; i < group[i].nb_objects; i ++)
-    {
-        
-        // Pour le shader
-        glUseProgram(group->objects[i].material->shader.shader);
-
-        // Pour les texture
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, group->objects[i].material->texture.id);
-
-        // Pour les éléments
-        glBindVertexArray(group->objects[i].mesh->VAO);
-        glDrawElements(GL_TRIANGLES, group->objects[i].mesh->index_count, GL_UNSIGNED_INT, 0);
-        glBindVertexArray(0);
-    
-    }
-
 }

@@ -28,32 +28,26 @@ int init_menu(st_state *state)
     init_render_main_menu(&state->render);
     
     // CHARGER LES SHADERS --------------------------------------------------------------------------------------------
-    unsigned int shader = new_shader("src/Shaders/shader_menu.vert", "src/Shaders/main_shader.frag");
+    st_shader main_shader = new_shader("src/Shaders/shader_menu.vert", "src/Shaders/main_shader.frag");
 
     // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
     st_mesh house = new_object(BASIC_HOUSE_PATH);
     st_mesh tile = new_object(BASIC_TILE_PATH);
 
     // Charger les textures
-    unsigned int grass_img = new_texture("ressources/images/grass_test.jpg");
+    st_texture grass_texture = new_texture("ressources/images/grass_test.jpg");
     
     // Creation du groupe
     add_group(&state->render, RENDER_GROUP_MESH);
-
     st_render_group *group = get_group(state->render.groups, 0, state->render.nb_groups);
-    
-    // Définir les shaders
-    st_shader main_shader = create_shader(shader);
-
-    // Définir les textures
-    st_texture grass_texture = create_texture(grass_img);
 
     // Définir les transformation
     st_transform house_transform = configure_transform((st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0});
+    st_transform floor = configure_transform((st_vec3){0.5, 0.5, 0.0}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0});
 
     // Définir les objets
     create_an_object(HOUSE, house, grass_texture, main_shader, house_transform, group);
-    create_an_object(SQUARE, tile, grass_texture, main_shader, house_transform, group);
+    create_an_object(SQUARE, tile, grass_texture, main_shader, floor, group);
     
     // Initialiser le model --------------------------------------------------------------------------------------------
     init_data_main_menu(state);
