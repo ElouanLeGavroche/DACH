@@ -48,6 +48,10 @@ int context_group_init(st_render_group **group, int id, e_render_group_type type
             return ERROR;
         }
 
+        // Initialiser les valeur de base de group_type
+        group_type->nb_objects = 0;
+        group_type->objects = NULL;
+
         // Ajout du pointeur dans la structure groupe
         (*group)->data = group_type;
 
@@ -145,7 +149,7 @@ int add_group(st_render_data *render, e_render_group_type type)
 
 
     // Re allouer de la place pour le nouveau groupe
-    render->groups = realloc(render->groups, sizeof(st_render_group)* render->nb_groups);
+    render->groups = realloc(render->groups, sizeof(st_render_group)* (render->nb_groups + 1));
     
     // Vérifier l'allocation
     if(render->groups == NULL)
@@ -236,7 +240,9 @@ int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader sh
     st_render_object obj;
     obj.material = malloc(sizeof(st_material));
     obj.id = name;
-    obj.mesh = &mesh;
+
+    obj.mesh = malloc(sizeof(st_mesh));
+    *obj.mesh = mesh;
     obj.material->texture = texture_id;
     obj.material->shader = shader;
     obj.transform = transform;
@@ -253,7 +259,7 @@ int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader sh
 
         // Si la fonction ne nous retourne pas NULL, c'est qu'il y a déjà quelque chose à l'intérieur, et 
         // On ne peux pas avoir deux mesh dans un groupe d'instances.
-        if(dest->get_element == NULL)
+        if(dest->get_element != NULL)
         {
             fprintf(stderr, "Vous avez déjà un mesh dans cet instance.\n");
             return ERROR;
@@ -302,25 +308,56 @@ st_transform configure_transform(st_vec3 pos, st_vec3 rotation, st_vec3 transfor
 
 int add_render_data_in_group(st_render_group *group, st_render_object object)
 {
+    
+    // Vérification des données entrés
+    if(group == NULL)
+    {
+        fprintf(stderr, "Le group passer est NULL, impossible de lui ajouter un élément.\n");
+        return ERROR;
+    }
 
+    switch (group->type)
+    {
+    case RENDER_GROUP_MESH:
+        // Allocation de la mémoire
+        st_mesh_group *object_list = group->data;
+        object_list->objects = realloc(object_list->objects, sizeof(st_render_object) * (object_list->nb_objects + 1));
+        
+        // Vérification de l'allocation
+        if(object_list->objects == NULL)
+        {
+            fprintf(stderr, "Allocation dans la liste échouer.\n");
+            return ERROR;
+        }
+        
+        object_list->objects[object_list->nb_objects] = object;
+        object_list->nb_objects ++;
+        break;
+    
+    default:
+        break;
+    }
+    
+
+    return DONE;
 }
 
 int remove_render_data_of_group(st_render_group *group)
 {
-
+    printf("remove\n");
 }
 
 int remove_all_render_data_of_a_group(st_render_group *group)
 {
-
+    printf("remove all\n");
 }
 
 st_render_object* get_render_data_of_a_group(st_render_group *group)
 {
-
+    printf("get\n");
 }
 
 int delete_mesh_group(st_render_group **group)
-{
-
+{   
+    printf("delete\n");
 }

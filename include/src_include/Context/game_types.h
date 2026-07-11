@@ -72,6 +72,7 @@ typedef struct st_mesh
     unsigned int VAO;
     unsigned int VBO;
     unsigned int EBO;
+    unsigned int index_count;
 
 }st_mesh;
 
@@ -142,7 +143,6 @@ typedef struct st_render_object
     int id;
 
     st_mesh *mesh;
-    st_mesh_data *data;
     st_material *material;
     st_transform transform;
 

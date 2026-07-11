@@ -57,6 +57,7 @@ st_mesh init_a_3d_loaded_element(st_mesh_data *elt, int indice)
     mesh.VAO = VAO;
     mesh.VBO = VBO;
     mesh.EBO = EBO;
+    mesh.index_count = elt->index_count;
     
     // Positition des polygones
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -171,6 +172,7 @@ void render_mesh_group(st_mesh_group *group)
 
     for(i = 0; i < group[i].nb_objects; i ++)
     {
+        
         // Pour le shader
         glUseProgram(group->objects[i].material->shader.shader);
 
@@ -180,7 +182,7 @@ void render_mesh_group(st_mesh_group *group)
 
         // Pour les éléments
         glBindVertexArray(group->objects[i].mesh->VAO);
-        glDrawElements(GL_TRIANGLES, group->objects[i].data->index_count, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, group->objects[i].mesh->index_count, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     
     }

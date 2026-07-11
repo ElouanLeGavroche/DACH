@@ -46,12 +46,10 @@ void update_render_main_menu(st_render_data *render)
         switch (group->type)
         {
         case RENDER_GROUP_MESH:
-            printf("okkk\n");
             st_mesh_group *mesh_group = group->data;
             int y;
             for(y = 0; y < mesh_group->nb_objects; y ++)
             {
-                
                 int model_loc = glGetUniformLocation(mesh_group->objects[y].material->shader.shader, "model");
                 glUniformMatrix4fv(model_loc, 1, GL_FALSE, *model);
 
@@ -63,8 +61,18 @@ void update_render_main_menu(st_render_data *render)
 
                 transform_loc = glGetUniformLocation(mesh_group->objects[y].material->shader.shader, "transform");
                 glUniformMatrix4fv(transform_loc, 1, GL_FALSE, *trans);
-                
-                render_mesh_group(mesh_group);
+
+                // Pour le shader
+                glUseProgram(mesh_group->objects[y].material->shader.shader);
+
+                // Pour les texture
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, mesh_group->objects[y].material->texture.id);
+
+                // Pour les éléments
+                glBindVertexArray(mesh_group->objects[y].mesh->VAO);
+                glDrawElements(GL_TRIANGLES, mesh_group->objects[y].mesh->index_count, GL_UNSIGNED_INT, 0);
+                glBindVertexArray(0);
             }
             break;
         
