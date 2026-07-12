@@ -19,8 +19,9 @@ void init_render_game(st_render_data *render)
 
 void init_world(st_render_data *render, mat4 *models, int amount)
 {
-    /*
+
     int i, y, index = 0;
+    st_instanced_mesh_group *group_data;
     models = malloc(sizeof(mat4) * (amount));
     if(models == NULL)
     {
@@ -31,13 +32,14 @@ void init_world(st_render_data *render, mat4 *models, int amount)
 
     for(i = 0; i < render->nb_groups; i ++)
     {
-        for(y = 0; y < render->groups[i].nb_object; y ++)
+        group_data = &render->groups[i];
+        for(y = 0; y < group_data->st_instanced.count; y ++)
         {
             mat4 model;
             glm_mat4_identity(model);
             st_render_object *obj = &render->groups[i].data[y];
 
-            glm_translate(model, (vec3){obj->x_pos, obj->y_pos, obj->z_pos});
+            glm_translate(model, &obj->transform.position);
 
             glm_mat4_copy(model, models[index]);
             index ++;
@@ -55,7 +57,7 @@ void init_world(st_render_data *render, mat4 *models, int amount)
     glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glVertexAttribDivisor(3, 1);
-    */
+    
 }
 
 void init_game_camera(st_camera *camera)

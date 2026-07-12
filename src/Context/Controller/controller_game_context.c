@@ -31,9 +31,9 @@ int init_game(st_state *state)
     st_mesh tile = new_object(BASIC_TILE_PATH);
 
     st_texture grass_texture = new_texture("ressources/images/grass_test.jpg");
-    /*
+    
     // Creation du groupe du monde
-    add_group(&state->render, state->render.nb_groups, WORLD);
+    add_group(&state->render, RENDER_GROUP_INSTANCED_MESH);
     st_render_group *group = get_group(state->render.groups, WORLD, state->render.nb_groups);
     
     
@@ -44,12 +44,12 @@ int init_game(st_state *state)
     {
         for(y = size_map; y > 0; y --)
         {
-            create_an_object(TILE + i, tile, grass_texture, ((float)i * 2.0f) - size_map, 0.0, ((float)y * 2.0f) - size_map, group);
+            st_transform floor = configure_transform((st_vec3){0.5, 0.5, 0.0}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0});
+            create_an_object(TILE, tile, grass_texture, shader, floor, group);
+    
         }
     }
 
-    // Définir les shaders
-    create_a_shader(shader, group);
 
     mat4 world_tile;
     init_world(&state->render, world_tile, 52*52);
@@ -66,7 +66,8 @@ int init_game(st_state *state)
     data->camera = &state->render.camera;
 
     glfwSetScrollCallback(window, scroll_callback);
-    */
+    
+
     printf("Context jeu initier\n");
     return DONE;
 }

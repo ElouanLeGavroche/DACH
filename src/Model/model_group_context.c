@@ -151,7 +151,6 @@ int add_group(st_render_data *render, e_render_group_type type)
     }
 
     // Allouer le nouveau group, au... groupe
-    printf("%d\n", new_group->type);
     render->groups[render->nb_groups] = *new_group;
     render->nb_groups ++;
     render->nb_total_groups ++;
@@ -405,7 +404,7 @@ int _add_render_mesh_object(void *void_group, st_render_object object)
         fprintf(stderr, "La structure void group ne contient rien pour ajouter un mesh.\n");
         return ERROR;
     }
-    printf("%d\n", object_list->nb_objects);
+
     object_list->objects = realloc(object_list->objects, sizeof(st_render_object) * (object_list->nb_objects + 1));
     
     // Vérifier l'allocation
