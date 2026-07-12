@@ -74,12 +74,17 @@ st_render_group* get_group(st_render_group *groups, int id, size_t max);
 
 // Partie pour les mesh group
 int generic_func_add_render_object(st_render_group *group, st_render_object object);
-int generic_func_remove_render_object(st_mesh_group *group, int id);
+int generic_func_remove_render_object(st_render_group *group, int id);
 int generic_func_remove_all_render_object(st_mesh_group *group);
 st_render_object* generic_func_get_render_object(st_mesh_group *group, int id);
 int generic_func_delete_group_object(st_render_group *group);
 
 int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader shader, st_transform transform, st_render_group *dest);
 
+int _add_render_mesh_object(st_render_group *group, st_render_object object);
+int _remove_render_mesh_object(void *void_group, void *id);
+
+int _add_render_instenced_mesh_object(st_render_group *group, st_render_object object);
+int _remove_render_instenced_mesh_object(st_instanced_mesh_group *group, void* id);
 
 #endif

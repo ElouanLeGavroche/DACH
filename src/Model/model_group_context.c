@@ -39,8 +39,8 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
         group->data = group_type;
 
         // On applique les fonction correspondantes
-        group->tables->add_element = generic_func_add_render_object;
-        group->tables->remove_element = generic_func_remove_render_object;
+        group->tables->add_element = _add_render_mesh_object;
+        group->tables->remove_element = _remove_render_mesh_object;
         group->tables->remove_all_elements = generic_func_remove_all_render_object;
         group->tables->get_element = generic_func_get_render_object;
 
@@ -81,7 +81,74 @@ int test_render(st_render_data *render)
 
 int add_group(st_render_data *render, e_render_group_type type)
 {
-    
+    // Définition des variables
+    int res;
+
+    st_render_group new_group;
+    st_mesh_group *new_mesh_group;
+    st_instanced_mesh_group *new_instanced_group;
+
+    // Test des valeurs entrées
+    if(test_render(render) == ERROR)
+        return ERROR;
+
+
+    // On initialise new_group
+    res = context_group_init(&new_group, render->nb_total_groups, type);
+
+    // Test de l'allocation mémoire
+    if(&new_group == NULL)
+    {
+        fprintf(stderr, "Erreur lors de l'allocation mémoire de new_group.\n");
+        return ERROR;
+    }
+
+    switch (type)
+    {
+    case RENDER_GROUP_MESH:
+        new_mesh_group = malloc(sizeof(st_mesh_group));
+
+        // Test de l'allocation mémoire
+        if(new_mesh_group == NULL)
+        {
+            fprintf(stderr, "Erreur lors de l'allocation mémoire de new_mesh_group.\n");
+            return ERROR;
+        }
+
+        // Initialisation 
+        new_mesh_group->nb_objects = 0;
+        new_mesh_group->objects = NULL;
+
+        break;
+
+    case RENDER_GROUP_INSTANCED_MESH:
+        fprintf(stderr, "Pas encore développer.\n");
+        break;
+
+    default:
+        fprintf(stderr, "Type de groupe invalide.\n");
+        return ERROR;
+        break;
+    }    
+
+
+    // Re allouer de la place pour le nouveau groupe
+    render->groups = realloc(render->groups, sizeof(st_render_group)* render->nb_groups);
+    render->groups = realloc(render->groups, sizeof(st_render_group)* (render->nb_groups + 1));
+
+    // Vérifier l'allocation
+    if(render->groups == NULL)
+    {
+        fprintf(stderr, "Erreur lors de l'allocation mémoire\n");
+        return ERROR;
+    }
+
+    // Allouer le nouveau group, au... groupe
+    render->groups[render->nb_groups] = new_group;
+    render->nb_groups ++;
+    render->nb_total_groups ++;
+
+    return DONE;
 
 }
 
@@ -189,7 +256,7 @@ int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader sh
     {
     case RENDER_GROUP_MESH:
         // Autrement, on ajout l'élément au sein du groupe
-        printf("Ajout d'un mesh au group mesh.\n");
+        
         break;
     
     case RENDER_GROUP_INSTANCED_MESH:
@@ -209,7 +276,8 @@ int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader sh
         break;
     }
 
-    dest->tables->add_element(dest, obj);
+    printf("Ajout d'un mesh au group mesh.\n");
+    generic_func_add_render_object(dest, obj);
 
 }
 
@@ -219,7 +287,6 @@ int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader sh
 
 int generic_func_add_render_object(st_render_group *group, st_render_object object)
 {
-    
     // Vérification des données entrés
     if(group == NULL)
     {
@@ -233,7 +300,7 @@ int generic_func_add_render_object(st_render_group *group, st_render_object obje
     return DONE;
 }
 
-int generic_func_remove_render_object(st_mesh_group *group, int id)
+int generic_func_remove_render_object(st_render_group *group, int id)
 {
     int i = 0;
 
@@ -243,61 +310,23 @@ int generic_func_remove_render_object(st_mesh_group *group, int id)
         return ERROR;
     }
     
-    // Recherche de l'élément dans la liste.
-    while (i < group->nb_objects && group->objects[i].id != id) i ++;
-    
-    if(i == group->nb_objects)
-    {
-        fprintf(stderr, "Element non trouvé.\n");
-        return ERROR;
-    }
-
       /********************************/
      // Free les info de cet élément //
     /********************************/
-
-    /*
-    note : 
-        On ne supprime pas directement les ressources, car elles peuvent être partager.
-        On free simplement les structure qui les relie. Ainsi l'on sais que toute les ressources
-        sont encore charger quand tout est supprimer, et qu'il ne reste plus qu'à les supprimer.
-        Cela comprend le shader, la texture et le mesh.
-    */
-
-    // Free du pointeur vers ses matériaux
-    free(group->objects[i].material);
-    // Free du pointeur vers son mesh
-    free(group->objects[i].mesh);
+    switch (group->type)
+    {
+    case RENDER_GROUP_MESH:
+        group->tables->remove_element((st_mesh_group *)group->data, &id);
+        break;
     
-    /*
-    note :
-        Il n'est pas nécéssaire de free l'object en lui même car c'est la liste qui possède ça mémoire.
-        Lorsque l'on realloc plus bas la liste, l'élément est finalement, automatiquement oublier, et libre.
-    */
+    case RENDER_GROUP_INSTANCED_MESH:
+        group->tables->remove_element((st_instanced_mesh_group *)group->data, &id);
+        break;
 
-    // Loop de décalage
-    for(i = i; i < group->nb_objects; i ++) group->objects[i] = group->objects[i + 1];
-
-    // S'il ne reste plus rien, c'est équivalent au free
-    if(group->nb_objects - 1 == 0)
-    {
-        free(group->objects);
-        group->objects == NULL;
-    }
-    else
-    {
-        // Re Allocation de la nouvelle taille
-        group->objects = realloc(group->objects, sizeof(st_render_object) * group->nb_objects - 1);
-    }
-
-    // Vérifier l'allocation
-    if(!group->objects)
-    {
-        fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
-        return FAILED_MALLOC;
+    default:
+        break;
     }
     
-    group->nb_objects --;
 }
 
 int generic_func_remove_all_render_object(st_mesh_group *group)
@@ -364,19 +393,63 @@ int generic_func_delete_group_object(st_render_group *group)
 
 int _add_render_mesh_object(st_render_group *group, st_render_object object)
 {
-        // Allocation de la mémoire
-        st_mesh_group *object_list = group->data;
-        object_list->objects = realloc(object_list->objects, sizeof(st_render_object) * (object_list->nb_objects + 1));
-        
-        // Vérifier l'allocation
-        if(!object_list->objects)
-        {
-            fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
-            return FAILED_MALLOC;
-        }
-        
-        object_list->objects[object_list->nb_objects] = object;
-        object_list->nb_objects ++;
+    printf("oksdqds\n");
+    // Allocation de la mémoire
+    st_mesh_group *object_list = group->data;
+    object_list->objects = realloc(object_list->objects, sizeof(st_render_object) * (object_list->nb_objects + 1));
+    
+    // Vérifier l'allocation
+    if(!object_list->objects)
+    {
+        fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
+        return FAILED_MALLOC;
+    }
+    
+    object_list->objects[object_list->nb_objects] = object;
+    object_list->nb_objects ++;
+}
+
+int _remove_render_mesh_object(void *void_group, void *id)
+{
+    int i = 0;
+    st_mesh_group *group = (st_mesh_group*)void_group;
+    // Recherche de l'élément dans la liste.
+    while (i < group->nb_objects && group->objects[i].id != *(int*)id) i ++;
+    
+    if(i == group->nb_objects)
+    {
+        fprintf(stderr, "Element non trouvé.\n");
+        return ERROR;
+    }
+
+    // Free du pointeur vers ses matériaux
+    free(group->objects[i].material);
+    // Free du pointeur vers son mesh
+    free(group->objects[i].mesh);
+
+    // Loop de décalage
+    for(i = i; i < group->nb_objects; i ++) group->objects[i] = group->objects[i + 1];
+
+    // S'il ne reste plus rien, c'est équivalent au free
+    if(group->nb_objects - 1 == 0)
+    {
+        free(group->objects);
+        group->objects == NULL;
+    }
+    else
+    {
+        // Re Allocation de la nouvelle taille
+        group->objects = realloc(group->objects, sizeof(st_render_object) * group->nb_objects - 1);
+    }
+
+    // Vérifier l'allocation
+    if(!group->objects)
+    {
+        fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
+        return FAILED_MALLOC;
+    }
+    
+    group->nb_objects --;
 }
 
 int _add_render_instenced_mesh_object(st_render_group *group, st_render_object object)
@@ -393,4 +466,16 @@ int _add_render_instenced_mesh_object(st_render_group *group, st_render_object o
     }
 
     shared_object->shared_render_object = &object;
+}
+
+int _remove_render_instenced_mesh_object(st_instanced_mesh_group *group, void*)
+{
+    free(group->shared_render_object->material);
+    group->shared_render_object->material = NULL;
+    
+    free(group->shared_render_object->mesh);
+    group->shared_render_object->mesh = NULL;
+
+    free(group->shared_render_object);
+    group->shared_render_object = NULL;
 }
