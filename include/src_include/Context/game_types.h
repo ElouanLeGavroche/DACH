@@ -215,11 +215,11 @@ typedef struct st_render_group st_render_group;
 
 typedef struct vt_group_virtual_table
 {
-    int (* add_element)(st_render_group *group, st_render_object object);
-    int (* remove_element)(void *group, void* id);
+    int (* add_element)(void *void_group, st_render_object object);
+    int (* remove_element)(void *void_group, void* id);
     st_render_object* (* get_element)(st_mesh_group *group, int id);
     int (* remove_all_elements)(st_mesh_group *group);
-    int (* generic_func_delete_group_object)(st_render_group *group); 
+    int (* delete_group_object)(st_render_group *group); 
 }vt_group_virtual_table;
 
 

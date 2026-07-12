@@ -4,6 +4,9 @@
 void init_render_game(st_render_data *render)
 {
 
+    render->nb_groups = 0;
+    render->nb_total_groups = 0;
+    
     init_game_camera(&render->camera);
 
 
