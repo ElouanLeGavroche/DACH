@@ -53,7 +53,7 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
 
         // Ajout du pointeur dans la structure groupe
         group->data = normal_type;
-
+        printf("toutou %d\n", normal_type->nb_objects);
         // On applique les fonction correspondantes
         group->tables->add_element = _add_render_mesh_object;
         group->tables->remove_element = _remove_render_mesh_object;
