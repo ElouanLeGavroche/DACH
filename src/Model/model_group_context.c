@@ -33,7 +33,7 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
     case RENDER_GROUP_MESH:
         
         // Déclarer le pointeur
-        group->data = malloc(sizeof(st_mesh_group));
+        //group->data = malloc(sizeof(st_mesh_group));
         if (!group->data) {
             fprintf(stderr, "Allocation échouée : %s\n", strerror(errno));
             return FAILED_MALLOC;
@@ -65,15 +65,8 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
             fprintf(stderr, "Allocation échouée : %s\n", strerror(errno));
             return FAILED_MALLOC;
         }
-
         st_instanced_mesh_group *instanced_type = (st_instanced_mesh_group*)group->data;;
 
-        // Tester l'allocation mémoire
-        if(!instanced_type)
-        {
-            fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
-            return FAILED_MALLOC;
-        }
 
         // Initialiser les valeur de base de group_type
         instanced_type->st_instanced.capacity = 0;
@@ -104,6 +97,7 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
 
     return DONE;   
 }
+
 int test_render(st_render_data *render)
 {
     if(render == NULL)
