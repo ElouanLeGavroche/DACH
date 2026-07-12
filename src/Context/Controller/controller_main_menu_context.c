@@ -24,6 +24,7 @@ struct st_state main_menu_state =
 int init_menu(st_state *state)
 {
     printf("début de l'initiation\n");
+    int res;
 
     init_render_main_menu(&state->render);
     
@@ -38,7 +39,13 @@ int init_menu(st_state *state)
     st_texture grass_texture = new_texture("ressources/images/grass_test.jpg");
     
     // Creation du groupe
-    add_group(&state->render, RENDER_GROUP_MESH);
+    res = add_group(&state->render, RENDER_GROUP_MESH);
+    if(res != DONE)
+    {
+        fprintf(stderr, "Erreur lors de la création du group.\n");
+        return ERROR;
+    }
+    
     st_render_group *group = get_group(state->render.groups, 0, state->render.nb_groups);
 
     // Définir les transformation

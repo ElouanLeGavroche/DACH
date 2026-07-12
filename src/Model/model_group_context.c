@@ -7,6 +7,14 @@ bool context_group_is_null(st_render_group *group)
 
 int context_group_init(st_render_group *group, int id, e_render_group_type type)
 {
+
+    // Allouer de la mémoire au group
+    group = malloc(sizeof(st_render_group));
+    if (!group) {
+        fprintf(stderr, "Allocation échouée : %s\n", strerror(errno));
+        return FAILED_MALLOC;
+    }
+    
     // Création de l'id
     group->ID = id;
 
@@ -31,14 +39,13 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
     switch (group->type)
     {
     case RENDER_GROUP_MESH:
-        
         // Déclarer le pointeur
-        //group->data = malloc(sizeof(st_mesh_group));
+        group->data = malloc(sizeof(st_mesh_group));
         if (!group->data) {
             fprintf(stderr, "Allocation échouée : %s\n", strerror(errno));
             return FAILED_MALLOC;
         }
-        st_mesh_group *normal_type = (st_mesh_group*)group->data;
+        st_mesh_group *normal_type = group->data;
 
         // Initialiser les valeur de base de group_type
         normal_type->nb_objects = 0;
@@ -54,7 +61,6 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
         group->tables->get_element = NULL;
 
         group->tables->delete_group_object = generic_func_delete_group_object;
-        
         break;
     
     case RENDER_GROUP_INSTANCED_MESH:
@@ -123,18 +129,17 @@ int add_group(st_render_data *render, e_render_group_type type)
     // Définition des variables
     int res;
 
-    st_render_group new_group;
+    st_render_group *new_group;
     st_mesh_group *new_mesh_group;
     st_instanced_mesh_group *new_instanced_group;
 
     // Test des valeurs entrées
     if(test_render(render) == ERROR)
         return ERROR;
-
-
+    
     // On initialise new_group
-    res = context_group_init(&new_group, render->nb_total_groups, type); 
-    if(!res)
+    res = context_group_init(new_group, render->nb_total_groups, type); 
+    if(res != DONE)
     {
         fprintf(stderr, "Echec de l'initiation du group.\n");
         return ERROR;
@@ -151,7 +156,8 @@ int add_group(st_render_data *render, e_render_group_type type)
     }
 
     // Allouer le nouveau group, au... groupe
-    render->groups[render->nb_groups] = new_group;
+    printf("%d\n", new_group->type);
+    render->groups[render->nb_groups] = *new_group;
     render->nb_groups ++;
     render->nb_total_groups ++;
 
