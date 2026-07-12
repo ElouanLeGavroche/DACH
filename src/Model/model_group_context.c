@@ -9,11 +9,7 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
 {
 
     // Allouer de la mémoire au group
-    group = malloc(sizeof(st_render_group));
-    if (!group) {
-        fprintf(stderr, "Allocation échouée : %s\n", strerror(errno));
-        return FAILED_MALLOC;
-    }
+ 
     
     // Création de l'id
     group->ID = id;
@@ -51,9 +47,8 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
         normal_type->nb_objects = 0;
         normal_type->objects = NULL;
 
-        // Ajout du pointeur dans la structure groupe
-        group->data = normal_type;
-        printf("toutou %d\n", normal_type->nb_objects);
+        st_mesh_group *dos = group->data;
+
         // On applique les fonction correspondantes
         group->tables->add_element = _add_render_mesh_object;
         group->tables->remove_element = _remove_render_mesh_object;
@@ -82,8 +77,6 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
 
         instanced_type->shared_render_object = NULL;
 
-        // Ajout du pointeur dans la structure groupe
-        group->data = instanced_type;
 
         // On applique les fonction correspondantes
         group->tables->add_element = _add_render_instenced_mesh_object;
@@ -128,10 +121,12 @@ int add_group(st_render_data *render, e_render_group_type type)
 {
     // Définition des variables
     int res;
-
-    st_render_group *new_group;
-    st_mesh_group *new_mesh_group;
-    st_instanced_mesh_group *new_instanced_group;
+    
+    st_render_group *new_group = malloc(sizeof(st_render_group));
+    if (!new_group) {
+        fprintf(stderr, "Allocation échouée : %s\n", strerror(errno));
+        return FAILED_MALLOC;
+    }
 
     // Test des valeurs entrées
     if(test_render(render) == ERROR)
@@ -160,6 +155,8 @@ int add_group(st_render_data *render, e_render_group_type type)
     render->groups[render->nb_groups] = *new_group;
     render->nb_groups ++;
     render->nb_total_groups ++;
+
+    free(new_group);
 
     return DONE;
 
@@ -312,7 +309,7 @@ int generic_func_add_render_object(st_render_group *group, st_render_object obje
         return ERROR;
     }
 
-    group->tables->add_element(group, object);
+    group->tables->add_element(group->data, object);
     
 
     return DONE;
@@ -327,24 +324,8 @@ int generic_func_remove_render_object(st_render_group *group, int id)
         fprintf(stderr, "Le groupe est null, impossible de supprimer l'un de ces élément.\n");
         return ERROR;
     }
-    
-      /********************************/
-     // Free les info de cet élément //
-    /********************************/
-    switch (group->type)
-    {
-    case RENDER_GROUP_MESH:
-        group->tables->remove_element((st_mesh_group *)group->data, &id);
-        break;
-    
-    case RENDER_GROUP_INSTANCED_MESH:
-        group->tables->remove_element((st_instanced_mesh_group *)group->data, &id);
-        break;
 
-    default:
-        break;
-    }
-
+    group->tables->remove_element(group->data, &id);
     return DONE;
     
 }
@@ -419,6 +400,12 @@ int _add_render_mesh_object(void *void_group, st_render_object object)
 {
     // Allocation de la mémoire
     st_mesh_group *object_list = (st_mesh_group *)void_group;
+    if(object_list == NULL)
+    {
+        fprintf(stderr, "La structure void group ne contient rien pour ajouter un mesh.\n");
+        return ERROR;
+    }
+    printf("%d\n", object_list->nb_objects);
     object_list->objects = realloc(object_list->objects, sizeof(st_render_object) * (object_list->nb_objects + 1));
     
     // Vérifier l'allocation
