@@ -1,4 +1,4 @@
-#include "../../../include/src_include/Context/Controller/controller_init_context.h"
+#include "../../include/src_include/Controller/controller_init_context.h"
 
 st_mesh new_object(char *path)
 {

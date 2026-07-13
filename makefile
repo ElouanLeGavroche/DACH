@@ -51,7 +51,7 @@ $(SAVE_EXEC)$(EXEC):\
 	$(CONTROLLER)controller_mainloop.o\
 	$(CONTROLLER)callback_controller.o\
 	$(CONTROLLER)controller_input.o\
-	$(CONTEXT_CONTROLLER)controller_init_context.o\
+	$(CONTROLLER)controller_init_context.o\
 	\
 	$(MODEL)model_mainloop.o\
 	$(MODEL)model_group_context.o\
