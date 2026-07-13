@@ -155,12 +155,12 @@ typedef struct st_render_object
  */
 typedef struct st_instance_data
 {
-    float model[16];
+    vec3 pos;
 }st_instance_data;
 
 /**
  * @brief structure d'élément instencier
- * @param cpu_data les donnée de celle-ci
+ * @param cpu_data les données du model pour chaque instances
  * @param count le nombre de donnée actives
  * @param capacity le nombre max de données
  * @param vbo buffer de ces données côté GPU

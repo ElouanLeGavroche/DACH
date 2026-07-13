@@ -36,20 +36,12 @@ int init_game(st_state *state)
     add_group(&state->render, RENDER_GROUP_INSTANCED_MESH);
     st_render_group *group = get_group(state->render.groups, WORLD, state->render.nb_groups);
     
-    
-    // Définir les objets
-    int i, y;
-    int size_map = 52;
-    for(i = size_map; i > 0; i --)
-    {
-        for(y = size_map; y > 0; y --)
-        {
-            st_transform floor = configure_transform((st_vec3){0.5, 0.5, 0.0}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0});
-            create_an_object(TILE, tile, grass_texture, shader, floor, group);
-    
-        }
-    }
+    st_transform floor = configure_transform((st_vec3){0.5, 0.5, 0.0}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0});
+    create_an_object(TILE, tile, grass_texture, shader, floor, group);
 
+    st_instanced *data;
+    // Je dois crée le get d'une liste pour ce faire
+    //create_an_instance(52*52, )
 
     mat4 world_tile;
     init_world(&state->render, world_tile, 52*52);

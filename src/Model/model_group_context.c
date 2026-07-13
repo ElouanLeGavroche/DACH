@@ -295,6 +295,37 @@ int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader sh
 
 }
 
+int create_an_instance(int capacity, st_render_object obj, vec3 positions, st_instanced *dest)
+{
+    if(!dest)
+    {
+        fprintf(stderr, "La structure st_instanced est NULL");
+        return ERROR;
+    }
+
+    // Allouer les valeurs initiales
+    dest->capacity = capacity;
+    dest->count = 0;
+    dest->cpu_data = NULL;
+    dest->vbo = obj.mesh->VBO;
+
+    // Crée les instances
+    for(dest->count = 0; dest->count < dest->capacity; dest->count ++)
+    {
+        // On fait une copie du pointeur avant la realloc
+        st_instance_data *data = dest->cpu_data;
+        data = realloc(data, sizeof(st_instance_data) * (dest->count + 1));
+        if(!data)
+        {
+            free(dest);
+            fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
+            return FAILED_MALLOC;
+        }
+        *dest->cpu_data[dest->count].pos = positions[dest->count];
+    }  
+
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -79,7 +79,19 @@ int generic_func_remove_all_render_object(st_mesh_group *group);
 st_render_object* generic_func_get_render_object(st_mesh_group *group, int id);
 int generic_func_delete_group_object(st_render_group *group);
 
+
+/**
+ * @brief Permet de crée un objet qui pourra se trouver dans n'importe quelle context
+ * @param name identifiant de l'élément
+ * @param mesh son mesh déjà crée
+ * @param texture_id l'id de ça texture déjà crée
+ * @param shader l'id de sont shader déjà crée
+ * @param transform ces divers transformation d'un object (pos, rot, trans...)
+ * @param dest group auquel est déstiné l'objet
+ */
 int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader shader, st_transform transform, st_render_group *dest);
+int create_an_instance(int capacity, st_render_object obj, vec3 positions, st_instanced *dest);
+
 
 int _add_render_mesh_object(void *void_group, st_render_object object);
 int _remove_render_mesh_object(void *void_group, void *id);

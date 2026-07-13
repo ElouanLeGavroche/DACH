@@ -91,3 +91,28 @@ void translate_world(mat4 *model, float x, float y, float z)
     glm_mat4_identity(*model);
     glm_translate(*model, (vec3){x, y, z});
 }
+
+vec3* init_map(int amount)
+{   int i, y;
+    vec3 *positions = malloc(sizeof(vec3) * (amount));
+    if(!positions)
+    {
+        fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
+        return FAILED_MALLOC;
+    }
+
+    glm_mat3_identity_array(positions, amount);
+
+    int size_map = 52;
+    int total = 0;
+    for(i = size_map; i > 0; i --)
+    {
+        for(y = size_map; y > 0; y --)
+        {
+            translate_world(positions[total], (float)i * 2.0f - size_map, 0.0, (float)y * 2.0f - size_map);
+            total ++;
+        }
+    }
+        
+    return positions;
+}
