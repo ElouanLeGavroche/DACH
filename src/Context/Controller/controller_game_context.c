@@ -55,12 +55,12 @@ int init_game(st_state *state)
 
     // Initialisation du monde
     init_world(instenced_data, world_tile, world_size);
-    
+    printf("ici : %d\n", instenced_data->count);
+
     // On attribue la valeur tampon à la structure
     st_instanced_mesh_group *instaced_group = (st_instanced_mesh_group *)world_group->data;
     instaced_group->st_instanced = *instenced_data;
     free(instenced_data);
-    printf("ici : %d\n", instaced_group->st_instanced.count);
 
     init_render_game(&state->render);
 

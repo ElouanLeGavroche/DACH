@@ -102,7 +102,7 @@ mat4* init_map(int amount)
     int total = 0;
     for(i = size_map; i > 0; i --)
     {
-        for(y = size_map - 1; y > 0; y --)
+        for(y = size_map; y > 0; y --)
         {
             
             glm_mat4_identity(positions[total]);

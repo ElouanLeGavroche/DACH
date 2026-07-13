@@ -23,10 +23,11 @@ void init_world(st_instanced *instance, mat4 *model, int amount)
     unsigned int instance_vbo;
     glGenBuffers(1, &instance_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, instance_vbo);
-    glBufferData(GL_ARRAY_BUFFER, amount * sizeof(vec3), &model[0], GL_STATIC_DRAW);
-    
+    glBufferData(GL_ARRAY_BUFFER, amount * sizeof(mat4), &model[0], GL_STATIC_DRAW);
+
     // On va diviser le model en 4 partie pour l'envoier au GPU
     // via les in layout, et c'est lui qui s'occupera de les reformer
+
     for(i = 0; i < 4; i ++)
     {
         
@@ -135,11 +136,11 @@ void update_render_game(st_render_data *render)
     int proj_loc = glGetUniformLocation(obj->material->shader.shader, "projection");
     glUniformMatrix4fv(proj_loc, 1, GL_FALSE, &render->camera.projection[0][0]);
 
-
     // Lié le VAO
     glBindVertexArray(obj->mesh->VAO);
     
     glDrawElementsInstanced(GL_TRIANGLES, obj->mesh->index_count, GL_UNSIGNED_INT, 0, group->st_instanced.count);
+    //glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 100);
     glBindVertexArray(0);
 
 }

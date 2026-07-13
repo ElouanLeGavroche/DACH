@@ -306,7 +306,7 @@ int create_an_instance(int capacity, st_render_object *obj, mat4 *model, st_inst
 
     // Allouer les valeurs initiales
     dest->capacity = capacity;
-    dest->count = 0;
+    dest->count = capacity;
     dest->cpu_data = NULL;
     dest->vbo = 0;
     
