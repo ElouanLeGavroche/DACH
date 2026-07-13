@@ -155,7 +155,7 @@ typedef struct st_render_object
  */
 typedef struct st_instance_data
 {
-    float model[16];
+    float mat4[16];
 }st_instance_data;
 
 /**
