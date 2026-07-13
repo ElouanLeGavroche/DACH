@@ -19,7 +19,7 @@
 
 void update_render_game(st_render_data *render);
 void init_render_game(st_render_data *render);
-void init_world(st_render_data *render, mat4 positions, int amount);
+void init_world(st_instanced *instance, mat4 *model, int amount);
 void init_game_camera(st_camera *camera);
 
 #endif

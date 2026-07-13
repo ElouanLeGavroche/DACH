@@ -90,25 +90,26 @@ mat4* init_map(int amount)
 {   
     int i, y;
     mat4 *positions = malloc(sizeof(mat4) * (amount));
+    
     if(!positions)
     {
         fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
         return NULL;
     }
     
-    //glm_mat4_identity_array(positions, amount);
 
-    int size_map = 52*52;
+    int size_map = 52;
     int total = 0;
     for(i = size_map; i > 0; i --)
     {
-        for(y = size_map; y > 0; y --)
+        for(y = size_map - 1; y > 0; y --)
         {
+            
             glm_mat4_identity(positions[total]);
             glm_translate(positions[total], (vec3){(float)i * 2.0f - size_map, 0.0, (float)y * 2.0f - size_map});
             total ++;
         }
     }
-    
+
     return positions;
 }

@@ -17,25 +17,27 @@ void init_render_game(st_render_data *render)
     data->camera = &render->camera; 
 }
 
-void init_world(st_render_data *render, mat4 positions, int amount)
+void init_world(st_instanced *instance, mat4 *model, int amount)
 {
     int i;
     unsigned int instance_vbo;
     glGenBuffers(1, &instance_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, instance_vbo);
-    glBufferData(GL_ARRAY_BUFFER, amount * sizeof(vec3), &positions[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    // Alors là, je comprend rien, mais c'est comme ça dans le cours xD
+    glBufferData(GL_ARRAY_BUFFER, amount * sizeof(vec3), &model[0], GL_STATIC_DRAW);
+    
+    // On va diviser le model en 4 partie pour l'envoier au GPU
+    // via les in layout, et c'est lui qui s'occupera de les reformer
     for(i = 0; i < 4; i ++)
     {
+        
         glEnableVertexAttribArray(3 + i);
         glVertexAttribPointer(3 + i, 4, GL_FLOAT, GL_FALSE, sizeof(mat4), (void*) (i* sizeof(vec4)) );
         glVertexAttribDivisor(3 + i, 1);
     }
     
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    free(positions);
+    printf("%d\n", instance->capacity);
+    instance->vbo = instance_vbo;
 }
 
 void init_game_camera(st_camera *camera)
@@ -100,7 +102,7 @@ void update_render_game(st_render_data *render)
 
     render->camera.actual_speed = render->camera.speed *render->delta_time;
 
-        /* Model */
+    /* Model */
     mat4 model;
     glm_mat4_identity(model);
     glm_rotate(model, (float)glfwGetTime()*2, (vec3){0.0f, 0.0f, 1.0f});
@@ -119,49 +121,25 @@ void update_render_game(st_render_data *render)
     
 
     glClearColor(num_to_01(24), num_to_01(32), num_to_01(61), 1.0f);
-    
-    //glUseProgram(render->groups->shaders[0].shader);
-    
-    /* Application de la rotation */
-    //int model_loc = glGetUniformLocation(render->groups->shaders[0].shader, "model");
-    //glUniformMatrix4fv(model_loc, 1, GL_FALSE, *model);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    st_instanced_mesh_group *group = (st_instanced_mesh_group*)render->groups[0].data;
+    st_render_object *obj = group->shared_render_object;
+    glUseProgram(obj->material->shader.shader);
 
     /* Application du point de vue */
-    //int view_loc = glGetUniformLocation(render->groups->shaders[0].shader, "view");
-    //glUniformMatrix4fv(view_loc, 1, GL_FALSE, *render->camera.view);
+    int view_loc = glGetUniformLocation(obj->material->shader.shader, "view");
+    glUniformMatrix4fv(view_loc, 1, GL_FALSE, &render->camera.view[0][0]);
     
     /* Application de la projection*/
-    //int proj_loc = glGetUniformLocation(render->groups->shaders[0].shader, "projection");
-    //glUniformMatrix4fv(proj_loc, 1, GL_FALSE, *render->camera.projection);
+    int proj_loc = glGetUniformLocation(obj->material->shader.shader, "projection");
+    glUniformMatrix4fv(proj_loc, 1, GL_FALSE, &render->camera.projection[0][0]);
 
-    /*
-    glBindVertexArray(render->groups[0].all_matrices);
-    glDrawArraysInstanced(GL_TRIANGLES, 0, render->groups[0].objects[0].mesh_obj.index_count, render->groups[0].nb_object);
+
+    // Lié le VAO
+    glBindVertexArray(obj->mesh->VAO);
+    
+    glDrawElementsInstanced(GL_TRIANGLES, obj->mesh->index_count, GL_UNSIGNED_INT, 0, group->st_instanced.count);
     glBindVertexArray(0);
-    */
-    /*
-    for(i = 0; i < render->nb_groups; i ++)
-    {
-        for(y = 0; y < render->groups[i].nb_object; y ++)
-        {
-            st_render_object *obj = &render->groups[i].objects[y];
-
-            // Pour les texture
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, obj->texture_id);
-            
-            glm_mat4_identity(model);
-            glm_translate(model, (vec3){obj->x_pos, obj->y_pos, obj->z_pos});
-
-            int model_loc = glGetUniformLocation(render->groups->shaders[0].shader, "model");
-            glUniformMatrix4fv(model_loc, 1, GL_FALSE, *model);
-
-            glBindVertexArray(obj->mesh_obj.VAO);
-            glDrawElementsInstanced(GL_TRIANGLES, obj->mesh_obj.index_count, GL_UNSIGNED_INT, 0, (float *)render->groups[0].all_matrices);
-            glBindVertexArray(0);
-        }
-
-    }
-        */
 
 }

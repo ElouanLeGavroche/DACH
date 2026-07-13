@@ -295,7 +295,7 @@ int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader sh
 
 }
 
-int create_an_instance(int capacity, st_render_object *obj, mat4 *positions, st_instanced *dest)
+int create_an_instance(int capacity, st_render_object *obj, mat4 *model, st_instanced *dest)
 {
     if(!dest)
     {
@@ -309,7 +309,7 @@ int create_an_instance(int capacity, st_render_object *obj, mat4 *positions, st_
     dest->count = 0;
     dest->cpu_data = NULL;
     dest->vbo = 0;
-
+    
     dest->cpu_data = malloc(sizeof(st_instance_data) * capacity);
     if(!dest->cpu_data)
     {
@@ -321,7 +321,7 @@ int create_an_instance(int capacity, st_render_object *obj, mat4 *positions, st_
     // Crée les instances
     for(i = 0; i < dest->capacity; i ++)
     {
-        glm_mat4_copy(positions[i], dest->cpu_data[i].model);
+        glm_mat4_copy(model[i], *dest->cpu_data[i].model);
     }  
 
 }

@@ -41,17 +41,26 @@ int init_game(st_state *state)
     st_transform floor = configure_transform((st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0});
     create_an_object(TILE, tile, grass_texture, shader, floor, world_group);
     
-    st_instanced *instenced_group_data = malloc(sizeof(st_instanced));
-    // 1 - On donne la taille
+    // Paramètre principaux du monde
     int world_size = 52*52;
-    // 2 - On récupère la valeur de l'objet à instancier
-    st_render_object *instenced_obj = world_group->tables->get_element(world_group, TILE);
-    // 3 - On init la carte qui nous donnes un tableau de vec3 avec les bonne pos
     mat4 *world_tile = init_map(world_size);
-    // 4 - On donne le groupe qui va recevoir tout ce beau monde
-    create_an_instance(world_size, instenced_obj, world_tile, instenced_group_data);
     
-    init_world(&state->render, world_tile, world_size);
+
+    // Récuperer l'objet crée
+    st_render_object *instenced_obj = world_group->tables->get_element(world_group, TILE);
+
+    // Crée une variable tampon pour l'instanciation
+    st_instanced *instenced_data = malloc(sizeof(st_instanced));
+    create_an_instance(world_size, instenced_obj, world_tile, instenced_data);
+
+    // Initialisation du monde
+    init_world(instenced_data, world_tile, world_size);
+    
+    // On attribue la valeur tampon à la structure
+    st_instanced_mesh_group *instaced_group = (st_instanced_mesh_group *)world_group->data;
+    instaced_group->st_instanced = *instenced_data;
+    free(instenced_data);
+    printf("ici : %d\n", instaced_group->st_instanced.count);
 
     init_render_game(&state->render);
 
