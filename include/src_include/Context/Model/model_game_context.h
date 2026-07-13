@@ -2,6 +2,7 @@
 #define MODEL_GAME_CONTEXT
 
 #include <stdio.h>
+#include <string.h>
 #include <errno.h>
 
 #include "../../Config/constantes.h"
@@ -19,7 +20,7 @@ void init_data_game(st_state *state);
  * 
  * @attention Devra être modifier lorsque l'on chargera des carte par des fichier
  */
-vec3* init_map(int amount);
+mat4* init_map(int amount);
 
 void move_camera(st_camera *camera, int dir);
 

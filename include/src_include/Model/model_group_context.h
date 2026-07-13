@@ -72,14 +72,6 @@ int remove_group(st_render_data *render, int id);
  */
 st_render_group* get_group(st_render_group *groups, int id, size_t max);
 
-// Partie pour les mesh group
-int generic_func_add_render_object(st_render_group *group, st_render_object object);
-int generic_func_remove_render_object(st_render_group *group, int id);
-int generic_func_remove_all_render_object(st_mesh_group *group);
-st_render_object* generic_func_get_render_object(st_mesh_group *group, int id);
-int generic_func_delete_group_object(st_render_group *group);
-
-
 /**
  * @brief Permet de crée un objet qui pourra se trouver dans n'importe quelle context
  * @param name identifiant de l'élément
@@ -90,13 +82,26 @@ int generic_func_delete_group_object(st_render_group *group);
  * @param dest group auquel est déstiné l'objet
  */
 int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader shader, st_transform transform, st_render_group *dest);
-int create_an_instance(int capacity, st_render_object obj, vec3 positions, st_instanced *dest);
+int create_an_instance(int capacity, st_render_object *obj, mat4 *positions, st_instanced *dest);
+
+  /************************/
+ /* Fonctions générique  */
+/************************/
+
+int generic_func_add_render_object(st_render_group *group, st_render_object object);
+int generic_func_remove_render_object(st_render_group *group, int id);
+int generic_func_remove_all_render_object(st_mesh_group *group);
+st_render_object* generic_func_get_render_object(st_render_group *group, int id);
+int generic_func_delete_group_object(st_render_group *group);
 
 
 int _add_render_mesh_object(void *void_group, st_render_object object);
 int _remove_render_mesh_object(void *void_group, void *id);
+st_render_object* _get_render_mesh_group(void *void_group, int id);
+
 
 int _add_render_instenced_mesh_object(void *void_group, st_render_object object);
 int _remove_render_instenced_mesh_object(void *void_group, void*);
+st_render_object* _get_render_instenced_mesh_group(void *void_group, int id);
 
 #endif

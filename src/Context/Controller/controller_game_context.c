@@ -24,27 +24,34 @@ int init_game(st_state *state)
 {
     printf("début de l'initiation\n");
     
-    // CHARGER LES SHADERS --------------------------------------------------------------------------------------------
+    // CHARGER LES SHADERS ---------------------------------------------------------------------------------------------
     st_shader shader = new_shader("src/Shaders/main_shader.vert", "src/Shaders/main_shader.frag");
 
-    // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
+    // CHARGER LES ELTS 3D ---------------------------------------------------------------------------------------------
     st_mesh tile = new_object(BASIC_TILE_PATH);
 
+    // CHARGER LES TEXTURES --------------------------------------------------------------------------------------------
     st_texture grass_texture = new_texture("ressources/images/grass_test.jpg");
     
     // Creation du groupe du monde
     add_group(&state->render, RENDER_GROUP_INSTANCED_MESH);
-    st_render_group *group = get_group(state->render.groups, WORLD, state->render.nb_groups);
+    st_render_group *world_group = get_group(state->render.groups, WORLD, state->render.nb_groups);
     
-    st_transform floor = configure_transform((st_vec3){0.5, 0.5, 0.0}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0});
-    create_an_object(TILE, tile, grass_texture, shader, floor, group);
-
-    st_instanced *data;
-    // Je dois crée le get d'une liste pour ce faire
-    //create_an_instance(52*52, )
-
-    mat4 world_tile;
-    init_world(&state->render, world_tile, 52*52);
+    // On crée l'objet qui sera instancier
+    st_transform floor = configure_transform((st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0});
+    create_an_object(TILE, tile, grass_texture, shader, floor, world_group);
+    
+    st_instanced *instenced_group_data = malloc(sizeof(st_instanced));
+    // 1 - On donne la taille
+    int world_size = 52*52;
+    // 2 - On récupère la valeur de l'objet à instancier
+    st_render_object *instenced_obj = world_group->tables->get_element(world_group, TILE);
+    // 3 - On init la carte qui nous donnes un tableau de vec3 avec les bonne pos
+    mat4 *world_tile = init_map(world_size);
+    // 4 - On donne le groupe qui va recevoir tout ce beau monde
+    create_an_instance(world_size, instenced_obj, world_tile, instenced_group_data);
+    
+    init_world(&state->render, world_tile, world_size);
 
     init_render_game(&state->render);
 

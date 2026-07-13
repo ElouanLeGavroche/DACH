@@ -17,47 +17,25 @@ void init_render_game(st_render_data *render)
     data->camera = &render->camera; 
 }
 
-void init_world(st_render_data *render, mat4 *models, int amount)
+void init_world(st_render_data *render, mat4 positions, int amount)
 {
-
-    int i, y, index = 0;
-    st_instanced_mesh_group *group_data;
-    models = malloc(sizeof(mat4) * (amount));
-    if(models == NULL)
-    {
-        fprintf(stderr, "erreur lors de l'allocation mémoire de models\n");
-        return;
-    }
-    glm_mat4_identity_array(models, amount);
-
-    for(i = 0; i < render->nb_groups; i ++)
-    {
-        group_data = &render->groups[i];
-        for(y = 0; y < group_data->st_instanced.count; y ++)
-        {
-            mat4 model;
-            glm_mat4_identity(model);
-            st_render_object *obj = &render->groups[i].data[y];
-
-            glm_translate(model, &obj->transform.position);
-
-            glm_mat4_copy(model, models[index]);
-            index ++;
-        }
-    }
+    int i;
     unsigned int instance_vbo;
     glGenBuffers(1, &instance_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, instance_vbo);
-    glBufferData(GL_ARRAY_BUFFER, amount * sizeof(mat4), &models[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, amount * sizeof(vec3), &positions[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     // Alors là, je comprend rien, mais c'est comme ça dans le cours xD
-    glEnableVertexAttribArray(3);
-    glBindBuffer(GL_ARRAY_BUFFER, instance_vbo);
-    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glVertexAttribDivisor(3, 1);
+    for(i = 0; i < 4; i ++)
+    {
+        glEnableVertexAttribArray(3 + i);
+        glVertexAttribPointer(3 + i, 4, GL_FLOAT, GL_FALSE, sizeof(mat4), (void*) (i* sizeof(vec4)) );
+        glVertexAttribDivisor(3 + i, 1);
+    }
     
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    free(positions);
 }
 
 void init_game_camera(st_camera *camera)

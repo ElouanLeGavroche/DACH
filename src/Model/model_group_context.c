@@ -53,7 +53,7 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
         group->tables->add_element = _add_render_mesh_object;
         group->tables->remove_element = _remove_render_mesh_object;
         group->tables->remove_all_elements = NULL;
-        group->tables->get_element = NULL;
+        group->tables->get_element = _get_render_mesh_group;
 
         group->tables->delete_group_object = generic_func_delete_group_object;
         break;
@@ -82,7 +82,7 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
         group->tables->add_element = _add_render_instenced_mesh_object;
         group->tables->remove_element = _remove_render_instenced_mesh_object;
         group->tables->remove_all_elements = NULL;
-        group->tables->get_element = NULL;
+        group->tables->get_element = _get_render_instenced_mesh_group;
 
         group->tables->delete_group_object = generic_func_delete_group_object;
 
@@ -295,33 +295,33 @@ int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader sh
 
 }
 
-int create_an_instance(int capacity, st_render_object obj, vec3 positions, st_instanced *dest)
+int create_an_instance(int capacity, st_render_object *obj, mat4 *positions, st_instanced *dest)
 {
     if(!dest)
     {
-        fprintf(stderr, "La structure st_instanced est NULL");
+        fprintf(stderr, "La structure st_instanced est NULL.\n");
         return ERROR;
     }
+    int i;
 
     // Allouer les valeurs initiales
     dest->capacity = capacity;
     dest->count = 0;
     dest->cpu_data = NULL;
-    dest->vbo = obj.mesh->VBO;
+    dest->vbo = 0;
+
+    dest->cpu_data = malloc(sizeof(st_instance_data) * capacity);
+    if(!dest->cpu_data)
+    {
+        free(dest);
+        fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
+        return FAILED_MALLOC;
+    }
 
     // Crée les instances
-    for(dest->count = 0; dest->count < dest->capacity; dest->count ++)
+    for(i = 0; i < dest->capacity; i ++)
     {
-        // On fait une copie du pointeur avant la realloc
-        st_instance_data *data = dest->cpu_data;
-        data = realloc(data, sizeof(st_instance_data) * (dest->count + 1));
-        if(!data)
-        {
-            free(dest);
-            fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
-            return FAILED_MALLOC;
-        }
-        *dest->cpu_data[dest->count].pos = positions[dest->count];
+        glm_mat4_copy(positions[i], dest->cpu_data[i].model);
     }  
 
 }
@@ -379,7 +379,7 @@ int generic_func_remove_all_render_object(st_mesh_group *group)
     return DONE;
 }
 
-st_render_object* generic_func_get_render_object(st_mesh_group *group, int id)
+st_render_object* generic_func_get_render_object(st_render_group *group, int id)
 {
     int i = 0;
 
@@ -388,19 +388,9 @@ st_render_object* generic_func_get_render_object(st_mesh_group *group, int id)
         fprintf(stderr, "Le groupe est null, impossible de récupéré l'un de ces éléments._n");
         return NULL;
     }
+    st_render_object *object = group->tables->get_element(group->data, id);
 
-    while (i < group->nb_objects && group->objects[i].id != id)
-    {
-        i ++;
-    }
-
-    if(i == group->nb_objects)
-    {
-        fprintf(stderr, "Element non trouvé.\n");
-        return NULL;
-    }
-
-    return &group->objects[i];
+    return object;
 }
 
 int generic_func_delete_group_object(st_render_group *group)
@@ -495,6 +485,28 @@ int _remove_render_mesh_object(void *void_group, void *id)
     return DONE;
 }
 
+st_render_object* _get_render_mesh_group(void *void_group, int id)
+{
+    st_mesh_group *group = (st_mesh_group*)void_group;
+    int i = 0;
+
+    if(group == NULL)
+    {
+        fprintf(stderr, "Le groupe est null, impossible de récupéré l'un de ces éléments._n");
+        return NULL;
+    }
+
+    while (i < group->nb_objects && group->objects[i].id != id) i ++;
+
+    if(i == group->nb_objects)
+    {
+        fprintf(stderr, "Element non trouvé.\n");
+        return NULL;
+    }
+    
+    return &group->objects[i];
+}
+
 int _add_render_instenced_mesh_object(void *void_group, st_render_object object)
 {
     // Allocation mémoire
@@ -525,4 +537,18 @@ int _remove_render_instenced_mesh_object(void *void_group, void*)
     free(group->shared_render_object);
     group->shared_render_object = NULL;
     return DONE;
+}
+
+st_render_object* _get_render_instenced_mesh_group(void *void_group, int id)
+{
+    st_mesh_group *group = (st_mesh_group*)void_group;
+    int i = 0;
+    
+    if(group == NULL)
+    {
+        fprintf(stderr, "Le groupe est null, impossible de récupéré l'un de ces éléments._n");
+        return NULL;
+    }
+
+    return &group->objects[0];
 }
