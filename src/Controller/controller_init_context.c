@@ -23,7 +23,7 @@ st_texture new_texture(char *path)
 
     st_texture texture;
     texture.id = texture_id;
-
+    texture.nb_occurences = 0;
     return texture;
 }
 
@@ -47,6 +47,7 @@ st_shader new_shader(char *path_vert, char *path_frag)
     // Définir les shaders
     st_shader t_shader;
     t_shader.shader = shader;
+    t_shader.nb_occurences = 0;
 
     return t_shader;
 }

@@ -236,7 +236,7 @@ int remove_group(st_render_data *render, int id)
 
 }
 
-int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader shader, st_transform transform, st_render_group *dest)
+int create_an_object(int name, st_mesh mesh, st_texture texture, st_shader shader, st_transform transform, st_render_group *dest)
 {
     st_render_object obj;
     obj.material = malloc(sizeof(st_material));
@@ -254,9 +254,13 @@ int create_an_object(int name, st_mesh mesh, st_texture texture_id, st_shader sh
         return FAILED_MALLOC;
     }
 
+    mesh.nb_occurences ++;
+    texture.nb_occurences ++;
+    shader.nb_occurences ++;
+
     obj.id = name;
     *obj.mesh = mesh;
-    obj.material->texture = texture_id;
+    obj.material->texture = texture;
     obj.material->shader = shader;
     obj.transform = transform;
 

@@ -193,12 +193,49 @@ void destroy_render_data(st_render_data *render)
 {
     if(render == NULL || render->groups == NULL)
             return;
-    int y;
+    int i, y;
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glUseProgram(0);
+    
+    for(i = 0; i < render->nb_groups; i ++)
+    {
+        // On récupère le group lui même pour avoir des lignes plus lisible
+        st_render_group *group = &render->groups[i];
+        
+        switch (group->type)
+        {
+        case RENDER_GROUP_MESH:
+            // On récupère les data avec le type mesh groupe
+            st_mesh_group *mesh_group = group->data;
+
+            for(y = 0; y < mesh_group->nb_objects; y ++)
+            {
+                st_render_object *object = &mesh_group->objects[i];
+
+            // On supprime les données OpenGL
+            glDeleteVertexArrays(1, object->mesh->VAO);
+            glDeleteBuffers(1, object->mesh->VBO);
+            glDeleteBuffers(1, object->mesh->EBO);
+            glDeleteTextures(1, object->material->texture.id);
+            
+            //free(group->objects[i].mesh_obj.face_indice);
+            //free(group->objects[i].mesh_obj.vert_pos);
+            //group->data[i].mesh_obj.face_indice = NULL;
+            //group->data[i].mesh_obj.vert_pos = NULL;
+            }
+            
+            break;
+        case RENDER_GROUP_INSTANCED_MESH:
+            /* code */
+            break;
+        
+        default:
+            break;
+        }
+    }
     /*
     for(y = 0; y < render->nb_groups; y ++)
     {

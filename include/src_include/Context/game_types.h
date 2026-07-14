@@ -50,15 +50,18 @@ typedef struct st_image
 typedef struct st_texture
 {
     unsigned int id;
+    int nb_occurences;
 }st_texture;
 
 /**
  * @brief Structure qui stock le contenu d'un shader
  * @param shader id du shader
+ * @param nb_occurences Permet de savoir combien d'objet on ce shader avant de le free
  */
 typedef struct st_shader
 {
     unsigned int shader;
+    int nb_occurences;
 } st_shader;
 
 /**
@@ -66,6 +69,7 @@ typedef struct st_shader
  * @param VAO valeur des sommets à envoyé à la carte graphique
  * @param VBO buffer de sommets
  * @param EBO buffer de sommets
+ * @param nb_occurences Permet de savoir combien d'objet on ce mesh avant de le free
  */
 typedef struct st_mesh
 {
@@ -73,6 +77,7 @@ typedef struct st_mesh
     unsigned int VBO;
     unsigned int EBO;
     unsigned int index_count;
+    int nb_occurences;
 
 }st_mesh;
 

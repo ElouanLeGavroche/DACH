@@ -58,6 +58,7 @@ st_mesh init_a_3d_loaded_element(st_mesh_data *elt, int indice)
     mesh.VBO = VBO;
     mesh.EBO = EBO;
     mesh.index_count = elt->index_count;
+    mesh.nb_occurences = 0;
     
     // Positition des polygones
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
