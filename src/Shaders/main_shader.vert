@@ -10,6 +10,7 @@ layout (location = 6) in vec4 mod_col3;
 
 uniform mat4 view;
 uniform mat4 projection;
+uniform mat4 transform;
 
 out vec3 our_color;             // Nous définirons la couleur dans cette variable
 out vec2 text_coord;
@@ -18,7 +19,7 @@ out vec2 text_coord;
 void main()
 {
     mat4 model = mat4(mod_col0, mod_col1, mod_col2, mod_col3);
-    gl_Position =  projection * view * model * vec4(a_pos , 1.0);
+    gl_Position =  projection * view * model * transform * vec4(a_pos , 1.0);
 
     our_color = a_color;
     text_coord = a_tex_coord;

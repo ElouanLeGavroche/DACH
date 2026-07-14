@@ -56,7 +56,7 @@ void move_camera(st_camera *camera, int dir)
     switch (dir)
     {
     case DOWN:
-        glm_vec3_mulsubs(camera->up, camera->actual_speed * 3, camera->pos);
+        glm_vec3_mulsubs(camera->up, camera->actual_speed, camera->pos);
         break;
 
     case RIGHT:
@@ -69,7 +69,7 @@ void move_camera(st_camera *camera, int dir)
         break;
 
     case UP:
-        glm_vec3_muladds(camera->up, camera->actual_speed * 3, camera->pos);
+        glm_vec3_muladds(camera->up, camera->actual_speed, camera->pos);
         break;
     case LEFT:
         
@@ -89,7 +89,7 @@ void move_camera(st_camera *camera, int dir)
 mat4* init_map(int amount)
 {   
     int i, y;
-    mat4 *positions = malloc(sizeof(mat4) * (amount));
+    mat4 *positions = malloc(sizeof(mat4) * (amount*amount));
     
     if(!positions)
     {
@@ -98,15 +98,14 @@ mat4* init_map(int amount)
     }
     
 
-    int size_map = 52;
     int total = 0;
-    for(i = size_map; i > 0; i --)
+    for(i = amount; i > 0; i --)
     {
-        for(y = size_map; y > 0; y --)
+        for(y = amount; y > 0; y --)
         {
             
             glm_mat4_identity(positions[total]);
-            glm_translate(positions[total], (vec3){(float)i * 2.0f - size_map, 0.0, (float)y * 2.0f - size_map});
+            glm_translate(positions[total], (vec3){(float)i * 2.0f - amount, 0.0, (float)y * 2.0f - amount});
             total ++;
         }
     }

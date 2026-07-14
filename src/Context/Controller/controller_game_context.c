@@ -25,16 +25,22 @@ int init_game(st_state *state)
     printf("début de l'initiation\n");
     
     init_render_game(&state->render);
-    
+
     // CHARGER LES SHADERS ---------------------------------------------------------------------------------------------
     st_shader *shader = new_shader("src/Shaders/main_shader.vert", "src/Shaders/main_shader.frag");
+
+
 
     // CHARGER LES ELTS 3D ---------------------------------------------------------------------------------------------
     st_mesh *tile = new_object(BASIC_TILE_PATH);
 
+
+
     // CHARGER LES TEXTURES --------------------------------------------------------------------------------------------
     st_texture *grass_texture = new_texture("ressources/images/grass_test.jpg");
     
+
+
     // Creation du groupe du monde
     add_group(&state->render, RENDER_GROUP_INSTANCED_MESH);
     st_render_group *world_group = get_group(state->render.groups, WORLD, state->render.nb_groups);
@@ -44,7 +50,7 @@ int init_game(st_state *state)
     create_an_object(TILE, tile, grass_texture, shader, floor, world_group);
     
     // Paramètre principaux du monde
-    int world_size = 52*52;
+    int world_size = 150;
     mat4 *world_tile = init_map(world_size);
     
 
@@ -53,10 +59,10 @@ int init_game(st_state *state)
 
     // Crée une variable tampon pour l'instanciation
     st_instanced *instenced_data = malloc(sizeof(st_instanced));
-    create_an_instance(world_size, instenced_obj, world_tile, instenced_data);
+    create_an_instance(world_size * world_size, instenced_obj, world_tile, instenced_data);
 
     // Initialisation du monde
-    init_world(instenced_data, world_tile, world_size);
+    init_world(instenced_data, world_tile, world_size * world_size);
 
     // On attribue la valeur tampon à la structure
     st_instanced_mesh_group *instaced_group = (st_instanced_mesh_group *)world_group->data;

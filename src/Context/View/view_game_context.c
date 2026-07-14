@@ -43,17 +43,17 @@ void init_world(st_instanced *instance, mat4 *model, int amount)
 void init_game_camera(st_camera *camera)
 {
     // Vitesse absolue de la caméra
-    camera->speed = 4.0f;
+    camera->speed = 30.0f;
     // Vitesse relative de la caméra
     camera->actual_speed = 0.0f;
     // ortho_size de la fenêtre
     camera->ratio = ((float)SCREEN_WITH_DEFAULT / (float)SCREEN_HEIGHT_DEFAULT) * (4.0f / 3.0f);
     // Rendu le plus proche
-    camera->near_z = -100.0f;
+    camera->near_z = -1000.0f;
     // Rendu le plus loin
-    camera->far_z = 100.0f; 
+    camera->far_z = 1000.0f; 
     // Taille du champ de vision (N 15; S 15, E 15, W 15)
-    camera->ortho_size = 15.0f;
+    camera->ortho_size = 250.0f;
 
     vec3 center;
 
@@ -63,8 +63,8 @@ void init_game_camera(st_camera *camera)
     // Création de la vue Orthogonale avec les paramètres déclarer plus haut
     glm_ortho(
         //Champ de vue
-        -camera->ortho_size - camera->ratio, 
-        camera->ortho_size + camera->ratio, 
+        -camera->ortho_size * camera->ratio, 
+        camera->ortho_size * camera->ratio, 
         -camera->ortho_size, 
         camera->ortho_size, 
         // Profondeur de champ
@@ -78,13 +78,13 @@ void init_game_camera(st_camera *camera)
     // On paramètre la Position de la caméra
     glm_vec3_copy((vec3){2.0f, 2.0f, 2.0f} , camera->pos);
     // Vecteur qui correspond à ce que regarde la caméra
-    glm_vec3_copy((vec3){0.125, 0.125, 0.125} , camera->front);
+    glm_vec3_copy((vec3){0.450, 0.250, 0.450} , camera->front);
     // Vecteur haut
-    glm_vec3_copy((vec3){0.0, 0.25, 0.0} , camera->up);
+    glm_vec3_copy((vec3){0.0, 1.0, 0.0} , camera->up);
 
     /* Définition du LookAt*/
-    glm_vec3_sub(camera->pos, camera->front, center);
-    glm_lookat(camera->pos, center, camera->up, camera->view);
+    //glm_vec3_sub(camera->pos, camera->front, center);
+    glm_lookat(camera->pos, camera->front, camera->up, camera->view);
 
 }
 
@@ -105,9 +105,9 @@ void update_render_game(st_render_data *render)
     /* Model */
     mat4 model;
     glm_mat4_identity(model);
-    glm_rotate(model, (float)glfwGetTime()*2, (vec3){0.0f, 0.0f, 1.0f});
-    glm_translate(model, (vec3){0.0f, 0.0f, (float)glfwGetTime()*2});
-    unsigned int transfrom_loc;
+    //glm_rotate(model, (float)glfwGetTime()*2, (vec3){0.5f, 0.5f, 1.0f});
+    //glm_translate(model, (vec3){0.0f, 0.0f, (float)glfwGetTime()*2});
+    
     
     vec3 center;
 
@@ -118,7 +118,6 @@ void update_render_game(st_render_data *render)
         render->camera.up, 
         render->camera.view
     );
-    
 
     glClearColor(num_to_01(24), num_to_01(32), num_to_01(61), 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -134,6 +133,10 @@ void update_render_game(st_render_data *render)
     /* Application de la projection*/
     int proj_loc = glGetUniformLocation(obj->material->shader->shader, "projection");
     glUniformMatrix4fv(proj_loc, 1, GL_FALSE, &render->camera.projection[0][0]);
+
+    /* application d'une transformation bidon */
+    unsigned int transfrom_loc = glGetUniformLocation(obj->material->shader->shader, "transform");;
+    glUniformMatrix4fv(transfrom_loc, 1, GL_FALSE, *model);
 
     // Lié le VAO
     glBindVertexArray(obj->mesh->VAO);

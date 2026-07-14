@@ -15,11 +15,11 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
             camera->ortho_size = 25.0f;
       
       glm_ortho(
-            -camera->ortho_size - camera->ratio,
-            camera->ortho_size + camera->ratio,
+            -camera->ortho_size * camera->ratio,
+            camera->ortho_size * camera->ratio,
             -camera->ortho_size, camera->ortho_size, 
-            -100.0f, 
-            100.0f, 
+            -1000.0f, 
+            1000.0f, 
             camera->projection
       );
       //glm_perspective(glm_rad(camera->ratio), (float)1280/(float)720, 0.1f, 100.0f, camera->projection);
@@ -40,8 +40,8 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height){
       camera->ratio = ((float)window_parametr->size_x / (float)window_parametr->size_y) * (4.0f / 3.0f);
 
       glm_ortho(
-            -camera->ortho_size - camera->ratio,
-            camera->ortho_size + camera->ratio,
+            -camera->ortho_size * camera->ratio,
+            camera->ortho_size * camera->ratio,
             -camera->ortho_size,
             camera->ortho_size, 
             camera->near_z, 
