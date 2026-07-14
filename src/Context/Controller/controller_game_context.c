@@ -25,13 +25,13 @@ int init_game(st_state *state)
     printf("début de l'initiation\n");
     
     // CHARGER LES SHADERS ---------------------------------------------------------------------------------------------
-    st_shader shader = new_shader("src/Shaders/main_shader.vert", "src/Shaders/main_shader.frag");
+    st_shader *shader = new_shader("src/Shaders/main_shader.vert", "src/Shaders/main_shader.frag");
 
     // CHARGER LES ELTS 3D ---------------------------------------------------------------------------------------------
-    st_mesh tile = new_object(BASIC_TILE_PATH);
+    st_mesh *tile = new_object(BASIC_TILE_PATH);
 
     // CHARGER LES TEXTURES --------------------------------------------------------------------------------------------
-    st_texture grass_texture = new_texture("ressources/images/grass_test.jpg");
+    st_texture *grass_texture = new_texture("ressources/images/grass_test.jpg");
     
     // Creation du groupe du monde
     add_group(&state->render, RENDER_GROUP_INSTANCED_MESH);

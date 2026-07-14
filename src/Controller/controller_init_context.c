@@ -1,13 +1,18 @@
 #include "../../include/src_include/Controller/controller_init_context.h"
 
-st_mesh new_object(char *path)
+st_mesh* new_object(char *path)
 {
     st_mesh_data mesh_data = {0};
-    st_mesh mesh;
+    st_mesh *mesh = malloc(sizeof(st_mesh));
+    if(!mesh)
+    {
+        fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
+        return FAILED_MALLOC;
+    }
 
     load_file(path, &mesh_data);
 
-    mesh = init_a_3d_loaded_element(&mesh_data, 0);
+    *mesh = init_a_3d_loaded_element(&mesh_data, 0);
     // On nettoye la structure côté CPU
     free(mesh_data.face_indice);
     free(mesh_data.vert_pos);
@@ -15,25 +20,36 @@ st_mesh new_object(char *path)
     return mesh;
 }
 
-st_texture new_texture(char *path)
+st_texture* new_texture(char *path)
 {
-    // CHARGER LES TEXTURES DES ELEMENTS --------------------------------------------------------------------------------------------
     st_image image = load_texture(path, 736, 552, 0);
+    st_texture *texture = malloc(sizeof(st_texture));
+    if(!texture)
+    {
+        fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
+        return FAILED_MALLOC;
+    }
 
-    // Initialiser les Texutures des elements --------------------------------------------------------------------------------------------
     int texture_id = init_a_loaded_texture(&image);
     stbi_image_free(image.data);
 
-    st_texture texture;
-    texture.id = texture_id;
-    texture.nb_occurences = 0;
+    
+    texture->id = texture_id;
+    texture->nb_occurences = 0;
     return texture;
 }
 
-st_shader new_shader(char *path_vert, char *path_frag)
+st_shader* new_shader(char *path_vert, char *path_frag)
 {
     const char *vert = load_shader(path_vert);
     const char *frag = load_shader(path_frag);
+
+    st_shader *t_shader = malloc(sizeof(st_shader));
+    if(!t_shader)
+    {
+        fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
+        return FAILED_MALLOC;
+    }
 
     // ""Gestion de l'erreur - lmao""
     if(!vert || !frag)
@@ -48,9 +64,8 @@ st_shader new_shader(char *path_vert, char *path_frag)
     free((void *)frag);
 
     // Définir les shaders
-    st_shader t_shader;
-    t_shader.shader = shader;
-    t_shader.nb_occurences = 0;
+    t_shader->shader = shader;
+    t_shader->nb_occurences = 0;
 
     return t_shader;
 }

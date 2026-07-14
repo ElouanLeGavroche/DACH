@@ -125,14 +125,14 @@ void update_render_game(st_render_data *render)
 
     st_instanced_mesh_group *group = (st_instanced_mesh_group*)render->groups[0].data;
     st_render_object *obj = group->shared_render_object;
-    glUseProgram(obj->material->shader.shader);
+    glUseProgram(obj->material->shader->shader);
 
     /* Application du point de vue */
-    int view_loc = glGetUniformLocation(obj->material->shader.shader, "view");
+    int view_loc = glGetUniformLocation(obj->material->shader->shader, "view");
     glUniformMatrix4fv(view_loc, 1, GL_FALSE, &render->camera.view[0][0]);
     
     /* Application de la projection*/
-    int proj_loc = glGetUniformLocation(obj->material->shader.shader, "projection");
+    int proj_loc = glGetUniformLocation(obj->material->shader->shader, "projection");
     glUniformMatrix4fv(proj_loc, 1, GL_FALSE, &render->camera.projection[0][0]);
 
     // Lié le VAO

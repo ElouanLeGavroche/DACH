@@ -128,8 +128,8 @@ typedef struct st_transform
  */
 typedef struct st_material
 {
-    st_shader shader;
-    st_texture texture;
+    st_shader *shader;
+    st_texture *texture;
 }st_material;
 
 /**

@@ -236,7 +236,7 @@ int remove_group(st_render_data *render, int id)
 
 }
 
-int create_an_object(int name, st_mesh mesh, st_texture texture, st_shader shader, st_transform transform, st_render_group *dest)
+int create_an_object(int name, st_mesh *mesh, st_texture *texture, st_shader *shader, st_transform transform, st_render_group *dest)
 {
     st_render_object obj;
     obj.material = malloc(sizeof(st_material));
@@ -254,12 +254,13 @@ int create_an_object(int name, st_mesh mesh, st_texture texture, st_shader shade
         return FAILED_MALLOC;
     }
 
-    mesh.nb_occurences ++;
-    texture.nb_occurences ++;
-    shader.nb_occurences ++;
+    mesh->nb_occurences ++;
+    texture->nb_occurences ++;
+    shader->nb_occurences ++;
 
     obj.id = name;
-    *obj.mesh = mesh;
+
+    obj.mesh = mesh;
     obj.material->texture = texture;
     obj.material->shader = shader;
     obj.transform = transform;
@@ -448,27 +449,27 @@ int _remove_render_mesh_object(void *void_group, int id)
 {
     int i = 0;
     st_mesh_group *group = (st_mesh_group*)void_group;
-    
-    // Recherche de l'élément dans la liste.
-    //int *id = (int *)id;
-    while (i < group->nb_objects && group->objects[i].id != id) i ++;
-    if(i == group->nb_objects)
-    {
-        fprintf(stderr, "Element non trouvé.\n");
-        return ERROR;
-    }
-
-    // Loop de décalage
-    for(i = i; i < group->nb_objects - 1; i ++) group->objects[i] = group->objects[i + 1];
 
     // S'il ne reste plus rien, c'est équivalent au free
-    if(group->nb_objects - 1 == 0)
+    if(group->nb_objects == 1)
     {
+        printf("ici\n");
         free(group->objects);
         group->objects = NULL;
     }
     else
     {
+        while (i < group->nb_objects && group->objects[i].id != id) i ++;
+        
+        if(i == group->nb_objects)
+        {
+            fprintf(stderr, "Element non trouvé.\n");
+            return ERROR;
+        }
+
+        // Loop de décalage
+        for(i = i; i < group->nb_objects - 1; i ++) group->objects[i] = group->objects[i + 1];
+
         // Re Allocation de la nouvelle taille
         group->objects = realloc(group->objects, sizeof(st_render_object) * (group->nb_objects - 1));
             // Vérifier l'allocation

@@ -52,24 +52,24 @@ void update_render_main_menu(st_render_data *render)
             for(y = 0; y < mesh_group->nb_objects; y ++)
             {
                 
-                int model_loc = glGetUniformLocation(mesh_group->objects[y].material->shader.shader, "model");
+                int model_loc = glGetUniformLocation(mesh_group->objects[y].material->shader->shader, "model");
                 glUniformMatrix4fv(model_loc, 1, GL_FALSE, *model);
 
-                int view_loc = glGetUniformLocation(mesh_group->objects[y].material->shader.shader, "view");
+                int view_loc = glGetUniformLocation(mesh_group->objects[y].material->shader->shader, "view");
                 glUniformMatrix4fv(view_loc, 1, GL_FALSE, *view);
 
-                int proj_loc = glGetUniformLocation(mesh_group->objects[y].material->shader.shader, "projection");
+                int proj_loc = glGetUniformLocation(mesh_group->objects[y].material->shader->shader, "projection");
                 glUniformMatrix4fv(proj_loc, 1, GL_FALSE, *proj);
 
-                transform_loc = glGetUniformLocation(mesh_group->objects[y].material->shader.shader, "transform");
+                transform_loc = glGetUniformLocation(mesh_group->objects[y].material->shader->shader, "transform");
                 glUniformMatrix4fv(transform_loc, 1, GL_FALSE, *trans);
 
                 // Pour le shader
-                glUseProgram(mesh_group->objects[y].material->shader.shader);
+                glUseProgram(mesh_group->objects[y].material->shader->shader);
 
                 // Pour les texture
                 glActiveTexture(GL_TEXTURE0);
-                glBindTexture(GL_TEXTURE_2D, mesh_group->objects[y].material->texture.id);
+                glBindTexture(GL_TEXTURE_2D, mesh_group->objects[y].material->texture->id);
 
                 // Pour les éléments
                 glBindVertexArray(mesh_group->objects[y].mesh->VAO);

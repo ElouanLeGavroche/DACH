@@ -29,14 +29,14 @@ int init_menu(st_state *state)
     init_render_main_menu(&state->render);
     
     // CHARGER LES SHADERS --------------------------------------------------------------------------------------------
-    st_shader main_shader = new_shader("src/Shaders/shader_menu.vert", "src/Shaders/main_shader.frag");
+    st_shader *main_shader = new_shader("src/Shaders/shader_menu.vert", "src/Shaders/main_shader.frag");
 
     // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
-    st_mesh house = new_object(BASIC_HOUSE_PATH);
-    st_mesh tile = new_object(BASIC_TILE_PATH);
+    st_mesh *house = new_object(BASIC_HOUSE_PATH);
+    st_mesh *tile = new_object(BASIC_TILE_PATH);
 
     // Charger les textures
-    st_texture grass_texture = new_texture("ressources/images/grass_test.jpg");
+    st_texture *grass_texture = new_texture("ressources/images/grass_test.jpg");
     
     // Creation du groupe
     res = add_group(&state->render, RENDER_GROUP_MESH);
