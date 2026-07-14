@@ -27,9 +27,7 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
 
     group->tables->add_element = NULL;
     group->tables->remove_element = NULL;
-    group->tables->remove_all_elements = NULL;
     group->tables->get_element = NULL;
-    group->tables->delete_group_object = NULL;
 
     // Création du type de groupe
     switch (group->type)
@@ -52,10 +50,7 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
         // On applique les fonction correspondantes
         group->tables->add_element = _add_render_mesh_object;
         group->tables->remove_element = _remove_render_mesh_object;
-        group->tables->remove_all_elements = NULL;
         group->tables->get_element = _get_render_mesh_group;
-
-        group->tables->delete_group_object = generic_func_delete_group_object;
         break;
     
     case RENDER_GROUP_INSTANCED_MESH:
@@ -81,10 +76,7 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
         // On applique les fonction correspondantes
         group->tables->add_element = _add_render_instenced_mesh_object;
         group->tables->remove_element = _remove_render_instenced_mesh_object;
-        group->tables->remove_all_elements = NULL;
         group->tables->get_element = _get_render_instenced_mesh_group;
-
-        group->tables->delete_group_object = generic_func_delete_group_object;
 
         break;
 
@@ -354,25 +346,6 @@ int generic_func_remove_render_object(st_render_group *group, int id)
     
 }
 
-int generic_func_remove_all_render_object(st_mesh_group *group)
-{
-    int i;
-    for(i = 0; i < group->nb_objects; i ++)
-    {
-        // Free du pointeur vers ses matériaux
-        free(group->objects[i].material);
-        // Free du pointeur vers son mesh
-        free(group->objects[i].mesh);
-    }
-
-    free(group->objects);
-
-    group->objects = NULL;
-    group->nb_objects = 0;
-
-    return DONE;
-}
-
 st_render_object* generic_func_get_render_object(st_render_group *group, int id)
 {
     int i = 0;
@@ -387,27 +360,7 @@ st_render_object* generic_func_get_render_object(st_render_group *group, int id)
     return object;
 }
 
-int generic_func_delete_group_object(st_render_group *group)
-{   
-    
-    if(group == NULL)
-    {
-        fprintf(stderr, "Le groupe est null, impossible de la supprimer.\n");
-        return ERROR;
-    }
-    
-    if(group->type == RENDER_GROUP_MESH)
-    {
-        st_mesh_group *mesh_group = (st_mesh_group *)group->data;
-        generic_func_remove_all_render_object(mesh_group);
-        free(group->data);
-    } 
-    free(group->tables);
-    free(group);
 
-    printf("delete\n");
-    return DONE;
-}
 
 
 int _add_render_mesh_object(void *void_group, st_render_object object)

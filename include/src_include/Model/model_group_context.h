@@ -90,9 +90,7 @@ int create_an_instance(int capacity, st_render_object *obj, mat4 *positions, st_
 
 int generic_func_add_render_object(st_render_group *group, st_render_object object);
 int generic_func_remove_render_object(st_render_group *group, int id);
-int generic_func_remove_all_render_object(st_mesh_group *group);
 st_render_object* generic_func_get_render_object(st_render_group *group, int id);
-int generic_func_delete_group_object(st_render_group *group);
 
 
 int _add_render_mesh_object(void *void_group, st_render_object object);
