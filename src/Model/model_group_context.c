@@ -186,20 +186,17 @@ int remove_group(st_render_data *render, int id)
     /* On va parcourir la liste pour trouver grâce à l'id, le group à supprimer */
     int i = 0, y = 0;
     int res;
-
+    
     while(i < render->nb_groups && render->groups[i].ID != id)
     {
         i ++;
     }
-    
+
     if (i == render->nb_groups)
     {
         fprintf(stderr, "Groupe non trouvé dans la liste.\n");
         return ERROR;
     }
-    
-    // On supprime le groupe
-    res = render->groups[i].tables->delete_group_object(&render->groups[i]);
 
     // On vérifie que la suppression c'est bien passer
     if(res == ERROR)
@@ -208,19 +205,19 @@ int remove_group(st_render_data *render, int id)
         return ERROR;
     }
 
-    // Faire un décalage pour "resize" la liste
-    for(y = i; y < render->nb_groups - 1; y ++) render->groups[y] = render->groups[y + 1];
-
-    render->nb_groups --;
-
     if(render->nb_groups == 1)
     {
+        printf("yooo\n");
         free(render->groups);
-        render->groups = 0;
+        render->groups = NULL;
         render->nb_groups = 0;
     }
     else
     {
+        render->nb_groups --;
+        // Faire un décalage pour "resize" la liste
+        for(y = i; y < render->nb_groups; y ++) render->groups[y] = render->groups[y + 1];
+
         // Realocation de la liste
         render->groups = realloc(render->groups, sizeof(st_render_group) * render->nb_groups);
 
@@ -242,14 +239,6 @@ int create_an_object(int name, st_mesh *mesh, st_texture *texture, st_shader *sh
     obj.material = malloc(sizeof(st_material));
     if(!obj.material)
     {
-        fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
-        return FAILED_MALLOC;
-    }
-
-    obj.mesh = malloc(sizeof(st_mesh));
-    if(!obj.mesh)
-    {
-        free(obj.material);
         fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
         return FAILED_MALLOC;
     }
@@ -453,7 +442,6 @@ int _remove_render_mesh_object(void *void_group, int id)
     // S'il ne reste plus rien, c'est équivalent au free
     if(group->nb_objects == 1)
     {
-        printf("ici\n");
         free(group->objects);
         group->objects = NULL;
     }

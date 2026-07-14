@@ -223,9 +223,8 @@ void destroy_render_data(st_render_data *render)
 
             for(y = 0; y < tamp_nb_object; y ++)
             {
-                
-                object = &mesh_group->objects[y];
-                printf("%d\n", object->material->shader->nb_occurences);
+                // On supprime toujours le premier élément
+                object = &mesh_group->objects[0];
                 printf("Suppresion de l'élément : %d, éléments free : %d/%d.\n", object->id, y, tamp_nb_object - 1);
 
                 object->material->shader->nb_occurences --;
@@ -246,7 +245,7 @@ void destroy_render_data(st_render_data *render)
                 if(object->material->texture->nb_occurences == 0)
                 {
                     glDeleteTextures(1, &object->material->texture->id);
-                    free(object->material->shader);
+                    free(object->material->texture);
                 }
                 // Si c'est le dernier object à avoir l'occurence d'un shader, alors c'est lui qui le supprime
                 if(object->material->shader->nb_occurences == 0)
@@ -289,42 +288,11 @@ void destroy_render_data(st_render_data *render)
         // On supprime les tables du groupe
         free(group->tables);
         // On supprime le groupe
+        
         remove_group(render, group->ID);
+        
     }
-    /*
-    for(y = 0; y < render->nb_groups; y ++)
-    {
-        st_render_group *group = &render->groups[y];
-        
-        int i;
-        // On détruit tout les éléments de la liste
-        
-        for(i = 0; i < group->nb_object; i ++)
-        {
-            glDeleteVertexArrays(1, &group->data[i].mesh_obj.VAO);
-            glDeleteBuffers(1, &group->data[i].mesh_obj.VBO);
-            glDeleteBuffers(1, &group->data[i].mesh_obj.EBO);
-            glDeleteTextures(1, &group->data[i].texture_id);
-            
-            //free(group->objects[i].mesh_obj.face_indice);
-            //free(group->objects[i].mesh_obj.vert_pos);
-            group->data[i].mesh_obj.face_indice = NULL;
-            group->data[i].mesh_obj.vert_pos = NULL;
-        }
-            
-        free(group->data);
-        group->data = NULL;
-        group->nb_object = 0;
-        
-        for(i = 0; i < group->nb_shader; i ++)
-        {
-            glDeleteProgram(group->shaders[i].shader);
-        }
-        free(group->shaders);
-        group->shaders = NULL;
-        group->nb_shader = 0;
-    }
-        */
+
     free(render->groups);
     render->groups = NULL;
     render->nb_groups = 0;

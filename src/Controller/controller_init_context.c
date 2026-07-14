@@ -7,7 +7,7 @@ st_mesh* new_object(char *path)
     if(!mesh)
     {
         fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
-        return FAILED_MALLOC;
+        return NULL;
     }
 
     load_file(path, &mesh_data);
@@ -27,7 +27,7 @@ st_texture* new_texture(char *path)
     if(!texture)
     {
         fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
-        return FAILED_MALLOC;
+        return NULL;
     }
 
     int texture_id = init_a_loaded_texture(&image);
@@ -48,7 +48,7 @@ st_shader* new_shader(char *path_vert, char *path_frag)
     if(!t_shader)
     {
         fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
-        return FAILED_MALLOC;
+        return NULL;
     }
 
     // ""Gestion de l'erreur - lmao""
