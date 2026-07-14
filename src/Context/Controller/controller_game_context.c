@@ -24,6 +24,8 @@ int init_game(st_state *state)
 {
     printf("début de l'initiation\n");
     
+    init_render_game(&state->render);
+    
     // CHARGER LES SHADERS ---------------------------------------------------------------------------------------------
     st_shader *shader = new_shader("src/Shaders/main_shader.vert", "src/Shaders/main_shader.frag");
 
@@ -59,9 +61,7 @@ int init_game(st_state *state)
     // On attribue la valeur tampon à la structure
     st_instanced_mesh_group *instaced_group = (st_instanced_mesh_group *)world_group->data;
     instaced_group->st_instanced = *instenced_data;
-    free(instenced_data);
 
-    init_render_game(&state->render);
 
     // Initialiser le model --------------------------------------------------------------------------------------------
     init_data_game(state);
@@ -74,8 +74,11 @@ int init_game(st_state *state)
 
     glfwSetScrollCallback(window, scroll_callback);
     
-
+    free(instenced_data);
+    free(world_tile);
+    
     printf("Context jeu initier\n");
+
     return DONE;
 }
 

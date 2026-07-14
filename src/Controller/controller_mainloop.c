@@ -207,7 +207,7 @@ void destroy_render_data(st_render_data *render)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glUseProgram(0);
-    
+
     tamp_nb_group = render->nb_groups;
     for(i = 0; i < tamp_nb_group; i ++)
     {
@@ -251,10 +251,20 @@ void destroy_render_data(st_render_data *render)
 
             break;
         case RENDER_GROUP_INSTANCED_MESH:
-            
+            printf("okosdkoqsdkoqkdoqkd\n");
         
             // On récupère les data avec le type mesh groupe
             instanced_mesh_group = group->data;
+            references_object_test(instanced_mesh_group->shared_render_object);
+
+            free(instanced_mesh_group->shared_render_object->material);
+            free(instanced_mesh_group->shared_render_object->mesh);
+
+            free(instanced_mesh_group->shared_render_object);
+
+            glDeleteBuffers(1, &instanced_mesh_group->st_instanced.vbo);
+            free(instanced_mesh_group->st_instanced.cpu_data);
+            
             break;
         
         default:
