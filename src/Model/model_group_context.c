@@ -359,7 +359,7 @@ int generic_func_remove_render_object(st_render_group *group, int id)
         return ERROR;
     }
 
-    group->tables->remove_element(group->data, &id);
+    group->tables->remove_element(group->data, id);
     return DONE;
     
 }
@@ -444,24 +444,19 @@ int _add_render_mesh_object(void *void_group, st_render_object object)
     return DONE;
 }
 
-int _remove_render_mesh_object(void *void_group, void *id)
+int _remove_render_mesh_object(void *void_group, int id)
 {
     int i = 0;
     st_mesh_group *group = (st_mesh_group*)void_group;
-
-    // Recherche de l'élément dans la liste.
-    while (i < group->nb_objects && group->objects[i].id != *(int*)id) i ++;
     
+    // Recherche de l'élément dans la liste.
+    //int *id = (int *)id;
+    while (i < group->nb_objects && group->objects[i].id != id) i ++;
     if(i == group->nb_objects)
     {
         fprintf(stderr, "Element non trouvé.\n");
         return ERROR;
     }
-
-    // Free du pointeur vers ses matériaux
-    free(group->objects[i].material);
-    // Free du pointeur vers son mesh
-    free(group->objects[i].mesh);
 
     // Loop de décalage
     for(i = i; i < group->nb_objects - 1; i ++) group->objects[i] = group->objects[i + 1];
@@ -476,13 +471,12 @@ int _remove_render_mesh_object(void *void_group, void *id)
     {
         // Re Allocation de la nouvelle taille
         group->objects = realloc(group->objects, sizeof(st_render_object) * (group->nb_objects - 1));
-    }
-
-    // Vérifier l'allocation
-    if(!group->objects)
-    {
-        fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
-        return FAILED_MALLOC;
+            // Vérifier l'allocation
+        if(!group->objects)
+        {
+            fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
+            return FAILED_MALLOC;
+        }
     }
     
     group->nb_objects --;
@@ -529,7 +523,7 @@ int _add_render_instenced_mesh_object(void *void_group, st_render_object object)
     return DONE;
 }
 
-int _remove_render_instenced_mesh_object(void *void_group, void*)
+int _remove_render_instenced_mesh_object(void *void_group, int)
 {
     st_instanced_mesh_group *group = (st_instanced_mesh_group*)void_group;
     free(group->shared_render_object->material);

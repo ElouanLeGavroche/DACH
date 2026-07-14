@@ -96,12 +96,12 @@ int generic_func_delete_group_object(st_render_group *group);
 
 
 int _add_render_mesh_object(void *void_group, st_render_object object);
-int _remove_render_mesh_object(void *void_group, void *id);
+int _remove_render_mesh_object(void *void_group, int id);
 st_render_object* _get_render_mesh_group(void *void_group, int id);
 
 
 int _add_render_instenced_mesh_object(void *void_group, st_render_object object);
-int _remove_render_instenced_mesh_object(void *void_group, void*);
+int _remove_render_instenced_mesh_object(void *void_group, int);
 st_render_object* _get_render_instenced_mesh_group(void *void_group, int id);
 
 #endif

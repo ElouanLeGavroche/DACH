@@ -37,7 +37,6 @@ void init_world(st_instanced *instance, mat4 *model, int amount)
     }
     
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    printf("%d\n", instance->capacity);
     instance->vbo = instance_vbo;
 }
 

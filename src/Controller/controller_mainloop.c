@@ -195,6 +195,8 @@ void destroy_render_data(st_render_data *render)
             return;
     int i, y;
 
+    printf("Début de libération de la mémoire de l'ancien context.\n");
+
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -213,18 +215,41 @@ void destroy_render_data(st_render_data *render)
 
             for(y = 0; y < mesh_group->nb_objects; y ++)
             {
-                st_render_object *object = &mesh_group->objects[i];
+                st_render_object *object = &mesh_group->objects[y];
+                printf("Suppresion de l'élément : %d.\n", object->id);
 
-            // On supprime les données OpenGL
-            glDeleteVertexArrays(1, object->mesh->VAO);
-            glDeleteBuffers(1, object->mesh->VBO);
-            glDeleteBuffers(1, object->mesh->EBO);
-            glDeleteTextures(1, object->material->texture.id);
-            
-            //free(group->objects[i].mesh_obj.face_indice);
-            //free(group->objects[i].mesh_obj.vert_pos);
-            //group->data[i].mesh_obj.face_indice = NULL;
-            //group->data[i].mesh_obj.vert_pos = NULL;
+                object->material->shader.nb_occurences --;
+                object->material->texture.nb_occurences --;
+                object->mesh->nb_occurences --;
+
+                // On supprime les données OpenGL
+                // Si c'est le dernier object à avoir l'occurence d'un mesh, alors c'est lui qui le supprime
+                if(object->mesh->nb_occurences == 0)
+                {
+                    glDeleteVertexArrays(1, &object->mesh->VAO);
+                    glDeleteBuffers(1, &object->mesh->VBO);
+                    glDeleteBuffers(1, &object->mesh->EBO);
+                    object->mesh->index_count = 0;
+                    
+                }
+                // Si c'est le dernier object à avoir l'occurence d'une texture alors c'est lui qui le supprime
+                if(object->material->texture.nb_occurences == 0)
+                {
+                    glDeleteTextures(1, &object->material->texture.id);
+                }
+                // Si c'est le dernier object à avoir l'occurence d'un shader, alors c'est lui qui le supprime
+                if(object->material->shader.nb_occurences == 0)
+                {
+                    glDeleteProgram(object->material->shader.shader);
+                }
+                
+                free(object->material);
+                object->material = NULL;
+
+                free(object->mesh);
+                object->mesh = NULL;
+
+                group->tables->remove_element(mesh_group, object->id);
             }
             
             break;
