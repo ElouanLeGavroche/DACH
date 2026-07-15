@@ -235,5 +235,28 @@ struct st_render_group
     vt_group_virtual_table *tables;
 };
 
+typedef struct st_loaded_tile_map
+{
+    int x_indice;
+    int y_indice;
+    int height_value;
+}st_loaded_tile_map;
 
+typedef struct st_loaded_group_map
+{
+    st_shader *shader;
+    st_mesh *mesh;
+    st_texture *st_texture;
+    st_loaded_tile_map *tiles;
+
+}st_loaded_group_map;
+
+typedef struct st_map
+{
+    const char *path;
+    int map_size;
+
+    st_loaded_group_map *groups;
+
+};
 #endif
