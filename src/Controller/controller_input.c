@@ -23,7 +23,9 @@ void pressed_key_callback(GLFWwindow *window, int key, int scancode, int action,
                 [KEY_D]      = GLFW_KEY_D,
                 [KEY_Q]      = GLFW_KEY_Q,
                 [KEY_S]      = GLFW_KEY_S,
-                [KEY_Z]      = GLFW_KEY_Z
+                [KEY_Z]      = GLFW_KEY_Z,
+                [KEY_A]      = GLFW_KEY_A,
+                [KEY_E]      = GLFW_KEY_E
             };
 
             for(i = 0; i < KEY_NUM; i ++)

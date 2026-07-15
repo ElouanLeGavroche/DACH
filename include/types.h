@@ -29,6 +29,8 @@ typedef enum e_key
     KEY_Q,
     KEY_S,
     KEY_D,
+    KEY_A,
+    KEY_E,
 
     KEY_NUM
 }e_key;
@@ -79,6 +81,8 @@ typedef struct{
 
     float ortho_size;
 
+    float rotation;
+    pthread_mutex_t mutex;
 }st_camera;
 
 // Permet de savoir vers quelle direction va la caméra
@@ -86,7 +90,9 @@ typedef enum e_dir{
     UP,
     LEFT,
     DOWN,
-    RIGHT
+    RIGHT,
+    ROTATE_L,
+    ROTATE_R
 }e_dir;
 
 /**

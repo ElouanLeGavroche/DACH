@@ -1,6 +1,5 @@
 #include "../../../include/src_include/Context/Model/model_game_context.h"
 
-
 void update_logic_game(st_state *state)
 {
 
@@ -34,6 +33,16 @@ void update_logic_game(st_state *state)
     {
         move_camera(&state->render.camera, RIGHT);
     }
+    if(state->inputs.release[KEY_A])
+    {
+        move_camera(&state->render.camera, ROTATE_L);
+        state->inputs.release[KEY_A] = false;
+    }
+    if(state->inputs.release[KEY_E])
+    {
+        move_camera(&state->render.camera, ROTATE_R);
+        state->inputs.release[KEY_E] = false;
+    }
     
 
     pthread_mutex_unlock(&state->inputs.mutex); // Déverrouillage
@@ -56,34 +65,62 @@ void move_camera(st_camera *camera, int dir)
     switch (dir)
     {
     case DOWN:
-        glm_vec3_mulsubs(camera->up, camera->actual_speed, camera->pos);
+        down(camera);
         break;
 
     case RIGHT:
-
-        glm_cross(camera->front, camera->up, res);
-
-        glm_vec3_normalize(res);
-        glm_vec3_mulsubs(res, camera->actual_speed, camera->pos);
-
+        right(camera);
         break;
 
     case UP:
-        glm_vec3_muladds(camera->up, camera->actual_speed, camera->pos);
+        up(camera);
         break;
-    case LEFT:
-        
-        glm_cross(camera->front, camera->up, res);
 
-        glm_vec3_normalize(res);
-        glm_vec3_muladds(res, camera->actual_speed, camera->pos);
+    case LEFT:
+        left(camera);
+        break;
+
+    case ROTATE_L:
+        // à l'avenir, il faudra crée un fichier pour regrouper les système d'animations
+        pthread_t rotate_l;
+        camera->rotation = -45.0f;
+        pthread_create(&rotate_l, NULL, rotate_animation, camera);
 
         break;
     
+    case ROTATE_R:
+        pthread_t rotate_r;
+        camera->rotation = 45.0f;
+        pthread_create(&rotate_r, NULL, rotate_animation, camera);
+        break;
+
     default:
         break;
     }
     
+}
+
+// Fonction temporaire, ce n'est pas propre, juste temporaire
+void *rotate_animation(void *camera_data){
+    st_camera *camera = camera_data;
+    int i;
+    struct timespec ts_start, ts_end;
+    double elapsed;
+    float rotate_value = abs(camera->rotation) / camera->rotation;
+
+    for(i = 0; i < 45; i ++)
+    {
+        clock_gettime(CLOCK_MONOTONIC, &ts_start);
+
+        rotate(camera, rotate_value);
+
+        //Time fin de boucle
+        clock_gettime(CLOCK_MONOTONIC, &ts_end);
+
+        //Gestion de des conditions au calcul d'un nouveau tick
+        wait_frame(ts_start, ts_end);
+    }
+
 }
 
 mat4* init_map(int amount)

@@ -55,6 +55,7 @@ $(SAVE_EXEC)$(EXEC):\
 	\
 	$(MODEL)model_mainloop.o\
 	$(MODEL)model_group_context.o\
+	$(MODEL)model_camera.o\
 	\
 	$(VIEW)view_render_loop.o\
 	\

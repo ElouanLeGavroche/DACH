@@ -7,6 +7,8 @@
 
 #include "../../Config/constantes.h"
 #include "../../../types.h"
+#include "../../Model/model_camera.h"
+#include "../../Model/model_mainloop.h"
 
 void update_logic_game(st_state *state);
 void init_data_game(st_state *state);
@@ -23,5 +25,6 @@ void init_data_game(st_state *state);
 mat4* init_map(int amount);
 
 void move_camera(st_camera *camera, int dir);
+void *rotate_animation(void *camera);
 
 #endif

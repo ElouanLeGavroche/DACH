@@ -54,11 +54,10 @@ void init_game_camera(st_camera *camera)
     camera->far_z = 1000.0f; 
     // Taille du champ de vision (N 15; S 15, E 15, W 15)
     camera->ortho_size = 250.0f;
+    // Valeur de l'angle de rotatio
+    camera->rotation = 45.0f;
 
     vec3 center;
-
-    // initialisation du point de vue
-    glm_mat4_identity(camera->view);
 
     // Création de la vue Orthogonale avec les paramètres déclarer plus haut
     glm_ortho(
@@ -110,7 +109,7 @@ void update_render_game(st_render_data *render)
     
     
     vec3 center;
-
+    pthread_mutex_lock(&render->camera.mutex);
     glm_vec3_sub(render->camera.pos, render->camera.front, center);
     glm_lookat(
         render->camera.pos, 
@@ -118,6 +117,7 @@ void update_render_game(st_render_data *render)
         render->camera.up, 
         render->camera.view
     );
+    pthread_mutex_unlock(&render->camera.mutex);
 
     glClearColor(num_to_01(24), num_to_01(32), num_to_01(61), 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
