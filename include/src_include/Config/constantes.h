@@ -9,6 +9,7 @@
 
 
 #define LOAD_MAP_SEPARATOR ';'
+#define LM_KW_DEFINE_GROUPE void define_groupe(line)
 
 // Path vers fichiers
 #define PATH_LOAD_GAME_DATA "data/configuration.json"

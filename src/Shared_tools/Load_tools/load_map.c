@@ -1,5 +1,10 @@
 #include "../../../include/src_include/Shared_tools/Load_tools/load_map.h"
 
+void define_group(char* line)
+{
+    printf("coucopu\n");
+}
+
 int load_map(const char *path)
 {
     FILE *file = NULL;
@@ -15,28 +20,10 @@ int load_map(const char *path)
         return FAILED_MALLOC;
     }
 
-    
-    /*
-    while (getline(&line, &cap, file) != -1)
-    {
-        printf("%s", line);
-        
-        for(i = 0; i < 7; i ++)
-        {
-            st_loaded_group_map *group = malloc(sizeof(st_loaded_group_map));
-
-            if(!group)
-            {
-                fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
-                return FAILED_MALLOC;
-            }
-        } 
-        
-    }
-    */
     // Get delim permet de récuperer chaque ligne séprarer par un ';'
     while(getdelim(&line, &cap, LOAD_MAP_SEPARATOR, file) != -1)
     {
+        LM_KW_DEFINE_GROUPE;
         printf("%s", line);
         printf("\n");
         printf("\n");
