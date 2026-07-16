@@ -43,6 +43,7 @@ $(SAVE_EXEC)$(EXEC):\
 	$(LOAD_TOOLS)load_shader.o\
 	$(LOAD_TOOLS)load_obj_format.o\
 	$(LOAD_TOOLS)load_image.o\
+	$(LOAD_TOOLS)load_map.o\
 	\
 	$(CONTROLLER)controller_init.o\
 	$(MODEL)model_init.o\

@@ -7,6 +7,9 @@
 #define FAILED_MALLOC 2
 #define NULL_POINTER 3
 
+
+#define LOAD_MAP_SEPARATOR ';'
+
 // Path vers fichiers
 #define PATH_LOAD_GAME_DATA "data/configuration.json"
 

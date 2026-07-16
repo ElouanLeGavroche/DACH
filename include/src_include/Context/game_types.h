@@ -258,5 +258,5 @@ typedef struct st_map
 
     st_loaded_group_map *groups;
 
-};
+}st_map;
 #endif

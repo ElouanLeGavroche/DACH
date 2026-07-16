@@ -8,6 +8,7 @@
 
 #include "../../Model/model_group_context.h"
 #include "../../Controller/controller_init_context.h"
+#include "../../Shared_tools/Load_tools/load_map.h"
 
 #include "../../../types.h"
 
