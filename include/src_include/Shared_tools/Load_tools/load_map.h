@@ -11,10 +11,7 @@
 #include "../../Context/game_types.h"
 #include "../../Config/constantes.h"
 
-int open_map(FILE **file, const char *path);
-int load_map(const char *path);
+st_map* load_map(const char *path);
 
-char* get_key_word(const char* line);
-char* get_param(const char* line);
 
 #endif

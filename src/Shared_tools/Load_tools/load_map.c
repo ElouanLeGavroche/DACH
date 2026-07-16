@@ -5,15 +5,13 @@ void *define_group(char* line)
     printf("coucopu\n");
 }
 
-int load_map(const char *path)
+st_map* load_map(const char *path)
 {
-    FILE *fp;
     const char *err;
-    size_t res;
 
     struct json_object *temp_object;
-    struct json_object *temp_group;
-    int temp_indice, temp_indice_obj, temp_size, i, y;
+    struct json_object *json_group;
+    int temp_indice, blocks_group, i, y;
 
     // Structures des différents éléments stocké dans le JSON
     struct json_object *root;
@@ -34,20 +32,11 @@ int load_map(const char *path)
     struct json_object *_y;
     struct json_object *_z;
     
-
-    // Variables des valeur à récuperer
-    int id_value;
-    const char *vert_value = NULL;
-    const char *frag_value = NULL;
-    const char *mesh_value = NULL;
-    const char *texture_value = NULL;
-
-    
     st_map *map = malloc(sizeof(st_map));
     if(!map)
     {
         fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
-        return FAILED_MALLOC;
+        return NULL;
     }
 
     root = json_object_from_file(PATH_FISEL_MAP);
@@ -59,6 +48,12 @@ int load_map(const char *path)
     
     // Parser la struct dans les sous structures adéquat 
     json_object_object_get_ex(root, "groups", &groups);
+    if(!root)
+    {
+        err = json_util_get_last_err();
+        fprintf(stderr, "Erreur lors de l'ouverture de la map : %s\n", err);
+    }
+
     temp_indice = json_object_array_length(groups);
 
     // Alloué à la map de quoi contenir tout les groupes
@@ -68,70 +63,105 @@ int load_map(const char *path)
     if(!map->groups)
     {
         fprintf(stderr, "Allocation échouer %s.\n", strerror(errno));
-        return FAILED_MALLOC;
+        return NULL;
     }
-
+    
     for(y = 0; y < map->nb_groups; y ++)
     {
         st_loaded_group_map *group = &map->groups[y];
         if(!group)
         {
             fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
-            return FAILED_MALLOC;
+            return NULL;
         }
 
-        temp_group = json_object_array_get_idx(groups, y);
-        
+        json_group = json_object_array_get_idx(groups, y);
+        if(!root)
+        {
+            err = json_util_get_last_err();
+            fprintf(stderr, "Erreur lors de l'ouverture de la map : %s\n", err);
+        }
+
         // Parser l'id du groupe
-        group_id = json_object_object_get(temp_group, "group");
+        group_id = json_object_object_get(json_group, "group");
+        if(!root)
+        {
+            err = json_util_get_last_err();
+            fprintf(stderr, "Erreur lors de l'ouverture de la map : %s\n", err);
+        }
         group->id = json_object_get_int(group_id);
 
         // Parser le shader vertex
-        vert = json_object_object_get(temp_group, "vert");
+        vert = json_object_object_get(json_group, "vert");
+        if(!root)
+        {
+            err = json_util_get_last_err();
+            fprintf(stderr, "Erreur lors de l'ouverture de la map : %s\n", err);
+        }
         strcpy(group->vert_shader, json_object_get_string(vert));
 
         // Parser le shader frag
-        frag = json_object_object_get(temp_group, "frag");
+        frag = json_object_object_get(json_group, "frag");
+        if(!root)
+        {
+            err = json_util_get_last_err();
+            fprintf(stderr, "Erreur lors de l'ouverture de la map : %s\n", err);
+        }
         strcpy(group->frag_shader, json_object_get_string(frag));
         
 
         // Parser le mesh
-        mesh = json_object_object_get(temp_group, "mesh");
+        mesh = json_object_object_get(json_group, "mesh");
+        if(!root)
+        {
+            err = json_util_get_last_err();
+            fprintf(stderr, "Erreur lors de l'ouverture de la map : %s\n", err);
+        }
         strcpy(group->mesh, json_object_get_string(mesh));
 
         // Parser la texture
-        texture = json_object_object_get(temp_group, "texture");
+        texture = json_object_object_get(json_group, "texture");
+        if(!root)
+        {
+            err = json_util_get_last_err();
+            fprintf(stderr, "Erreur lors de l'ouverture de la map : %s\n", err);
+        }
         strcpy(group->texture, json_object_get_string(texture));
 
-        blocks = json_object_object_get(temp_group, "blocks");
+        blocks = json_object_object_get(json_group, "blocks");
 
-        if (!json_object_object_get_ex(temp_group, "blocks", &blocks))
+        if (!json_object_object_get_ex(json_group, "blocks", &blocks))
             fprintf(stderr, "Le groupe de blocks n'existe pas\n");
         else
         {
             
             // Récupéré le nombre de block de la liste
-            temp_indice = json_object_array_length(blocks);
+            blocks_group = json_object_array_length(blocks);
 
             // Alloué de la mémoire pour stocker tous les block du groupe
-            group->tiles = malloc(sizeof(st_loaded_tile_map) * temp_indice);
-
-            if(temp_indice)
+            group->tiles = malloc(sizeof(st_loaded_tile_map) * blocks_group);
+            if(!group->tiles)
             {
-                for(i = 0; i < temp_indice_obj; i ++)
+                fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
+                return NULL;
+            }
+
+            group->nb_blocks = blocks_group;
+
+            if(group->nb_blocks)
+            {
+                for(i = 0; i < group->nb_blocks; i ++)
                 {
-                    st_loaded_tile_map tile;
+                    st_loaded_tile_map *tile = &group->tiles[i];
                     
                     temp_object = json_object_array_get_idx(blocks, i);
                     _x = json_object_object_get(temp_object, "x");
                     _y = json_object_object_get(temp_object, "y");
                     _z = json_object_object_get(temp_object, "z");
-
-                    tile.x_indice = json_object_get_int(_x);
-                    tile.y_indice = json_object_get_int(_y);
-                    tile.height_value = json_object_get_int(_z);
-
-                    group->tiles[i] = tile;
+                    
+                    tile->x_indice = json_object_get_int(_x);
+                    tile->y_indice = json_object_get_int(_y);
+                    tile->height_value = json_object_get_int(_z);
                 }
                 
             }
@@ -140,11 +170,5 @@ int load_map(const char *path)
 
         }
     }
-
-    
-    /*
-    size_x_value = json_object_get_int(size_x);
-    size_y_value = json_object_get_int(size_y);
-    frame_rate_value = json_object_get_int(frame_rate);
-    */
+    return map;
 }

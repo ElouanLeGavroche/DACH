@@ -199,7 +199,6 @@ int remove_group(st_render_data *render, int id)
 
     if(render->nb_groups == 1)
     {
-        printf("yooo\n");
         free(render->groups);
         render->groups = NULL;
         render->nb_groups = 0;
@@ -251,7 +250,7 @@ int create_an_object(int name, st_mesh *mesh, st_texture *texture, st_shader *sh
     {
     case RENDER_GROUP_MESH:
         // Autrement, on ajout l'élément au sein du groupe
-        
+        printf("Ajout d'un mesh au group mesh.\n");
         break;
     
     case RENDER_GROUP_INSTANCED_MESH:
@@ -274,7 +273,7 @@ int create_an_object(int name, st_mesh *mesh, st_texture *texture, st_shader *sh
         break;
     }
 
-    printf("Ajout d'un mesh au group mesh.\n");
+    
     generic_func_add_render_object(dest, obj);
 
     return DONE;

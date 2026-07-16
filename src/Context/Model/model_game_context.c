@@ -123,7 +123,7 @@ void *rotate_animation(void *camera_data){
 
 }
 
-mat4* init_map(int amount)
+mat4* init_map(int amount, st_loaded_tile_map *tiles)
 {   
     int i, y;
     mat4 *positions = malloc(sizeof(mat4) * (amount*amount));
@@ -134,7 +134,7 @@ mat4* init_map(int amount)
         return NULL;
     }
     
-
+    /*
     int total = 0;
     for(i = amount; i > 0; i --)
     {
@@ -145,6 +145,15 @@ mat4* init_map(int amount)
             glm_translate(positions[total], (vec3){(float)i * 2.0f - amount, 0.0, (float)y * 2.0f - amount});
             total ++;
         }
+    }
+    */
+    int total = 0;
+    for(i = amount; i > 0; i --)
+    {
+        printf("yoo %d %d %d\n", tiles[i].x_indice, tiles[i].y_indice, tiles[i].height_value);
+        glm_mat4_identity(positions[total]);
+        glm_translate(positions[total], (vec3){(float)tiles[i].x_indice * 2.0f - amount, (float)tiles[i].height_value, (float)tiles[i].y_indice * 2.0f - amount});
+        total ++;
     }
 
     return positions;

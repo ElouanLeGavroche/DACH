@@ -3,7 +3,8 @@
 
 typedef enum
 {
-    WORLD
+    OTHER,
+    INSTANCED_GROUP
 }e_group_name;
 
 typedef enum
@@ -23,54 +24,58 @@ struct st_state game_state =
 int init_game(st_state *state)
 {
     printf("début de l'initiation\n");
-    
+    int i;
     init_render_game(&state->render);
 
-    load_map("ressources/maps/fisel.kb");
+    // Chargement des éléments propre à la map
+    st_map *map = load_map("ressources/maps/fisel.json");
 
-    // CHARGER LES SHADERS ---------------------------------------------------------------------------------------------
-    st_shader *shader = new_shader("src/Shaders/main_shader.vert", "src/Shaders/main_shader.frag");
+    for(i = 0; i < map->nb_groups; i ++)
+    {
 
-
-
-    // CHARGER LES ELTS 3D ---------------------------------------------------------------------------------------------
-    st_mesh *tile = new_object(BASIC_TILE_PATH);
-
-
-
-    // CHARGER LES TEXTURES --------------------------------------------------------------------------------------------
-    st_texture *grass_texture = new_texture("ressources/images/grass_test.jpg");
+        // CHARGER LES SHADERS ---------------------------------------------------------------------------------------------
+        st_shader *shader = new_shader(map->groups[i].vert_shader, map->groups[i].frag_shader);
     
+        // CHARGER LES ELTS 3D ---------------------------------------------------------------------------------------------
+        st_mesh *tile = new_object(map->groups[i].mesh);
 
+        // CHARGER LES TEXTURES --------------------------------------------------------------------------------------------
+        st_texture *grass_texture = new_texture(map->groups[i].texture);
 
-    // Creation du groupe du monde
-    add_group(&state->render, RENDER_GROUP_INSTANCED_MESH);
-    st_render_group *world_group = get_group(state->render.groups, WORLD, state->render.nb_groups);
-    
-    // On crée l'objet qui sera instancier
-    st_transform floor = configure_transform((st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0});
-    create_an_object(TILE, tile, grass_texture, shader, floor, world_group);
-    
-    // Paramètre principaux du monde
-    int world_size = 150;
-    mat4 *world_tile = init_map(world_size);
-    
+        // Creation du groupe du monde
+        add_group(&state->render, INSTANCED_GROUP);
+        st_render_group *world_group = get_group(state->render.groups, map->groups[i].id, state->render.nb_groups);
+        
+        // On crée l'objet qui sera instancier
+        st_transform floor = configure_transform((st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0});
+        create_an_object(TILE, tile, grass_texture, shader, floor, world_group);
+        
+        // Paramètre principaux du monde
+        int world_size = map->groups[i].nb_blocks;
+        mat4 *world_tile = init_map(map->groups[i].nb_blocks, map->groups[i].tiles);
 
-    // Récuperer l'objet crée
-    st_render_object *instenced_obj = world_group->tables->get_element(world_group, TILE);
+        // Récuperer l'objet crée
+        st_render_object *instenced_obj = world_group->tables->get_element(world_group, TILE);
 
-    // Crée une variable tampon pour l'instanciation
-    st_instanced *instenced_data = malloc(sizeof(st_instanced));
-    create_an_instance(world_size * world_size, instenced_obj, world_tile, instenced_data);
+        // Crée une variable tampon pour l'instanciation
+        st_instanced *instenced_data = malloc(sizeof(st_instanced));
+        create_an_instance(world_size, instenced_obj, world_tile, instenced_data);
 
-    // Initialisation du monde
-    init_world(instenced_data, world_tile, world_size * world_size);
+        // Initialisation du monde
+        init_world(instenced_data, world_tile, world_size);
+        printf("okk\n");
+        // On attribue la valeur tampon à la structure
+        st_instanced_mesh_group *instaced_group = (st_instanced_mesh_group *)world_group->data;
+        instaced_group->st_instanced = *instenced_data;
 
-    // On attribue la valeur tampon à la structure
-    st_instanced_mesh_group *instaced_group = (st_instanced_mesh_group *)world_group->data;
-    instaced_group->st_instanced = *instenced_data;
+        free(instenced_data);
+        free(world_tile);
 
+        instenced_data = NULL;
+        world_tile = NULL;
+    } 
 
+    printf("ok\n");
     // Initialiser le model --------------------------------------------------------------------------------------------
     init_data_game(state);
 
@@ -81,9 +86,6 @@ int init_game(st_state *state)
     data->camera = &state->render.camera;
 
     glfwSetScrollCallback(window, scroll_callback);
-    
-    free(instenced_data);
-    free(world_tile);
     
     printf("Context jeu initier\n");
 
