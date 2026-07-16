@@ -148,7 +148,7 @@ mat4* init_map(int amount, st_loaded_tile_map *tiles)
     }
     */
     int total = 0;
-    for(i = amount; i > 0; i --)
+    for(i = amount -1; i > -1; i --)
     {
         printf("yoo %d %d %d\n", tiles[i].x_indice, tiles[i].y_indice, tiles[i].height_value);
         glm_mat4_identity(positions[total]);
