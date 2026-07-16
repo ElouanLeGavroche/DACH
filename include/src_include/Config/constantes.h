@@ -8,8 +8,7 @@
 #define NULL_POINTER 3
 
 
-#define LOAD_MAP_SEPARATOR ';'
-#define LM_KW_DEFINE_GROUPE void define_groupe(line)
+#define PATH_FISEL_MAP "ressources/maps/fisel.json"
 
 // Path vers fichiers
 #define PATH_LOAD_GAME_DATA "data/configuration.json"

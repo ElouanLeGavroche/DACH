@@ -244,18 +244,20 @@ typedef struct st_loaded_tile_map
 
 typedef struct st_loaded_group_map
 {
-    st_shader *shader;
-    st_mesh *mesh;
-    st_texture *st_texture;
+    int id;
+    char *vert_shader;
+    char *frag_shader;
+    char *mesh;
+    char *texture;
     st_loaded_tile_map *tiles;
 
 }st_loaded_group_map;
 
 typedef struct st_map
 {
-    const char *path;
+    char *path;
     int map_size;
-
+    int nb_groups;
     st_loaded_group_map *groups;
 
 }st_map;

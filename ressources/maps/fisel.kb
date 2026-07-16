@@ -1,23 +1,25 @@
-group TILE_1 
-(
+TILE_1(
     0,
     "src/Shaders/main_shader.vert", 
     "src/Shaders/main_shader.frag", 
     "ressources/tiles/tile.obj",
     "ressources/images/grass_test.jpg"
 );
-group TILE_2 
-(
+
+TILE_2(
     1,
     "src/Shaders/main_shader.vert", 
     "src/Shaders/main_shader.frag", 
     "ressources/tiles/tile.obj",
-    "ressources/images/grass_test.jpg"
+    "ressources/images/dirt_test.jpg"
 );
-datas 0, 
-(0.0, 0.0, 0),
-(1.0, 0.0, 1);
 
-datas 1, 
+0(
+(0.0, 0.0, 0),
+(1.0, 0.0, 1)
+);
+
+1( 
 (1.0, 0.0, 0),
-(1.0, 1.0, 1);
+(1.0, 1.0, 1)
+);

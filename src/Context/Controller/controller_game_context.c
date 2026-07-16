@@ -27,7 +27,7 @@ int init_game(st_state *state)
     init_render_game(&state->render);
 
     load_map("ressources/maps/fisel.kb");
-    
+
     // CHARGER LES SHADERS ---------------------------------------------------------------------------------------------
     st_shader *shader = new_shader("src/Shaders/main_shader.vert", "src/Shaders/main_shader.frag");
 
