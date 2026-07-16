@@ -3,7 +3,7 @@
     "groups":[
         {
             "group" : 0,
-            "vert": "src/Shaders/main_shader.vert", 
+            "vert" : "src/Shaders/main_shader.vert", 
             "frag" : "src/Shaders/main_shader.frag", 
             "mesh" : "ressources/tiles/tile.obj",
             "texture" : "ressources/images/grass_test.jpg",

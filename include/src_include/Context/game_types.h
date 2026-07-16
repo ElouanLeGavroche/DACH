@@ -245,10 +245,10 @@ typedef struct st_loaded_tile_map
 typedef struct st_loaded_group_map
 {
     int id;
-    char *vert_shader;
-    char *frag_shader;
-    char *mesh;
-    char *texture;
+    char vert_shader[256];
+    char frag_shader[256];
+    char mesh[256];
+    char texture[256];
     st_loaded_tile_map *tiles;
 
 }st_loaded_group_map;

@@ -8,14 +8,16 @@ void *define_group(char* line)
 int load_map(const char *path)
 {
     FILE *fp;
-    char *buffer;
+    const char *err;
     size_t res;
 
     struct json_object *temp_object;
     struct json_object *temp_group;
-    int temp_indice, temp_size, i, y;
+    int temp_indice, temp_indice_obj, temp_size, i, y;
 
     // Structures des différents éléments stocké dans le JSON
+    struct json_object *root;
+
     struct json_object *parsed_json;
     struct json_object *groups;
 
@@ -41,44 +43,27 @@ int load_map(const char *path)
     const char *texture_value = NULL;
 
     
-    st_map *map = malloc(sizeof(map));
+    st_map *map = malloc(sizeof(st_map));
     if(!map)
     {
         fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
         return FAILED_MALLOC;
     }
 
-    fp = fopen(PATH_LOAD_GAME_DATA, "r");
-    if(fp == NULL){
-        printf("Fichier non trouvé\n");
-        return EXIT_FAILURE;
-    }
-    else{
-        printf("fichier ouvert\n");
-    }
-printf("yoo\n");
-    res = fread(buffer, 1024, 1, fp);
-    printf("byte lu : %ld\n", res);
-    if(res == -1)
+    root = json_object_from_file(PATH_FISEL_MAP);
+    if(!root)
     {
-        fprintf(stderr, "Erreur lors la lecture du fichier %s\n", strerror(errno));
-        return ERROR;
-    }
-    else
-    {
-        fclose(fp);
-        printf("byte lu : %ld\n", res);
+        err = json_util_get_last_err();
+        fprintf(stderr, "Erreur lors de l'ouverture de la map : %s\n", err);
     }
     
-
-    parsed_json = json_tokener_parse(buffer);
-
     // Parser la struct dans les sous structures adéquat 
-    json_object_object_get_ex(parsed_json, "groups", &groups);
+    json_object_object_get_ex(root, "groups", &groups);
     temp_indice = json_object_array_length(groups);
 
     // Alloué à la map de quoi contenir tout les groupes
     map->nb_groups = temp_indice;
+
     map->groups = malloc(sizeof(st_loaded_group_map) * map->nb_groups);
     if(!map->groups)
     {
@@ -86,43 +71,45 @@ printf("yoo\n");
         return FAILED_MALLOC;
     }
 
-    for(y = 0; y < temp_indice; y ++)
+    for(y = 0; y < map->nb_groups; y ++)
     {
-        st_loaded_group_map *group = malloc(sizeof(st_loaded_group_map));
+        st_loaded_group_map *group = &map->groups[y];
         if(!group)
         {
             fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
             return FAILED_MALLOC;
         }
 
-        temp_group = json_object_array_get_idx(groups, i);
+        temp_group = json_object_array_get_idx(groups, y);
         
         // Parser l'id du groupe
-        json_object_object_get_ex(temp_group, "group", &group_id);
+        group_id = json_object_object_get(temp_group, "group");
         group->id = json_object_get_int(group_id);
 
         // Parser le shader vertex
-        json_object_object_get_ex(temp_group, "vert", &vert);
+        vert = json_object_object_get(temp_group, "vert");
         strcpy(group->vert_shader, json_object_get_string(vert));
 
         // Parser le shader frag
-        json_object_object_get_ex(temp_group, "frag", &frag);
+        frag = json_object_object_get(temp_group, "frag");
         strcpy(group->frag_shader, json_object_get_string(frag));
+        
 
         // Parser le mesh
-        json_object_object_get_ex(temp_group, "mesh", &mesh);
+        mesh = json_object_object_get(temp_group, "mesh");
         strcpy(group->mesh, json_object_get_string(mesh));
 
         // Parser la texture
-        json_object_object_get_ex(temp_group, "texture", &texture);
+        texture = json_object_object_get(temp_group, "texture");
         strcpy(group->texture, json_object_get_string(texture));
 
-        json_object_object_get_ex(temp_group, "blocks", &blocks);
+        blocks = json_object_object_get(temp_group, "blocks");
 
-        if(json_object_get_type(blocks) == json_type_null)
+        if (!json_object_object_get_ex(temp_group, "blocks", &blocks))
             fprintf(stderr, "Le groupe de blocks n'existe pas\n");
         else
         {
+            
             // Récupéré le nombre de block de la liste
             temp_indice = json_object_array_length(blocks);
 
@@ -131,7 +118,7 @@ printf("yoo\n");
 
             if(temp_indice)
             {
-                for(i = 0; i < temp_indice; i ++)
+                for(i = 0; i < temp_indice_obj; i ++)
                 {
                     st_loaded_tile_map tile;
                     
@@ -150,13 +137,11 @@ printf("yoo\n");
             }
             else
                 fprintf(stderr, "Longeur incconu.\n");
-        }
 
-        map->groups[i] = *group;
+        }
     }
 
     
-
     /*
     size_x_value = json_object_get_int(size_x);
     size_y_value = json_object_get_int(size_y);
