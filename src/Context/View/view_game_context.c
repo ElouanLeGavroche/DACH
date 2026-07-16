@@ -122,27 +122,29 @@ void update_render_game(st_render_data *render)
     glClearColor(num_to_01(24), num_to_01(32), num_to_01(61), 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    st_instanced_mesh_group *group = (st_instanced_mesh_group*)render->groups[0].data;
-    st_render_object *obj = group->shared_render_object;
-    glUseProgram(obj->material->shader->shader);
+    for(i = 0; i < render->nb_groups; i ++)
+    {
+        st_instanced_mesh_group *group = (st_instanced_mesh_group*)render->groups[i].data;
+        st_render_object *obj = group->shared_render_object;
+        glUseProgram(obj->material->shader->shader);
 
-    /* Application du point de vue */
-    int view_loc = glGetUniformLocation(obj->material->shader->shader, "view");
-    glUniformMatrix4fv(view_loc, 1, GL_FALSE, &render->camera.view[0][0]);
-    
-    /* Application de la projection*/
-    int proj_loc = glGetUniformLocation(obj->material->shader->shader, "projection");
-    glUniformMatrix4fv(proj_loc, 1, GL_FALSE, &render->camera.projection[0][0]);
+        /* Application du point de vue */
+        int view_loc = glGetUniformLocation(obj->material->shader->shader, "view");
+        glUniformMatrix4fv(view_loc, 1, GL_FALSE, &render->camera.view[0][0]);
+        
+        /* Application de la projection*/
+        int proj_loc = glGetUniformLocation(obj->material->shader->shader, "projection");
+        glUniformMatrix4fv(proj_loc, 1, GL_FALSE, &render->camera.projection[0][0]);
 
-    /* application d'une transformation bidon */
-    unsigned int transfrom_loc = glGetUniformLocation(obj->material->shader->shader, "transform");;
-    glUniformMatrix4fv(transfrom_loc, 1, GL_FALSE, *model);
+        /* application d'une transformation bidon */
+        unsigned int transfrom_loc = glGetUniformLocation(obj->material->shader->shader, "transform");;
+        glUniformMatrix4fv(transfrom_loc, 1, GL_FALSE, *model);
 
-    // Lié le VAO
-    glBindVertexArray(obj->mesh->VAO);
-    
-    glDrawElementsInstanced(GL_TRIANGLES, obj->mesh->index_count, GL_UNSIGNED_INT, 0, group->st_instanced.count);
-    //glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 100);
-    glBindVertexArray(0);
+        // Lié le VAO
+        glBindVertexArray(obj->mesh->VAO);
+        
+        glDrawElementsInstanced(GL_TRIANGLES, obj->mesh->index_count, GL_UNSIGNED_INT, 0, group->st_instanced.count);
+        glBindVertexArray(0);
+    }
 
 }

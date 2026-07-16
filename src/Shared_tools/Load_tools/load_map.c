@@ -167,7 +167,7 @@ st_map* load_map(const char *path)
             }
             else
                 fprintf(stderr, "Longeur incconu.\n");
-
+            printf("OKKK\n");
         }
     }
     return map;
