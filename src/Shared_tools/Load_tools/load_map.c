@@ -1,10 +1,5 @@
 #include "../../../include/src_include/Shared_tools/Load_tools/load_map.h"
 
-void *define_group(char* line)
-{
-    printf("coucopu\n");
-}
-
 st_map* load_map(const char *path)
 {
     const char *err;
@@ -167,7 +162,6 @@ st_map* load_map(const char *path)
             }
             else
                 fprintf(stderr, "Longeur incconu.\n");
-            printf("OKKK\n");
         }
     }
     return map;

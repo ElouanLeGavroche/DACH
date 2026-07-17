@@ -211,13 +211,13 @@ void destroy_render_data(st_render_data *render)
     tamp_nb_group = render->nb_groups;
     for(i = 0; i < tamp_nb_group; i ++)
     {
+        
         // On récupère le group lui même pour avoir des lignes plus lisible
         st_render_group *group = &render->groups[i];
-        
+        printf("%d\n", group->type);
         switch (group->type)
         {
         case RENDER_GROUP_MESH:
-
             // On récupère les data avec le type mesh groupe
             mesh_group = group->data;
             tamp_nb_object = mesh_group->nb_objects;
@@ -251,17 +251,17 @@ void destroy_render_data(st_render_data *render)
 
             break;
         case RENDER_GROUP_INSTANCED_MESH:
-            printf("okosdkoqsdkoqkdoqkd\n");
+            
         
             // On récupère les data avec le type mesh groupe
             instanced_mesh_group = group->data;
             references_object_test(instanced_mesh_group->shared_render_object);
-
+            
             free(instanced_mesh_group->shared_render_object->material);
             free(instanced_mesh_group->shared_render_object->mesh);
-
+            
             free(instanced_mesh_group->shared_render_object);
-
+            
             glDeleteBuffers(1, &instanced_mesh_group->st_instanced.vbo);
             free(instanced_mesh_group->st_instanced.cpu_data);
             
@@ -281,7 +281,6 @@ void destroy_render_data(st_render_data *render)
         remove_group(render, group->ID);
         
     }
-
     free(render->groups);
     render->groups = NULL;
     render->nb_groups = 0;

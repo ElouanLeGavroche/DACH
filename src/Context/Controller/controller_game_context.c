@@ -41,7 +41,7 @@ int init_game(st_state *state)
 
         // CHARGER LES TEXTURES --------------------------------------------------------------------------------------------
         st_texture *grass_texture = new_texture(map->groups[i].texture);
-
+        printf("%s\n", map->groups[i].texture);
         // Creation du groupe du monde
         add_group(&state->render, INSTANCED_GROUP);
         st_render_group *world_group = get_group(state->render.groups, map->groups[i].id, state->render.nb_groups);
@@ -62,8 +62,8 @@ int init_game(st_state *state)
         create_an_instance(world_size, instenced_obj, world_tile, instenced_data);
 
         // Initialisation du monde
-        init_world(instenced_data, world_tile, world_size);
-        printf("okk\n");
+        create_an_instance_GPU(instenced_data, world_tile, world_size);
+
         // On attribue la valeur tampon à la structure
         st_instanced_mesh_group *instaced_group = (st_instanced_mesh_group *)world_group->data;
         instaced_group->st_instanced = *instenced_data;
@@ -75,7 +75,6 @@ int init_game(st_state *state)
         world_tile = NULL;
     } 
 
-    printf("ok\n");
     // Initialiser le model --------------------------------------------------------------------------------------------
     init_data_game(state);
 

@@ -21,7 +21,7 @@
             "vert": "src/Shaders/main_shader.vert", 
             "frag" : "src/Shaders/main_shader.frag", 
             "mesh" : "ressources/tiles/tile.obj",
-            "texture" : "ressources/images/grass_test.jpg",
+            "texture" : "ressources/images/ardoise.png",
 
             "blocks":[
                 { "x" : 1, "y" : 1, "z" : 0 },

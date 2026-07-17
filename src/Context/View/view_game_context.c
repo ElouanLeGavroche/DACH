@@ -17,7 +17,7 @@ void init_render_game(st_render_data *render)
     data->camera = &render->camera; 
 }
 
-void init_world(st_instanced *instance, mat4 *model, int amount)
+void create_an_instance_GPU(st_instanced *instance, mat4 *model, int amount)
 {
     int i;
     unsigned int instance_vbo;
@@ -104,7 +104,7 @@ void update_render_game(st_render_data *render)
     /* Model */
     mat4 model;
     glm_mat4_identity(model);
-    //glm_rotate(model, (float)glfwGetTime()*2, (vec3){0.5f, 0.5f, 1.0f});
+    glm_rotate(model, (float)glfwGetTime()*2, (vec3){0.5f, 0.5f, 1.0f});
     //glm_translate(model, (vec3){0.0f, 0.0f, (float)glfwGetTime()*2});
     
     
@@ -126,7 +126,9 @@ void update_render_game(st_render_data *render)
     {
         st_instanced_mesh_group *group = (st_instanced_mesh_group*)render->groups[i].data;
         st_render_object *obj = group->shared_render_object;
+
         glUseProgram(obj->material->shader->shader);
+        glBindTexture(GL_TEXTURE_2D, obj->material->texture->id);
 
         /* Application du point de vue */
         int view_loc = glGetUniformLocation(obj->material->shader->shader, "view");
