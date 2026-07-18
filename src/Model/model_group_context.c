@@ -13,10 +13,10 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
     
     // Création de l'id
     group->ID = id;
-
+    
     // Application du type à la structure
     group->type = type;
-
+    printf("%d\n",group->type);
     group->data = NULL;
 
     group->tables = malloc(sizeof(vt_group_virtual_table));
@@ -44,9 +44,6 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
         // Initialiser les valeur de base de group_type
         normal_type->nb_objects = 0;
         normal_type->objects = NULL;
-
-        st_mesh_group *dos = group->data;
-
         // On applique les fonction correspondantes
         group->tables->add_element = _add_render_mesh_object;
         group->tables->remove_element = _remove_render_mesh_object;
@@ -131,7 +128,7 @@ int add_group(st_render_data *render, e_render_group_type type)
         fprintf(stderr, "Echec de l'initiation du group.\n");
         return ERROR;
     }
-
+    
     // Re allouer de la place pour le nouveau groupe
     render->groups = realloc(render->groups, sizeof(st_render_group)* (render->nb_groups + 1));
     

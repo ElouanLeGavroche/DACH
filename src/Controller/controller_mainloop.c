@@ -212,9 +212,9 @@ void destroy_render_data(st_render_data *render)
     for(i = 0; i < tamp_nb_group; i ++)
     {
         
-        // On récupère le group lui même pour avoir des lignes plus lisible
-        st_render_group *group = &render->groups[i];
-        printf("%d\n", group->type);
+        // On récupère toujours le premier, car l'ancien premier à été supprimer
+        st_render_group *group = &render->groups[0];
+        
         switch (group->type)
         {
         case RENDER_GROUP_MESH:
@@ -252,7 +252,6 @@ void destroy_render_data(st_render_data *render)
             break;
         case RENDER_GROUP_INSTANCED_MESH:
             
-        
             // On récupère les data avec le type mesh groupe
             instanced_mesh_group = group->data;
             references_object_test(instanced_mesh_group->shared_render_object);
