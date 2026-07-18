@@ -2,7 +2,7 @@
 
 st_mesh* new_object(char *path)
 {
-    st_mesh_data mesh_data = {0};
+    st_mesh_data *mesh_data = malloc(sizeof(st_mesh_data));
     st_mesh *mesh = malloc(sizeof(st_mesh));
     if(!mesh)
     {
@@ -10,12 +10,13 @@ st_mesh* new_object(char *path)
         return NULL;
     }
 
-    load_file(path, &mesh_data);
+    load_file(path, mesh_data);
 
-    *mesh = init_a_3d_loaded_element(&mesh_data, 0);
+    *mesh = init_a_3d_loaded_element(mesh_data, 0);
     // On nettoye la structure côté CPU
-    free(mesh_data.face_indice);
-    free(mesh_data.vert_pos);
+    free(mesh_data->face_indice);
+    free(mesh_data->vert_pos);
+    free(mesh_data);
     
     return mesh;
 }

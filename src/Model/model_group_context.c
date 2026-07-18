@@ -16,7 +16,6 @@ int context_group_init(st_render_group *group, int id, e_render_group_type type)
     
     // Application du type à la structure
     group->type = type;
-    printf("%d\n",group->type);
     group->data = NULL;
 
     group->tables = malloc(sizeof(vt_group_virtual_table));

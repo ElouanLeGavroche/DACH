@@ -115,11 +115,13 @@ int load_file(char *path, st_mesh_data *tile)
             }
         }
     }
+    printf("%ld\n", sizeof(st_mesh_data));
     if(file != NULL)
         fclose(file);
-
+    
     if(line != NULL)
         free(line);
+    
     return ok;
 }
 

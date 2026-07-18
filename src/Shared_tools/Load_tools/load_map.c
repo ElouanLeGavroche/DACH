@@ -11,7 +11,6 @@ st_map* load_map(const char *path)
     // Structures des différents éléments stocké dans le JSON
     struct json_object *root;
 
-    struct json_object *parsed_json;
     struct json_object *groups;
 
     struct json_object *group_id;
@@ -20,8 +19,6 @@ st_map* load_map(const char *path)
     struct json_object *mesh;
     struct json_object *texture;
     
-    struct json_object *nb_blocks;
-
     struct json_object *blocks;
     struct json_object *_x;
     struct json_object *_y;
@@ -43,7 +40,7 @@ st_map* load_map(const char *path)
     
     // Parser la struct dans les sous structures adéquat 
     json_object_object_get_ex(root, "groups", &groups);
-    if(!root)
+    if(!groups)
     {
         err = json_util_get_last_err();
         fprintf(stderr, "Erreur lors de l'ouverture de la map : %s\n", err);
@@ -157,12 +154,19 @@ st_map* load_map(const char *path)
                     tile->x_indice = json_object_get_int(_x);
                     tile->y_indice = json_object_get_int(_y);
                     tile->height_value = json_object_get_int(_z);
+
                 }
                 
             }
             else
                 fprintf(stderr, "Longeur incconu.\n");
         }
+
+
+
     }
+
+    json_object_put(root);
+    
     return map;
 }
