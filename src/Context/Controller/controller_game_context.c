@@ -25,9 +25,43 @@ int init_game(st_state *state)
 {
     printf("début de l'initiation\n");
     int i;
+
+    // Initialiser le rendu --------------------------------------------------------------------------------------------
     init_render_game(&state->render);
 
+    // Initialiser le model --------------------------------------------------------------------------------------------
+    init_data_game(state);
+
+    // On crée le monde
+    controller_create_world(state);
+
+    // On passe la caméra dans la fenêtre pour les callbacks
+    GLFWwindow *window = glfwGetCurrentContext();
+
+    st_window_user_data *data = glfwGetWindowUserPointer(window);
+    data->camera = &state->render.camera;
+
+    glfwSetScrollCallback(window, scroll_callback);
+    
+    printf("Context jeu initier\n");
+
+    return DONE;
+}
+
+void controller_update_logic_game(st_state *state)
+{
+    update_logic_game(state);
+}
+
+void controller_update_render_game(st_render_data *render)
+{
+    update_render_game(render);
+}
+
+void controller_create_world(st_state *state)
+{
     // Chargement des éléments propre à la map
+    int i;
     st_map *map = load_map("ressources/maps/fisel.json");
 
     for(i = 0; i < map->nb_groups; i ++)
@@ -75,35 +109,10 @@ int init_game(st_state *state)
         world_tile = NULL;
     } 
 
+
     // On free map
     free(map->groups->tiles);
     free(map->groups);
     free(map);
     map = NULL;
-
-    // Initialiser le model --------------------------------------------------------------------------------------------
-    init_data_game(state);
-
-    // On passe la caméra dans la fenêtre pour les callbacks
-    GLFWwindow *window = glfwGetCurrentContext();
-
-    st_window_user_data *data = glfwGetWindowUserPointer(window);
-    data->camera = &state->render.camera;
-
-    glfwSetScrollCallback(window, scroll_callback);
-    
-    printf("Context jeu initier\n");
-
-    return DONE;
-}
-
-
-void controller_update_logic_game(st_state *state)
-{
-    update_logic_game(state);
-}
-
-void controller_update_render_game(st_render_data *render)
-{
-    update_render_game(render);
 }

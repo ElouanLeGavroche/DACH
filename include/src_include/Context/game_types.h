@@ -237,9 +237,9 @@ struct st_render_group
 
 typedef struct st_loaded_tile_map
 {
-    int x_indice;
-    int y_indice;
-    int height_value;
+    float x_indice;
+    float y_indice;
+    float height_value;
 }st_loaded_tile_map;
 
 typedef struct st_loaded_group_map

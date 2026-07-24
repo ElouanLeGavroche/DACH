@@ -18,6 +18,7 @@
 
 void controller_update_render_game(st_render_data *render);
 int init_game(st_state *state);
+void controller_create_world(st_state *state);
 void controller_update_logic_game(st_state *state);
 
 

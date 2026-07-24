@@ -153,7 +153,7 @@ st_map* load_map(const char *path)
                     
                     tile->x_indice = json_object_get_int(_x);
                     tile->y_indice = json_object_get_int(_y);
-                    tile->height_value = json_object_get_int(_z);
+                    tile->height_value = (float)json_object_get_int(_z) / 2.5;
 
                 }
                 

@@ -126,7 +126,7 @@ void *rotate_animation(void *camera_data){
 mat4* init_map(int amount, st_loaded_tile_map *tiles)
 {   
     int i, y;
-    mat4 *positions = malloc(sizeof(mat4) * (amount*amount));
+    mat4 *positions = malloc(sizeof(mat4) * (amount));
     
     if(!positions)
     {
@@ -151,7 +151,7 @@ mat4* init_map(int amount, st_loaded_tile_map *tiles)
     for(i = 0; i < amount; i ++)
     {
         glm_mat4_identity(positions[total]);
-        glm_translate(positions[total], (vec3){(float)tiles[i].x_indice * 2.0f - amount, (float)tiles[i].height_value, (float)tiles[i].y_indice * 2.0f - amount});
+        glm_translate(positions[total], (vec3){(float)tiles[i].x_indice * 2.0f, (float)tiles[i].height_value, (float)tiles[i].y_indice * 2.0f });
         total ++;
     }
 

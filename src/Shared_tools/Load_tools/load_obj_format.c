@@ -26,7 +26,6 @@ int load_file(char *path, st_mesh_data *tile)
         {
             while (read = getline(&line, &cap, file) != -1)
             {
-                printf("ici : %d\n", ok);
                 // Sert à savoir combien il y à de vert et de frag avant le malloc
                 
                 if(line[0] == 'v' && line[1] == ' ')
@@ -58,7 +57,7 @@ int load_file(char *path, st_mesh_data *tile)
             }
             free(line);
             line = NULL;
-            
+
             fclose(file);
             file = NULL;
         }
