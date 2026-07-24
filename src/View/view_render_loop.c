@@ -164,3 +164,146 @@ int init_a_loaded_texture(st_image *image)
 
     return texture;
 }
+void view_render(st_render_data *render)
+{
+int i, y;
+    /* 
+    On va en premier lieu calculer le temps que prend une frame à être fait
+    ainsi, la caméra ne dépendant plus de la vitesse du jeu .
+    */
+    glDepthFunc(GL_LESS);  
+    float current_frame = glfwGetTime();
+    render->delta_time = current_frame - render->last_time;
+    render->last_time = current_frame;
+
+    render->camera.actual_speed = render->camera.speed *render->delta_time;
+    
+    
+    vec3 center;
+    pthread_mutex_lock(&render->camera.mutex);
+    glm_vec3_sub(render->camera.pos, render->camera.front, center);
+    glm_lookat(
+        render->camera.pos, 
+        center, 
+        render->camera.up, 
+        render->camera.view
+    );
+    pthread_mutex_unlock(&render->camera.mutex);
+
+    glClearColor(num_to_01(24), num_to_01(32), num_to_01(61), 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    for(i = 0; i < render->nb_groups; i ++)
+    {
+        
+        switch (render->groups[i].type)
+        {
+        case RENDER_GROUP_INSTANCED_MESH:
+            view_instanced_render(&render->groups[i], &render->camera);
+            break;
+        
+        case RENDER_GROUP_MESH:
+            view_normal_render(&render->groups[i]);
+            break;
+        
+        default:
+            break;
+        }
+        
+    }
+}
+
+void view_billboard_render();
+
+void view_instanced_render(st_render_group *void_group, st_camera *camera)
+{
+    /* Model */
+    mat4 model;
+    glm_mat4_identity(model);
+
+    st_instanced_mesh_group *group = (st_instanced_mesh_group*)void_group->data;
+    st_render_object *obj = group->shared_render_object;
+
+    glm_translate(model, (vec3){obj->transform.position.x, obj->transform.position.y, obj->transform.position.z});
+
+
+    /* Application du point de vue */
+    int view_loc = glGetUniformLocation(obj->material->shader->shader, "view");
+    glUniformMatrix4fv(view_loc, 1, GL_FALSE, &camera->view[0][0]);
+    
+    /* Application de la projection*/
+    int proj_loc = glGetUniformLocation(obj->material->shader->shader, "projection");
+    glUniformMatrix4fv(proj_loc, 1, GL_FALSE, &camera->projection[0][0]);
+
+    /* application d'une transformation bidon */
+    unsigned int transfrom_loc = glGetUniformLocation(obj->material->shader->shader, "transform");;
+    glUniformMatrix4fv(transfrom_loc, 1, GL_FALSE, *model);
+
+    glUseProgram(obj->material->shader->shader);
+    glBindTexture(GL_TEXTURE_2D, obj->material->texture->id);
+
+    // Lié le VAO
+    glBindVertexArray(obj->mesh->VAO);
+    
+    glDrawElementsInstanced(GL_TRIANGLES, obj->mesh->index_count, GL_UNSIGNED_INT, 0, group->st_instanced.count);
+    glBindVertexArray(0);
+}
+
+void view_normal_render(st_render_group *group)
+{
+    unsigned int transform_loc;
+    
+    // Préparation des info à envoyer au rendu
+    mat4 model, proj, trans, view;
+    glm_mat4_identity(model);
+    glm_mat4_identity(proj);
+    glm_mat4_identity(trans);
+    glm_mat4_identity(view);
+
+    /* Model */
+    glm_rotate(model, (float)glfwGetTime(), (vec3){0.0f, 0.0f, 1.0f});
+
+    /* Projection en perspective de la caméra */
+    glm_perspective(glm_rad(45.0f), (float)1280/(float)720, 0.1f, 100.0f, proj);
+
+    /* Modification que l'on apporte au model */
+    glm_rotate(trans, (float)glfwGetTime(), (vec3){1.0, 1.0, 1.0});
+    glm_scale(trans, (vec3){0.5, 0.5, 0.5});
+
+    /* Gestion de la caméra et de ces déplacement*/
+    float radius = 10.0f;
+    float cam_x = sin(glfwGetTime()) * radius;
+    float cam_z = cos(glfwGetTime()) * radius;
+
+    glm_lookat((vec3){cam_x, 0.0, cam_z}, (vec3){0.0, 0.0, 0.0}, (vec3){0.0, 1.0, 0.0}, view);
+
+    st_mesh_group *mesh_group = group->data;
+    int y;
+    for(y = 0; y < mesh_group->nb_objects; y ++)
+    {
+        
+        int model_loc = glGetUniformLocation(mesh_group->objects[y].material->shader->shader, "model");
+        glUniformMatrix4fv(model_loc, 1, GL_FALSE, *model);
+
+        int view_loc = glGetUniformLocation(mesh_group->objects[y].material->shader->shader, "view");
+        glUniformMatrix4fv(view_loc, 1, GL_FALSE, *view);
+
+        int proj_loc = glGetUniformLocation(mesh_group->objects[y].material->shader->shader, "projection");
+        glUniformMatrix4fv(proj_loc, 1, GL_FALSE, *proj);
+
+        transform_loc = glGetUniformLocation(mesh_group->objects[y].material->shader->shader, "transform");
+        glUniformMatrix4fv(transform_loc, 1, GL_FALSE, *trans);
+
+        // Pour le shader
+        glUseProgram(mesh_group->objects[y].material->shader->shader);
+
+        // Pour les texture
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, mesh_group->objects[y].material->texture->id);
+
+        // Pour les éléments
+        glBindVertexArray(mesh_group->objects[y].mesh->VAO);
+        glDrawElements(GL_TRIANGLES, mesh_group->objects[y].mesh->index_count, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+    }
+}
