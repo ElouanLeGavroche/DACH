@@ -167,6 +167,5 @@ st_map* load_map(const char *path)
     }
 
     json_object_put(root);
-    
     return map;
 }

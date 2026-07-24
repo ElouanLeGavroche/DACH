@@ -10,7 +10,7 @@ int load_file(char *path, st_mesh_data *tile)
     int ok = 0;
 
     size_t cap = 0;
-
+    ssize_t read;
 
     /* */
     tile->vertex_count = 0;
@@ -24,9 +24,9 @@ int load_file(char *path, st_mesh_data *tile)
         }
         else
         {
-            while (getline(&line, &cap, file) != -1)
+            while (read = getline(&line, &cap, file) != -1)
             {
-
+                printf("ici : %d\n", ok);
                 // Sert à savoir combien il y à de vert et de frag avant le malloc
                 
                 if(line[0] == 'v' && line[1] == ' ')
@@ -56,7 +56,11 @@ int load_file(char *path, st_mesh_data *tile)
                 }
                 
             }
+            free(line);
+            line = NULL;
+            
             fclose(file);
+            file = NULL;
         }
 
 
@@ -83,7 +87,7 @@ int load_file(char *path, st_mesh_data *tile)
             int i_f = 0;
             line = NULL;
 
-            while (getline(&line, &cap, file) != -1 && ok != ERROR)
+            while (read = getline(&line, &cap, file) != -1 && ok != ERROR)
             {
 
                 if (ferror(file))
@@ -111,11 +115,11 @@ int load_file(char *path, st_mesh_data *tile)
                     }
 
                 }
-
+                free(line);
+                line = NULL;
             }
         }
     }
-    printf("%ld\n", sizeof(st_mesh_data));
     if(file != NULL)
         fclose(file);
     
@@ -163,9 +167,8 @@ int parse_vertext(char line[], st_mesh_data *tile, int i_v)
     }
     
 
-    while(letter[i] != '\0' && letter[i] != '\n')
+    while((letter = strtok( NULL, " " )) != NULL)
     {
-        letter = strtok( NULL, " " );
         if(letter == NULL)
         {
             return -1;
