@@ -9,6 +9,8 @@
 #include "../../../types.h"
 #include "../../Config/constantes.h"
 
+
+
 #include "../../View/view_render_loop.h"
 
 // Les chemins des éléments du menu
@@ -18,6 +20,5 @@
 void update_render_game(st_render_data *render);
 void init_render_game(st_render_data *render);
 void create_an_instance_GPU(st_instanced *instance, mat4 *model, int amount);
-void init_game_camera(st_camera *camera);
 
 #endif
