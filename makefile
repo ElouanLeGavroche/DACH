@@ -53,6 +53,7 @@ $(SAVE_EXEC)$(EXEC):\
 	$(CONTROLLER)callback_controller.o\
 	$(CONTROLLER)controller_input.o\
 	$(CONTROLLER)controller_init_context.o\
+	$(CONTROLLER)controller_camera.o\
 	\
 	$(MODEL)model_mainloop.o\
 	$(MODEL)model_group_context.o\

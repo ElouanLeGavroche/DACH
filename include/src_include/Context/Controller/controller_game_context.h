@@ -15,6 +15,7 @@
 #include "../../../state.h"
 
 #include "../../Controller/callback_controller.h"
+#include "../../Controller/controller_camera.h"
 
 void controller_update_render_game(st_render_data *render);
 int init_game(st_state *state);
