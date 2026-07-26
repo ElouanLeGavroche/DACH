@@ -133,3 +133,22 @@ float get_speed(st_camera *camera)
 {
     return camera->speed;
 }
+
+void look(st_camera *camera)
+{
+    vec3 center;
+    pthread_mutex_lock(&camera->mutex);
+    glm_vec3_sub(camera->pos, camera->front, center);
+    glm_lookat(
+        camera->pos, 
+        center, 
+        camera->up, 
+        camera->view
+    );
+    pthread_mutex_unlock(&camera->mutex);
+}
+
+void camera_speed(st_camera *camera, float delta_time)
+{
+    camera->actual_speed = camera->speed * delta_time;
+}

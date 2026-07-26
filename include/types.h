@@ -63,7 +63,8 @@ typedef struct
  * @param near_z au plus proche que va rendre la caméra
  * @param far_z au plus loin que va voir la caméré
  */
-typedef struct{
+typedef struct st_camera st_camera;
+struct st_camera{
     mat4 view;
     mat4 projection;
 
@@ -83,7 +84,10 @@ typedef struct{
 
     float rotation;
     pthread_mutex_t mutex;
-}st_camera;
+
+    void (*look)(st_camera *camera);
+    void (*camera_speed)(st_camera *camera, float delta_time);
+};
 
 // Permet de savoir vers quelle direction va la caméra
 typedef enum e_dir{

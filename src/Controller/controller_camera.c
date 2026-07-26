@@ -9,6 +9,9 @@ void controller_init_camera(st_camera *camera, float speed, float near, float fa
     set_rotation(camera, rotation);
     set_ratio(camera);
     set_actual_speed(camera, 0.0f);
+
+    camera->look = look;
+    camera->camera_speed = camera_speed;
 }
 
 void controller_init_camera_vector(st_camera *camera, vec3 pos, vec3 front, vec3 up)

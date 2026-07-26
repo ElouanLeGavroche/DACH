@@ -52,8 +52,7 @@ void update_render_game(st_render_data *render)
     render->delta_time = current_frame - render->last_time;
     render->last_time = current_frame;
 
-    render->camera.actual_speed = render->camera.speed *render->delta_time;
-    
+    render->camera.camera_speed(&render->camera, render->delta_time);
 
     /* Model */
     mat4 model;
@@ -61,16 +60,7 @@ void update_render_game(st_render_data *render)
     //glm_rotate(model, (float)glfwGetTime()*2, (vec3){0.5f, 0.5f, 1.0f});
     glm_translate(model, (vec3){0.0f, 0.0f, sin((float)glfwGetTime()*2)});
     
-    vec3 center;
-    pthread_mutex_lock(&render->camera.mutex);
-    glm_vec3_sub(render->camera.pos, render->camera.front, center);
-    glm_lookat(
-        render->camera.pos, 
-        center, 
-        render->camera.up, 
-        render->camera.view
-    );
-    pthread_mutex_unlock(&render->camera.mutex);
+    render->camera.look(&render->camera);
 
     glClearColor(num_to_01(24), num_to_01(32), num_to_01(61), 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
