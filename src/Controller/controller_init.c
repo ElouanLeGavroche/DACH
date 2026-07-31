@@ -14,14 +14,14 @@ int controller_init(){
     /* Etape 1 : Création de la fenêtre et de son context */
     
     // -1- Charger les donnée propre à la fenêtre
-    if(load_screen_data(&engine_state.window, &engine_state) == ERROR){
+    if(load_screen_data(&engine_state.window, &engine_state) == RES_ERROR){
         printf("Erreur lors de la récupération des données propre au contexte OpenGl.\n");
 
         return EXIT_FAILURE;
     }
 
     // -2- Initialiser la View
-    if(init_View(&engine_state.window) == ERROR){
+    if(init_View(&engine_state.window) == RES_ERROR){
         printf("Erreur lors de l'initialisation de la vue. \n");
 
         return EXIT_FAILURE;

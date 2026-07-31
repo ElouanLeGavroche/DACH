@@ -35,7 +35,7 @@ bool context_group_is_null(st_render_group *group);
  * @param group un groupe
  * @param id de ce groupe
  * 
- * @return ERROR si echec | DONE si reussi
+ * @return RES_ERROR si echec | RES_DONE si reussi
  */
 int context_group_init(st_render_group *group, int id, e_render_group_type type);
 
@@ -50,7 +50,7 @@ int test_render(st_render_data *render);
  * @param render structure qui contient la liste de groupe et le nombre d'elt dans celle-ci
  * @param nb le nombre d'élément à ajouter à la liste. Si 0 ou autre valeur incohérente, ce sera
  * 
- * @return ERROR si echec | DONE si reussi
+ * @return RES_ERROR si echec | RES_DONE si reussi
  */
 int add_group(st_render_data *render, e_render_group_type type);
 
@@ -60,7 +60,7 @@ int add_group(st_render_data *render, e_render_group_type type);
  * @param id du groupe que l'on cherche à supprimer
  * @param max la taille maximum de la liste
  * 
- * @return ERROR si echec | DONE si reussi
+ * @return RES_ERROR si echec | RES_DONE si reussi
  */
 int remove_group(st_render_data *render, int id);
 

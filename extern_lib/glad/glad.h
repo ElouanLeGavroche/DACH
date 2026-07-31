@@ -24,7 +24,7 @@
 #define __glad_h_
 
 #ifdef __gl_h_
-#error OpenGL header already included, remove this include, glad already provides it
+#RES_ERROR OpenGL header already included, remove this include, glad already provides it
 #endif
 #define __gl_h_
 
@@ -174,7 +174,7 @@ typedef void (APIENTRY *GLVULKANPROCNV)(void);
 #define GL_LEFT 0x0406
 #define GL_RIGHT 0x0407
 #define GL_FRONT_AND_BACK 0x0408
-#define GL_NO_ERROR 0
+#define GL_NO_RES_ERROR 0
 #define GL_INVALID_ENUM 0x0500
 #define GL_INVALID_VALUE 0x0501
 #define GL_INVALID_OPERATION 0x0502
@@ -1219,7 +1219,7 @@ typedef void (APIENTRY *GLVULKANPROCNV)(void);
 #define GL_DEBUG_SOURCE_THIRD_PARTY 0x8249
 #define GL_DEBUG_SOURCE_APPLICATION 0x824A
 #define GL_DEBUG_SOURCE_OTHER 0x824B
-#define GL_DEBUG_TYPE_ERROR 0x824C
+#define GL_DEBUG_TYPE_RES_ERROR 0x824C
 #define GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR 0x824D
 #define GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR 0x824E
 #define GL_DEBUG_TYPE_PORTABILITY 0x824F
@@ -1495,7 +1495,7 @@ typedef void (APIENTRY *GLVULKANPROCNV)(void);
 #define GL_SPIR_V_BINARY 0x9552
 #define GL_PARAMETER_BUFFER 0x80EE
 #define GL_PARAMETER_BUFFER_BINDING 0x80EF
-#define GL_CONTEXT_FLAG_NO_ERROR_BIT 0x00000008
+#define GL_CONTEXT_FLAG_NO_RES_ERROR_BIT 0x00000008
 #define GL_VERTICES_SUBMITTED 0x82EE
 #define GL_PRIMITIVES_SUBMITTED 0x82EF
 #define GL_VERTEX_SHADER_INVOCATIONS 0x82F0
@@ -1624,9 +1624,9 @@ GLAPI PFNGLGETBOOLEANVPROC glad_glGetBooleanv;
 typedef void (APIENTRYP PFNGLGETDOUBLEVPROC)(GLenum pname, GLdouble *data);
 GLAPI PFNGLGETDOUBLEVPROC glad_glGetDoublev;
 #define glGetDoublev glad_glGetDoublev
-typedef GLenum (APIENTRYP PFNGLGETERRORPROC)(void);
-GLAPI PFNGLGETERRORPROC glad_glGetError;
-#define glGetError glad_glGetError
+typedef GLenum (APIENTRYP PFNGLGETRES_ERRORPROC)(void);
+GLAPI PFNGLGETRES_ERRORPROC glad_glGetRES_ERROR;
+#define glGetRES_ERROR glad_glGetRES_ERROR
 typedef void (APIENTRYP PFNGLGETFLOATVPROC)(GLenum pname, GLfloat *data);
 GLAPI PFNGLGETFLOATVPROC glad_glGetFloatv;
 #define glGetFloatv glad_glGetFloatv

@@ -51,7 +51,7 @@ int init_game(st_state *state)
     
     printf("Context jeu initier\n");
 
-    return DONE;
+    return RES_DONE;
 }
 
 void controller_update_logic_game(st_state *state)

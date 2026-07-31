@@ -31,7 +31,6 @@
 #include "../Context/Controller/controller_main_menu_context.h"
 
 void controller_mainloop_management(st_engine *engine_state);
-void* logical_loop(void *data_engine);
 void input_loop(st_engine *engine_state);
 
 int new_context(st_engine *engine_state, st_state *new_state);

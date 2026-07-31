@@ -484,7 +484,7 @@ PFNGLGETCOMPRESSEDTEXTURESUBIMAGEPROC glad_glGetCompressedTextureSubImage = NULL
 PFNGLGETDEBUGMESSAGELOGPROC glad_glGetDebugMessageLog = NULL;
 PFNGLGETDOUBLEI_VPROC glad_glGetDoublei_v = NULL;
 PFNGLGETDOUBLEVPROC glad_glGetDoublev = NULL;
-PFNGLGETERRORPROC glad_glGetError = NULL;
+PFNGLGETRES_ERRORPROC glad_glGetRES_ERROR = NULL;
 PFNGLGETFLOATI_VPROC glad_glGetFloati_v = NULL;
 PFNGLGETFLOATVPROC glad_glGetFloatv = NULL;
 PFNGLGETFRAGDATAINDEXPROC glad_glGetFragDataIndex = NULL;
@@ -1011,7 +1011,7 @@ static void load_GL_VERSION_1_0(GLADloadproc load) {
 	glad_glReadPixels = (PFNGLREADPIXELSPROC)load("glReadPixels");
 	glad_glGetBooleanv = (PFNGLGETBOOLEANVPROC)load("glGetBooleanv");
 	glad_glGetDoublev = (PFNGLGETDOUBLEVPROC)load("glGetDoublev");
-	glad_glGetError = (PFNGLGETERRORPROC)load("glGetError");
+	glad_glGetRES_ERROR = (PFNGLGETRES_ERRORPROC)load("glGetRES_ERROR");
 	glad_glGetFloatv = (PFNGLGETFLOATVPROC)load("glGetFloatv");
 	glad_glGetIntegerv = (PFNGLGETINTEGERVPROC)load("glGetIntegerv");
 	glad_glGetString = (PFNGLGETSTRINGPROC)load("glGetString");

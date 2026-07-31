@@ -4,7 +4,7 @@ void input_loop(st_engine *engine_state){
     // Ce tampon permet de savoir si le jeu est revenu à un etat entérieur
     // Et donc de recharger les éléments qui lui y étais associé
     int level_tampon = engine_state->stack_context.level_of_depth;
-    int res = DONE;
+    int res = RES_DONE;
 
     // récupéré les entrées //
 
@@ -55,7 +55,7 @@ void input_loop(st_engine *engine_state){
         if(*who != C_BACK)
         {
             res = new_context(engine_state, new_state);
-            if(res == ERROR)
+            if(res == RES_ERROR)
             {
                 // Gestion de l'erreur
                 engine_state->running = false;
@@ -85,7 +85,7 @@ void controller_mainloop_management(st_engine *engine_state){
 
     // On charge le premier context
     res = new_context(engine_state, &main_menu_state);
-    if(res != ERROR)
+    if(res != RES_ERROR)
     {
 
             ////////////////////////////////////////////
@@ -128,10 +128,10 @@ int new_context(st_engine *engine_state, st_state *new_state)
 
     // L'on initialise le nouveau context
     res = new_state->init_state(new_state);
-    if(res == ERROR)
+    if(res == RES_ERROR)
     {
         printf("Erreur lors de l'initialisation du context\n");
-        return ERROR;
+        return RES_ERROR;
     }
 
     // L'on envoie le context suivant pour remplacer l'actuel
@@ -139,7 +139,7 @@ int new_context(st_engine *engine_state, st_state *new_state)
     engine_state->stack_context.current_state->ev_next_context = C_NONE;
     // On relie le clavier au nouveau context
     link_input(engine_state);
-    return DONE;
+    return RES_DONE;
 
 }
 

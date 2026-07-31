@@ -1,12 +1,14 @@
 #ifndef CONSTANTES
 #define CONSTANTES
 
-#define DONE 0
-#define ERROR -1
-#define SUCCES 1
-#define FAILED_MALLOC 2
-#define NULL_POINTER 3
-
+typedef enum
+{
+    RES_DONE,
+    RES_ERROR,
+    RES_FAILED_MALLOC,
+    RES_FAILED_ASSIGNEMENT,
+    RES_NULL_POINTER
+}result;
 
 #define PATH_FISEL_MAP "ressources/maps/fisel.json"
 

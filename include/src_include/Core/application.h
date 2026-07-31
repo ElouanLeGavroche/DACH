@@ -1,0 +1,23 @@
+#ifndef APPLICATION
+#define APPLICATION
+
+#include <stdlib.h>
+#include <stdio.h>
+
+#include "../Config/constantes.h"
+#include "../../state.h"
+#include "../../types.h"
+
+#include "clock.h"
+#include "context_stack.h"
+
+#include "../Platform/glfw_window.h"
+#include "../Platform/glfw_input.h"
+
+#include "../Renderer/opengl_renderer.h"
+#include "../Renderer/renderer.h"
+
+int init_application();
+void mainloop(st_engine *engine_state);
+
+#endif

@@ -6,7 +6,7 @@ int init_View(st_loaded_windows_data *window_data)
 {
     
     if (!glfwInit())
-        return ERROR;
+        return RES_ERROR;
     
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -17,7 +17,7 @@ int init_View(st_loaded_windows_data *window_data)
     if (!window)
     {
         glfwTerminate();
-        return ERROR;
+        return RES_ERROR;
     }
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
@@ -28,11 +28,11 @@ int init_View(st_loaded_windows_data *window_data)
         glfwTerminate();
 
         fprintf(stderr, "Failed to initialize GLAD\n");
-        return ERROR;
+        return RES_ERROR;
     }
 
     /* Activer le test de profondeur */
     glEnable(GL_DEPTH_TEST);
 
-    return DONE;
+    return RES_DONE;
 }

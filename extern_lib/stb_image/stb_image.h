@@ -50,7 +50,7 @@ RECENT REVISION HISTORY:
 
       2.30  (2024-05-31) avoid erroneous gcc warning
       2.29  (2023-05-xx) optimizations
-      2.28  (2023-01-29) many error fixes, security errors, just tons of stuff
+      2.28  (2023-01-29) many RES_ERROR fixes, security RES_ERRORs, just tons of stuff
       2.27  (2021-07-11) document stbi_info better, 16-bit PNM support, bug fixes
       2.26  (2020-07-13) many minor fixes
       2.25  (2020-02-02) fix warnings
@@ -651,7 +651,7 @@ typedef uint32_t stbi__uint32;
 typedef int32_t  stbi__int32;
 #endif
 
-// should produce compiler error if size is wrong
+// should produce compiler RES_ERROR if size is wrong
 typedef unsigned char validate_uint32[sizeof(stbi__uint32)==4 ? 1 : -1];
 
 #ifdef _MSC_VER
@@ -675,7 +675,7 @@ typedef unsigned char validate_uint32[sizeof(stbi__uint32)==4 ? 1 : -1];
 #elif !defined(STBI_MALLOC) && !defined(STBI_FREE) && !defined(STBI_REALLOC) && !defined(STBI_REALLOC_SIZED)
 // ok
 #else
-#error "Must define all or none of STBI_MALLOC, STBI_FREE, and STBI_REALLOC (or STBI_REALLOC_SIZED)."
+#RES_ERROR "Must define all or none of STBI_MALLOC, STBI_FREE, and STBI_REALLOC (or STBI_REALLOC_SIZED)."
 #endif
 
 #ifndef STBI_MALLOC
@@ -1083,9 +1083,9 @@ static int stbi__mul2shorts_valid(int a, int b)
    return a >= SHRT_MIN / b;
 }
 
-// stbi__err - error
-// stbi__errpf - error returning pointer to float
-// stbi__errpuc - error returning pointer to unsigned char
+// stbi__err - RES_ERROR
+// stbi__errpf - RES_ERROR returning pointer to float
+// stbi__errpuc - RES_ERROR returning pointer to unsigned char
 
 #ifdef STBI_NO_FAILURE_STRINGS
    #define stbi__err(x,y)  0
@@ -2125,7 +2125,7 @@ stbi_inline static int stbi__jpeg_huff_decode(stbi__jpeg *j, stbi__huffman *h)
       if (temp < h->maxcode[k])
          break;
    if (k == 17) {
-      // error! code not found
+      // RES_ERROR! code not found
       j->code_bits -= 16;
       return -1;
    }
@@ -3868,7 +3868,7 @@ static stbi_uc *load_jpeg_image(stbi__jpeg *z, int *out_x, int *out_y, int *comp
    z->s->img_n = 0; // make stbi__cleanup_jpeg safe
 
    // validate req_comp
-   if (req_comp < 0 || req_comp > 4) return stbi__errpuc("bad req_comp", "Internal error");
+   if (req_comp < 0 || req_comp > 4) return stbi__errpuc("bad req_comp", "Internal RES_ERROR");
 
    // load a jpeg image from whichever source, but leave in YCbCr format
    if (!stbi__decode_jpeg_image(z)) { stbi__cleanup_jpeg(z); return NULL; }
@@ -3918,7 +3918,7 @@ static stbi_uc *load_jpeg_image(stbi__jpeg *z, int *out_x, int *out_y, int *comp
          else                               r->resample = stbi__resample_row_generic;
       }
 
-      // can't error after this so, this is safe
+      // can't RES_ERROR after this so, this is safe
       output = (stbi_uc *) stbi__malloc_mad3(n, z->s->img_x, z->s->img_y, 1);
       if (!output) { stbi__cleanup_jpeg(z); return stbi__errpuc("outofmem", "Out of memory"); }
 
@@ -4312,7 +4312,7 @@ static int stbi__parse_huffman_block(stbi__zbuf *a)
    for(;;) {
       int z = stbi__zhuffman_decode(a, &a->z_length);
       if (z < 256) {
-         if (z < 0) return stbi__err("bad huffman code","Corrupt PNG"); // error in huffman codes
+         if (z < 0) return stbi__err("bad huffman code","Corrupt PNG"); // RES_ERROR in huffman codes
          if (zout >= a->zout_end) {
             if (!stbi__zexpand(a, zout, 1)) return 0;
             zout = a->zout;
@@ -4712,8 +4712,8 @@ static int stbi__create_png_image_raw(stbi__png *a, stbi_uc *raw, stbi__uint32 r
    a->out = (stbi_uc *) stbi__malloc_mad3(x, y, output_bytes, 0); // extra bytes to write off the end into
    if (!a->out) return stbi__err("outofmem", "Out of memory");
 
-   // note: error exits here don't need to clean up a->out individually,
-   // stbi__do_png always does on error.
+   // note: RES_ERROR exits here don't need to clean up a->out individually,
+   // stbi__do_png always does on RES_ERROR.
    if (!stbi__mad3sizes_valid(img_n, x, depth, 7)) return stbi__err("too large", "Corrupt PNG");
    img_width_bytes = (((img_n * x * depth) + 7) >> 3);
    if (!stbi__mad2sizes_valid(img_width_bytes, y, img_width_bytes)) return stbi__err("too large", "Corrupt PNG");
@@ -5205,7 +5205,7 @@ static int stbi__parse_png_file(stbi__png *z, int scan, int req_comp)
             bpl = (s->img_x * z->depth + 7) / 8; // bytes per line, per component
             raw_len = bpl * s->img_y * s->img_n /* pixels */ + s->img_y /* filter mode per row */;
             z->expanded = (stbi_uc *) stbi_zlib_decode_malloc_guesssize_headerflag((char *) z->idata, ioff, raw_len, (int *) &raw_len, !is_iphone);
-            if (z->expanded == NULL) return 0; // zlib should set error
+            if (z->expanded == NULL) return 0; // zlib should set RES_ERROR
             STBI_FREE(z->idata); z->idata = NULL;
             if ((req_comp == s->img_n+1 && req_comp != 3 && !pal_img_n) || has_trans)
                s->img_out_n = s->img_n+1;
@@ -5263,7 +5263,7 @@ static int stbi__parse_png_file(stbi__png *z, int scan, int req_comp)
 static void *stbi__do_png(stbi__png *p, int *x, int *y, int *n, int req_comp, stbi__result_info *ri)
 {
    void *result=NULL;
-   if (req_comp < 0 || req_comp > 4) return stbi__errpuc("bad req_comp", "Internal error");
+   if (req_comp < 0 || req_comp > 4) return stbi__errpuc("bad req_comp", "Internal RES_ERROR");
    if (stbi__parse_png_file(p, STBI__SCAN_load, req_comp)) {
       if (p->depth <= 8)
          ri->bits_per_channel = 8;
@@ -5442,7 +5442,7 @@ static int stbi__bmp_set_mask_defaults(stbi__bmp_data *info, int compress)
       }
       return 1;
    }
-   return 0; // error
+   return 0; // RES_ERROR
 }
 
 static void *stbi__bmp_parse_header(stbi__context *s, stbi__bmp_data *info)
@@ -5540,7 +5540,7 @@ static void *stbi__bmp_load(stbi__context *s, int *x, int *y, int *comp, int req
 
    info.all_a = 255;
    if (stbi__bmp_parse_header(s, &info) == NULL)
-      return NULL; // error code already set
+      return NULL; // RES_ERROR code already set
 
    flip_vertically = ((int) s->img_y) > 0;
    s->img_y = abs((int) s->img_y);
@@ -5735,7 +5735,7 @@ static void *stbi__bmp_load(stbi__context *s, int *x, int *y, int *comp, int req
 // Targa Truevision - TGA
 // by Jonathan Dummer
 #ifndef STBI_NO_TGA
-// returns STBI_rgb or whatever, 0 on error
+// returns STBI_rgb or whatever, 0 on RES_ERROR
 static int stbi__tga_get_comp(int bits_per_pixel, int is_grey, int* is_rgb16)
 {
    // only RGB or RGBA (incl. 16bit) or grey allowed
@@ -5823,27 +5823,27 @@ static int stbi__tga_test(stbi__context *s)
    int sz, tga_color_type;
    stbi__get8(s);      //   discard Offset
    tga_color_type = stbi__get8(s);   //   color type
-   if ( tga_color_type > 1 ) goto errorEnd;   //   only RGB or indexed allowed
+   if ( tga_color_type > 1 ) goto RES_ERROREnd;   //   only RGB or indexed allowed
    sz = stbi__get8(s);   //   image type
    if ( tga_color_type == 1 ) { // colormapped (paletted) image
-      if (sz != 1 && sz != 9) goto errorEnd; // colortype 1 demands image type 1 or 9
+      if (sz != 1 && sz != 9) goto RES_ERROREnd; // colortype 1 demands image type 1 or 9
       stbi__skip(s,4);       // skip index of first colormap entry and number of entries
       sz = stbi__get8(s);    //   check bits per palette color entry
-      if ( (sz != 8) && (sz != 15) && (sz != 16) && (sz != 24) && (sz != 32) ) goto errorEnd;
+      if ( (sz != 8) && (sz != 15) && (sz != 16) && (sz != 24) && (sz != 32) ) goto RES_ERROREnd;
       stbi__skip(s,4);       // skip image x and y origin
    } else { // "normal" image w/o colormap
-      if ( (sz != 2) && (sz != 3) && (sz != 10) && (sz != 11) ) goto errorEnd; // only RGB or grey allowed, +/- RLE
+      if ( (sz != 2) && (sz != 3) && (sz != 10) && (sz != 11) ) goto RES_ERROREnd; // only RGB or grey allowed, +/- RLE
       stbi__skip(s,9); // skip colormap specification and image x/y origin
    }
-   if ( stbi__get16le(s) < 1 ) goto errorEnd;      //   test width
-   if ( stbi__get16le(s) < 1 ) goto errorEnd;      //   test height
+   if ( stbi__get16le(s) < 1 ) goto RES_ERROREnd;      //   test width
+   if ( stbi__get16le(s) < 1 ) goto RES_ERROREnd;      //   test height
    sz = stbi__get8(s);   //   bits per pixel
-   if ( (tga_color_type == 1) && (sz != 8) && (sz != 16) ) goto errorEnd; // for colormapped images, bpp is size of an index
-   if ( (sz != 8) && (sz != 15) && (sz != 16) && (sz != 24) && (sz != 32) ) goto errorEnd;
+   if ( (tga_color_type == 1) && (sz != 8) && (sz != 16) ) goto RES_ERROREnd; // for colormapped images, bpp is size of an index
+   if ( (sz != 8) && (sz != 15) && (sz != 16) && (sz != 24) && (sz != 32) ) goto RES_ERROREnd;
 
    res = 1; // if we got this far, everything's good and we can return 1 instead of 0
 
-errorEnd:
+RES_ERROREnd:
    stbi__rewind(s);
    return res;
 }
@@ -6064,12 +6064,12 @@ static void *stbi__tga_load(stbi__context *s, int *x, int *y, int *comp, int req
    if (req_comp && req_comp != tga_comp)
       tga_data = stbi__convert_format(tga_data, tga_comp, req_comp, tga_width, tga_height);
 
-   //   the things I do to get rid of an error message, and yet keep
+   //   the things I do to get rid of an RES_ERROR message, and yet keep
    //   Microsoft's C compilers happy... [8^(
    tga_palette_start = tga_palette_len = tga_palette_bits =
          tga_x_origin = tga_y_origin = 0;
    STBI_NOTUSED(tga_palette_start);
-   //   OK, done
+   //   OK, RES_DONE
    return tga_data;
 }
 #endif
@@ -7059,11 +7059,11 @@ static void *stbi__gif_load(stbi__context *s, int *x, int *y, int *comp, int req
       *y = g.h;
 
       // moved conversion to after successful load so that the same
-      // can be done for multiple frames.
+      // can be RES_DONE for multiple frames.
       if (req_comp && req_comp != 4)
          u = stbi__convert_format(u, 4, req_comp, g.w, g.h);
    } else if (g.out) {
-      // if there was an error and we allocated an image buffer, free it!
+      // if there was an RES_ERROR and we allocated an image buffer, free it!
       STBI_FREE(g.out);
    }
 
@@ -7825,7 +7825,7 @@ STBIDEF int stbi_is_16_bit_from_callbacks(stbi_io_callbacks const *c, void *user
       1.46  (2014-08-26)
               fix broken tRNS chunk (colorkey-style transparency) in non-paletted PNG
       1.45  (2014-08-16)
-              fix MSVC-ARM internal compiler error by wrapping malloc
+              fix MSVC-ARM internal compiler RES_ERROR by wrapping malloc
       1.44  (2014-08-07)
               various warning fixes from Ronny Chevalier
       1.43  (2014-07-15)
@@ -7835,7 +7835,7 @@ STBIDEF int stbi_is_16_bit_from_callbacks(stbi_io_callbacks const *c, void *user
               fixes to stbi__cleanup_jpeg path
               added STBI_ASSERT to avoid requiring assert.h
       1.41  (2014-06-25)
-              fix search&replace from 1.36 that messed up comments/error messages
+              fix search&replace from 1.36 that messed up comments/RES_ERROR messages
       1.40  (2014-06-22)
               fix gcc struct-initialization warning
       1.39  (2014-06-15)
@@ -7868,7 +7868,7 @@ STBIDEF int stbi_is_16_bit_from_callbacks(stbi_io_callbacks const *c, void *user
               added ability to load files via callbacks to accomidate custom input streams (Ben Wenger)
               removed deprecated format-specific test/load functions
               removed support for installable file formats (stbi_loader) -- would have been broken for IO callbacks anyway
-              error cases in bmp and tga give messages and don't leak (Raymond Barbiero, grisha)
+              RES_ERROR cases in bmp and tga give messages and don't leak (Raymond Barbiero, grisha)
               fix inefficiency in decoding 32-bit BMP (David Woo)
       1.29  (2010-08-16)
               various warning fixes from Aurelien Pocheville
@@ -7909,8 +7909,8 @@ STBIDEF int stbi_is_16_bit_from_callbacks(stbi_io_callbacks const *c, void *user
               optimized upsampling by Fabian "ryg" Giesen
       1.09    Fix format-conversion for PSD code (bad global variables!)
       1.08    Thatcher Ulrich's PSD code integrated by Nicolas Schulz
-      1.07    attempt to fix C++ warning/errors again
-      1.06    attempt to fix C++ warning/errors again
+      1.07    attempt to fix C++ warning/RES_ERRORs again
+      1.06    attempt to fix C++ warning/RES_ERRORs again
       1.05    fix TGA loading to return correct *comp and use good luminance calc
       1.04    default float alpha is 1, not 255; use 'void *' for stbi_image_free
       1.03    bugfixes to STBI_NO_STDIO, STBI_NO_HDR
@@ -7920,11 +7920,11 @@ STBIDEF int stbi_is_16_bit_from_callbacks(stbi_io_callbacks const *c, void *user
       1.00    interface to zlib that skips zlib header
       0.99    correct handling of alpha in palette
       0.98    TGA loader by lonesock; dynamically add loaders (untested)
-      0.97    jpeg errors on too large a file; also catch another malloc failure
+      0.97    jpeg RES_ERRORs on too large a file; also catch another malloc failure
       0.96    fix detection of invalid v value - particleman@mollyrocket forum
       0.95    during header scan, seek to markers in case of padding
       0.94    STBI_NO_STDIO to disable stdio usage; rename all #defines the same
-      0.93    handle jpegtran output; verbose errors
+      0.93    handle jpegtran output; verbose RES_ERRORs
       0.92    read 4,8,16,24,32-bit BMP files of several formats
       0.91    output 24-bit Windows 3.0 BMP files
       0.90    fix a few more warnings; bump version number to approach 1.0

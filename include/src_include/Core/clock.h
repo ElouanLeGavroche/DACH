@@ -1,5 +1,5 @@
-#ifndef MODEL_MAINLOOP
-#define MODEL_MAINLOOP
+#ifndef CLOCK
+#define CLOCK
 
 #include <stdlib.h>
 #include <stdbool.h>
@@ -17,5 +17,6 @@ double calculus_elapsed_time(struct timespec time_a, struct timespec time_b);
 void wait_time(struct timespec time_a, struct timespec time_b, double elapsed, double time);
 
 void get_time(struct timespec *dest);
+
 
 #endif

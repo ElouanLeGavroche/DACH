@@ -86,7 +86,7 @@ int load_file(char *path, st_mesh_data *tile)
             int i_f = 0;
             line = NULL;
 
-            while (read = getline(&line, &cap, file) != -1 && ok != ERROR)
+            while (read = getline(&line, &cap, file) != -1 && ok != RES_ERROR)
             {
 
                 if (ferror(file))
@@ -102,9 +102,9 @@ int load_file(char *path, st_mesh_data *tile)
                         if(line[0] == 'v') 
                         { 
                             i_v = parse_vertext(line, tile, i_v); 
-                            if(i_v == ERROR)
+                            if(i_v == RES_ERROR)
                             {
-                                ok = ERROR;
+                                ok = RES_ERROR;
                             }
                         }
                         else if(line[0] == 'f') 
@@ -186,7 +186,7 @@ int parse_vertext(char line[], st_mesh_data *tile, int i_v)
         fprintf(stderr, "Ce message s'adresse au développeur, merci de demander à Paotr Neñvel de te donner la programme qui permet de "
                         "passer du format .obj au .obj personnaliser du projet.\n");
         
-        return ERROR;
+        return RES_ERROR;
     }
     return i_v;
 }
@@ -223,7 +223,7 @@ int parse_face(char line[], st_mesh_data *tile, int i_f)
         fprintf(stderr, "Ce message s'adresse au développeur, merci de demander à Paotr Neñvel de te donner la programme qui permet de "
                         "passer du format .obj au .obj personnaliser du projet.\n");
         
-        return ERROR;
+        return RES_ERROR;
     }
     return i_f;
 }

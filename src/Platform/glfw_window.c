@@ -1,7 +1,10 @@
-#include "../../include/src_include/Model/model_init.h"
+#include "../../include/src_include/Platform/glfw_window.h"
 
-int load_screen_data(st_loaded_windows_data *screen_data, st_engine *engine_state)
+int init_window(st_loaded_windows_data *window_data)
 {
+    st_window_user_data *data;
+
+    // Charger les informations de la fenêtre dans le Json
     // Fichier    
     FILE *fp;
     char buffer[1024] = {'\0'};
@@ -19,21 +22,10 @@ int load_screen_data(st_loaded_windows_data *screen_data, st_engine *engine_stat
     int frame_rate_value;
     const char *initial_context_value = NULL;
 
-    // Initialisation des premières variables du moteur
-    engine_state->running = true;
-
-
-    // Initialisation des outils de context
-    engine_state->context_tool.put_context = put_context;
-    engine_state->context_tool.remove_context = remove_context;
-
-    engine_state->stack_context.level_of_depth = 0;
-    engine_state->stack_context.current_state = NULL;
-
     fp = fopen(PATH_LOAD_GAME_DATA, "r");
     if(fp == NULL){
         printf("Fichier non trouvé\n");
-        return EXIT_FAILURE;
+        return RES_NULL_POINTER;
     }
     else{
         printf("fichier ouvert\n");
@@ -76,10 +68,55 @@ int load_screen_data(st_loaded_windows_data *screen_data, st_engine *engine_stat
         frame_rate_value = SCREEN_FRAME_RATE_DEFAUL;
     }
     // Allocation des informations de la fenêtre
-    screen_data->size_x = size_x_value;
-    screen_data->size_y = size_y_value;
-    screen_data->frame_rate = frame_rate_value;
+    window_data->size_x = size_x_value;
+    window_data->size_y = size_y_value;
+    window_data->frame_rate = frame_rate_value;
+    
+    // Initialiser les informations récupéré
+    if (!glfwInit())
+        return RES_ERROR;
+    
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+    GLFWwindow *window = glfwCreateWindow(window_data->size_x, window_data->size_y, "Douar ar c'hornôg", NULL, NULL);
+    
+    if (!window)
+    {
+        glfwTerminate();
+        return RES_ERROR;
+    }
+    /* Make the window's context current */
+    glfwMakeContextCurrent(window);
+
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        glfwDestroyWindow(window);
+        glfwTerminate();
+
+        fprintf(stderr, "Failed to initialize GLAD\n");
+        return RES_ERROR;
+    }
+
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetWindowUserPointer(window, data);
 
     return RES_DONE;
+}
+
+void framebuffer_size_callback(GLFWwindow *window, int width, int height){
+
+      st_window_user_data *data = glfwGetWindowUserPointer(window);
+      st_loaded_windows_data *window_parametr = data->window;
+      st_camera *camera = data->camera;
+
+      glViewport(0, 0, width, height);
+
+      window_parametr->size_x = width;
+      window_parametr->size_y = height;
+
+      // Calcule du ration pour la projection : 
+      camera->ratio = ((float)window_parametr->size_x / (float)window_parametr->size_y) * (4.0f / 3.0f);
+
 }

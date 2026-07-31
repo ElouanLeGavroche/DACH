@@ -40,10 +40,10 @@ int init_menu(st_state *state)
     
     // Creation du groupe
     res = add_group(&state->render, RENDER_GROUP_MESH);
-    if(res != DONE)
+    if(res != RES_DONE)
     {
         fprintf(stderr, "Erreur lors de la création du group.\n");
-        return ERROR;
+        return RES_ERROR;
     }
     
     st_render_group *group = get_group(state->render.groups, 0, state->render.nb_groups);
@@ -60,7 +60,7 @@ int init_menu(st_state *state)
     init_data_main_menu(state);
     
     printf("Context menu initier\n");
-    return DONE;
+    return RES_DONE;
 }
 
 

@@ -1,0 +1,14 @@
+#ifndef CONTEXT_STACK
+#define CONTEXT_STACK
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "../../../types.h"
+#include "../../Config/constantes.h"
+
+int link_context(void *put, void *remove);
+void put_context(stack *my_stack, st_state *my_state);
+int remove_context(stack *my_stack);
+
+#endif
