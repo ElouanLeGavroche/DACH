@@ -148,14 +148,20 @@ int init_a_loaded_texture(st_image *image)
     // charge et génère la texture
     if (image->data != NULL)
     {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->width, image->height, 0, GL_RGB, GL_UNSIGNED_BYTE, image->data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-
-        glGetProgramiv(texture, GL_LINK_STATUS, &success);
-        if(!success) {
-            glGetProgramInfoLog(texture, 512, NULL, infoLog);
-            printf("Erreur lors de la création du programe shader : %s\n", infoLog);
+        switch (image->nr_channels)
+        {
+        case 3:
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->width, image->height, 0, GL_RGB, GL_UNSIGNED_BYTE, image->data);
+            break;
+        
+        case 4:
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->width, image->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image->data);
+            break;
+        default:
+            break;
         }
+        
+        glGenerateMipmap(GL_TEXTURE_2D);
     }
     else
     {

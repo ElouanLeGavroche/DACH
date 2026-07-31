@@ -1,4 +1,4 @@
-#version 460 core
+#version 330 core
 
 out vec4 frag_color;
 in vec3 our_color; // Variable d'entrée identique à la sortie du vertex shader

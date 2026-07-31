@@ -173,7 +173,6 @@ int remove_group(st_render_data *render, int id)
 {
     /* On va parcourir la liste pour trouver grâce à l'id, le group à supprimer */
     int i = 0, y = 0;
-    int res;
     
     while(i < render->nb_groups && render->groups[i].ID != id)
     {
@@ -183,13 +182,6 @@ int remove_group(st_render_data *render, int id)
     if (i == render->nb_groups)
     {
         fprintf(stderr, "Groupe non trouvé dans la liste.\n");
-        return ERROR;
-    }
-
-    // On vérifie que la suppression c'est bien passer
-    if(res == ERROR)
-    {
-        fprintf(stderr, "Erreur lors de la suppression du groupe.\n");
         return ERROR;
     }
 
@@ -223,6 +215,7 @@ int remove_group(st_render_data *render, int id)
 int create_an_object(int name, st_mesh *mesh, st_texture *texture, st_shader *shader, st_transform transform, st_render_group *dest)
 {
     st_render_object obj;
+    int res;
     obj.material = malloc(sizeof(st_material));
     if(!obj.material)
     {
@@ -256,8 +249,6 @@ int create_an_object(int name, st_mesh *mesh, st_texture *texture, st_shader *sh
         st_instanced_mesh_group *test = (st_instanced_mesh_group*)dest->data;
         if(test->shared_render_object != NULL)
         {
-            free(obj.material);
-            free(obj.mesh);
             fprintf(stderr, "Vous avez déjà un mesh dans cet instance.\n");
             return ERROR;
         }
@@ -270,13 +261,17 @@ int create_an_object(int name, st_mesh *mesh, st_texture *texture, st_shader *sh
     }
 
     
-    generic_func_add_render_object(dest, obj);
+    res = generic_func_add_render_object(dest, obj);
+    if(res != DONE)
+    {
+        return ERROR;
+    }
 
     return DONE;
 
 }
 
-int create_an_instance(int capacity, st_render_object *obj, mat4 *model, st_instanced *dest)
+int create_an_instance(int capacity, mat4 *model, st_instanced *dest)
 {
     if(!dest)
     {
@@ -313,6 +308,8 @@ int create_an_instance(int capacity, st_render_object *obj, mat4 *model, st_inst
 
 int generic_func_add_render_object(st_render_group *group, st_render_object object)
 {
+    int res;
+
     // Vérification des données entrés
     if(group == NULL)
     {
@@ -320,8 +317,11 @@ int generic_func_add_render_object(st_render_group *group, st_render_object obje
         return ERROR;
     }
 
-    group->tables->add_element(group->data, object);
-    
+    res = group->tables->add_element(group->data, object);
+    if(res == ERROR || res == FAILED_MALLOC)
+    {
+        return ERROR;
+    }
 
     return DONE;
 }
@@ -329,14 +329,18 @@ int generic_func_add_render_object(st_render_group *group, st_render_object obje
 int generic_func_remove_render_object(st_render_group *group, int id)
 {
     int i = 0;
-
+    int res;
     if(group == NULL)
     {
         fprintf(stderr, "Le groupe est null, impossible de supprimer l'un de ces élément.\n");
         return ERROR;
     }
 
-    group->tables->remove_element(group->data, id);
+    res = group->tables->remove_element(group->data, id);
+    if(res == ERROR || res == FAILED_MALLOC)
+    {
+        return ERROR;
+    }
     return DONE;
     
 }

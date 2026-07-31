@@ -137,7 +137,7 @@ typedef struct st_render_data{
  * @param upper sont parent s'il en à un.
  * @param render données de rendu du context.
  * @param ev_next_context variable qui sera lu par le moteur et qui passera à un état suivant.
- * @param ev_ev_close_close varibale qui sera lu par le moteur et qui quittera le jeu.
+ * @param ev_close_close varibale qui sera lu par le moteur et qui quittera le jeu.
  */
 typedef struct st_state
 {
@@ -230,8 +230,6 @@ typedef struct st_engine
 
     st_loaded_windows_data window;
     
-    pthread_mutex_t context_mutex;
-
 } st_engine;
 
 // Structure qui englobe les éléments qui ont besoin d'être envoyé à la fenêtre

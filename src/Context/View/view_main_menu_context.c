@@ -51,6 +51,8 @@ void update_render_main_menu(st_render_data *render)
             int y;
             for(y = 0; y < mesh_group->nb_objects; y ++)
             {
+                // Pour le shader
+                glUseProgram(mesh_group->objects[y].material->shader->shader);
                 
                 int model_loc = glGetUniformLocation(mesh_group->objects[y].material->shader->shader, "model");
                 glUniformMatrix4fv(model_loc, 1, GL_FALSE, *model);
@@ -63,9 +65,6 @@ void update_render_main_menu(st_render_data *render)
 
                 transform_loc = glGetUniformLocation(mesh_group->objects[y].material->shader->shader, "transform");
                 glUniformMatrix4fv(transform_loc, 1, GL_FALSE, *trans);
-
-                // Pour le shader
-                glUseProgram(mesh_group->objects[y].material->shader->shader);
 
                 // Pour les texture
                 glActiveTexture(GL_TEXTURE0);

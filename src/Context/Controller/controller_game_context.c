@@ -83,7 +83,7 @@ void controller_create_world(st_state *state)
         st_texture *grass_texture = new_texture(map->groups[i].texture);
 
         // Creation du groupe du monde
-        add_group(&state->render, INSTANCED_GROUP);
+        add_group(&state->render, RENDER_GROUP_INSTANCED_MESH);
         st_render_group *world_group = get_group(state->render.groups, map->groups[i].id, state->render.nb_groups);
         
         // On crée l'objet qui sera instancier
@@ -95,11 +95,11 @@ void controller_create_world(st_state *state)
         mat4 *world_tile = init_map(map->groups[i].nb_blocks, map->groups[i].tiles);
 
         // Récuperer l'objet crée
-        st_render_object *instenced_obj = world_group->tables->get_element(world_group, TILE);
+        st_render_object *instenced_obj = world_group->tables->get_element(world_group, i);
 
         // Crée une variable tampon pour l'instanciation
         st_instanced *instenced_data = malloc(sizeof(st_instanced));
-        create_an_instance(world_size, instenced_obj, world_tile, instenced_data);
+        create_an_instance(world_size, world_tile, instenced_data);
 
         // Initialisation du monde
         create_an_instance_GPU(instenced_data, world_tile, world_size);

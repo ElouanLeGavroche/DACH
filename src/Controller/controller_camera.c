@@ -12,6 +12,8 @@ void controller_init_camera(st_camera *camera, float speed, float near, float fa
 
     camera->look = look;
     camera->camera_speed = camera_speed;
+
+    pthread_mutex_init(&camera->mutex, NULL);
 }
 
 void controller_init_camera_vector(st_camera *camera, vec3 pos, vec3 front, vec3 up)

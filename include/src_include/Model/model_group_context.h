@@ -82,7 +82,7 @@ st_render_group* get_group(st_render_group *groups, int id, size_t max);
  * @param dest group auquel est déstiné l'objet
  */
 int create_an_object(int name, st_mesh *mesh, st_texture *texture, st_shader *shader, st_transform transform, st_render_group *dest);
-int create_an_instance(int capacity, st_render_object *obj, mat4 *positions, st_instanced *dest);
+int create_an_instance(int capacity, mat4 *positions, st_instanced *dest);
 
   /************************/
  /* Fonctions générique  */

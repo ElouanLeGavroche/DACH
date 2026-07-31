@@ -1,35 +1,5 @@
 #include "../../include/src_include/Controller/controller_mainloop.h"
 
-void *logical_loop(void *data_engine)
-{
-    // Partie Logique
-    st_engine *engine_state = data_engine;
-    //Définition des variables pour accorder la clock
-    struct timespec ts_start, ts_end;
-    double elapsed;
-    // 
-    // Partie Model
-    while(engine_state->running)
-    {
-        //Time au début de la boucle
-        clock_gettime(CLOCK_MONOTONIC, &ts_start);
-        
-        pthread_mutex_lock(&engine_state->context_mutex);
-        // Contenu //
-        engine_state->stack_context.current_state->update_logic_context(engine_state->stack_context.current_state);
-        
-        pthread_mutex_unlock(&engine_state->context_mutex);
-
-        //Time fin de boucle
-        clock_gettime(CLOCK_MONOTONIC, &ts_end);
-
-        //Gestion de des conditions au calcul d'un nouveau tick
-        wait_tick(ts_start, ts_end);
-    }
-
-    printf("Thread logique mené à bien\n");
-}
-
 void input_loop(st_engine *engine_state){
     // Ce tampon permet de savoir si le jeu est revenu à un etat entérieur
     // Et donc de recharger les éléments qui lui y étais associé
@@ -106,10 +76,6 @@ void input_loop(st_engine *engine_state){
  */
 void controller_mainloop_management(st_engine *engine_state){
 
-    // Thread qui tournera en parralèlle pour la logique. En outre
-    // Il ne s'actualisera que 20 fois par seconde au le de 60
-    // comme les graphismes
-    pthread_t logical_thread;
     // Varibiable pour les erreurs
     int res;
 
@@ -121,11 +87,7 @@ void controller_mainloop_management(st_engine *engine_state){
     res = new_context(engine_state, &main_menu_state);
     if(res != ERROR)
     {
-        // Pas la peine de crée le nouveau thread si le menu n'a pas bien charger.
 
-        // Création des threads et passage de la structure engine
-        pthread_create(&logical_thread, NULL, logical_loop, engine_state);
-        
             ////////////////////////////////////////////
             //                                        //
             //                Boucle                  //
@@ -137,13 +99,13 @@ void controller_mainloop_management(st_engine *engine_state){
             clock_gettime(CLOCK_MONOTONIC, &ts_start);
             view_clear();
             
-            pthread_mutex_lock(&engine_state->context_mutex);
+            // Contenu //
+            engine_state->stack_context.current_state->update_logic_context(engine_state->stack_context.current_state);
 
             //Actual context
             engine_state->stack_context.current_state->update_render_context(&engine_state->stack_context.current_state->render);
             input_loop(engine_state);
 
-            pthread_mutex_unlock(&engine_state->context_mutex);
             view_swap();
 
             //Time fin de boucle
@@ -154,7 +116,6 @@ void controller_mainloop_management(st_engine *engine_state){
 
         }
         engine_state->running = false;
-        pthread_join(logical_thread, NULL);
         unload_data(engine_state);
     }
 
