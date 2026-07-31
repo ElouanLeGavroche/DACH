@@ -54,3 +54,22 @@ void put_context(stack *my_stack, st_state *my_state){
     printf("Niveau de la stack : %d\n", my_stack->level_of_depth);
     printf("context ajouter\n");
 }
+
+int new_context(st_state *new_state, st_context_tool tools, stack *stack)
+{
+    int res;
+    
+    // L'on initialise le nouveau context
+    res = new_state->init_state(new_state);
+    if(res == RES_ERROR)
+    {
+        printf("Erreur lors de l'initialisation du context\n");
+        return RES_ERROR;
+    }
+
+    tools.put_context(stack, new_state);
+    stack->current_state->ev_next_context = C_NONE;
+    // On relie le clavier au nouveau context
+    return RES_DONE;
+
+}

@@ -6,7 +6,6 @@
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <unistd.h>
-
 #include "../../types.h"
 
 void pressed_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);

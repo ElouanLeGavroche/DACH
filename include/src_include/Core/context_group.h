@@ -1,3 +1,4 @@
+#define CONTEXT_GROUP
 /***
  * @author DHENNIN Elouan
  * @date 04/07/2026

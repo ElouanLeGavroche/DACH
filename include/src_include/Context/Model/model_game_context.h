@@ -7,7 +7,7 @@
 
 #include "../../Config/constantes.h"
 #include "../../../types.h"
-#include "../../Model/model_camera.h"
+#include "../../Core/context_camera.h"
 #include "../../Model/model_mainloop.h"
 
 void update_logic_game(st_state *state);

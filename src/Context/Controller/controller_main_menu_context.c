@@ -25,7 +25,7 @@ int init_menu(st_state *state)
 {
     printf("début de l'initiation\n");
     int res;
-
+    
     init_render_main_menu(&state->render);
     
     // CHARGER LES SHADERS --------------------------------------------------------------------------------------------

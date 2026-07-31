@@ -10,7 +10,7 @@
 #include "../Model/model_init.h"
 
 #include "../Controller/callback_controller.h"
-#include "../Controller/controller_mainloop.h"
+#include "../Core/application.h"
 
 #include "controller_input.h"
 

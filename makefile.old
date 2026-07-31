@@ -16,10 +16,6 @@ MODEL=$(SRC)Model/
 CONTROLLER=$(SRC)Controller/
 VIEW=$(SRC)View/
 
-CORE=$(SRC)Core/
-PLATFORM=$(SRC)Platform/
-RENDERER=$(SRC)Renderer/
-
 CONTEXT_MODEL=$(SRC_CONTEXT)Model/
 CONTEXT_CONTROLLER=$(SRC_CONTEXT)Controller/
 CONTEXT_VIEW=$(SRC_CONTEXT)View/
@@ -42,28 +38,28 @@ $(SAVE_EXEC)$(EXEC):\
 	$(EXTERN_INCLUDE)glad/glad.o\
 	\
 	$(TRANSFORM_TOOL)colors.o\
+	$(CONTEXT_TOOL)stack.o\
 	\
 	$(LOAD_TOOLS)load_shader.o\
 	$(LOAD_TOOLS)load_obj_format.o\
 	$(LOAD_TOOLS)load_image.o\
 	$(LOAD_TOOLS)load_map.o\
 	\
-	$(CORE)application.o\
-	$(CORE)clock.o\
-	$(CORE)context_stack.o\
-	$(CORE)context_group.o\
-	$(CORE)context_content.o\
-	$(CORE)context_camera.o\
-	$(CORE)result.o\
+	$(CONTROLLER)controller_init.o\
+	$(MODEL)model_init.o\
+	$(VIEW)view_init.o\
 	\
-	$(PLATFORM)glfw_input.o\
-	$(PLATFORM)glfw_window.o\
-	$(PLATFORM)glfw_mouse.o\
+	$(CONTROLLER)controller_mainloop.o\
+	$(CONTROLLER)callback_controller.o\
+	$(CONTROLLER)controller_input.o\
+	$(CONTROLLER)controller_init_context.o\
+	$(CONTROLLER)controller_camera.o\
 	\
-	$(RENDERER)opengl_renderer.o\
-	$(RENDERER)render_group.o\
-	$(RENDERER)render_scene.o\
-	$(RENDERER)renderer.o\
+	$(MODEL)model_mainloop.o\
+	$(MODEL)model_group_context.o\
+	$(MODEL)model_camera.o\
+	\
+	$(VIEW)view_render_loop.o\
 	\
 	$(CONTEXT_CONTROLLER)controller_main_menu_context.o\
 	$(CONTEXT_MODEL)model_main_menu_context.o\
@@ -92,8 +88,4 @@ clean:
 	rm -rf $(FLOAT_LIST)*.o
 	rm -rf $(LOAD_TOOLS)*.o
 	rm -rf $(EXTERN_INCLUDE)glad/*.o
-	rm -rf $(CORE)*.o 
-	rm -rf $(PLATFORM)*.o 
-	rm -rf $(RENDERER)*.o
 	rm -rf *.o
-	rm -rf out/DACH

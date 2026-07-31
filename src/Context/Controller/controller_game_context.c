@@ -27,9 +27,9 @@ int init_game(st_state *state)
     int i;
 
     // Paramètre de la caméra 
-    controller_init_camera(&state->render.camera, 30.0f, 1000.0f, -1000.0f, 100.0f, 45.0f);
-    controller_init_camera_vector(&state->render.camera, (vec3){2.0f, 2.0f, 2.0f}, (vec3){0.450f, 0.250f, 0.450f}, (vec3){0.0f, 1.0f, 0.0f});
-    controller_init_camera_view(&state->render.camera);
+    init_camera(&state->render.camera, 30.0f, 1000.0f, -1000.0f, 100.0f, 45.0f);
+    init_camera_vector(&state->render.camera, (vec3){2.0f, 2.0f, 2.0f}, (vec3){0.450f, 0.250f, 0.450f}, (vec3){0.0f, 1.0f, 0.0f});
+    init_camera_view(&state->render.camera);
 
     // Initialiser le rendu --------------------------------------------------------------------------------------------
     state->render.nb_groups = 0;

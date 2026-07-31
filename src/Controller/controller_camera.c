@@ -1,6 +1,6 @@
 #include "../../include/src_include/Controller/controller_camera.h"
 
-void controller_init_camera(st_camera *camera, float speed, float near, float far, float size, float rotation)
+void init_camera(st_camera *camera, float speed, float near, float far, float size, float rotation)
 {
     set_speed(camera, speed);
     set_near_z(camera, near);
@@ -16,7 +16,7 @@ void controller_init_camera(st_camera *camera, float speed, float near, float fa
     pthread_mutex_init(&camera->mutex, NULL);
 }
 
-void controller_init_camera_vector(st_camera *camera, vec3 pos, vec3 front, vec3 up)
+void init_camera_vector(st_camera *camera, vec3 pos, vec3 front, vec3 up)
 {
     // On paramètre la Position de la caméra
     set_pos(camera, pos);
@@ -29,7 +29,7 @@ void controller_init_camera_vector(st_camera *camera, vec3 pos, vec3 front, vec3
     glm_normalize(camera->front);
 }
 
-void controller_init_camera_view(st_camera *camera)
+void init_camera_view(st_camera *camera)
 {
     model_init_camera_view(camera);
 }

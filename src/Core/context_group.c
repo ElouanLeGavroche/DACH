@@ -1,4 +1,4 @@
-#include "../../include/src_include/Model/model_group_context.h"
+#include "../../include/src_include/Core/context_group.h"
 
 bool context_group_is_null(st_render_group *group)
 {
