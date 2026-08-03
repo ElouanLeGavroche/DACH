@@ -1,4 +1,4 @@
-#include "../include/src_include/Controller/controller_init.h"
+#include "../include/src_include/Core/application.h"
 int main() { return init_application(); }
 
 

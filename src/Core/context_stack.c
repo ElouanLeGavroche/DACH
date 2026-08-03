@@ -1,16 +1,16 @@
 #include "../../include/src_include/Core/context_stack.h"
 
-int link_context(st_context_tool *tool)
+int link_context(st_context_tool *tools)
 {
     // Initialisation des outils de context
-    tool->put_context = put_context;
-    if(!(tool->put_context))
+    tools->put_context = put_context;
+    if(!(tools->put_context))
     {
         fprintf(stderr, "Impossible de linker la stack context avec put.\n");
         return RES_FAILED_ASSIGNEMENT;
     }
-    tool->remove_context = remove_context;
-    if(!(tool->remove_context))
+    tools->remove_context = remove_context;
+    if(!(tools->remove_context))
     {
         fprintf(stderr, "Impossible de linker la stack context avec put.\n");
         return RES_FAILED_ASSIGNEMENT;
@@ -70,6 +70,7 @@ int new_context(st_state *new_state, st_context_tool tools, stack *stack)
     tools.put_context(stack, new_state);
     stack->current_state->ev_next_context = C_NONE;
     // On relie le clavier au nouveau context
+    link_input(new_state);
     return RES_DONE;
 
 }

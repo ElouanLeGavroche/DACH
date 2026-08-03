@@ -6,10 +6,9 @@
 #include "../Model/model_main_menu_context.h"
 #include "../View/view_main_menu_context.h"
 
-#include "../../Model/model_group_context.h"
-
-#include "../../Controller/controller_init_context.h"
-
+#include "../../Core/context_group.h"
+#include "../../Core/context_stack.h"
+#include "../../Core/context_content.h"
 
 #include "../../../types.h"
 #include "../../../state.h"

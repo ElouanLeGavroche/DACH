@@ -67,7 +67,7 @@ void input_loop(st_engine *engine_state){
             level_tampon = engine_state->stack_context.level_of_depth;
 
             // On relie le clavier au nouveau context
-            link_input(engine_state);
+            link_input(engine_state->stack_context.current_state);
 
             break;
         case C_GAME:
@@ -116,7 +116,7 @@ void mainloop(st_engine *engine_state){
 
     // On charge le premier context
     res = new_context(&main_menu_state, engine_state->context_tool, &engine_state->stack_context);
-    link_input(engine_state);
+    link_input(engine_state->stack_context.current_state);
     if(res != RES_ERROR)
     {
 
@@ -293,19 +293,4 @@ void references_object_test(st_render_object *object)
         glDeleteProgram(object->material->shader->shader);
         free(object->material->shader);
     }
-}
-
-/**
- * @brief Cette fonction permet de lié le callback au context actuel, 
- * il est important de toujours l'initialiser à chaque nouveau context.
- */
-void link_input(st_engine *engine_state)
-{
-    // Liée la strucures des entrée dans la fenêtre pour le callback
-    GLFWwindow *window = glfwGetCurrentContext();
-    st_window_user_data *data = glfwGetWindowUserPointer(window);
-    data->input = &engine_state->stack_context.current_state->inputs;
-    
-    glfwSetKeyCallback(window, pressed_key_callback);
-  
 }

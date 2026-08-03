@@ -8,7 +8,6 @@
 #include "../../Config/constantes.h"
 #include "../../../types.h"
 #include "../../Core/context_camera.h"
-#include "../../Model/model_mainloop.h"
 
 void update_logic_game(st_state *state);
 void init_data_game(st_state *state);

@@ -6,16 +6,18 @@
 #include "../Model/model_game_context.h"
 #include "../View/view_game_context.h"
 
-#include "../../Model/model_group_context.h"
-#include "../../Controller/controller_init_context.h"
+#include "../../Core/context_group.h"
+#include "../../Core/context_stack.h"
+#include "../../Core/context_camera.h"
+#include "../../Core/context_content.h"
+
+#include "../../Platform/glfw_mouse.h"
+
 #include "../../Shared_tools/Load_tools/load_map.h"
 
 #include "../../../types.h"
 
 #include "../../../state.h"
-
-#include "../../Controller/callback_controller.h"
-#include "../../Core/context_camera.h"
 
 void controller_update_render_game(st_render_data *render);
 int init_game(st_state *state);

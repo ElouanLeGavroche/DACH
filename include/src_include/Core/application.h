@@ -24,6 +24,5 @@ void mainloop(st_engine *engine_state);
 void unload_data(st_engine *engine_state);
 void destroy_render_data(st_render_data *render);
 void references_object_test(st_render_object *object);
-void link_input(st_engine *engine_state);
 
 #endif
