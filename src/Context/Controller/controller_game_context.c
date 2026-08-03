@@ -95,7 +95,7 @@ void controller_create_world(st_state *state)
         mat4 *world_tile = init_map(map->groups[i].nb_blocks, map->groups[i].tiles);
 
         // Récuperer l'objet crée
-        st_render_object *instenced_obj = world_group->tables->get_element(world_group, i);
+        st_render_object *instenced_obj = world_group->tables->get_element(world_group->data, i);
 
         // Crée une variable tampon pour l'instanciation
         st_instanced *instenced_data = malloc(sizeof(st_instanced));

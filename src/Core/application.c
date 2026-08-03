@@ -11,13 +11,13 @@ int init_application(){
     engine_state.stack_context.level_of_depth = 0;
     engine_state.stack_context.current_state = NULL;
 
-    if(init_window(&engine_state.window) == (RES_ERROR || RES_NULL_POINTER))
+    if(init_window(&engine_state.window) != RES_DONE)
     {
         fprintf(stderr, "Erreur lors du chargerment de la fenêtre.\n");
         return RES_ERROR;
     }
     
-    if(link_context(&engine_state.context_tool.put_context, &engine_state.context_tool.remove_context) == RES_FAILED_ASSIGNEMENT)
+    if(link_context(&engine_state.context_tool) != RES_DONE)
     {
         fprintf(stderr, "Erreur lors du linkage avec les outils de context");
         return RES_ERROR;

@@ -8,7 +8,6 @@ void init_render_main_menu(st_render_data *render)
     GLFWwindow *window = glfwGetCurrentContext();
     
     st_window_user_data *data = glfwGetWindowUserPointer(window);
-    printf("Bonsoir\n");
     data->camera = &render->camera;
 }
 void update_render_main_menu(st_render_data *render)

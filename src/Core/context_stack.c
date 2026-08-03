@@ -1,16 +1,16 @@
 #include "../../include/src_include/Core/context_stack.h"
 
-int link_context(void **put, void **remove)
+int link_context(st_context_tool *tool)
 {
     // Initialisation des outils de context
-    *put = put_context;
-    if(!(*put))
+    tool->put_context = put_context;
+    if(!(tool->put_context))
     {
         fprintf(stderr, "Impossible de linker la stack context avec put.\n");
         return RES_FAILED_ASSIGNEMENT;
     }
-    *remove = remove_context;
-    if(!(*remove))
+    tool->remove_context = remove_context;
+    if(!(tool->remove_context))
     {
         fprintf(stderr, "Impossible de linker la stack context avec put.\n");
         return RES_FAILED_ASSIGNEMENT;
