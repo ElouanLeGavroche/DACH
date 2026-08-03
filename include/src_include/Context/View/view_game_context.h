@@ -3,8 +3,6 @@
 
 #include <stdio.h>
 
-#include "../../../../extern_lib/glad/glad.h"
-#include <GLFW/glfw3.h>
 
 #include "../../../types.h"
 #include "../../Config/constantes.h"

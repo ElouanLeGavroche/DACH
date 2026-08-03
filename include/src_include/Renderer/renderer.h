@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <glad/glad.h>
+#include "../../../extern_lib/glad/glad.h"
 #include <GLFW/glfw3.h>
 
 void view_clear();
