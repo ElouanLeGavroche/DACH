@@ -17,7 +17,7 @@ int init_application(){
         return RES_ERROR;
     }
     
-    if(link_context(engine_state.context_tool.put_context, engine_state.context_tool.remove_context) == RES_FAILED_ASSIGNEMENT)
+    if(link_context(&engine_state.context_tool.put_context, &engine_state.context_tool.remove_context) == RES_FAILED_ASSIGNEMENT)
     {
         fprintf(stderr, "Erreur lors du linkage avec les outils de context");
         return RES_ERROR;

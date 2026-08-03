@@ -7,7 +7,7 @@
 #include "../../types.h"
 #include "../Config/constantes.h"
 
-int link_context(void *put, void *remove);
+int link_context(void **put, void **remove);
 void put_context(stack *my_stack, st_state *my_state);
 int remove_context(stack *my_stack);
 int new_context(st_state *new_state, st_context_tool tools, stack *stack);
