@@ -36,6 +36,7 @@ st_map* load_map(const char *path)
     {
         err = json_util_get_last_err();
         fprintf(stderr, "Erreur lors de l'ouverture de la map : %s\n", err);
+        return NULL;
     }
     
     // Parser la struct dans les sous structures adéquat 

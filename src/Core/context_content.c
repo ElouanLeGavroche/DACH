@@ -10,9 +10,18 @@ st_mesh* new_object(char *path)
         return NULL;
     }
 
-    load_file(path, mesh_data);
+    if(load_file(path, mesh_data) != RES_DONE)
+    {
+        fprintf(stderr, "Erreur lors du chargement de l'object.\n");
+        return NULL;
+    }
 
     *mesh = init_a_3d_loaded_element(mesh_data);
+    if(mesh == NULL)
+    {
+        fprintf(stderr, "Erreur lors de l'initialisation de l'object.\n");
+        return NULL;
+    }
     // On nettoye la structure côté CPU
     free(mesh_data->face_indice);
     free(mesh_data->vert_pos);
@@ -32,6 +41,11 @@ st_texture* new_texture(char *path)
     }
 
     int texture_id = init_a_loaded_texture(&image);
+    if(texture_id == -1)
+    {
+        fprintf(stderr, "Erreur lors du chargement de la texture.\n");
+        return NULL;
+    }
     stbi_image_free(image.data);
 
     
@@ -57,10 +71,15 @@ st_shader* new_shader(char *path_vert, char *path_frag)
     {
         printf("Attention, certains shaders n'ont pas élé chargé"
         "Le comportement du programme peux-être compromis.\n");
+        return NULL;
     }
     // Initialiser les shaders --------------------------------------------------------------------------------------------
     unsigned int shader = init_a_loaded_shader(vert, frag);
-
+    if(shader == RES_ERROR)
+    {
+        fprintf(stderr, "Erreur lors de l'initialisation du shader.\n");
+        return NULL;
+    }
     free((void *)vert);
     free((void *)frag);
 

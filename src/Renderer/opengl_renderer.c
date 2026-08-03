@@ -70,6 +70,7 @@ int init_a_loaded_shader(const char vertex_shader_source[], const char fragment_
     {
         glGetShaderInfoLog(vertex_shader, 512, NULL, infoLog);
         printf("Erreur lors de la compilation du Vertex Shader : %s\n", infoLog);
+        return RES_ERROR;
     }
 
     fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -82,6 +83,7 @@ int init_a_loaded_shader(const char vertex_shader_source[], const char fragment_
     {
         glGetShaderInfoLog(fragment_shader, 512, NULL, infoLog);
         printf("Erreur lors de la compilation du Frag Shader : %s\n", infoLog);
+        return RES_ERROR;
     }
 
     
@@ -96,6 +98,7 @@ int init_a_loaded_shader(const char vertex_shader_source[], const char fragment_
     if(!success) {
         glGetProgramInfoLog(shader_program, 512, NULL, infoLog);
         printf("Erreur lors de la création du programe shader : %s\n", infoLog);
+        return RES_ERROR;
     }
     
     // Une fois lié, l'on peux les supprimer
@@ -138,6 +141,7 @@ int init_a_loaded_texture(st_image *image)
     else
     {
         fprintf(stderr, "erreur lors de la création de la texture\n");
+        return -1;
     }
 
     return texture;

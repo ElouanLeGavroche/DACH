@@ -13,7 +13,6 @@ void init_camera(st_camera *camera, float speed, float near, float far, float si
     camera->look = look;
     camera->camera_speed = camera_speed;
 
-    pthread_mutex_init(&camera->mutex, NULL);
 }
 
 void init_camera_vector(st_camera *camera, vec3 pos, vec3 front, vec3 up)
@@ -71,7 +70,7 @@ void right(st_camera *camera)
 
 void rotate(st_camera *camera, float deg)
 {
-    pthread_mutex_lock(&camera->mutex);
+ 
     vec3 target;
     glm_vec3_copy(camera->pos, target);
 
@@ -88,7 +87,6 @@ void rotate(st_camera *camera, float deg)
     glm_normalize(camera->front);
     glm_lookat(camera->pos, target, camera->up, camera->view);
 
-    pthread_mutex_unlock(&camera->mutex);
 }
 
 
@@ -176,7 +174,6 @@ float get_speed(st_camera *camera)
 void look(st_camera *camera)
 {
     vec3 center;
-    pthread_mutex_lock(&camera->mutex);
     glm_vec3_sub(camera->pos, camera->front, center);
     glm_lookat(
         camera->pos, 
@@ -184,7 +181,6 @@ void look(st_camera *camera)
         camera->up, 
         camera->view
     );
-    pthread_mutex_unlock(&camera->mutex);
 }
 
 void camera_speed(st_camera *camera, float delta_time)

@@ -111,6 +111,8 @@ int add_group(st_render_data *render, e_render_group_type type)
     int res;
     
     st_render_group *new_group = malloc(sizeof(st_render_group));
+    st_render_group *temp;
+
     if (!new_group) {
         fprintf(stderr, "Allocation échouée : %s\n", strerror(errno));
         return RES_FAILED_MALLOC;
@@ -129,15 +131,16 @@ int add_group(st_render_data *render, e_render_group_type type)
     }
     
     // Re allouer de la place pour le nouveau groupe
-    render->groups = realloc(render->groups, sizeof(st_render_group)* (render->nb_groups + 1));
+    temp = realloc(render->groups, sizeof(st_render_group)* (render->nb_groups + 1));
     
     // Vérifier l'allocation
-    if(render->groups == NULL)
+    if(!temp)
     {
         fprintf(stderr, "Erreur lors de l'allocation mémoire\n");
         return RES_ERROR;
     }
-
+    render->groups = temp;
+    
     // Allouer le nouveau group, au... groupe
     render->groups[render->nb_groups] = *new_group;
     render->nb_groups ++;
@@ -173,7 +176,8 @@ int remove_group(st_render_data *render, int id)
 {
     /* On va parcourir la liste pour trouver grâce à l'id, le group à supprimer */
     int i = 0, y = 0;
-    
+    st_render_group *temp;
+
     while(i < render->nb_groups && render->groups[i].ID != id)
     {
         i ++;
@@ -198,14 +202,15 @@ int remove_group(st_render_data *render, int id)
         for(y = i; y < render->nb_groups; y ++) render->groups[y] = render->groups[y + 1];
 
         // Realocation de la liste
-        render->groups = realloc(render->groups, sizeof(st_render_group) * render->nb_groups);
+        temp = realloc(render->groups, sizeof(st_render_group) * render->nb_groups);
 
             // Vérifier l'allocation
-        if(!render->groups)
+        if(!temp)
         {
             fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
             return RES_FAILED_MALLOC;
         }
+        render->groups = temp;
     }
 
     return RES_DONE;
@@ -363,21 +368,24 @@ int add_render_mesh_object(void *void_group, st_render_object object)
 {
     // Allocation de la mémoire
     st_mesh_group *object_list = (st_mesh_group *)void_group;
+    st_render_object *temp;
+
     if(object_list == NULL)
     {
         fprintf(stderr, "La structure void group ne contient rien pour ajouter un mesh.\n");
         return RES_ERROR;
     }
 
-    object_list->objects = realloc(object_list->objects, sizeof(st_render_object) * (object_list->nb_objects + 1));
+    temp = realloc(object_list->objects, sizeof(st_render_object) * (object_list->nb_objects + 1));
     
     // Vérifier l'allocation
-    if(!object_list->objects)
+    if(!temp)
     {
         fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
         return RES_FAILED_MALLOC;
     }
-    
+    object_list->objects = temp;
+
     object_list->objects[object_list->nb_objects] = object;
     object_list->nb_objects ++;
     return RES_DONE;
@@ -387,6 +395,7 @@ int remove_render_mesh_object(void *void_group, int id)
 {
     int i = 0;
     st_mesh_group *group = (st_mesh_group*)void_group;
+    st_render_object *temp;
 
     // S'il ne reste plus rien, c'est équivalent au free
     if(group->nb_objects == 1)
@@ -408,13 +417,15 @@ int remove_render_mesh_object(void *void_group, int id)
         for(i = i; i < group->nb_objects - 1; i ++) group->objects[i] = group->objects[i + 1];
 
         // Re Allocation de la nouvelle taille
-        group->objects = realloc(group->objects, sizeof(st_render_object) * (group->nb_objects - 1));
+        temp = realloc(group->objects, sizeof(st_render_object) * (group->nb_objects - 1));
             // Vérifier l'allocation
-        if(!group->objects)
+        if(!temp)
         {
             fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
             return RES_FAILED_MALLOC;
         }
+
+        group->objects = temp;
     }
     
     group->nb_objects --;
@@ -477,7 +488,7 @@ int remove_render_instenced_mesh_object(void *void_group, int)
 
 st_render_object* get_render_instenced_mesh_group(void *void_group, int id)
 {
-    st_mesh_group *group = (st_mesh_group*)void_group;
+    st_instanced_mesh_group *group = (st_instanced_mesh_group*)void_group;
     
     if(group == NULL)
     {
@@ -485,5 +496,5 @@ st_render_object* get_render_instenced_mesh_group(void *void_group, int id)
         return NULL;
     }
 
-    return &group->objects[id];
+    return &group->shared_render_object;
 }

@@ -35,15 +35,21 @@ void update_logic_game(st_state *state)
     }
     if(state->inputs.release[KEY_A])
     {
-        move_camera(&state->render.camera, ROTATE_L);
+        //move_camera(&state->render.camera, ROTATE_L);
+        state->render.camera.target = (state->render.camera.target <= 0.0f)? 45.0f + state->render.camera.target: state->render.camera.target;
         state->inputs.release[KEY_A] = false;
     }
     if(state->inputs.release[KEY_E])
     {
-        move_camera(&state->render.camera, ROTATE_R);
+        //move_camera(&state->render.camera, ROTATE_R);
+        state->render.camera.target = (state->render.camera.target >= -0.0f)? -45.0f + state->render.camera.target: state->render.camera.target;
         state->inputs.release[KEY_E] = false;
     }
-    
+    printf("target : %f\n", state->render.camera.target);
+    if(state->render.camera.target != 0.0f)
+    {
+        move_camera(&state->render.camera, (state->render.camera.target > 0.0f) ? ROTATE_L : ROTATE_R);
+    }
 
     pthread_mutex_unlock(&state->inputs.mutex); // Déverrouillage
 
@@ -79,44 +85,20 @@ void move_camera(st_camera *camera, int dir)
         break;
 
     case ROTATE_L:
-        // à l'avenir, il faudra crée un fichier pour regrouper les système d'animations
-        pthread_t rotate_l;
-        camera->rotation = -45.0f;
-        pthread_create(&rotate_l, NULL, rotate_animation, camera);
+        camera->target --;
+        rotate(camera, -1.0f);
 
         break;
     
     case ROTATE_R:
-        pthread_t rotate_r;
-        camera->rotation = 45.0f;
-        pthread_create(&rotate_r, NULL, rotate_animation, camera);
+        camera->target ++;
+        rotate(camera, 1.0f);
         break;
 
     default:
         break;
     }
     
-}
-
-// Fonction temporaire, ce n'est pas propre, juste temporaire
-void *rotate_animation(void *camera_data){
-    st_camera *camera = camera_data;
-    int i;
-    struct timespec ts_start, ts_end;
-    float rotate_value = abs((int)camera->rotation) / camera->rotation;
-
-    for(i = 0; i < 45; i ++)
-    {
-        get_time(&ts_start);
-
-        rotate(camera, rotate_value);
-
-        //Time fin de boucle
-        get_time(&ts_end);
-
-        //Gestion de des conditions au calcul d'un nouveau tick
-        wait_frame(ts_start, ts_end);
-    }
 }
 
 mat4* init_map(int amount, st_loaded_tile_map *tiles)
@@ -130,19 +112,6 @@ mat4* init_map(int amount, st_loaded_tile_map *tiles)
         return NULL;
     }
     
-    /*
-    int total = 0;
-    for(i = amount; i > 0; i --)
-    {
-        for(y = amount; y > 0; y --)
-        {
-            
-            glm_mat4_identity(positions[total]);
-            glm_translate(positions[total], (vec3){(float)i * 2.0f - amount, 0.0, (float)y * 2.0f - amount});
-            total ++;
-        }
-    }
-    */
     int total = 0;
     for(i = 0; i < amount; i ++)
     {

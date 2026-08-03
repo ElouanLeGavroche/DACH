@@ -63,23 +63,42 @@ void controller_update_render_game(st_render_data *render)
     update_render_game(render);
 }
 
-void controller_create_world(st_state *state)
+int controller_create_world(st_state *state)
 {
     // Chargement des éléments propre à la map
     int i;
     st_map *map = load_map("ressources/maps/fisel.json");
-
+    if(map == NULL)
+    {
+        fprintf(stderr, "Erreur lors du chargement de la map.\n");
+        return RES_ERROR;
+    }
     for(i = 0; i < map->nb_groups; i ++)
     {
 
         // CHARGER LES SHADERS ---------------------------------------------------------------------------------------------
         st_shader *shader = new_shader(map->groups[i].vert_shader, map->groups[i].frag_shader);
-    
+        if(!shader)
+        {
+            fprintf(stderr, "Erreur lors de la création d'un shader.\n");
+            return RES_ERROR;
+        }
+
         // CHARGER LES ELTS 3D ---------------------------------------------------------------------------------------------
         st_mesh *tile = new_object(map->groups[i].mesh);
+        if(!tile)
+        {
+            fprintf(stderr, "Erreur lors de la création d'une tile.\n");
+            return RES_ERROR;
+        }
 
         // CHARGER LES TEXTURES --------------------------------------------------------------------------------------------
         st_texture *grass_texture = new_texture(map->groups[i].texture);
+        if(!grass_texture)
+        {
+            fprintf(stderr, "Erreur lors de la création d'une texture.\n");
+            return RES_ERROR;
+        }
 
         // Creation du groupe du monde
         add_group(&state->render, RENDER_GROUP_INSTANCED_MESH);
@@ -117,4 +136,6 @@ void controller_create_world(st_state *state)
     free(map->groups);
     free(map);
     map = NULL;
+
+    return RES_DONE;
 }

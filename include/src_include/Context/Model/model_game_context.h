@@ -24,6 +24,5 @@ void init_data_game(st_state *state);
 mat4* init_map(int amount, st_loaded_tile_map *tiles);
 
 void move_camera(st_camera *camera, int dir);
-void *rotate_animation(void *camera);
 
 #endif

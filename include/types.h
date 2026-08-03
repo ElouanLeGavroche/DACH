@@ -83,7 +83,9 @@ struct st_camera{
     float ortho_size;
 
     float rotation;
-    pthread_mutex_t mutex;
+
+    // Cette variables sert à savoir lorsque qu'il faut effectuer une rotation et quand elle est fini
+    float target;
 
     void (*look)(st_camera *camera);
     void (*camera_speed)(st_camera *camera, float delta_time);

@@ -115,10 +115,10 @@ void mainloop(st_engine *engine_state){
 
     // On charge le premier context
     res = new_context(&main_menu_state, engine_state->context_tool, &engine_state->stack_context);
-    link_input(engine_state->stack_context.current_state);
+    
     if(res != RES_ERROR)
     {
-
+        link_input(engine_state->stack_context.current_state);
             ////////////////////////////////////////////
             //                                        //
             //                Boucle                  //
