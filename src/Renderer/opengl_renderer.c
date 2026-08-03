@@ -9,7 +9,7 @@ void init_opengl()
 /**
  * @brief Cette fonction va me servir à initialiser les différent éléments graphique de la page
  */
-st_mesh init_a_3d_loaded_element(st_mesh_data *elt, int indice)
+st_mesh init_a_3d_loaded_element(st_mesh_data *elt)
 {
 
     st_mesh mesh;
@@ -107,10 +107,6 @@ int init_a_loaded_shader(const char vertex_shader_source[], const char fragment_
 
 int init_a_loaded_texture(st_image *image)
 {
-    /* Variables de debug */
-    int  success;
-    char infoLog[512];
-
     // GENÉRÉ LES TEXTURES --------------------------------------------------------------------------------------------
     unsigned int texture;
     glGenTextures(1, &texture);

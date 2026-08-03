@@ -1,17 +1,20 @@
 #include "../../include/src_include/Core/application.h"
 
 int init_application(){
-    int res;
-
     // Stock des informations pour le moteur
     st_engine engine_state;
-    
+    st_window_user_data user_data = {
+        .camera = NULL,
+        .input = NULL,
+        .window = &engine_state.window
+    };
+
     // Initialisation des premières variables du moteur
     engine_state.running = true;
     engine_state.stack_context.level_of_depth = 0;
     engine_state.stack_context.current_state = NULL;
 
-    if(init_window(&engine_state.window) != RES_DONE)
+    if(init_window(&user_data, &engine_state.window) != RES_DONE)
     {
         fprintf(stderr, "Erreur lors du chargerment de la fenêtre.\n");
         return RES_ERROR;
@@ -35,7 +38,6 @@ int init_application(){
 void input_loop(st_engine *engine_state){
     // Ce tampon permet de savoir si le jeu est revenu à un etat entérieur
     // Et donc de recharger les éléments qui lui y étais associé
-    int level_tampon = engine_state->stack_context.level_of_depth;
     int res = RES_DONE;
 
     // récupéré les entrées //
@@ -64,7 +66,6 @@ void input_loop(st_engine *engine_state){
             engine_state->stack_context.level_of_depth --;
 
             old_state->upper = NULL;
-            level_tampon = engine_state->stack_context.level_of_depth;
 
             // On relie le clavier au nouveau context
             link_input(engine_state->stack_context.current_state);
@@ -93,7 +94,6 @@ void input_loop(st_engine *engine_state){
                 engine_state->running = false;
             }
 
-            level_tampon = engine_state->stack_context.level_of_depth;
         }
         // On reset la valeur, sinon on retourne en boucle sur le context précédent
         *who = C_NONE;
@@ -112,7 +112,6 @@ void mainloop(st_engine *engine_state){
 
     //Définition des variables pour accorder la clock
     struct timespec ts_start, ts_end;
-    double elapsed;
 
     // On charge le premier context
     res = new_context(&main_menu_state, engine_state->context_tool, &engine_state->stack_context);

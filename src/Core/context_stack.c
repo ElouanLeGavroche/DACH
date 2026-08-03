@@ -19,7 +19,7 @@ int link_context(st_context_tool *tools)
 }
 
 // Essaie de structure file pour les etats
-int remove_context(stack *my_stack)
+int remove_context(st_stack *my_stack)
 {
     int return_status = EXIT_SUCCESS;
 
@@ -38,7 +38,7 @@ int remove_context(stack *my_stack)
     return return_status;
 }
 
-void put_context(stack *my_stack, st_state *my_state){
+void put_context(st_stack *my_stack, st_state *my_state){
     /**
      * 2 cas : 1 stack vide, ajout simple
      *         2 stack non vide, remplacement nécéssaire  
@@ -55,7 +55,7 @@ void put_context(stack *my_stack, st_state *my_state){
     printf("context ajouter\n");
 }
 
-int new_context(st_state *new_state, st_context_tool tools, stack *stack)
+int new_context(st_state *new_state, st_context_tool tools, st_stack *stack)
 {
     int res;
     

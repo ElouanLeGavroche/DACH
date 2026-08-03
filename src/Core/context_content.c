@@ -12,7 +12,7 @@ st_mesh* new_object(char *path)
 
     load_file(path, mesh_data);
 
-    *mesh = init_a_3d_loaded_element(mesh_data, 0);
+    *mesh = init_a_3d_loaded_element(mesh_data);
     // On nettoye la structure côté CPU
     free(mesh_data->face_indice);
     free(mesh_data->vert_pos);

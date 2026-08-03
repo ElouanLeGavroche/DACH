@@ -8,7 +8,7 @@ double calculus_elapsed_time(struct timespec time_a, struct timespec time_b)
 }
 
 
-void wait_time(struct timespec time_a, struct timespec time_b, double elapsed, double time)
+void wait_time(double elapsed, double time)
 {
         // Temps de pause
         double sleep_sec =  time - elapsed;
@@ -32,7 +32,7 @@ void wait_frame(struct timespec time_a, struct timespec time_b)
 
     // Si on à du retard, on va alors calculer le temps que devra prendre la pause
     if(elapsed < TIME_PER_FRAME){
-        wait_time(time_a, time_b, elapsed, TIME_PER_FRAME);
+        wait_time(elapsed, TIME_PER_FRAME);
     }
     /*
     
@@ -52,7 +52,7 @@ void wait_tick(struct timespec time_a, struct timespec time_b)
 
     // Si on à du retard, on va alors calculer le temps que devra prendre la pause
     if(elapsed < TIME_PER_TICK){
-        wait_time(time_a, time_b, elapsed, TIME_PER_TICK);
+        wait_time(elapsed, TIME_PER_TICK);
     }
 
 }

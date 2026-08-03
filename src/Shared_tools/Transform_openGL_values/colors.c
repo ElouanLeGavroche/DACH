@@ -1,9 +1,5 @@
 #include "../../../include/src_include/Shared_tools/Transform_openGL_values/colors.h"
 
-int hexa_to_01(char val[1]){
-
-}
-
 float num_to_01(int val)
 {
     float new_val;

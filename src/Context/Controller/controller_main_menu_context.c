@@ -15,10 +15,11 @@ typedef enum
 
 struct st_state main_menu_state =
 {
-    C_MAIN_MENU,
-    init_menu,
-    controller_update_logic_main_menu,
-    controller_update_render_main_menu
+    .id = C_MAIN_MENU,
+    .init_state = init_menu,
+    .update_logic_context = controller_update_logic_main_menu,
+    .update_render_context = controller_update_render_main_menu,
+    .inputs = NULL,
 };
 
 int init_menu(st_state *state)

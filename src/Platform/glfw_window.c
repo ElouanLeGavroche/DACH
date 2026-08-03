@@ -1,9 +1,7 @@
 #include "../../include/src_include/Platform/glfw_window.h"
 
-int init_window(st_loaded_windows_data *window_data)
+int init_window(st_window_user_data *user_data, st_loaded_windows_data *window_data)
 {
-    st_window_user_data *data;
-
     // Charger les informations de la fenêtre dans le Json
     // Fichier    
     FILE *fp;
@@ -14,13 +12,11 @@ int init_window(st_loaded_windows_data *window_data)
     struct json_object *size_x;
     struct json_object *size_y;
     struct json_object *frame_rate;
-    struct json_object *initial_context;
 
     // Variables des valeur à récuperer
     int size_x_value;
     int size_y_value;
     int frame_rate_value;
-    const char *initial_context_value = NULL;
 
     fp = fopen(PATH_LOAD_GAME_DATA, "r");
     if(fp == NULL){
@@ -100,7 +96,7 @@ int init_window(st_loaded_windows_data *window_data)
     }
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glfwSetWindowUserPointer(window, data);
+    glfwSetWindowUserPointer(window, user_data);
 
     return RES_DONE;
 }

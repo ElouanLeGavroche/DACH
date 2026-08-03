@@ -5,10 +5,10 @@
 #include <string.h>
 #include <errno.h>
 
-#include "../../Config/constantes.h"
 #include "../../../types.h"
+#include "../../Config/constantes.h"
 #include "../../Core/context_camera.h"
-
+#include "../../Core/clock.h"
 void update_logic_game(st_state *state);
 void init_data_game(st_state *state);
 

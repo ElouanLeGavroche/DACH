@@ -14,17 +14,16 @@ typedef enum
 
 struct st_state game_state =
 {
-    C_GAME,
-    init_game,
-    controller_update_logic_game,
-    controller_update_render_game,
-    
+    .id =  C_GAME,
+    .init_state = init_game,
+    .update_logic_context = controller_update_logic_game,
+    .update_render_context = controller_update_render_game,
+    .inputs = NULL
 };
 
 int init_game(st_state *state)
 {
     printf("début de l'initiation\n");
-    int i;
 
     // Paramètre de la caméra 
     init_camera(&state->render.camera, 30.0f, 1000.0f, -1000.0f, 100.0f, 45.0f);
@@ -93,9 +92,6 @@ void controller_create_world(st_state *state)
         // Paramètre principaux du monde
         int world_size = map->groups[i].nb_blocks;
         mat4 *world_tile = init_map(map->groups[i].nb_blocks, map->groups[i].tiles);
-
-        // Récuperer l'objet crée
-        st_render_object *instenced_obj = world_group->tables->get_element(world_group->data, i);
 
         // Crée une variable tampon pour l'instanciation
         st_instanced *instenced_data = malloc(sizeof(st_instanced));

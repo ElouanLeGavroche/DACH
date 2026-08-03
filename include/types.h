@@ -178,7 +178,7 @@ typedef struct {
     st_state *current_state;
 
     atomic_int level_of_depth;
-}stack;
+}st_stack;
 
 /**
  * @brief étant un outil très général au moteur et très important, je décide de l'intégré directement en-tant que structure de fonction.
@@ -192,8 +192,8 @@ typedef struct {
  */
 typedef struct
 {
-    void (*put_context) (stack *my_stack, st_state *my_state);
-    int (*remove_context)(stack *my_stack);
+    void (*put_context) (st_stack *my_stack, st_state *my_state);
+    int (*remove_context)(st_stack *my_stack);
     
 }st_context_tool;
 
@@ -225,7 +225,7 @@ typedef struct st_engine
     atomic_bool running;
     
     // élément liées au context et à la stack
-    stack stack_context;
+    st_stack stack_context;
     st_context_tool context_tool;
 
     st_loaded_windows_data window;

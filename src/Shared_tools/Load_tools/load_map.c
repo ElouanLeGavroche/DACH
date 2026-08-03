@@ -31,7 +31,7 @@ st_map* load_map(const char *path)
         return NULL;
     }
 
-    root = json_object_from_file(PATH_FISEL_MAP);
+    root = json_object_from_file(path);
     if(!root)
     {
         err = json_util_get_last_err();

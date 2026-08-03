@@ -60,8 +60,6 @@ void init_data_game(st_state *state)
 
 void move_camera(st_camera *camera, int dir)
 {
-    vec3 res;
-
     switch (dir)
     {
     case DOWN:
@@ -105,27 +103,25 @@ void *rotate_animation(void *camera_data){
     st_camera *camera = camera_data;
     int i;
     struct timespec ts_start, ts_end;
-    double elapsed;
-    float rotate_value = abs(camera->rotation) / camera->rotation;
+    float rotate_value = abs((int)camera->rotation) / camera->rotation;
 
     for(i = 0; i < 45; i ++)
     {
-        clock_gettime(CLOCK_MONOTONIC, &ts_start);
+        get_time(&ts_start);
 
         rotate(camera, rotate_value);
 
         //Time fin de boucle
-        clock_gettime(CLOCK_MONOTONIC, &ts_end);
+        get_time(&ts_end);
 
         //Gestion de des conditions au calcul d'un nouveau tick
         wait_frame(ts_start, ts_end);
     }
-
 }
 
 mat4* init_map(int amount, st_loaded_tile_map *tiles)
 {   
-    int i, y;
+    int i;
     mat4 *positions = malloc(sizeof(mat4) * (amount));
     
     if(!positions)

@@ -156,7 +156,7 @@ st_render_group* get_group(st_render_group *groups, int id, size_t max)
         fprintf(stderr, "Liste NULL\n");
         return NULL;
     }   
-    int i = 0;
+    size_t i = 0;
     while(i < max && groups[i].ID != id)
     {
         i ++;
@@ -300,6 +300,7 @@ int create_an_instance(int capacity, mat4 *model, st_instanced *dest)
         glm_mat4_copy(model[i], *dest->cpu_data[i].model);
     }  
 
+    return RES_DONE;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -328,7 +329,6 @@ int generic_func_add_render_object(st_render_group *group, st_render_object obje
 
 int generic_func_remove_render_object(st_render_group *group, int id)
 {
-    int i = 0;
     int res;
     if(group == NULL)
     {
@@ -347,8 +347,6 @@ int generic_func_remove_render_object(st_render_group *group, int id)
 
 st_render_object* generic_func_get_render_object(st_render_group *group, int id)
 {
-    int i = 0;
-
     if(group == NULL)
     {
         fprintf(stderr, "Le groupe est null, impossible de récupéré l'un de ces éléments._n");
@@ -481,7 +479,6 @@ int remove_render_instenced_mesh_object(void *void_group, int)
 st_render_object* get_render_instenced_mesh_group(void *void_group, int id)
 {
     st_mesh_group *group = (st_mesh_group*)void_group;
-    int i = 0;
     
     if(group == NULL)
     {
@@ -489,5 +486,5 @@ st_render_object* get_render_instenced_mesh_group(void *void_group, int id)
         return NULL;
     }
 
-    return &group->objects[0];
+    return &group->objects[id];
 }

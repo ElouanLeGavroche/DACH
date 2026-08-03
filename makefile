@@ -1,5 +1,7 @@
 CC=cc 
-CFLAG= -lglfw -ljson-c  -lm -lX11 -lpthread -lXrandr -ldl -Wall
+CPPFLAGS := -Iinclude -Iextern_lib 
+CFLAGS := -std=c17 -Wall -Wextra -Wshadow -g
+LDLIBS := -lglfw -ljson-c -lm -lX11 -lpthread -lXrandr -ldl
 INC=-I
 
 #Nom de l'executable
@@ -72,7 +74,7 @@ $(SAVE_EXEC)$(EXEC):\
 	$(CONTEXT_CONTROLLER)controller_game_context.o\
 	$(CONTEXT_MODEL)model_game_context.o\
 	$(CONTEXT_VIEW)view_game_context.o
-	$(CC) -o $@ $^ $(CFLAG)
+	$(CC) -o $@ $^ $(CPPFLAGS) $(CFLAGS) $(LDLIBS)
 
 
 

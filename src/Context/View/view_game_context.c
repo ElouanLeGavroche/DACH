@@ -42,7 +42,7 @@ void create_an_instance_GPU(st_instanced *instance, mat4 *model, int amount)
 
 void update_render_game(st_render_data *render)
 {
-    int i, y;
+    int i;
     /* 
     On va en premier lieu calculer le temps que prend une frame à être fait
     ainsi, la caméra ne dépendant plus de la vitesse du jeu .
