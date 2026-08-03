@@ -289,7 +289,6 @@ int create_an_instance(int capacity, mat4 *model, st_instanced *dest)
     dest->cpu_data = malloc(sizeof(st_instance_data) * capacity);
     if(!dest->cpu_data)
     {
-        free(dest);
         fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
         return RES_FAILED_MALLOC;
     }

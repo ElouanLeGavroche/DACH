@@ -7,8 +7,8 @@
  * 
  */
 
-#ifndef MODEL_GROUP_CONTEXT
-#define MODEL_GROUP_CONTEXT
+#ifndef CONTEXT_GROUP
+#define CONTEXT_GROUP
 
 #include "../../types.h"
 #include "../Config/constantes.h"
