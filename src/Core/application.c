@@ -40,8 +40,7 @@ void input_loop(st_engine *engine_state){
     int res = RES_DONE;
 
     // récupéré les entrées //
-
-    glfwPollEvents();
+    poll_events();
     
     
     if(engine_state->stack_context.current_state->ev_must_close == true)
@@ -176,10 +175,7 @@ void destroy_render_data(st_render_data *render)
 
     printf("Début de libération de la mémoire de l'ancien context.\n");
 
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glUseProgram(0);
+    gl_deletes();
 
     tamp_nb_group = render->nb_groups;
     for(i = 0; i < tamp_nb_group; i ++)

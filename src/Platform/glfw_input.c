@@ -80,3 +80,8 @@ void link_input(st_state *state)
     glfwSetKeyCallback(window, pressed_key_callback);
   
 }
+
+void poll_events()
+{
+    glfwPollEvents();
+}

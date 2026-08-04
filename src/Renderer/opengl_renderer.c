@@ -146,3 +146,11 @@ int init_a_loaded_texture(st_image *image)
 
     return texture;
 }
+
+void gl_deletes()
+{
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glUseProgram(0);
+}
