@@ -27,7 +27,6 @@ int init_application(){
     }
 
     init_opengl();
-    
     /* -4- entrer dans les mains loops */
     mainloop(&engine_state);
     

@@ -13,4 +13,9 @@
 int init_window(st_window_user_data *user_data, st_loaded_windows_data *window_data);
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
+void view_clear();
+void view_swap();
+void view_close_window();
+int window_should_close();
+
 #endif

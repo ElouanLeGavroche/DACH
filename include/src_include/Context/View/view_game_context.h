@@ -7,7 +7,7 @@
 #include "../../../types.h"
 #include "../../Config/constantes.h"
 
-#include "../../Renderer/renderer.h"
+#include "../../Platform/glfw_window.h"
 
 #include "../../../../include/src_include/Shared_tools/Transform_openGL_values/colors.h"
 
