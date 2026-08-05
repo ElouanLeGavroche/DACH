@@ -19,7 +19,7 @@ struct st_state main_menu_state =
     .init_state = init_menu,
     .update_logic_context = controller_update_logic_main_menu,
     .update_render_context = controller_update_render_main_menu,
-    .inputs = NULL,
+    .inputs = {0},
 };
 
 int init_menu(st_state *state)
@@ -56,9 +56,6 @@ int init_menu(st_state *state)
     // Définir les objets
     create_an_object(HOUSE, house, grass_texture, main_shader, house_transform, group);
     create_an_object(SQUARE, tile, grass_texture, main_shader, floor, group);
-    
-    // Initialiser le model --------------------------------------------------------------------------------------------
-    init_data_main_menu(state);
     
     printf("Context menu initier\n");
     return RES_DONE;

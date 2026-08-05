@@ -3,7 +3,6 @@
 void update_logic_game(st_state *state)
 {
 
-    pthread_mutex_lock(&state->inputs.mutex); // Verrouillage
     // Géré les inputs
     if(state->inputs.release[KEY_DOWN] == true)
     {
@@ -51,18 +50,11 @@ void update_logic_game(st_state *state)
         move_camera(&state->render.camera, (state->render.camera.target > 0.0f) ? ROTATE_L : ROTATE_R);
     }
 
-    pthread_mutex_unlock(&state->inputs.mutex); // Déverrouillage
-
     /* On préviens l'autre thread que la lecture à bien été faite*/
     state->inputs.ok = true;
     
 }
 
-void init_data_game(st_state *state)
-{
-    // Initialiser les mutex
-    pthread_mutex_init(&state->inputs.mutex, NULL);
-}
 
 void move_camera(st_camera *camera, int dir)
 {

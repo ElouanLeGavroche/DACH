@@ -18,7 +18,7 @@ struct st_state game_state =
     .init_state = init_game,
     .update_logic_context = controller_update_logic_game,
     .update_render_context = controller_update_render_game,
-    .inputs = NULL
+    .inputs = {0}
 };
 
 int init_game(st_state *state)
@@ -33,9 +33,6 @@ int init_game(st_state *state)
     // Initialiser le rendu --------------------------------------------------------------------------------------------
     state->render.nb_groups = 0;
     state->render.nb_total_groups = 0;
-
-    // Initialiser le model --------------------------------------------------------------------------------------------
-    init_data_game(state);
 
     // On crée le monde
     controller_create_world(state);

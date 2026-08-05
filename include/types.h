@@ -44,7 +44,6 @@ typedef struct
     bool pressed[KEY_NUM];
     // Quand une touche est lachée
     bool release[KEY_NUM];
-    pthread_mutex_t mutex;
     // Permet de savoir si l'autre thread a lu les informations
     atomic_bool ok;
 
