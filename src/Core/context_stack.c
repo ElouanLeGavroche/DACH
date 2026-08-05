@@ -6,13 +6,20 @@ int link_context(vt_context_tool *tools)
     tools->push_context = push_context;
     if(!(tools->push_context))
     {
-        fprintf(stderr, "Impossible de linker la stack context avec put.\n");
+        fprintf(stderr, "Impossible de linker la stack context avec push.\n");
         return RES_FAILED_ASSIGNEMENT;
     }
     tools->exit_context = exit_context;
     if(!(tools->exit_context))
     {
-        fprintf(stderr, "Impossible de linker la stack context avec put.\n");
+        fprintf(stderr, "Impossible de linker la stack context avec exit.\n");
+        return RES_FAILED_ASSIGNEMENT;
+    }
+
+    tools->create_context = create_context;
+    if(!tools->create_context)
+    {
+        fprintf(stderr, "Impossible de linker la stack context avec create.\n");
         return RES_FAILED_ASSIGNEMENT;
     }
     return RES_DONE;
@@ -22,18 +29,18 @@ int link_context(vt_context_tool *tools)
 int exit_context(st_stack *my_stack)
 {
     int return_status = EXIT_SUCCESS;
-
     if(my_stack->current_state->upper != NULL)
     {
         my_stack->current_state = my_stack->current_state->upper;
         // L'on incremente le niveau de profondeur
-        my_stack->level_of_depth --;
     }
     else
     {
-        printf("impossible de retirer cet éléments, il n'a pas de parents\n");
-        return_status = EXIT_FAILURE;
+        my_stack->current_state = NULL;
+        // L'on incremente le niveau de profondeur
+        
     }
+    my_stack->level_of_depth --;
     printf("Le niveau de la stack : %d\n", my_stack->level_of_depth);
     return return_status;
 }
@@ -61,7 +68,7 @@ int destroy_context();
 int pause_context();
 int resume_context();
 
-int create_context(st_context *new_state, vt_context_tool tools, st_stack *stack)
+int create_context(st_context *new_state)
 {
     int res;
     
@@ -73,7 +80,7 @@ int create_context(st_context *new_state, vt_context_tool tools, st_stack *stack
         return RES_ERROR;
     }
 
-    tools.push_context(stack, new_state);
+    
     // On relie le clavier au nouveau context
     link_input(new_state);
     return RES_DONE;

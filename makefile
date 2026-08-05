@@ -55,6 +55,7 @@ $(SAVE_EXEC)$(EXEC):\
 	$(CORE)context_stack.o\
 	$(CORE)context_group.o\
 	$(CORE)context_content.o\
+	$(CORE)context_request.o\
 	$(CORE)context_camera.o\
 	$(CORE)result.o\
 	\

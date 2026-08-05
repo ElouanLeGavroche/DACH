@@ -12,6 +12,5 @@
 int link_context(vt_context_tool *tools);
 void push_context(st_stack *my_stack, st_context *my_state);
 int exit_context(st_stack *my_stack);
-int create_context(st_context *new_state, vt_context_tool tools, st_stack *stack);
-
+int create_context(st_context *new_state);
 #endif

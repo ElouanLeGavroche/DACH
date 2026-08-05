@@ -215,6 +215,7 @@ typedef struct {
  */
 typedef struct
 {
+    int (*create_context) (st_context *state);
     void (*push_context) (st_stack *my_stack, st_context *my_state);
     int (*exit_context)(st_stack *my_stack);
 
