@@ -123,6 +123,36 @@ typedef struct st_render_data{
 }st_render_data;
 
 /**
+ * @brief ici le développeur doit indiqué TOUT les context de son jeu.
+ * En sachant que le premier sera celui qui sera charger... En premier.
+ */
+typedef enum e_context_list{
+    C_NONE,
+    C_BACK,
+
+    C_MAIN_MENU,
+    C_GAME,
+
+    C_NUM
+} e_context_list;
+
+typedef enum
+{
+    CONTEXT_ACTION_NONE,
+    CONTEXT_ACTION_PUSH,
+    CONTEXT_ACTION_POP,
+    CONTEXT_ACTION_REPLACE,
+    CONTEXT_ACTION_QUIT
+}e_context_actions;
+
+typedef struct st_context_request
+{
+    e_context_actions action;
+    e_context_list target;
+}st_context_request;
+
+
+/**
  * @brief Structure (presque class) qui contient deux catégorie d'élément
  * 
  * 1 - Des pointeurs de fonction, celle-ci servent à y placer de manière efficaces toutes les page de l'application
@@ -163,7 +193,7 @@ typedef struct st_context
     // Permet de savoir si on doit fermet le jeu
     atomic_bool ev_must_close;
 
-    
+    st_context_request request;
 }st_context;
 
 
@@ -181,21 +211,24 @@ typedef struct {
 }st_stack;
 
 /**
- * @brief étant un outil très général au moteur et très important, je décide de l'intégré directement en-tant que structure de fonction.
+ * @brief table qui sert à géré les context.
  * 
- * En effet, vu que le changement d'écran peut-avoir lieux à autant d'endroit où l'on à l'écran, il sera plus simple d'y accédé directement
- * via st_engin...
- * 
- * @param put_context fonction pour ajouter à la stack un context donnée.
- * @param remove_context retire le dernier context ajouter (celui affiché) pour le remplacer par le précédent.
- *         : " Il bloque la suppression s'il n'y a pas de context précédent. "
+ * @param push_context initialise le context
+ * @param exit_context permet de retirer un context
+ * @param pause_context met en pause un context - lorsqu'un context est ajouter par dessus
+ * @param resume_context réveil de ça pause une context - lorsque l'on revient sur lui
+ * @param destroy_context supprime un context - supprime la structure
  */
 typedef struct
 {
-    void (*put_context) (st_stack *my_stack, st_context *my_state);
-    int (*remove_context)(st_stack *my_stack);
+    void (*push_context) (st_stack *my_stack, st_context *my_state);
+    int (*exit_context)(st_stack *my_stack);
+
+    void (*pause_context)(st_stack *my_stack);
+    void (*resume_context)(st_stack *my_stack);
+    void (*destroy_context)(st_stack *my_stack);
     
-}st_context_tool;
+}vt_context_tool;
 
 // Structure pour la taille et le frame rate du contexte OpenGL
 typedef struct {
@@ -226,7 +259,7 @@ typedef struct st_engine
     
     // élément liées au context et à la stack
     st_stack stack_context;
-    st_context_tool context_tool;
+    vt_context_tool context_tool;
 
     st_loaded_windows_data window;
     

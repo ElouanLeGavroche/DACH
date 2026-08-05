@@ -1,16 +1,16 @@
 #include "../../include/src_include/Core/context_stack.h"
 
-int link_context(st_context_tool *tools)
+int link_context(vt_context_tool *tools)
 {
     // Initialisation des outils de context
-    tools->put_context = put_context;
-    if(!(tools->put_context))
+    tools->push_context = push_context;
+    if(!(tools->push_context))
     {
         fprintf(stderr, "Impossible de linker la stack context avec put.\n");
         return RES_FAILED_ASSIGNEMENT;
     }
-    tools->remove_context = remove_context;
-    if(!(tools->remove_context))
+    tools->exit_context = exit_context;
+    if(!(tools->exit_context))
     {
         fprintf(stderr, "Impossible de linker la stack context avec put.\n");
         return RES_FAILED_ASSIGNEMENT;
@@ -19,7 +19,7 @@ int link_context(st_context_tool *tools)
 }
 
 // Essaie de structure file pour les etats
-int remove_context(st_stack *my_stack)
+int exit_context(st_stack *my_stack)
 {
     int return_status = EXIT_SUCCESS;
 
@@ -38,7 +38,7 @@ int remove_context(st_stack *my_stack)
     return return_status;
 }
 
-void put_context(st_stack *my_stack, st_context *my_state){
+void push_context(st_stack *my_stack, st_context *my_state){
     /**
      * 2 cas : 1 stack vide, ajout simple
      *         2 stack non vide, remplacement nécéssaire  
@@ -55,7 +55,7 @@ void put_context(st_stack *my_stack, st_context *my_state){
     printf("context ajouter\n");
 }
 
-int new_context(st_context *new_state, st_context_tool tools, st_stack *stack)
+int create_context(st_context *new_state, vt_context_tool tools, st_stack *stack)
 {
     int res;
     
@@ -63,11 +63,11 @@ int new_context(st_context *new_state, st_context_tool tools, st_stack *stack)
     res = new_state->init_state(new_state);
     if(res == RES_ERROR)
     {
-        printf("Erreur lors de l'initialisation du context\n");
+        printf("Erreur lors de l'initialisation du context.\n");
         return RES_ERROR;
     }
 
-    tools.put_context(stack, new_state);
+    tools.push_context(stack, new_state);
     stack->current_state->ev_next_context = C_NONE;
     // On relie le clavier au nouveau context
     link_input(new_state);

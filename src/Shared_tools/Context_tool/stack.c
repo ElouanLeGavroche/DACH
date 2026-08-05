@@ -1,7 +1,7 @@
 #include "../../../include/src_include/Shared_tools/Context_tool/stack.h"
 
 // Essaie de structure file pour les etats
-int remove_context(st_stack *my_stack)
+int exit_context(st_stack *my_stack)
 {
     int return_status = EXIT_SUCCESS;
 
@@ -20,7 +20,7 @@ int remove_context(st_stack *my_stack)
     return return_status;
 }
 
-void put_context(st_stack *my_stack, st_context *my_state){
+void push_context(st_stack *my_stack, st_context *my_state){
     /**
      * 2 cas : 1 stack vide, ajout simple
      *         2 stack non vide, remplacement nécéssaire  

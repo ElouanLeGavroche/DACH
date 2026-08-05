@@ -6,7 +6,9 @@ void update_logic_game(st_context *state)
     // Géré les inputs
     if(state->inputs.release[KEY_DOWN] == true)
     {
-        state->ev_next_context = C_BACK;   
+        state->request.target = CONTEXT_ACTION_NONE;
+        state->request.action = CONTEXT_ACTION_REPLACE;
+
         state->inputs.release[KEY_DOWN] = false;
     }
     if(state->inputs.release[KEY_ESCAPE] == true)

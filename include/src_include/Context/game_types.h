@@ -1,20 +1,6 @@
 #ifndef GAME_TYPES
 #define GAME_TYPES
 
-/**
- * @brief ici le développeur doit indiqué TOUT les context de son jeu.
- * En sachant que le premier sera celui qui sera charger... En premier.
- */
-typedef enum e_context_list{
-    C_NONE,
-    C_BACK,
-
-    C_MAIN_MENU,
-    C_GAME,
-
-    C_NUM
-} e_context_list;
-
 
 typedef enum e_render_group_type
 {

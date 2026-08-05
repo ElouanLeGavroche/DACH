@@ -486,7 +486,7 @@ int remove_render_instenced_mesh_object(void *void_group, int)
     return RES_DONE;
 }
 
-st_render_object* get_render_instenced_mesh_group(void *void_group, int id)
+st_render_object* get_render_instenced_mesh_group(void *void_group, int)
 {
     st_instanced_mesh_group *group = (st_instanced_mesh_group*)void_group;
     
@@ -496,5 +496,5 @@ st_render_object* get_render_instenced_mesh_group(void *void_group, int id)
         return NULL;
     }
 
-    return &group->shared_render_object;
+    return group->shared_render_object;
 }

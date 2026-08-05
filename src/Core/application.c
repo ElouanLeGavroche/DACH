@@ -1,6 +1,8 @@
 #include "../../include/src_include/Core/application.h"
 
 int init_application(){
+    int res;
+
     // Stock des informations pour le moteur
     st_engine engine_state;
     st_window_user_data user_data = {
@@ -27,9 +29,20 @@ int init_application(){
     }
 
     init_opengl();
-    /* -4- entrer dans les mains loops */
-    mainloop(&engine_state);
+
+    // On charge le premier context
+    res = create_context(&main_menu_state, engine_state.context_tool, &engine_state.stack_context);
     
+    if(res != RES_ERROR)
+    {    
+        /* -4- entrer dans les mains loops */
+        mainloop(&engine_state);
+    }
+    else
+    {
+        fprintf(stderr, "Erreur lors de l'initialisation du contexte.\n");
+        return EXIT_FAILURE;
+    }
     return EXIT_SUCCESS;
     
 }
@@ -42,15 +55,16 @@ void input_loop(st_engine *engine_state){
     // récupéré les entrées //
     poll_events();
     
-    
+    st_context_request *request = &engine_state->stack_context.current_state->request;
+
     if(engine_state->stack_context.current_state->ev_must_close == true)
     {
         engine_state->running = false;
     }
-    if(engine_state->stack_context.current_state->ev_next_context != C_NONE)
+    if(request->target != C_NONE)
     {
         st_context *new_state;
-        atomic_int *who = &engine_state->stack_context.current_state->ev_next_context;
+        atomic_int *who = &request->target;
         
         // L'on va observer vers quelle context évoluer
         switch (*who)
@@ -85,10 +99,10 @@ void input_loop(st_engine *engine_state){
         // Si le nouveau context est l'ancien, pas la peine d'en crée un nouveau, ce serai con.
         if(*who != C_BACK)
         {
-            res = new_context(new_state, engine_state->context_tool, &engine_state->stack_context);
+            res = create_context(new_state, engine_state->context_tool, &engine_state->stack_context);
             if(res == RES_ERROR)
             {
-                // Gestion de l'erreur
+                // Gestion de l'err&engine_state->stack_context.current_state->ev_next_contexteur
                 engine_state->running = false;
             }
 
@@ -105,49 +119,42 @@ void input_loop(st_engine *engine_state){
  */
 void mainloop(st_engine *engine_state){
 
-    // Varibiable pour les erreurs
-    int res;
-
     //Définition des variables pour accorder la clock
     struct timespec ts_start, ts_end;
 
-    // On charge le premier context
-    res = new_context(&main_menu_state, engine_state->context_tool, &engine_state->stack_context);
-    
-    if(res != RES_ERROR)
+    link_input(engine_state->stack_context.current_state);
+        ////////////////////////////////////////////
+        //                                        //
+        //                Boucle                  //
+        //                                        //
+        ////////////////////////////////////////////
+
+    while(engine_state->running && window_should_close() != -1)
     {
-        link_input(engine_state->stack_context.current_state);
-            ////////////////////////////////////////////
-            //                                        //
-            //                Boucle                  //
-            //                                        //
-            ////////////////////////////////////////////
+        // Time au début de la boucle
+        get_time(&ts_start);
 
-        while(engine_state->running && window_should_close() != -1){
-            // Time au début de la boucle
-            get_time(&ts_start);
+        view_clear();
+        
+        // Contenu //
+        engine_state->stack_context.current_state->update_logic_context(engine_state->stack_context.current_state);
 
-            view_clear();
-            
-            // Contenu //
-            engine_state->stack_context.current_state->update_logic_context(engine_state->stack_context.current_state);
+        //Actual context
+        engine_state->stack_context.current_state->update_render_context(&engine_state->stack_context.current_state->render);
+        input_loop(engine_state);
 
-            //Actual context
-            engine_state->stack_context.current_state->update_render_context(&engine_state->stack_context.current_state->render);
-            input_loop(engine_state);
+        view_swap();
 
-            view_swap();
+        //Time fin de boucle
+        get_time(&ts_end);
 
-            //Time fin de boucle
-            get_time(&ts_end);
-
-            //Gestion de des conditions au calcul d'un nouveau tick
-            wait_frame(ts_start, ts_end);
-
-        }
-        engine_state->running = false;
-        unload_data(engine_state);
+        //Gestion de des conditions au calcul d'un nouveau tick
+        wait_frame(ts_start, ts_end);
     }
+    
+    engine_state->running = false;
+    unload_data(engine_state);
+
 
     view_close_window();
 }
