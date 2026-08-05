@@ -255,6 +255,7 @@ void destroy_render_data(st_render_data *render)
 
     // ça permet de forcer la cg à mettre à jour son utilisation de la mémoire.
     glFinish();
+    printf("Context supprimer\n");
 
 }
 
