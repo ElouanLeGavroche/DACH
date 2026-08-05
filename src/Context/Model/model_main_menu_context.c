@@ -11,8 +11,11 @@ void update_logic_main_menu(st_context *state)
         state->inputs.release[KEY_UP] = false;
     }
     if(state->inputs.release[KEY_ESCAPE] == true)
-    {
-        state->ev_must_close = true;   
+    {   
+
+        state->request.action = CONTEXT_ACTION_QUIT;
+        state->request.target = C_MAIN_MENU;
+        
         state->inputs.release[KEY_ESCAPE] = false;
     }
    

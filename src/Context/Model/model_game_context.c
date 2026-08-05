@@ -6,14 +6,16 @@ void update_logic_game(st_context *state)
     // Géré les inputs
     if(state->inputs.release[KEY_DOWN] == true)
     {
-        state->request.target = CONTEXT_ACTION_NONE;
-        state->request.action = CONTEXT_ACTION_REPLACE;
+        state->request.target = C_BACK;
+        state->request.action = CONTEXT_ACTION_POP;
 
         state->inputs.release[KEY_DOWN] = false;
     }
     if(state->inputs.release[KEY_ESCAPE] == true)
     {
-        state->ev_must_close = true;  
+        state->request.action = CONTEXT_ACTION_QUIT;
+        state->request.target = C_MAIN_MENU;
+        
         state->inputs.release[KEY_ESCAPE] = false; 
     }
 

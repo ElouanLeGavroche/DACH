@@ -57,7 +57,7 @@ void input_loop(st_engine *engine_state){
     
     st_context_request *request = &engine_state->stack_context.current_state->request;
 
-    if(engine_state->stack_context.current_state->ev_must_close == true)
+    if(request->action == CONTEXT_ACTION_QUIT)
     {
         engine_state->running = false;
     }
@@ -110,6 +110,9 @@ void input_loop(st_engine *engine_state){
         // On reset la valeur, sinon on retourne en boucle sur le context précédent
         *who = C_NONE;
     }
+
+    request->action = CONTEXT_ACTION_NONE;
+    request->target = C_NONE;
 
 }
 

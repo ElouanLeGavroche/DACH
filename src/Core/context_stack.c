@@ -55,6 +55,12 @@ void push_context(st_stack *my_stack, st_context *my_state){
     printf("context ajouter\n");
 }
 
+int destroy_context();
+
+
+int pause_context();
+int resume_context();
+
 int create_context(st_context *new_state, vt_context_tool tools, st_stack *stack)
 {
     int res;
@@ -68,7 +74,6 @@ int create_context(st_context *new_state, vt_context_tool tools, st_stack *stack
     }
 
     tools.push_context(stack, new_state);
-    stack->current_state->ev_next_context = C_NONE;
     // On relie le clavier au nouveau context
     link_input(new_state);
     return RES_DONE;

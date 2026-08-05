@@ -138,11 +138,11 @@ typedef enum e_context_list{
 
 typedef enum
 {
-    CONTEXT_ACTION_NONE,
-    CONTEXT_ACTION_PUSH,
-    CONTEXT_ACTION_POP,
-    CONTEXT_ACTION_REPLACE,
-    CONTEXT_ACTION_QUIT
+    CONTEXT_ACTION_NONE, // Rien
+    CONTEXT_ACTION_PUSH, // On met en avant
+    CONTEXT_ACTION_POP, // On retire
+    CONTEXT_ACTION_REPLACE, // On remplace
+    CONTEXT_ACTION_QUIT // On quite
 }e_context_actions;
 
 typedef struct st_context_request
@@ -167,9 +167,8 @@ typedef struct st_context_request
  * @param inputs structure des entrée clavier.
  * @param upper sont parent s'il en à un.
  * @param render données de rendu du context.
- * @param ev_next_context variable qui sera lu par le moteur et qui passera à un état suivant.
- * @param ev_close_close varibale qui sera lu par le moteur et qui quittera le jeu.
- */
+ * @param request gère les requête du context 
+*/
 typedef struct st_context
 {
     // l'id du context
@@ -187,11 +186,6 @@ typedef struct st_context
 
     struct st_context *upper;
     st_render_data render;
-
-    // Permet de savoir si un nouvel etat est attendu
-    atomic_int ev_next_context;
-    // Permet de savoir si on doit fermet le jeu
-    atomic_bool ev_must_close;
 
     st_context_request request;
 }st_context;
