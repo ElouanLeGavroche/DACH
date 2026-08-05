@@ -49,7 +49,7 @@ void input_loop(st_engine *engine_state){
     }
     if(engine_state->stack_context.current_state->ev_next_context != C_NONE)
     {
-        st_state *new_state;
+        st_context *new_state;
         atomic_int *who = &engine_state->stack_context.current_state->ev_next_context;
         
         // L'on va observer vers quelle context évoluer
@@ -58,7 +58,7 @@ void input_loop(st_engine *engine_state){
         case C_BACK:
 
             unload_data(engine_state);
-            st_state *old_state = engine_state->stack_context.current_state;
+            st_context *old_state = engine_state->stack_context.current_state;
             
             engine_state->stack_context.current_state = old_state->upper;
             engine_state->stack_context.level_of_depth --;

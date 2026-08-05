@@ -20,7 +20,7 @@ int remove_context(st_stack *my_stack)
     return return_status;
 }
 
-void put_context(st_stack *my_stack, st_state *my_state){
+void put_context(st_stack *my_stack, st_context *my_state){
     /**
      * 2 cas : 1 stack vide, ajout simple
      *         2 stack non vide, remplacement nécéssaire  
@@ -39,5 +39,5 @@ void put_context(st_stack *my_stack, st_state *my_state){
 
 void afficher_stack(st_stack *my_stack){
     printf("Bonjour\n");
-    //my_stack->current_state->st_state();
+    //my_stack->current_state->st_context();
 }

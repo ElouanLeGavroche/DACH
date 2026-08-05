@@ -12,7 +12,7 @@ typedef enum
     TILE
 }e_elt_name;
 
-struct st_state game_state =
+struct st_context game_state =
 {
     .id =  C_GAME,
     .init_state = init_game,
@@ -21,7 +21,7 @@ struct st_state game_state =
     .inputs = {0}
 };
 
-int init_game(st_state *state)
+int init_game(st_context *state)
 {
     printf("début de l'initiation\n");
 
@@ -50,7 +50,7 @@ int init_game(st_state *state)
     return RES_DONE;
 }
 
-void controller_update_logic_game(st_state *state)
+void controller_update_logic_game(st_context *state)
 {
     update_logic_game(state);
 }
@@ -60,7 +60,7 @@ void controller_update_render_game(st_render_data *render)
     update_render_game(render);
 }
 
-int controller_create_world(st_state *state)
+int controller_create_world(st_context *state)
 {
     // Chargement des éléments propre à la map
     int i;

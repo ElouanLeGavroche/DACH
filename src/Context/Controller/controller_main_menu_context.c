@@ -13,7 +13,7 @@ typedef enum
     SQUARE
 }e_elt_name;
 
-struct st_state main_menu_state =
+struct st_context main_menu_state =
 {
     .id = C_MAIN_MENU,
     .init_state = init_menu,
@@ -22,7 +22,7 @@ struct st_state main_menu_state =
     .inputs = {0},
 };
 
-int init_menu(st_state *state)
+int init_menu(st_context *state)
 {
     printf("début de l'initiation\n");
     int res;
@@ -62,7 +62,7 @@ int init_menu(st_state *state)
 }
 
 
-void controller_update_logic_main_menu(st_state *state)
+void controller_update_logic_main_menu(st_context *state)
 {
     update_logic_main_menu(state);
 }

@@ -70,7 +70,7 @@ void pressed_key_callback(GLFWwindow *window, int key, int scancode, int action,
  * @brief Cette fonction permet de lié le callback au context actuel, 
  * il est important de toujours l'initialiser à chaque nouveau context.
  */
-void link_input(st_state *state)
+void link_input(st_context *state)
 {
     // Liée la strucures des entrée dans la fenêtre pour le callback
     GLFWwindow *window = glfwGetCurrentContext();

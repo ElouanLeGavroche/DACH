@@ -12,7 +12,7 @@
 #include "src_include/Context/game_types.h"
 
 typedef struct st_engine st_engine;
-typedef struct st_state st_state;
+typedef struct st_context st_context;
 
 // Gestion des structures pour les inputs
 
@@ -131,7 +131,7 @@ typedef struct st_render_data{
  * 2 - Un pointeur vers (s'il y en à un) un parent. Ex : je suis sur le menu pause, le parent est le jeu) 
  * 
  * @param id permet de savoir de quelle context il s'agit aisémment
- * @param st_state fonction qui initialisera la fenêtre.
+ * @param st_context fonction qui initialisera la fenêtre.
  * @param update_logic_context fonction qui déroulera à chaque tick la logique du canva.
  * @param update_render_context fonction qui déroulera le rendu à chaque frame le rendu de la page.
  * @param inputs structure des entrée clavier.
@@ -140,22 +140,22 @@ typedef struct st_render_data{
  * @param ev_next_context variable qui sera lu par le moteur et qui passera à un état suivant.
  * @param ev_close_close varibale qui sera lu par le moteur et qui quittera le jeu.
  */
-typedef struct st_state
+typedef struct st_context
 {
     // l'id du context
     atomic_int id;
 
     // L'initialiseur connait tout
-    int (*init_state)(st_state *state);
+    int (*init_state)(st_context *state);
     // La logique ne connaitra que les model
-    void (*update_logic_context)(st_state *state);
+    void (*update_logic_context)(st_context *state);
     // Le rendu ne connait que les données liée au rendu
     void (*update_render_context)(st_render_data *render);
 
     // Permet de stocker les inputs qui gérerons les actions en conséquent
     st_input inputs;
 
-    struct st_state *upper;
+    struct st_context *upper;
     st_render_data render;
 
     // Permet de savoir si un nouvel etat est attendu
@@ -164,7 +164,7 @@ typedef struct st_state
     atomic_bool ev_must_close;
 
     
-}st_state;
+}st_context;
 
 
 /**
@@ -172,11 +172,11 @@ typedef struct st_state
  * 
  * Si on et le jeu en pause, le canva pause prend le dessus sur le jeu, et quand on la quitte, le jeu reprend.
  * 
- * @param st_state Est une structure simple. Pour en savoir plus, cliquer dessus.
+ * @param st_context Est une structure simple. Pour en savoir plus, cliquer dessus.
  * @param level_of_depth Niveau de profondeur de la state.
  */
 typedef struct {
-    st_state *current_state;
+    st_context *current_state;
     atomic_int level_of_depth;
 }st_stack;
 
@@ -192,7 +192,7 @@ typedef struct {
  */
 typedef struct
 {
-    void (*put_context) (st_stack *my_stack, st_state *my_state);
+    void (*put_context) (st_stack *my_stack, st_context *my_state);
     int (*remove_context)(st_stack *my_stack);
     
 }st_context_tool;

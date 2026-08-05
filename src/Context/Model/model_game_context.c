@@ -1,6 +1,6 @@
 #include "../../../include/src_include/Context/Model/model_game_context.h"
 
-void update_logic_game(st_state *state)
+void update_logic_game(st_context *state)
 {
 
     // Géré les inputs

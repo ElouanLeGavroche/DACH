@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 void pressed_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
-void link_input(st_state *state);
+void link_input(st_context *state);
 void poll_events();
 
 #endif

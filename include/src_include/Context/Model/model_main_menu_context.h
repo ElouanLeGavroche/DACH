@@ -5,5 +5,5 @@
 
 #include "../../../types.h"
 
-void update_logic_main_menu(st_state *state);
+void update_logic_main_menu(st_context *state);
 #endif

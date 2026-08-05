@@ -6,7 +6,7 @@
 
 #include "../../../types.h"
 
-void put_context(st_stack *my_stack, st_state *my_state);
+void put_context(st_stack *my_stack, st_context *my_state);
 int remove_context(st_stack *my_stack);
 void afficher_stack(st_stack *my_stack);
 
