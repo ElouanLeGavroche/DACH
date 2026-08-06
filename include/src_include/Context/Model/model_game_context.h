@@ -30,7 +30,7 @@ void move_camera(st_camera *camera, int dir);
 /**
  * @brief Gère uniquement le zoom de la caméra
  */
-void zoom_camera(st_camera *camera, st_mouse mouse);
+void zoom_camera(st_camera *camera, st_mouse *mouse);
 
 
 #endif

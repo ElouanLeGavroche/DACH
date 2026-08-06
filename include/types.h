@@ -35,6 +35,12 @@ typedef enum e_key
     KEY_NUM
 }e_key;
 
+typedef enum e_mouse
+{
+    MOUSE_SCROLL_Y,
+    MOUSE_NUM
+}e_mouse;
+
 // Savoir quand une touche est pressé ou relacher( permet de géré des entrer du type CTRL+C)
 typedef struct
 {
@@ -49,15 +55,15 @@ typedef struct
 
 /**
  * @brief Structure de la souris
- * @param x_pos position de la souris en X sur l'écran
- * @param y_pos position de la souris en y sur l'écran
- * @param scroll_x scroll actuel de la souris en x
- * @param scroll_y scroll actuel de la souris en y 
  */
 typedef struct
 {
     double scroll_y;
+    bool active_scroll_y;
+
     double scroll_x;
+    bool active_scroll_x;
+
 }st_mouse;
 
 

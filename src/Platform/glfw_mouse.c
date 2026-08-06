@@ -3,21 +3,26 @@
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
       st_window_user_data *data = glfwGetWindowUserPointer(window);
-      st_camera *camera = data->camera;
-      st_mouse *mouse = data->mouse;
-      mouse->scroll_x = xoffset;
-      mouse->scroll_y = yoffset;
-      //mouse->scroll_y = yoffset;
+      if(data != NULL)
+      {
+            if(data->mouse != NULL && data->camera != NULL)
+            {
+                  st_camera *camera = data->camera;
+                  st_mouse *mouse = data->mouse;
+                  mouse->scroll_x = xoffset;
+                  if(mouse->scroll_x != 0)
+                  {
+                        mouse->active_scroll_x = true;
+                  }
 
-      printf("%d\n", yoffset);
-      glm_ortho(
-            -camera->ortho_size * camera->ratio,
-            camera->ortho_size * camera->ratio,
-            -camera->ortho_size, camera->ortho_size, 
-            -1000.0f, 
-            1000.0f, 
-            camera->projection
-      );
+                  mouse->scroll_y = yoffset;
+                  if(mouse->scroll_y != 0)
+                  {
+                        mouse->active_scroll_y = true;
+                  }
+            }
+      }
+      
 }
 
 void link_mouse(st_context *state)

@@ -60,6 +60,14 @@ void update_render_game(st_render_data *render)
     //glm_rotate(model, (float)glfwGetTime()*2, (vec3){0.5f, 0.5f, 1.0f});
     glm_translate(model, (vec3){0.0f, 0.0f, sin((float)glfwGetTime()*2)});
     
+    glm_ortho(
+            -render->camera.ortho_size * render->camera.ratio,
+            render->camera.ortho_size * render->camera.ratio,
+            -render->camera.ortho_size, render->camera.ortho_size, 
+            -1000.0f, 
+            1000.0f, 
+            render->camera.projection
+      );
     render->camera.look(&render->camera);
     
     glClearColor(num_to_01(24), num_to_01(32), num_to_01(61), 1.0f);
