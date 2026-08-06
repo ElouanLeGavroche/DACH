@@ -146,7 +146,7 @@ void destroy_render_data(st_render_data *render)
     render->nb_groups = 0;
 
     // ça permet de forcer la cg à mettre à jour son utilisation de la mémoire.
-    glFinish();
+    gl_finish();
     printf("Datas supprimer.\n");
 
 }
@@ -162,22 +162,20 @@ void references_object_test(st_render_object *object)
     // Si c'est le dernier object à avoir l'occurence d'un mesh, alors c'est lui qui le supprime
     if(object->mesh->nb_occurences == 0)
     {
-        glDeleteVertexArrays(1, &object->mesh->VAO);
-        glDeleteBuffers(1, &object->mesh->VBO);
-        glDeleteBuffers(1, &object->mesh->EBO);
+        gl_delete_mesh(object);
         object->mesh->index_count = 0;
         
     }
     // Si c'est le dernier object à avoir l'occurence d'une texture alors c'est lui qui le supprime
     if(object->material->texture->nb_occurences == 0)
     {
-        glDeleteTextures(1, &object->material->texture->id);
+        gl_delete_texture(object->material->texture->id);
         free(object->material->texture);
     }
     // Si c'est le dernier object à avoir l'occurence d'un shader, alors c'est lui qui le supprime
     if(object->material->shader->nb_occurences == 0)
     {
-        glDeleteProgram(object->material->shader->shader);
+        gl_delete_shader(object->material->shader->shader);
         free(object->material->shader);
     }
 }

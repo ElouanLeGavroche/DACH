@@ -48,7 +48,6 @@ void update_logic_game(st_context *state)
         state->render.camera.target = (state->render.camera.target >= -0.0f)? -45.0f + state->render.camera.target: state->render.camera.target;
         state->inputs.release[KEY_E] = false;
     }
-    printf("target : %f\n", state->render.camera.target);
     if(state->render.camera.target != 0.0f)
     {
         move_camera(&state->render.camera, (state->render.camera.target > 0.0f) ? ROTATE_L : ROTATE_R);

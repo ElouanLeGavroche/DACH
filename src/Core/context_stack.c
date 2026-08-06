@@ -74,9 +74,6 @@ void push_context(st_context *new_context, st_stack *stack){
     printf("context ajouter\n");
 }
 
-int destroy_context();
-
-
 int pause_context();
 int resume_context();
 

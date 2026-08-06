@@ -154,3 +154,25 @@ void gl_deletes()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glUseProgram(0);
 }
+
+void gl_delete_mesh(st_render_object *object)
+{
+    glDeleteVertexArrays(1, &object->mesh->VAO);
+    glDeleteBuffers(1, &object->mesh->VBO);
+    glDeleteBuffers(1, &object->mesh->EBO);
+}
+
+void gl_delete_texture(unsigned int id)
+{
+    glDeleteTextures(1, &id);
+}
+
+void gl_delete_shader(unsigned int id)
+{
+    glDeleteProgram(id);
+}
+
+void gl_finish()
+{
+    glFinish();
+}
