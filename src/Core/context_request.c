@@ -4,48 +4,48 @@ void context_request(st_engine *engine_state){
     // Ce tampon permet de savoir si le jeu est revenu à un etat entérieur
     // Et donc de recharger les éléments qui lui y étais associé
     int res = RES_DONE;
-    
     st_context_request *request = &engine_state->stack_context.current_state->request;
-
-    if(request->action == CONTEXT_ACTION_QUIT)
+    int action = request->action;
+    
+    switch (action)
     {
-        engine_state->running = false;
-    }
-    if(request->target != C_NONE)
-    {
+    case CONTEXT_ACTION_PUSH:
         st_context *new_state;
-        int action = request->action;
-        
-        switch (action)
+        new_state = &game_state; 
+
+        res = engine_state->context_tool.create_context(new_state);
+        if(res == RES_ERROR)
         {
-        case CONTEXT_ACTION_PUSH:
-            new_state = &game_state; 
+            // Gestion de l'err&engine_state->stack_context.current_state->ev_next_contexteur
+            engine_state->running = false;
+        }
+        engine_state->context_tool.push_context(new_state, &engine_state->stack_context);
+        //new_state = request->target;
+        break;
 
-            res = engine_state->context_tool.create_context(new_state);
-            if(res == RES_ERROR)
-            {
-                // Gestion de l'err&engine_state->stack_context.current_state->ev_next_contexteur
-                engine_state->running = false;
-            }
-            engine_state->context_tool.push_context(&engine_state->stack_context, new_state);
-            //new_state = request->target;
-            break;
-
-        case CONTEXT_ACTION_POP:
-            
-            destroy_render_data(&engine_state->stack_context.current_state->render);
-            exit_context(engine_state->stack_context.current_state);
-
-            // On relie le clavier au nouveau context
-            link_input(engine_state->stack_context.current_state);
-            break;
+    case CONTEXT_ACTION_POP:
         
-        default:
-            fprintf(stderr, "Erreur, action incorrecte.\n");
-            break;
+        destroy_render_data(&engine_state->stack_context.current_state->render);
+        engine_state->context_tool.exit_context(&engine_state->stack_context);
+        // On relie le clavier au nouveau context
+        link_input(engine_state->stack_context.current_state);
+
+        break;
+    
+    case CONTEXT_ACTION_QUIT:
+        while(engine_state->stack_context.current_state != NULL)
+        {
+            destroy_render_data(&engine_state->stack_context.current_state->render);
+            engine_state->context_tool.exit_context(&engine_state->stack_context);
         }
         
+        engine_state->running = false;
+        break;
+
+    default:
+        break;
     }
+        
 
     request->action = CONTEXT_ACTION_NONE;
     request->target = C_NONE;
@@ -147,7 +147,7 @@ void destroy_render_data(st_render_data *render)
 
     // ça permet de forcer la cg à mettre à jour son utilisation de la mémoire.
     glFinish();
-    printf("Context supprimer\n");
+    printf("Datas supprimer.\n");
 
 }
 

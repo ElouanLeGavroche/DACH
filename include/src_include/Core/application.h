@@ -17,7 +17,6 @@
 #include "../Platform/glfw_input.h"
 
 #include "../Renderer/opengl_renderer.h"
-#include "../Renderer/renderer.h"
 
 
 int init_application();

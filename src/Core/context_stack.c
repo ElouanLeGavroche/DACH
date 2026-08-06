@@ -1,6 +1,6 @@
 #include "../../include/src_include/Core/context_stack.h"
 
-int link_context(vt_context_tool *tools)
+int link_context_tools_with_engine(vt_context_tool *tools)
 {
     // Initialisation des outils de context
     tools->push_context = push_context;
@@ -26,39 +26,51 @@ int link_context(vt_context_tool *tools)
 }
 
 // Essaie de structure file pour les etats
-int exit_context(st_stack *my_stack)
+int exit_context(st_stack *stack)
 {
-    int return_status = EXIT_SUCCESS;
-    if(my_stack->current_state->upper != NULL)
+    int return_status = RES_DONE;
+    if(stack->current_state == NULL)
     {
-        my_stack->current_state = my_stack->current_state->upper;
-        // L'on incremente le niveau de profondeur
+        fprintf(stderr, "Le context est null.\n");
+        return_status = RES_NULL_POINTER;
     }
     else
     {
-        my_stack->current_state = NULL;
-        // L'on incremente le niveau de profondeur
-        
+        if(stack->current_state->upper != NULL)
+        {
+            st_context *old_state = stack->current_state;
+            stack->current_state = old_state->upper;
+
+            //current_context = current_context->upper;
+            // L'on incremente le niveau de profondeur
+        }
+        else
+        {
+            stack->current_state = NULL;
+            // L'on incremente le niveau de profondeur
+            
+        }
+        stack->level_of_depth --;
     }
-    my_stack->level_of_depth --;
-    printf("Le niveau de la stack : %d\n", my_stack->level_of_depth);
     return return_status;
 }
 
-void push_context(st_stack *my_stack, st_context *my_state){
+void push_context(st_context *new_context, st_stack *stack){
     /**
      * 2 cas : 1 stack vide, ajout simple
      *         2 stack non vide, remplacement nécéssaire  
      */    
-    if(my_stack->current_state != NULL)
+    if(stack->current_state != NULL)
     {
-        my_state->upper = my_stack->current_state;
+        new_context->upper = stack->current_state;
     }
-    my_stack->current_state = my_state;
+    stack->current_state = new_context;
+    
+    // On relie le clavier au nouveau context
+    link_input(stack->current_state);
 
     // L'on incremente le niveau de profondeur
-    my_stack->level_of_depth ++;
-    printf("Niveau de la stack : %d\n", my_stack->level_of_depth);
+    stack->level_of_depth ++;
     printf("context ajouter\n");
 }
 
@@ -80,9 +92,6 @@ int create_context(st_context *new_state)
         return RES_ERROR;
     }
 
-    
-    // On relie le clavier au nouveau context
-    link_input(new_state);
     return RES_DONE;
 
 }

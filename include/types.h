@@ -172,7 +172,7 @@ typedef struct st_context_request
 typedef struct st_context
 {
     // l'id du context
-    atomic_int id;
+    int id;
 
     // L'initialiseur connait tout
     int (*init_state)(st_context *state);
@@ -201,7 +201,7 @@ typedef struct st_context
  */
 typedef struct {
     st_context *current_state;
-    atomic_int level_of_depth;
+    int level_of_depth;
 }st_stack;
 
 /**
@@ -216,8 +216,8 @@ typedef struct {
 typedef struct
 {
     int (*create_context) (st_context *state);
-    void (*push_context) (st_stack *my_stack, st_context *my_state);
-    int (*exit_context)(st_stack *my_stack);
+    void (*push_context) (st_context *new_context, st_stack *stack);
+    int (*exit_context)(st_stack *stack);
 
     void (*pause_context)(st_stack *my_stack);
     void (*resume_context)(st_stack *my_stack);

@@ -9,8 +9,10 @@
 
 #include "../Platform/glfw_input.h"
 
-int link_context(vt_context_tool *tools);
-void push_context(st_stack *my_stack, st_context *my_state);
-int exit_context(st_stack *my_stack);
+#include "../Renderer/opengl_renderer.h"
+
+int link_context_tools_with_engine(vt_context_tool *tools);
+void push_context(st_context *new_context, st_stack *stack);
+int exit_context(st_stack *stack);
 int create_context(st_context *new_state);
 #endif

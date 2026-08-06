@@ -22,7 +22,7 @@ int init_application(){
         return RES_ERROR;
     }
     
-    if(link_context(&engine_state.context_tool) != RES_DONE)
+    if(link_context_tools_with_engine(&engine_state.context_tool) != RES_DONE)
     {
         fprintf(stderr, "Erreur lors du linkage avec les outils de context");
         return RES_ERROR;
@@ -31,8 +31,9 @@ int init_application(){
     init_opengl();
 
     // On charge le premier context
-    res = create_context(&main_menu_state);
-    
+    res = engine_state.context_tool.create_context(&main_menu_state);
+    engine_state.context_tool.push_context(&main_menu_state, &engine_state.stack_context);
+
     if(res != RES_ERROR)
     {    
         /* -4- entrer dans les mains loops */
@@ -91,7 +92,5 @@ void mainloop(st_engine *engine_state){
         wait_frame(ts_start, ts_end);
     }
     
-    engine_state->running = false;
-
     view_close_window();
 }

@@ -18,7 +18,8 @@ struct st_context game_state =
     .init_state = init_game,
     .update_logic_context = controller_update_logic_game,
     .update_render_context = controller_update_render_game,
-    .inputs = {0}
+    .inputs = {0},
+    .upper = NULL
 };
 
 int init_game(st_context *state)

@@ -14,7 +14,7 @@ void update_logic_game(st_context *state)
     if(state->inputs.release[KEY_ESCAPE] == true)
     {
         state->request.action = CONTEXT_ACTION_QUIT;
-        state->request.target = C_MAIN_MENU;
+        state->request.target = C_GAME;
         
         state->inputs.release[KEY_ESCAPE] = false; 
     }
