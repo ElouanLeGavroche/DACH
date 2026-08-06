@@ -103,17 +103,23 @@ int init_window(st_window_user_data *user_data, st_loaded_windows_data *window_d
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height){
 
-      st_window_user_data *data = glfwGetWindowUserPointer(window);
-      st_loaded_windows_data *window_parametr = data->window;
-      st_camera *camera = data->camera;
+    if(window == NULL)
+    {
+        st_window_user_data *data = glfwGetWindowUserPointer(window);
+        if(data != NULL)
+        {
+            if(data->window != NULL && data->camera != NULL)
+            {
+                st_loaded_windows_data *window_parametr = data->window;
+                st_camera *camera = data->camera;
 
-      glViewport(0, 0, width, height);
+                window_parametr->size_x = width;
+                window_parametr->size_y = height;
 
-      window_parametr->size_x = width;
-      window_parametr->size_y = height;
-
-      // Calcule du ration pour la projection : 
-      camera->ratio = ((float)window_parametr->size_x / (float)window_parametr->size_y) * (4.0f / 3.0f);
+                camera->ratio = ((float)window_parametr->size_x / (float)window_parametr->size_y) * (4.0f / 3.0f);
+            }
+        }
+    }    
 
 }
 

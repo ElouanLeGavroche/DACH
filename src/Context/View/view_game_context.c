@@ -67,7 +67,10 @@ void update_render_game(st_render_data *render)
             -1000.0f, 
             1000.0f, 
             render->camera.projection
-      );
+    );
+
+    gl_update_view_port(1980, 1080);
+
     render->camera.look(&render->camera);
     
     glClearColor(num_to_01(24), num_to_01(32), num_to_01(61), 1.0f);

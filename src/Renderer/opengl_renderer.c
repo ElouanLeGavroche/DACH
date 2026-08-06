@@ -176,3 +176,8 @@ void gl_finish()
 {
     glFinish();
 }
+
+void gl_update_view_port(int width, int height)
+{
+    glViewport(0, 0, width, height);
+}

@@ -21,4 +21,7 @@ void gl_delete_texture(unsigned int id);
 void gl_delete_shader(unsigned int id);
 
 void gl_finish();
+
+void gl_update_view_port(int width, int height);
+
 #endif

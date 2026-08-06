@@ -8,6 +8,7 @@
 #include "../../Config/constantes.h"
 
 #include "../../Platform/glfw_window.h"
+#include "../../Renderer/opengl_renderer.h"
 
 #include "../../../../include/src_include/Shared_tools/Transform_openGL_values/colors.h"
 
