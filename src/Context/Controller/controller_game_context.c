@@ -43,8 +43,6 @@ int init_game(st_context *state)
 
     st_window_user_data *data = glfwGetWindowUserPointer(window);
     data->camera = &state->render.camera;
-
-    glfwSetScrollCallback(window, scroll_callback);
     
     printf("Context jeu initier\n");
 

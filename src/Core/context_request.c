@@ -20,7 +20,9 @@ void context_request(st_engine *engine_state){
             engine_state->running = false;
         }
         engine_state->context_tool.push_context(new_state, &engine_state->stack_context);
-        //new_state = request->target;
+
+        link_input(engine_state->stack_context.current_state);
+        link_mouse(engine_state->stack_context.current_state);
         break;
 
     case CONTEXT_ACTION_POP:
@@ -30,7 +32,6 @@ void context_request(st_engine *engine_state){
         // On relie le clavier au nouveau context
         link_input(engine_state->stack_context.current_state);
         link_mouse(engine_state->stack_context.current_state);
-        
         break;
     
     case CONTEXT_ACTION_QUIT:

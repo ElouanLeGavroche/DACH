@@ -52,11 +52,13 @@ void update_logic_game(st_context *state)
     {
         move_camera(&state->render.camera, (state->render.camera.target > 0.0f) ? ROTATE_L : ROTATE_R);
     }
+
+    zoom_camera(&state->render.camera, state->mouse);
     
 }
 
 
-void move_camera(st_camera *camera, int dir, st_mouse *mouse)
+void move_camera(st_camera *camera, int dir)
 {
     switch (dir)
     {
@@ -90,15 +92,17 @@ void move_camera(st_camera *camera, int dir, st_mouse *mouse)
     default:
         break;
     }
+}
 
+void zoom_camera(st_camera *camera, st_mouse mouse)
+{
     // Gestion du zoom
     if(camera->ortho_size >= 3.0f && camera->ortho_size <= 25.0f)
-        camera->ortho_size -= yoffset;
+        camera->ortho_size -= mouse.scroll_y;
     if(camera->ortho_size <= 3.0f)
         camera->ortho_size = 3.0f;
     if(camera->ortho_size >= 25.0f)
         camera->ortho_size = 25.0f;
-    
 }
 
 mat4* init_map(int amount, st_loaded_tile_map *tiles)

@@ -56,10 +56,8 @@ typedef struct
  */
 typedef struct
 {
-    float x_pos;
-    float y_pos;
-    float scroll_x;
-    float scroll_y;
+    double scroll_y;
+    double scroll_x;
 }st_mouse;
 
 
@@ -156,7 +154,7 @@ typedef enum
     CONTEXT_ACTION_PUSH, // On met en avant
     CONTEXT_ACTION_POP, // On retire
     CONTEXT_ACTION_REPLACE, // On remplace
-    CONTEXT_ACTION_QUIT // On quite
+    CONTEXT_ACTION_QUIT // On quitte
 }e_context_actions;
 
 typedef struct st_context_request

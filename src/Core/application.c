@@ -34,6 +34,9 @@ int init_application(){
     // On charge le premier context
     res = engine_state.context_tool.create_context(&main_menu_state);
     engine_state.context_tool.push_context(&main_menu_state, &engine_state.stack_context);
+    
+    link_input(engine_state.stack_context.current_state);
+    link_mouse(engine_state.stack_context.current_state);
 
     if(res != RES_ERROR)
     {    
@@ -58,7 +61,6 @@ void mainloop(st_engine *engine_state){
     //Définition des variables pour accorder la clock
     struct timespec ts_start, ts_end;
 
-    link_input(engine_state->stack_context.current_state);
         ////////////////////////////////////////////
         //                                        //
         //                Boucle                  //

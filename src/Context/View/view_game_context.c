@@ -61,7 +61,7 @@ void update_render_game(st_render_data *render)
     glm_translate(model, (vec3){0.0f, 0.0f, sin((float)glfwGetTime()*2)});
     
     render->camera.look(&render->camera);
-
+    
     glClearColor(num_to_01(24), num_to_01(32), num_to_01(61), 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
