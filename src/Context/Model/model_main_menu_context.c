@@ -18,9 +18,7 @@ void update_logic_main_menu(st_context *state)
         
         state->inputs.release[KEY_ESCAPE] = false;
     }
-   
-    /* On préviens l'autre thread que la lecture à bien été faite*/
-    state->inputs.ok = true;
+
 }
 
 /*

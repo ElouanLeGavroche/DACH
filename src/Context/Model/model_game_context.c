@@ -52,14 +52,11 @@ void update_logic_game(st_context *state)
     {
         move_camera(&state->render.camera, (state->render.camera.target > 0.0f) ? ROTATE_L : ROTATE_R);
     }
-
-    /* On préviens l'autre thread que la lecture à bien été faite*/
-    state->inputs.ok = true;
     
 }
 
 
-void move_camera(st_camera *camera, int dir)
+void move_camera(st_camera *camera, int dir, st_mouse *mouse)
 {
     switch (dir)
     {
@@ -93,6 +90,14 @@ void move_camera(st_camera *camera, int dir)
     default:
         break;
     }
+
+    // Gestion du zoom
+    if(camera->ortho_size >= 3.0f && camera->ortho_size <= 25.0f)
+        camera->ortho_size -= yoffset;
+    if(camera->ortho_size <= 3.0f)
+        camera->ortho_size = 3.0f;
+    if(camera->ortho_size >= 25.0f)
+        camera->ortho_size = 25.0f;
     
 }
 

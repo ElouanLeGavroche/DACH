@@ -4,6 +4,9 @@
 #include "context_stack.h"
 #include "context_group.h"
 
+#include "../Platform/glfw_input.h"
+#include "../Platform/glfw_mouse.h"
+
 #include "../Config/constantes.h"
 #include "../../types.h"
 #include "../../state.h"

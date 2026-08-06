@@ -44,10 +44,24 @@ typedef struct
     bool pressed[KEY_NUM];
     // Quand une touche est lachée
     bool release[KEY_NUM];
-    // Permet de savoir si l'autre thread a lu les informations
-    atomic_bool ok;
 
 }st_input;
+
+/**
+ * @brief Structure de la souris
+ * @param x_pos position de la souris en X sur l'écran
+ * @param y_pos position de la souris en y sur l'écran
+ * @param scroll_x scroll actuel de la souris en x
+ * @param scroll_y scroll actuel de la souris en y 
+ */
+typedef struct
+{
+    float x_pos;
+    float y_pos;
+    float scroll_x;
+    float scroll_y;
+}st_mouse;
+
 
 /**
  * @brief Structure qui contient les informations de la caméra
@@ -164,7 +178,8 @@ typedef struct st_context_request
  * @param st_context fonction qui initialisera la fenêtre.
  * @param update_logic_context fonction qui déroulera à chaque tick la logique du canva.
  * @param update_render_context fonction qui déroulera le rendu à chaque frame le rendu de la page.
- * @param inputs structure des entrée clavier.
+ * @param inputs structure des entrées clavier.
+ * @param mouse structure des déplacements de la souris
  * @param upper sont parent s'il en à un.
  * @param render données de rendu du context.
  * @param request gère les requête du context 
@@ -183,6 +198,8 @@ typedef struct st_context
 
     // Permet de stocker les inputs qui gérerons les actions en conséquent
     st_input inputs;
+    // Permet de stocker les mouvement de la souris et de les traiter
+    st_mouse mouse;
 
     struct st_context *upper;
     st_render_data render;
@@ -266,6 +283,8 @@ typedef struct
 {
     st_camera *camera;
     st_input *input;
+    st_mouse *mouse;
+
     st_loaded_windows_data *window;
 }st_window_user_data;
 

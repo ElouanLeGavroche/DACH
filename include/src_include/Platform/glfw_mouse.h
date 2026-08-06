@@ -7,5 +7,7 @@
 #include <GLFW/glfw3.h>
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void new_scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void link_mouse(st_context *state);
 
 #endif

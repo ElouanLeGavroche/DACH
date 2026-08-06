@@ -8,7 +8,8 @@ int init_application(){
     st_window_user_data user_data = {
         .camera = NULL,
         .input = NULL,
-        .window = &engine_state.window
+        .mouse = NULL,
+        .window = &engine_state.window  
     };
 
     // Initialisation des premières variables du moteur
