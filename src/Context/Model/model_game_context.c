@@ -99,7 +99,6 @@ void zoom_camera(st_camera *camera, st_mouse *mouse)
     // Gestion du zoom
     if(mouse->active_scroll_y == true)
     {
-        printf("%ld \n", mouse->active_scroll_y);
         if(camera->ortho_size >= 3.0f && camera->ortho_size <= 25.0f)
             camera->ortho_size -= mouse->scroll_y;
         if(camera->ortho_size <= 3.0f)

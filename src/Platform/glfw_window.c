@@ -64,10 +64,19 @@ int init_window(st_window_user_data *user_data, st_loaded_windows_data *window_d
         frame_rate_value = SCREEN_FRAME_RATE_DEFAUL;
     }
     // Allocation des informations de la fenêtre
-    window_data->size_x = size_x_value;
-    window_data->size_y = size_y_value;
-    window_data->frame_rate = frame_rate_value;
+    global_window = malloc(sizeof(st_loaded_windows_data));
+    if(!global_window)
+    {
+        fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
+        return RES_FAILED_MALLOC;
+    }
+
+    global_window->size_x = size_x_value;
+    global_window->size_y = size_y_value;
+    global_window->frame_rate = frame_rate_value;
     
+    window_data = global_window;
+
     // Initialiser les informations récupéré
     if (!glfwInit())
         return RES_ERROR;
@@ -103,8 +112,8 @@ int init_window(st_window_user_data *user_data, st_loaded_windows_data *window_d
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height){
 
-    if(window == NULL)
-    {
+    
+  
         st_window_user_data *data = glfwGetWindowUserPointer(window);
         if(data != NULL)
         {
@@ -117,9 +126,11 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height){
                 window_parametr->size_y = height;
 
                 camera->ratio = ((float)window_parametr->size_x / (float)window_parametr->size_y) * (4.0f / 3.0f);
+
+                gl_update_view_port(window_parametr->size_x, window_parametr->size_y);
             }
         }
-    }    
+    
 
 }
 
@@ -151,4 +162,10 @@ int window_should_close(){
     {
         return 0;
     }
+}
+
+
+st_loaded_windows_data *get_window_information()
+{
+    return global_window;
 }

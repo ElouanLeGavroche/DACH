@@ -12,6 +12,7 @@ void init_camera(st_camera *camera, float speed, float near, float far, float si
 
     camera->look = look;
     camera->camera_speed = camera_speed;
+    camera->update_ortho = update_ortho;
 
 }
 
@@ -186,4 +187,16 @@ void look(st_camera *camera)
 void camera_speed(st_camera *camera, float delta_time)
 {
     camera->actual_speed = camera->speed * delta_time;
+}
+
+void update_ortho(st_camera *camera)
+{
+    glm_ortho(
+        -camera->ortho_size * camera->ratio,
+        camera->ortho_size * camera->ratio,
+        -camera->ortho_size, camera->ortho_size, 
+        camera->far_z, 
+        camera->near_z, 
+        camera->projection
+    );
 }

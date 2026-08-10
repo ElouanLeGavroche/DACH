@@ -9,6 +9,8 @@
 
 #include "../../Platform/glfw_window.h"
 #include "../../Renderer/opengl_renderer.h"
+#include "../../Core/context_camera.h"
+#include "../../Renderer/renderer.h"
 
 #include "../../../../include/src_include/Shared_tools/Transform_openGL_values/colors.h"
 

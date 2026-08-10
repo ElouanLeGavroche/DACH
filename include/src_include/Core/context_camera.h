@@ -32,5 +32,6 @@ void set_up(st_camera *camera, vec3 up);
 /* Méthode publique (accessible en dehors de controller, model de camera)*/
 void look(st_camera *camera);
 void camera_speed(st_camera *camera, float delta_time);
+void update_ortho(st_camera *camera);
 
 #endif

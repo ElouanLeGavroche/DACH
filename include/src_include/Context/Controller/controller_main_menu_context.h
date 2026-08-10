@@ -8,6 +8,7 @@
 
 #include "../../Core/context_group.h"
 #include "../../Core/context_stack.h"
+#include "../../Core/context_camera.h"
 #include "../../Core/context_content.h"
 
 #include "../../../types.h"
