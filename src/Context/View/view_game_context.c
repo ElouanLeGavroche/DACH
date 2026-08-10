@@ -42,12 +42,5 @@ void create_an_instance_GPU(st_instanced *instance, mat4 *model, int amount)
 
 void update_render_game(st_render_data *render)
 {
-    int i;
-    /* 
-    On va en premier lieu calculer le temps que prend une frame à être fait
-    ainsi, la caméra ne dépendant plus de la vitesse du jeu .
-    */
-   printf("[RENDER] Camera Pos : %.3f %.3f %.3f | speel %.3f delta %.3f\n", render->camera.pos[0], render->camera.pos[1], render->camera.pos[2], render->camera.actual_speed, render->delta_time);
-    
     render_context(render);
 }

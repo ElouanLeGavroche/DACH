@@ -7,7 +7,6 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
       {
             if(data->mouse != NULL && data->camera != NULL)
             {
-                  st_camera *camera = data->camera;
                   st_mouse *mouse = data->mouse;
                   mouse->scroll_x = xoffset;
                   if(mouse->scroll_x != 0)

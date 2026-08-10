@@ -53,10 +53,7 @@ void update_logic_game(st_context *state)
         move_camera(&state->render.camera, (state->render.camera.target > 0.0f) ? ROTATE_L : ROTATE_R);
     }
 
-    zoom_camera(&state->render.camera, &state->mouse);
-
-    printf("[LOGIC] Camera Pos : %.3f %.3f %.3f | speel %.3f | delta %.3f\n", state->render.camera.pos[0], state->render.camera.pos[1], state->render.camera.pos[2], state->render.camera.actual_speed, state->render.delta_time);
-    
+    zoom_camera(&state->render.camera, &state->mouse);    
 }
 
 

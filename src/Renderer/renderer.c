@@ -11,12 +11,6 @@ void render_context(st_render_data *render)
     glm_mat4_identity(trans);
     glm_mat4_identity(view);
 
-
-    /* Gestion de la caméra et de ces déplacement*/
-    float radius = 10.0f;
-    float cam_x = sin(get_glfw_time()) * radius;
-    float cam_z = cos(get_glfw_time()) * radius;
-
     float current_frame = get_glfw_time();
     render->delta_time = current_frame - render->last_time;
     render->last_time = current_frame;
@@ -67,8 +61,8 @@ void render_context(st_render_data *render)
 
         case RENDER_GROUP_INSTANCED_MESH:
             
-            st_instanced_mesh_group *group = (st_instanced_mesh_group*)render->groups[i].data;
-            st_render_object *obj = group->shared_render_object;
+            st_instanced_mesh_group *inst_group = (st_instanced_mesh_group*)render->groups[i].data;
+            st_render_object *obj = inst_group->shared_render_object;
 
             glUseProgram(obj->material->shader->shader);
             glBindTexture(GL_TEXTURE_2D, obj->material->texture->id);
@@ -88,7 +82,7 @@ void render_context(st_render_data *render)
             // Lié le VAO
             glBindVertexArray(obj->mesh->VAO);
             
-            glDrawElementsInstanced(GL_TRIANGLES, obj->mesh->index_count, GL_UNSIGNED_INT, 0, group->st_instanced.count);
+            glDrawElementsInstanced(GL_TRIANGLES, obj->mesh->index_count, GL_UNSIGNED_INT, 0, inst_group->st_instanced.count);
             glBindVertexArray(0);
             
         break;
