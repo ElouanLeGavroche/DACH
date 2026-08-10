@@ -14,18 +14,16 @@ void render_context(st_render_data *render)
 
     /* Gestion de la caméra et de ces déplacement*/
     float radius = 10.0f;
-    float cam_x = sin(glfwGetTime()) * radius;
-    float cam_z = cos(glfwGetTime()) * radius;
+    float cam_x = sin(get_glfw_time()) * radius;
+    float cam_z = cos(get_glfw_time()) * radius;
 
-    float current_frame = glfwGetTime();
+    float current_frame = get_glfw_time();
     render->delta_time = current_frame - render->last_time;
     render->last_time = current_frame;
-    
+
+    render->camera.camera_speed(&render->camera, render->delta_time);
     render->camera.look(&render->camera);
     render->camera.update_ortho(&render->camera);
-    render->camera.camera_speed(&render->camera, render->delta_time);
-    
-
 
     glDepthFunc(GL_LESS);
     glClearColor(num_to_01(0), num_to_01(0), num_to_01(0), 1.0f);

@@ -8,7 +8,7 @@ void init_camera(st_camera *camera, float speed, float near, float far, float si
     set_ortho_size(camera, size);
     set_rotation(camera, rotation);
     set_ratio(camera);
-    set_actual_speed(camera, 0.0f);
+    set_actual_speed(camera, 1.0f);
 
     camera->look = look;
     camera->camera_speed = camera_speed;

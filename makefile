@@ -62,6 +62,7 @@ $(SAVE_EXEC)$(EXEC):\
 	$(PLATFORM)glfw_input.o\
 	$(PLATFORM)glfw_window.o\
 	$(PLATFORM)glfw_mouse.o\
+	$(PLATFORM)glfw_time.o\
 	\
 	$(RENDERER)opengl_renderer.o\
 	$(RENDERER)render_group.o\
