@@ -1,0 +1,4 @@
+#ifndef VIEW_PAUSE_MENU_CONTEXT
+#define VIEW_PAUSE_MENU_CONTEXT
+
+#endif

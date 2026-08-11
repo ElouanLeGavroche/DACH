@@ -1,0 +1,4 @@
+#ifndef MODEL_PAUSE_MENU_CONTEXT
+#define MODEL_PAUSE_MENU_CONTEXT
+
+#endif
