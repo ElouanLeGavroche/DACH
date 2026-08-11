@@ -146,7 +146,7 @@ typedef struct st_render_object
  */
 typedef struct st_instance_data
 {
-    mat4 model[16];
+    mat4 model;
 }st_instance_data;
 
 /**
