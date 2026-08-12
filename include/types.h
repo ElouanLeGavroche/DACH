@@ -232,8 +232,8 @@ typedef struct {
 /**
  * @brief table qui sert à géré les context.
  * 
- * @param push_context initialise le context
- * @param exit_context permet de retirer un context
+ * @param push_context Pousse le context dans la stack
+ * @param exit_context Retire le context de la stack
  * @param pause_context met en pause un context - lorsqu'un context est ajouter par dessus
  * @param resume_context réveil de ça pause une context - lorsque l'on revient sur lui
  * @param destroy_context supprime un context - supprime la structure
@@ -242,7 +242,7 @@ typedef struct
 {
     int (*create_context) (st_context *state);
     
-    void (*push_context) (st_context *new_context, st_stack *stack);
+    int (*push_context) (st_context *new_context, st_stack *stack);
     int (*exit_context)(st_stack *stack);
 
     void (*pause_context)(st_stack *my_stack);

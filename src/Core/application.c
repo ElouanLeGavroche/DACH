@@ -33,8 +33,19 @@ int init_application(){
 
     // On charge le premier context
     res = engine_state.context_tool.create_context(&main_menu_state);
-    engine_state.context_tool.push_context(&main_menu_state, &engine_state.stack_context);
-    
+    if(res != RES_DONE)
+    {
+        fprintf(stderr, "Echec de la création du contexte.\n");
+        return RES_ERROR;
+    }
+
+    res = engine_state.context_tool.push_context(&main_menu_state, &engine_state.stack_context);
+    if(res != RES_DONE)
+    {
+        fprintf(stderr, "Echec lors du poussage du contexte vers la stack.\n");
+        return RES_ERROR;
+    }
+
     link_input(engine_state.stack_context.current_context);
     link_mouse(engine_state.stack_context.current_context);
 

@@ -19,10 +19,20 @@ void context_request(st_engine *engine_state){
             // Gestion de l'err&engine_state->stack_context.current_context->ev_next_contexteur
             engine_state->running = false;
         }
-        engine_state->context_tool.push_context(new_state, &engine_state->stack_context);
+        else
+        {
 
-        link_input(engine_state->stack_context.current_context);
-        link_mouse(engine_state->stack_context.current_context);
+            res = engine_state->context_tool.push_context(new_state, &engine_state->stack_context);
+            if(res != RES_DONE)
+            {
+                fprintf(stderr, "Erreur lors du poussage du contexte dans la stack.\n");
+            }
+            else
+            {
+                link_input(engine_state->stack_context.current_context);
+                link_mouse(engine_state->stack_context.current_context);
+            }
+        }
         break;
 
     case CONTEXT_ACTION_POP:

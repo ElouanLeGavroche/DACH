@@ -13,7 +13,7 @@
 
 int link_context_tools_with_engine(vt_context_tool *tools);
 
-void push_context(st_context *new_context, st_stack *stack);
+int push_context(st_context *new_context, st_stack *stack);
 int exit_context(st_stack *stack);
 int create_context(st_context *new_state);
 #endif

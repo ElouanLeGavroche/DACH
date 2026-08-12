@@ -55,7 +55,7 @@ int exit_context(st_stack *stack)
     return return_status;
 }
 
-void push_context(st_context *new_context, st_stack *stack){
+void push_context_old(st_context *new_context, st_stack *stack){
     /**
      * 2 cas : 1 stack vide, ajout simple
      *         2 stack non vide, remplacement nécéssaire  
@@ -72,6 +72,34 @@ void push_context(st_context *new_context, st_stack *stack){
     // L'on incremente le niveau de profondeur
     stack->level_of_depth ++;
     printf("context ajouter\n");
+}
+
+int push_context(st_context *new_context, st_stack *stack)
+{
+    if(new_context == NULL)
+    {
+        fprintf(stderr, "Le nouveau context n'est pas prêt à être pousser.\n");
+        return RES_ERROR;
+    }
+
+    if(stack->level_of_depth == MAX_CONTEXT)
+    {
+        fprintf(stderr, "Erreur, limite de context atteint. Si vous voulez en mettre plus, modifier la valeur de MAX_CONTEXT.\n");
+        return RES_ERROR;
+    }
+    else
+    {
+        // Décalage des contextes
+        int i;
+        for(i = stack->level_of_depth; i > 0; i --) stack->stack_context[i + 1] = stack->stack_context[i];
+        stack->stack_context[0] = new_context;
+        stack->current_context = new_context;
+        
+
+        stack->level_of_depth ++;
+    }
+    printf("niveau de la stack : %d.\n", stack->level_of_depth);
+    return RES_DONE;
 }
 
 int pause_context();
