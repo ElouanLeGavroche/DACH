@@ -10,6 +10,7 @@
 #include <cglm/types.h>
 
 #include "src_include/Context/game_types.h"
+#include "src_include/Config/constantes.h"
 
 typedef struct st_engine st_engine;
 typedef struct st_context st_context;
@@ -218,11 +219,13 @@ typedef struct st_context
  * 
  * Si on et le jeu en pause, le canva pause prend le dessus sur le jeu, et quand on la quitte, le jeu reprend.
  * 
- * @param st_context Est une structure simple. Pour en savoir plus, cliquer dessus.
+ * @param stack_context La stack au global
+ * @param current_context Le context actuellement en tête de la stack
  * @param level_of_depth Niveau de profondeur de la state.
  */
 typedef struct {
-    st_context *current_state;
+    st_context *stack_context[MAX_CONTEXT];
+    st_context *current_context;
     int level_of_depth;
 }st_stack;
 

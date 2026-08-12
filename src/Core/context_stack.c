@@ -29,24 +29,24 @@ int link_context_tools_with_engine(vt_context_tool *tools)
 int exit_context(st_stack *stack)
 {
     int return_status = RES_DONE;
-    if(stack->current_state == NULL)
+    if(stack->current_context == NULL)
     {
         fprintf(stderr, "Le context est null.\n");
         return_status = RES_NULL_POINTER;
     }
     else
     {
-        if(stack->current_state->upper != NULL)
+        if(stack->current_context->upper != NULL)
         {
-            st_context *old_state = stack->current_state;
-            stack->current_state = old_state->upper;
+            st_context *old_state = stack->current_context;
+            stack->current_context = old_state->upper;
 
             //current_context = current_context->upper;
             // L'on incremente le niveau de profondeur
         }
         else
         {
-            stack->current_state = NULL;
+            stack->current_context = NULL;
             // L'on incremente le niveau de profondeur
             
         }
@@ -60,14 +60,14 @@ void push_context(st_context *new_context, st_stack *stack){
      * 2 cas : 1 stack vide, ajout simple
      *         2 stack non vide, remplacement nécéssaire  
      */    
-    if(stack->current_state != NULL)
+    if(stack->current_context != NULL)
     {
-        new_context->upper = stack->current_state;
+        new_context->upper = stack->current_context;
     }
-    stack->current_state = new_context;
+    stack->current_context = new_context;
     
     // On relie le clavier au nouveau context
-    link_input(stack->current_state);
+    link_input(stack->current_context);
 
     // L'on incremente le niveau de profondeur
     stack->level_of_depth ++;

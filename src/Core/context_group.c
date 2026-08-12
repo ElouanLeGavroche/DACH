@@ -301,7 +301,7 @@ int create_an_instance(int capacity, mat4 *model, st_instanced *dest)
     // Crée les instances
     for(i = 0; i < dest->capacity; i ++)
     {
-        glm_mat4_copy(model[i], *dest->cpu_data[i].model);
+        glm_mat4_copy(model[i], dest->cpu_data[i].model);
     }  
 
     return RES_DONE;

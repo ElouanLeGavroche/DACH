@@ -4,7 +4,7 @@ void context_request(st_engine *engine_state){
     // Ce tampon permet de savoir si le jeu est revenu à un etat entérieur
     // Et donc de recharger les éléments qui lui y étais associé
     int res = RES_DONE;
-    st_context_request *request = &engine_state->stack_context.current_state->request;
+    st_context_request *request = &engine_state->stack_context.current_context->request;
     int action = request->action;
     
     switch (action)
@@ -16,28 +16,28 @@ void context_request(st_engine *engine_state){
         res = engine_state->context_tool.create_context(new_state);
         if(res == RES_ERROR)
         {
-            // Gestion de l'err&engine_state->stack_context.current_state->ev_next_contexteur
+            // Gestion de l'err&engine_state->stack_context.current_context->ev_next_contexteur
             engine_state->running = false;
         }
         engine_state->context_tool.push_context(new_state, &engine_state->stack_context);
 
-        link_input(engine_state->stack_context.current_state);
-        link_mouse(engine_state->stack_context.current_state);
+        link_input(engine_state->stack_context.current_context);
+        link_mouse(engine_state->stack_context.current_context);
         break;
 
     case CONTEXT_ACTION_POP:
         
-        destroy_render_data(&engine_state->stack_context.current_state->render);
+        destroy_render_data(&engine_state->stack_context.current_context->render);
         engine_state->context_tool.exit_context(&engine_state->stack_context);
         // On relie le clavier au nouveau context
-        link_input(engine_state->stack_context.current_state);
-        link_mouse(engine_state->stack_context.current_state);
+        link_input(engine_state->stack_context.current_context);
+        link_mouse(engine_state->stack_context.current_context);
         break;
     
     case CONTEXT_ACTION_QUIT:
-        while(engine_state->stack_context.current_state != NULL)
+        while(engine_state->stack_context.current_context != NULL)
         {
-            destroy_render_data(&engine_state->stack_context.current_state->render);
+            destroy_render_data(&engine_state->stack_context.current_context->render);
             engine_state->context_tool.exit_context(&engine_state->stack_context);
         }
         

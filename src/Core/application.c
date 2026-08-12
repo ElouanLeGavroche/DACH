@@ -15,7 +15,7 @@ int init_application(){
     // Initialisation des premières variables du moteur
     engine_state.running = true;
     engine_state.stack_context.level_of_depth = 0;
-    engine_state.stack_context.current_state = NULL;
+    engine_state.stack_context.current_context = NULL;
 
     if(init_window(&user_data, &engine_state.window) != RES_DONE)
     {
@@ -35,8 +35,8 @@ int init_application(){
     res = engine_state.context_tool.create_context(&main_menu_state);
     engine_state.context_tool.push_context(&main_menu_state, &engine_state.stack_context);
     
-    link_input(engine_state.stack_context.current_state);
-    link_mouse(engine_state.stack_context.current_state);
+    link_input(engine_state.stack_context.current_context);
+    link_mouse(engine_state.stack_context.current_context);
 
     if(res != RES_ERROR)
     {    
@@ -78,10 +78,10 @@ void mainloop(st_engine *engine_state){
         view_clear();
         
         // Contenu //
-        engine_state->stack_context.current_state->update_logic_context(engine_state->stack_context.current_state);
+        engine_state->stack_context.current_context->update_logic_context(engine_state->stack_context.current_context);
 
         //Actual context
-        engine_state->stack_context.current_state->update_render_context(&engine_state->stack_context.current_state->render);
+        engine_state->stack_context.current_context->update_render_context(&engine_state->stack_context.current_context->render);
         
         /* on va regarder s'il y a eu des requête fait pour les contextes */
         context_request(engine_state);
