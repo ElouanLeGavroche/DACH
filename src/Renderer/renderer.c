@@ -19,9 +19,8 @@ void render_context(st_render_data *render)
     render->camera.look(&render->camera);
     render->camera.update_ortho(&render->camera);
 
-    glDepthFunc(GL_LESS);
-    glClearColor(num_to_01(0), num_to_01(0), num_to_01(0), 1.0f);
-    
+    glClearColor(num_to_01(0), num_to_01(0), num_to_01(12), 1.0f);
+    glEnable(GL_DEPTH_TEST);
     for(i = 0; i < render->nb_groups; i ++)
     {
         st_render_group *group = &render->groups[i];
@@ -40,10 +39,10 @@ void render_context(st_render_data *render)
                 glUniformMatrix4fv(model_loc, 1, GL_FALSE, *model);
 
                 int view_loc = glGetUniformLocation(mesh_group->objects[y].material->shader->shader, "view");
-                glUniformMatrix4fv(view_loc, 1, GL_FALSE, *view);
+                glUniformMatrix4fv(view_loc, 1, GL_FALSE, &render->camera.view[0][0]);
 
                 int proj_loc = glGetUniformLocation(mesh_group->objects[y].material->shader->shader, "projection");
-                glUniformMatrix4fv(proj_loc, 1, GL_FALSE, *proj);
+                glUniformMatrix4fv(proj_loc, 1, GL_FALSE, &render->camera.projection[0][0]);
 
                 transform_loc = glGetUniformLocation(mesh_group->objects[y].material->shader->shader, "transform");
                 glUniformMatrix4fv(transform_loc, 1, GL_FALSE, *trans);
@@ -91,5 +90,4 @@ void render_context(st_render_data *render)
             break;
         }
     }
-    
 }
