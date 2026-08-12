@@ -38,17 +38,29 @@ void context_request(st_engine *engine_state){
     case CONTEXT_ACTION_POP:
         
         destroy_render_data(&engine_state->stack_context.current_context->render);
-        engine_state->context_tool.exit_context(&engine_state->stack_context);
-        // On relie le clavier au nouveau context
-        link_input(engine_state->stack_context.current_context);
-        link_mouse(engine_state->stack_context.current_context);
+        res = engine_state->context_tool.exit_context(&engine_state->stack_context);
+        if(res != RES_DONE)
+        {
+            fprintf(stderr, "Erreur lors de la sortie du context de la stack.\n");
+        }
+        else
+        {
+            // On relie le clavier au nouveau context
+            link_input(engine_state->stack_context.current_context);
+            link_mouse(engine_state->stack_context.current_context);
+        }
         break;
     
     case CONTEXT_ACTION_QUIT:
         while(engine_state->stack_context.current_context != NULL)
         {
             destroy_render_data(&engine_state->stack_context.current_context->render);
-            engine_state->context_tool.exit_context(&engine_state->stack_context);
+            res = engine_state->context_tool.exit_context(&engine_state->stack_context);
+            
+            if(res != RES_DONE)
+            {
+                fprintf(stderr, "Erreur lors de la sortie du context de la stack.\n");
+            }
         }
         
         engine_state->running = false;

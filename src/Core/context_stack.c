@@ -25,36 +25,6 @@ int link_context_tools_with_engine(vt_context_tool *tools)
     return RES_DONE;
 }
 
-// Essaie de structure file pour les etats
-int old_exit_context(st_stack *stack)
-{
-    int return_status = RES_DONE;
-    if(stack->current_context == NULL)
-    {
-        fprintf(stderr, "Le context est null.\n");
-        return_status = RES_NULL_POINTER;
-    }
-    else
-    {
-        if(stack->current_context->upper != NULL)
-        {
-            st_context *old_state = stack->current_context;
-            stack->current_context = old_state->upper;
-
-            //current_context = current_context->upper;
-            // L'on incremente le niveau de profondeur
-        }
-        else
-        {
-            stack->current_context = NULL;
-            // L'on incremente le niveau de profondeur
-            
-        }
-        stack->level_of_depth --;
-    }
-    return return_status;
-}
-
 int exit_context(st_stack *stack)
 {
     int return_status = RES_DONE;
@@ -68,12 +38,18 @@ int exit_context(st_stack *stack)
         if(stack->level_of_depth > 1)
         {
             int i;
-            printf("oyoto\n");
-            printf("l'id %d\n", stack->stack_context[0]->render.nb_groups);
+            for(i = 0; i < stack->level_of_depth + 1; i ++) 
+            {
+                printf("les id's %d : %d\n", i, stack->stack_context[i]->id);
+            }
             for(i = 0; i < stack->level_of_depth; i ++) stack->stack_context[i] = stack->stack_context[i + 1];
-            printf("oyoto\n");
-            printf("l'id %d\n", stack->stack_context[0]->id);
             stack->current_context = stack->stack_context[0];
+
+            if(stack->current_context == NULL || stack->stack_context[0] == NULL)
+            {
+                fprintf(stderr, "Quelque chose c'est mal passé.\n");
+                return RES_NULL_POINTER;
+            }
         }
         else
         {
@@ -103,14 +79,13 @@ int push_context(st_context *new_context, st_stack *stack)
     {
         // Décalage des contextes
         int i;
-        for(i = stack->level_of_depth; i > 0; i --) stack->stack_context[i + 1] = stack->stack_context[i];
+        for(i = stack->level_of_depth; i >= 0; i --) stack->stack_context[i + 1] = stack->stack_context[i];
         stack->stack_context[0] = new_context;
         stack->current_context = new_context;
         
 
         stack->level_of_depth ++;
     }
-    printf("niveau de la stack : %d.\n", stack->level_of_depth);
     return RES_DONE;
 }
 
