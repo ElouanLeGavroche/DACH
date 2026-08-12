@@ -20,7 +20,6 @@ struct st_context main_menu_state =
     .update_logic_context = controller_update_logic_main_menu,
     .update_render_context = controller_update_render_main_menu,
     .inputs = {0},
-    .upper = NULL
 };
 
 int init_menu(st_context *state)

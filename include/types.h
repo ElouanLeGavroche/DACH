@@ -186,7 +186,6 @@ typedef struct st_context_request
  * @param update_render_context fonction qui déroulera le rendu à chaque frame le rendu de la page.
  * @param inputs structure des entrées clavier.
  * @param mouse structure des déplacements de la souris
- * @param upper sont parent s'il en à un.
  * @param render données de rendu du context.
  * @param request gère les requête du context 
 */
@@ -207,7 +206,6 @@ typedef struct st_context
     // Permet de stocker les mouvement de la souris et de les traiter
     st_mouse mouse;
 
-    struct st_context *upper;
     st_render_data render;
 
     st_context_request request;
