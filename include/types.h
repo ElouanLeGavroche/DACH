@@ -173,6 +173,22 @@ typedef struct st_context_request
 
 
 /**
+ * @brief Cette structure est TRÈS importante... En effet, elle permet de dire si un context va afficher, actualiser ou géré les inputs
+ * de son parent. Il est d'ailleurs recursrive : La pause affiche simplement son parent, qui est l'UI et lui affiche, gère les input, et actualise
+ * son parent qui est le jeu, mais il ne peux pas l'actualiser, car la pause lui block l'actualisation.
+ * 
+ * @param render_bellow rendre le parent
+ * @param input_bellow prendre en compte les entrées du parent
+ * @param update_bellow met à jour la logique du parent
+ */
+typedef struct st_context_politicy
+{
+    bool render_bellow;
+    bool input_bellow;
+    bool update_bellow;
+}st_context_politicy;
+
+/**
  * @brief Structure (presque class) qui contient deux catégorie d'élément
  * 
  * 1 - Des pointeurs de fonction, celle-ci servent à y placer de manière efficaces toutes les page de l'application
@@ -205,8 +221,10 @@ typedef struct st_context
     st_input inputs;
     // Permet de stocker les mouvement de la souris et de les traiter
     st_mouse mouse;
-
+    // Permet de stocker les information de rendu
     st_render_data render;
+
+    st_context_politicy politicy;
 
     st_context_request request;
 }st_context;

@@ -38,10 +38,6 @@ int exit_context(st_stack *stack)
         if(stack->level_of_depth > 1)
         {
             int i;
-            for(i = 0; i < stack->level_of_depth + 1; i ++) 
-            {
-                printf("les id's %d : %d\n", i, stack->stack_context[i]->id);
-            }
             for(i = 0; i < stack->level_of_depth; i ++) stack->stack_context[i] = stack->stack_context[i + 1];
             stack->current_context = stack->stack_context[0];
 

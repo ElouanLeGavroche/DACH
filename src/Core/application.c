@@ -88,12 +88,16 @@ void mainloop(st_engine *engine_state){
 
         view_clear();
         
-        // Contenu //
-        engine_state->stack_context.current_context->update_logic_context(engine_state->stack_context.current_context);
-
-        //Actual context
-        engine_state->stack_context.current_context->update_render_context(&engine_state->stack_context.current_context->render);
-        
+        /**
+         * Il y a ici une gestion du rendu/log/input du contexte actuel, mais aussi, et surtout, une gestion du rendu/log/input des contextes
+         * parents, en fonction des politique du contexe actuel.
+         */
+        // Logique //
+        //engine_state->stack_context.current_context->update_logic_context(engine_state->stack_context.current_context);
+        update_logique(engine_state->stack_context, 0);
+        // Rendu //
+        //engine_state->stack_context.current_context->update_render_context(&engine_state->stack_context.current_context->render);
+        update_render(engine_state->stack_context, 0);
         /* on va regarder s'il y a eu des requête fait pour les contextes */
         context_request(engine_state);
 
@@ -107,4 +111,23 @@ void mainloop(st_engine *engine_state){
     }
     
     view_close_window();
+}
+
+void update_logique(st_stack stack, int depth)
+{
+    if(stack.stack_context[depth]->politicy.update_bellow == true && depth != stack.level_of_depth)
+    {
+        update_logique(stack, depth + 1);
+    }
+    stack.stack_context[depth]->update_logic_context(stack.stack_context[depth]);
+
+}
+
+void update_render(st_stack stack, int depth)
+{
+    if(stack.stack_context[depth]->politicy.render_bellow == true && depth != stack.level_of_depth)
+    {
+        update_render(stack, depth + 1);
+    }
+    stack.stack_context[depth]->update_render_context(&stack.stack_context[depth]->render);
 }
