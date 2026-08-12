@@ -26,7 +26,7 @@ int link_context_tools_with_engine(vt_context_tool *tools)
 }
 
 // Essaie de structure file pour les etats
-int exit_context(st_stack *stack)
+int old_exit_context(st_stack *stack)
 {
     int return_status = RES_DONE;
     if(stack->current_context == NULL)
@@ -55,25 +55,36 @@ int exit_context(st_stack *stack)
     return return_status;
 }
 
-void push_context_old(st_context *new_context, st_stack *stack){
-    /**
-     * 2 cas : 1 stack vide, ajout simple
-     *         2 stack non vide, remplacement nécéssaire  
-     */    
-    if(stack->current_context != NULL)
+int exit_context(st_stack *stack)
+{
+    int return_status = RES_DONE;
+    if(stack->current_context == NULL)
     {
-        new_context->upper = stack->current_context;
+        fprintf(stderr, "Le context est null.\n");
+        return_status = RES_NULL_POINTER;
     }
-    stack->current_context = new_context;
-    
-    // On relie le clavier au nouveau context
-    link_input(stack->current_context);
+    else
+    {
+        if(stack->level_of_depth > 1)
+        {
+            int i;
+            printf("ok 1\n");
+            stack->current_context = stack->stack_context[1];
+            for(i = 0; i < stack->level_of_depth; i ++) stack->stack_context[i] = stack->stack_context[i + 1];
+            printf("C'est fait.\n");
+        }
+        else
+        {
+            printf("ok 2\n");
+            stack->current_context = NULL;
+            stack->stack_context[0] = NULL;
+        }
 
-    // L'on incremente le niveau de profondeur
-    stack->level_of_depth ++;
-    printf("context ajouter\n");
+        stack->level_of_depth --;
+    }
+
+    return return_status;
 }
-
 int push_context(st_context *new_context, st_stack *stack)
 {
     if(new_context == NULL)
