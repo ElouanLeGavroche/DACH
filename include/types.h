@@ -260,10 +260,6 @@ typedef struct
     
     int (*push_context) (st_context *new_context, st_stack *stack);
     int (*exit_context)(st_stack *stack);
-
-    void (*pause_context)(st_stack *my_stack);
-    void (*resume_context)(st_stack *my_stack);
-    void (*destroy_context)(st_stack *my_stack);
     
 }vt_context_tool;
 

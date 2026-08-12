@@ -85,9 +85,6 @@ int push_context(st_context *new_context, st_stack *stack)
     return RES_DONE;
 }
 
-int pause_context();
-int resume_context();
-
 int create_context(st_context *new_state)
 {
     int res;
