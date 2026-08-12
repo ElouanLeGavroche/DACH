@@ -68,14 +68,15 @@ int exit_context(st_stack *stack)
         if(stack->level_of_depth > 1)
         {
             int i;
-            printf("ok 1\n");
-            stack->current_context = stack->stack_context[1];
+            printf("oyoto\n");
+            printf("l'id %d\n", stack->stack_context[0]->render.nb_groups);
             for(i = 0; i < stack->level_of_depth; i ++) stack->stack_context[i] = stack->stack_context[i + 1];
-            printf("C'est fait.\n");
+            printf("oyoto\n");
+            printf("l'id %d\n", stack->stack_context[0]->id);
+            stack->current_context = stack->stack_context[0];
         }
         else
         {
-            printf("ok 2\n");
             stack->current_context = NULL;
             stack->stack_context[0] = NULL;
         }
