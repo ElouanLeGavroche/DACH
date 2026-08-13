@@ -1,12 +1,5 @@
 #include "../../../include/src_include/Context/Controller/controller_game_context.h"
 
-
-typedef enum
-{
-    OTHER,
-    INSTANCED_GROUP
-}e_group_name;
-
 typedef enum
 {
     TILE
@@ -58,9 +51,9 @@ void controller_update_logic_game(st_context *state)
     update_logic_game(state);
 }
 
-void controller_update_render_game(st_render_data *render)
+void controller_update_render_game(st_render_data *render, double time)
 {
-    update_render_game(render);
+    update_render_game(render, time);
 }
 
 int controller_create_world(st_context *state)
@@ -138,4 +131,21 @@ int controller_create_world(st_context *state)
     map = NULL;
 
     return RES_DONE;
+}
+
+st_context* create_game_context()
+{
+    struct st_context *main_menu_state = malloc(sizeof(st_context));
+
+    main_menu_state->id = C_MAIN_MENU;
+    
+    main_menu_state->init_state = init_game;
+    main_menu_state->update_logic_context = controller_update_logic_game;
+    main_menu_state->update_render_context = controller_update_render_game;
+
+    main_menu_state->politicy.input_bellow = false;
+    main_menu_state->politicy.render_bellow = true;
+    main_menu_state->politicy.update_bellow = false;
+
+    return main_menu_state;
 }

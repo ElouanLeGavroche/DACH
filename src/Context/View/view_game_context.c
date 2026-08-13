@@ -40,7 +40,7 @@ void create_an_instance_GPU(st_instanced *instance, mat4 *model, int amount)
     instance->vbo = instance_vbo;
 }
 
-void update_render_game(st_render_data *render)
+void update_render_game(st_render_data *render, double time)
 {
-    render_context(render);
+    render_context(render, time);
 }

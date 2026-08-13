@@ -29,17 +29,23 @@ int init_application(){
         return RES_ERROR;
     }
 
+    // On crée le dictionnaire des context
+    engine_state.all_contexts[C_GAME] = create_game_context;
+    engine_state.all_contexts[C_MAIN_MENU] = create_main_menu_context;
+    engine_state.all_contexts[C_PAUSE_MENU] = create_pause_menu_context;
+
     init_opengl();
 
     // On charge le premier context
-    res = engine_state.context_tool.create_context(&main_menu_state);
-    if(res != RES_DONE)
+
+    st_context *temp = engine_state.all_contexts[C_MAIN_MENU]();
+    if(temp == NULL)
     {
-        fprintf(stderr, "Echec de la création du contexte.\n");
+        fprintf(stderr, "Erreur lors de la création du context.\n");
         return RES_ERROR;
     }
 
-    res = engine_state.context_tool.push_context(&main_menu_state, &engine_state.stack_context);
+    res = engine_state.context_tool.push_context(temp, &engine_state.stack_context);
     if(res != RES_DONE)
     {
         fprintf(stderr, "Echec lors du poussage du contexte vers la stack.\n");
@@ -92,12 +98,12 @@ void mainloop(st_engine *engine_state){
          * Il y a ici une gestion du rendu/log/input du contexte actuel, mais aussi, et surtout, une gestion du rendu/log/input des contextes
          * parents, en fonction des politique du contexe actuel.
          */
+
         // Logique //
-        //engine_state->stack_context.current_context->update_logic_context(engine_state->stack_context.current_context);
         update_logique(engine_state->stack_context, 0);
         // Rendu //
-        //engine_state->stack_context.current_context->update_render_context(&engine_state->stack_context.current_context->render);
         update_render(engine_state->stack_context, 0);
+
         /* on va regarder s'il y a eu des requête fait pour les contextes */
         context_request(engine_state);
 
@@ -129,5 +135,5 @@ void update_render(st_stack stack, int depth)
     {
         update_render(stack, depth + 1);
     }
-    stack.stack_context[depth]->update_render_context(&stack.stack_context[depth]->render);
+    stack.stack_context[depth]->update_render_context(&stack.stack_context[depth]->render, get_glfw_time());
 }

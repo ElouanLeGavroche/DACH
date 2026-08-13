@@ -18,7 +18,7 @@
 #define BASIC_TILE_PATH "ressources/tiles/tile.obj"
 #define BASIC_HOUSE_PATH "ressources/houses/house.obj"
 
-void update_render_game(st_render_data *render);
+void update_render_game(st_render_data *render, double time);
 void init_render_game(st_render_data *render);
 void create_an_instance_GPU(st_instanced *instance, mat4 *model, int amount);
 void init_game_camera(st_camera *camera);

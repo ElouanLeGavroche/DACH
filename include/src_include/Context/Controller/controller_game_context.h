@@ -19,7 +19,9 @@
 
 #include "../../../state.h"
 
-void controller_update_render_game(st_render_data *render);
+st_context* create_game_context();
+
+void controller_update_render_game(st_render_data *render, double time);
 int init_game(st_context *state);
 int controller_create_world(st_context *state);
 void controller_update_logic_game(st_context *state);

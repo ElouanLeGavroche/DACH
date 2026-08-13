@@ -1,6 +1,6 @@
 #include "../../include/src_include/Renderer/renderer.h"
 
-void render_context(st_render_data *render)
+void render_context(st_render_data *render, double time)
 {
     int i;
     unsigned int transform_loc;
@@ -11,9 +11,8 @@ void render_context(st_render_data *render)
     glm_mat4_identity(trans);
     glm_mat4_identity(view);
 
-    float current_frame = get_glfw_time();
-    render->delta_time = current_frame - render->last_time;
-    render->last_time = current_frame;
+    render->delta_time = time - render->last_time;
+    render->last_time = time;
 
     render->camera.camera_speed(&render->camera, render->delta_time);
     render->camera.look(&render->camera);

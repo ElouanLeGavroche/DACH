@@ -11,7 +11,7 @@ void context_request(st_engine *engine_state){
     {
     case CONTEXT_ACTION_PUSH:
         st_context *new_state;
-        new_state = &game_state; 
+        new_state = engine_state->all_contexts[request->target](); 
 
         res = engine_state->context_tool.create_context(new_state);
         if(res == RES_ERROR)

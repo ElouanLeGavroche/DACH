@@ -152,6 +152,7 @@ typedef enum e_context_list{
 
     C_MAIN_MENU,
     C_GAME,
+    C_PAUSE_MENU,
 
     C_NUM
 } e_context_list;
@@ -215,7 +216,7 @@ typedef struct st_context
     // La logique ne connaitra que les model
     void (*update_logic_context)(st_context *state);
     // Le rendu ne connait que les données liée au rendu
-    void (*update_render_context)(st_render_data *render);
+    void (*update_render_context)(st_render_data *render, double time);
 
     // Permet de stocker les inputs qui gérerons les actions en conséquent
     st_input inputs;
@@ -271,6 +272,8 @@ typedef struct {
     float frame_rate;
 }st_loaded_windows_data;
 
+typedef st_context *(*dict_register)(void);
+
 /**
  * @brief Structure du moteur.
  * 
@@ -295,6 +298,8 @@ typedef struct st_engine
     vt_context_tool context_tool;
 
     st_loaded_windows_data window;
+
+    dict_register all_contexts[C_NUM];
     
 } st_engine;
 

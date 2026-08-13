@@ -6,10 +6,7 @@ bool context_group_is_null(st_render_group *group)
 }
 
 int context_group_init(st_render_group *group, int id, e_render_group_type type)
-{
-
-    // Allouer de la mémoire au group
- 
+{ 
     
     // Création de l'id
     group->ID = id;

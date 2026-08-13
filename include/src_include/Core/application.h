@@ -15,6 +15,7 @@
 
 #include "../Platform/glfw_window.h"
 #include "../Platform/glfw_input.h"
+#include "../Platform/glfw_time.h"
 
 #include "../Renderer/opengl_renderer.h"
 

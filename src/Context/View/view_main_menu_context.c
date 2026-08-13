@@ -10,7 +10,7 @@ void init_render_main_menu(st_render_data *render)
     st_window_user_data *data = glfwGetWindowUserPointer(window);
     data->camera = &render->camera;
 }
-void update_render_main_menu(st_render_data *render)
+void update_render_main_menu(st_render_data *render, double time)
 {
-    render_context(render);   
+    render_context(render, time);   
 }
