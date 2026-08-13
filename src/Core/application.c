@@ -100,7 +100,7 @@ void mainloop(st_engine *engine_state){
          */
 
         // Mettre à jour le temps du jeu //
-        engine_state->dt_time = last - get_glfw_time();
+        engine_state->dt_time =  get_glfw_time() - last;
         last = get_glfw_time();
 
         // Logique //
