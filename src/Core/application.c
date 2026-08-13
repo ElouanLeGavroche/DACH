@@ -4,7 +4,7 @@ int init_application(){
     int res;
 
     // Stock des informations pour le moteur
-    st_engine engine_state;
+    st_engine engine_state = {0};
     st_window_user_data user_data = {
         .camera = NULL,
         .input = NULL,
@@ -44,6 +44,12 @@ int init_application(){
         fprintf(stderr, "Erreur lors de la création du context.\n");
         return RES_ERROR;
     }
+    res = engine_state.context_tool.create_context(temp);
+    if(res != RES_DONE)
+    {
+        fprintf(stderr, "Echec lors du la création du contexte.\n");
+        return RES_ERROR;
+    }
 
     res = engine_state.context_tool.push_context(temp, &engine_state.stack_context);
     if(res != RES_DONE)
@@ -55,16 +61,9 @@ int init_application(){
     link_input(engine_state.stack_context.current_context);
     link_mouse(engine_state.stack_context.current_context);
 
-    if(res != RES_ERROR)
-    {    
-        /* -4- entrer dans les mains loops */
-        mainloop(&engine_state);
-    }
-    else
-    {
-        fprintf(stderr, "Erreur lors de l'initialisation du contexte.\n");
-        return EXIT_FAILURE;
-    }
+
+    mainloop(&engine_state);
+
     return EXIT_SUCCESS;
     
 }
@@ -131,8 +130,9 @@ void update_logique(st_stack stack, int depth)
 
 void update_render(st_stack stack, int depth)
 {
-    if(stack.stack_context[depth]->politicy.render_bellow == true && depth != stack.level_of_depth)
+    if(stack.stack_context[depth]->politicy.render_bellow == true)
     {
+        printf("ijj %d\n", depth);
         update_render(stack, depth + 1);
     }
     stack.stack_context[depth]->update_render_context(&stack.stack_context[depth]->render, get_glfw_time());

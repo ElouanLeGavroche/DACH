@@ -77,7 +77,7 @@ void controller_update_render_main_menu(st_render_data *render, double time)
 
 st_context* create_main_menu_context()
 {
-    st_context *main_menu_state = malloc(sizeof(st_context));
+    st_context *main_menu_state = calloc(sizeof(st_context), sizeof(st_context));
     if(!main_menu_state)
     {
         fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
@@ -93,6 +93,16 @@ st_context* create_main_menu_context()
     main_menu_state->politicy.render_bellow = false;
     main_menu_state->politicy.update_bellow = false;
 
-    main_menu_state->init_state(main_menu_state);
+    main_menu_state->render.groups = NULL;
+    main_menu_state->render.nb_groups = 0;
+    main_menu_state->render.nb_total_groups = 0;
+
+    main_menu_state->request.action = CONTEXT_ACTION_NONE;
+    main_menu_state->request.target = C_NONE;
+
+    main_menu_state->inputs.down == false;
+    main_menu_state->inputs.pressed == false;
+    main_menu_state->inputs.release == false;
+
     return main_menu_state;
 }

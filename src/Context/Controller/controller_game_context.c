@@ -18,11 +18,6 @@ int init_game(st_context *state)
 {
     printf("début de l'initiation\n");
 
-    /* Initialisation de la politique du context */
-    state->politicy.input_bellow = false;
-    state->politicy.render_bellow = true;
-    state->politicy.update_bellow = false;
-
     // Paramètre de la caméra 
     init_camera(&state->render.camera, 30.0f, 1000.0f, -1000.0f, 100.0f, 45.0f);
     init_camera_vector(&state->render.camera, (vec3){2.0f, 2.0f, 2.0f}, (vec3){0.450f, 0.250f, 0.450f}, (vec3){0.0f, 1.0f, 0.0f});
@@ -135,17 +130,28 @@ int controller_create_world(st_context *state)
 
 st_context* create_game_context()
 {
-    struct st_context *main_menu_state = malloc(sizeof(st_context));
+    struct st_context *game_state = calloc(sizeof(st_context), sizeof(st_context));
 
-    main_menu_state->id = C_MAIN_MENU;
+    game_state->id = C_GAME;
     
-    main_menu_state->init_state = init_game;
-    main_menu_state->update_logic_context = controller_update_logic_game;
-    main_menu_state->update_render_context = controller_update_render_game;
+    game_state->init_state = init_game;
+    game_state->update_logic_context = controller_update_logic_game;
+    game_state->update_render_context = controller_update_render_game;
 
-    main_menu_state->politicy.input_bellow = false;
-    main_menu_state->politicy.render_bellow = true;
-    main_menu_state->politicy.update_bellow = false;
+    game_state->politicy.input_bellow = false;
+    game_state->politicy.render_bellow = false;
+    game_state->politicy.update_bellow = false;
 
-    return main_menu_state;
+    game_state->render.groups = NULL;
+    game_state->render.nb_groups = 0;
+    game_state->render.nb_total_groups = 0;
+
+    game_state->request.action = CONTEXT_ACTION_NONE;
+    game_state->request.target = C_NONE;
+
+    game_state->inputs.down == false;
+    game_state->inputs.pressed == false;
+    game_state->inputs.release == false;
+
+    return game_state;
 }
