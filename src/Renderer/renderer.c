@@ -11,10 +11,7 @@ void render_context(st_render_data *render, double time)
     glm_mat4_identity(trans);
     glm_mat4_identity(view);
 
-    render->delta_time = time - render->last_time;
-    render->last_time = time;
-
-    render->camera.camera_speed(&render->camera, render->delta_time);
+    render->camera.camera_speed(&render->camera, time);
     render->camera.look(&render->camera);
     render->camera.update_ortho(&render->camera);
 

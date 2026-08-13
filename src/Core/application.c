@@ -76,6 +76,7 @@ void mainloop(st_engine *engine_state){
 
     //Définition des variables pour accorder la clock
     struct timespec ts_start, ts_end;
+    double last = 0;
 
         ////////////////////////////////////////////
         //                                        //
@@ -98,10 +99,14 @@ void mainloop(st_engine *engine_state){
          * parents, en fonction des politique du contexe actuel.
          */
 
+        // Mettre à jour le temps du jeu //
+        engine_state->dt_time = last - get_glfw_time();
+        last = get_glfw_time();
+
         // Logique //
-        update_logique(engine_state->stack_context, 0);
+        update_logique(engine_state->stack_context, 0, engine_state->dt_time);
         // Rendu //
-        update_render(engine_state->stack_context, 0);
+        update_render(engine_state->stack_context, 0, engine_state->dt_time);
 
         /* on va regarder s'il y a eu des requête fait pour les contextes */
         context_request(engine_state);
@@ -117,22 +122,22 @@ void mainloop(st_engine *engine_state){
     view_close_window();
 }
 
-void update_logique(st_stack stack, int depth)
+void update_logique(st_stack stack, int depth, double dt)
 {
     if(stack.stack_context[depth]->politicy.update_bellow == true && depth != stack.level_of_depth)
     {
-        update_logique(stack, depth + 1);
+        update_logique(stack, depth + 1, dt);
     }
     stack.stack_context[depth]->update_logic_context(stack.stack_context[depth]);
 
 }
 
-void update_render(st_stack stack, int depth)
+void update_render(st_stack stack, int depth, double dt)
 {
     if(stack.stack_context[depth]->politicy.render_bellow == true)
     {
         printf("ijj %d\n", depth);
-        update_render(stack, depth + 1);
+        update_render(stack, depth + 1, dt);
     }
-    stack.stack_context[depth]->update_render_context(&stack.stack_context[depth]->render, get_glfw_time());
+    stack.stack_context[depth]->update_render_context(&stack.stack_context[depth]->render, dt);
 }

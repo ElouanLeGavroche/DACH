@@ -61,3 +61,9 @@ void get_time(struct timespec *dest)
 {
     clock_gettime(CLOCK_MONOTONIC, dest);
 }
+
+void get_delta(double *dt, double *last)
+{
+    *dt = *last - get_glfw_time();
+    *last = get_glfw_time();
+}

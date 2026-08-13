@@ -136,10 +136,6 @@ typedef struct st_render_data{
 
     st_camera camera;
 
-    // Variables qui me permettront de géré le déplacement de la caméra indépendamment de la clock
-    float delta_time;
-    float last_time;
-
 }st_render_data;
 
 /**
@@ -287,6 +283,9 @@ typedef st_context *(*dict_register)(void);
  * @param running pour savoir si le jeu tourne
  * @param stack_context structure des contexts du moteur
  * @param context_tool petite boite à outil pour géré les contexts
+ * @param st_loaded_windows_data les informations de la fenêtre
+ * @param dict_register la liste des context du jeu sous forme d'un dictionnaire pour avoir accès à leur initialisateur
+ * @param dt_time le temps du jeu
  */
 typedef struct st_engine
 {
@@ -300,6 +299,8 @@ typedef struct st_engine
     st_loaded_windows_data window;
 
     dict_register all_contexts[C_NUM];
+
+    double dt_time;
     
 } st_engine;
 

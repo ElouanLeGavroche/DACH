@@ -23,7 +23,7 @@
 int init_application();
 void mainloop(st_engine *engine_state);
 
-void update_logique(st_stack stack, int depth);
-void update_render(st_stack stack, int depth);
+void update_logique(st_stack stack, int depth, double dt);
+void update_render(st_stack stack, int depth, double dt);
 
 #endif
