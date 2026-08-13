@@ -136,7 +136,6 @@ void update_render(st_stack stack, int depth, double dt)
 {
     if(stack.stack_context[depth]->politicy.render_bellow == true)
     {
-        printf("ijj %d\n", depth);
         update_render(stack, depth + 1, dt);
     }
     stack.stack_context[depth]->update_render_context(&stack.stack_context[depth]->render, dt);

@@ -5,15 +5,6 @@ typedef enum
     TILE
 }e_elt_name;
 
-struct st_context game_state =
-{
-    .id =  C_GAME,
-    .init_state = init_game,
-    .update_logic_context = controller_update_logic_game,
-    .update_render_context = controller_update_render_game,
-    .inputs = {0},
-};
-
 int init_game(st_context *state)
 {
     printf("début de l'initiation\n");
@@ -148,10 +139,6 @@ st_context* create_game_context()
 
     game_state->request.action = CONTEXT_ACTION_NONE;
     game_state->request.target = C_NONE;
-
-    game_state->inputs.down == false;
-    game_state->inputs.pressed == false;
-    game_state->inputs.release == false;
 
     return game_state;
 }

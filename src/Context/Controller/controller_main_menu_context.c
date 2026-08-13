@@ -100,9 +100,5 @@ st_context* create_main_menu_context()
     main_menu_state->request.action = CONTEXT_ACTION_NONE;
     main_menu_state->request.target = C_NONE;
 
-    main_menu_state->inputs.down == false;
-    main_menu_state->inputs.pressed == false;
-    main_menu_state->inputs.release == false;
-
     return main_menu_state;
 }
