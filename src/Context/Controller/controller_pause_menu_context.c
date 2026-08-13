@@ -1,7 +1,30 @@
 #include "../../../include/src_include/Context/Controller/controller_pause_menu_context.h"
 
+typedef enum
+{
+    MAIN_GROUP
+}e_group_name;
+
 int init_pause_menu(st_context *state)
 {
+    int res;
+
+    init_camera(&state->render.camera, 0.0f, 1000.0f, -1000.0f, 2.0f, 0.0f);
+    init_camera_vector(&state->render.camera, (vec3){0.0f, 0.0f, 0.0f}, (vec3){0.0f, 0.0f, 1.0f}, (vec3){0.0f, 1.0f, 0.0f});
+    init_camera_view(&state->render.camera);
+
+    init_render_main_menu(&state->render);
+
+
+    res = add_group(&state->render, MAIN_GROUP);
+    if(!res != RES_DONE)
+    {
+        fprintf(stderr, "Erreur lors de la création du groupe.\n");
+        return RES_ERROR;
+    }
+
+    st_render_group *group = get_group(state->render.groups, 0, state->render.nb_total_groups);
+    
     return RES_DONE;
 }
 
@@ -12,7 +35,7 @@ void controller_update_logic_pause_menu(st_context *state)
 
 void controller_update_render_pause_menu(st_render_data *render, double time)
 {
-    printf("Rendu de pause.\n");
+    update_render_pause_menu(render, time);
 }
 
 st_context* create_pause_menu_context()

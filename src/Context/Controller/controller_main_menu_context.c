@@ -18,29 +18,23 @@ int init_menu(st_context *state)
     printf("début de l'initiation\n");
     int res;
 
-    printf("Initialisation de la caméra du contexte.\n");
     init_camera(&state->render.camera, 0.0f, 1000.0f, -1000.0f, 2.0f, 0.0f);
     init_camera_vector(&state->render.camera, (vec3){0.0f, 0.0f, 0.0f}, (vec3){0.0f, 0.0f, 1.0f}, (vec3){0.0f, 1.0f, 0.0f});
     init_camera_view(&state->render.camera);
 
-    printf("Initialisation du rendu du contexte.\n");
     init_render_main_menu(&state->render);
     
     // CHARGER LES SHADERS --------------------------------------------------------------------------------------------
-    printf("Initialisation des shaders du contexte.\n");
     st_shader *main_shader = new_shader("src/Shaders/shader_menu.vert", "src/Shaders/main_shader.frag");
 
     // Initialiser les éléments 3D --------------------------------------------------------------------------------------------
-    printf("Initialisation des éléments 3D du contexte.\n");
     st_mesh *house = new_object(BASIC_HOUSE_PATH);
     st_mesh *tile = new_object(BASIC_TILE_PATH);
 
     // Charger les textures
-    printf("Initialisation des textures contexte.\n");
     st_texture *grass_texture = new_texture("ressources/images/grass_test.jpg");
     
     // Creation du groupe
-    printf("Initialisation des groupes du contexte.\n");
     res = add_group(&state->render, RENDER_GROUP_MESH);
     if(res != RES_DONE)
     {
@@ -51,12 +45,10 @@ int init_menu(st_context *state)
     st_render_group *group = get_group(state->render.groups, 0, state->render.nb_groups);
 
     // Définir les transformation
-    printf("Initialisation des transformations du contexte.\n");
     st_transform house_transform = configure_transform((st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0});
     st_transform floor = configure_transform((st_vec3){0.5, 0.5, 0.0}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0});
 
     // Définir les objets
-    printf("Initialisation des objets du context.\n");
     create_an_object(HOUSE, house, grass_texture, main_shader, house_transform, group);
     create_an_object(SQUARE, tile, grass_texture, main_shader, floor, group);
     
