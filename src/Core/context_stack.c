@@ -38,7 +38,11 @@ int exit_context(st_stack *stack)
         if(stack->level_of_depth > 1)
         {
             int i;
-            for(i = 1; i < stack->level_of_depth; i ++) stack->stack_context[i] = stack->stack_context[i + 1];
+            for(i = 0; i < stack->level_of_depth; i ++) stack->stack_context[i] = stack->stack_context[i + 1];
+
+            free(stack->current_context);
+            stack->current_context = NULL;
+
             stack->current_context = stack->stack_context[0];
 
             if(stack->current_context == NULL || stack->stack_context[0] == NULL)
@@ -49,6 +53,8 @@ int exit_context(st_stack *stack)
         }
         else
         {
+
+            free(stack->current_context);
             stack->current_context = NULL;
             stack->stack_context[0] = NULL;
         }

@@ -114,7 +114,6 @@ void mainloop(st_engine *engine_state){
         //Gestion de des conditions au calcul d'un nouveau tick
         wait_frame(ts_start, ts_end);
     }
-    
     view_close_window();
 }
 
