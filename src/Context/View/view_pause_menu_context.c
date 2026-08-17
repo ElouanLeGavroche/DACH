@@ -2,6 +2,9 @@
 
 void init_render_pause_menu(st_render_data *render)
 {
+    render->nb_groups = 0;
+    render->groups = NULL;
+    
     // On va associé la caméra dans Opengl, car on peut-en avoir besoin dans les callbacks
     GLFWwindow *window = glfwGetCurrentContext();
     
