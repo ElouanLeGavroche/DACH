@@ -10,7 +10,8 @@ typedef enum
 typedef enum
 {
     HOUSE,
-    SQUARE
+    SQUARE,
+    BACKGROUND_PLANE
 }e_elt_name;
 
 int init_menu(st_context *state)
@@ -31,9 +32,13 @@ int init_menu(st_context *state)
     st_mesh *house = new_object(BASIC_HOUSE_PATH);
     st_mesh *tile = new_object(BASIC_TILE_PATH);
 
+    st_mesh *background = new_plane(-4.5f, -2.0f, 9.0f, 4.0f);
+    st_transform background_plane_trans = configure_transform((st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0});
+
     // Charger les textures
     st_texture *grass_texture = new_texture("ressources/images/grass_test.jpg");
-    
+    st_texture *background_plane_text = new_texture("ressources/images/main_menu_bg.jpg");
+
     // Creation du groupe
     res = add_group(&state->render, RENDER_GROUP_MESH);
     if(res != RES_DONE)
@@ -51,6 +56,7 @@ int init_menu(st_context *state)
     // Définir les objets
     create_an_object(HOUSE, house, grass_texture, main_shader, house_transform, group);
     create_an_object(SQUARE, tile, grass_texture, main_shader, floor, group);
+    create_an_object(BACKGROUND_PLANE, background, background_plane_text, main_shader, background_plane_trans, group);
     
     printf("Context menu initier\n");
     return RES_DONE;
