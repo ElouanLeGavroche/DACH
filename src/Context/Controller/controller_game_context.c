@@ -1,25 +1,9 @@
 #include "../../../include/src_include/Context/Controller/controller_game_context.h"
 
-
-typedef enum
-{
-    OTHER,
-    INSTANCED_GROUP
-}e_group_name;
-
 typedef enum
 {
     TILE
 }e_elt_name;
-
-struct st_context game_state =
-{
-    .id =  C_GAME,
-    .init_state = init_game,
-    .update_logic_context = controller_update_logic_game,
-    .update_render_context = controller_update_render_game,
-    .inputs = {0}
-};
 
 int init_game(st_context *state)
 {
@@ -29,7 +13,7 @@ int init_game(st_context *state)
     init_camera(&state->render.camera, 30.0f, 1000.0f, -1000.0f, 100.0f, 45.0f);
     init_camera_vector(&state->render.camera, (vec3){2.0f, 2.0f, 2.0f}, (vec3){0.450f, 0.250f, 0.450f}, (vec3){0.0f, 1.0f, 0.0f});
     init_camera_view(&state->render.camera);
-
+    
     // Initialiser le rendu --------------------------------------------------------------------------------------------
     state->render.nb_groups = 0;
     state->render.nb_total_groups = 0;
@@ -42,8 +26,6 @@ int init_game(st_context *state)
 
     st_window_user_data *data = glfwGetWindowUserPointer(window);
     data->camera = &state->render.camera;
-
-    glfwSetScrollCallback(window, scroll_callback);
     
     printf("Context jeu initier\n");
 
@@ -55,9 +37,9 @@ void controller_update_logic_game(st_context *state)
     update_logic_game(state);
 }
 
-void controller_update_render_game(st_render_data *render)
+void controller_update_render_game(st_render_data *render, double time)
 {
-    update_render_game(render);
+    update_render_game(render, time);
 }
 
 int controller_create_world(st_context *state)
@@ -135,4 +117,28 @@ int controller_create_world(st_context *state)
     map = NULL;
 
     return RES_DONE;
+}
+
+st_context* create_game_context()
+{
+    struct st_context *game_state = calloc(sizeof(st_context), sizeof(st_context));
+
+    game_state->id = C_GAME;
+    
+    game_state->init_state = init_game;
+    game_state->update_logic_context = controller_update_logic_game;
+    game_state->update_render_context = controller_update_render_game;
+
+    game_state->politicy.input_bellow = false;
+    game_state->politicy.render_bellow = false;
+    game_state->politicy.update_bellow = false;
+
+    game_state->render.groups = NULL;
+    game_state->render.nb_groups = 0;
+    game_state->render.nb_total_groups = 0;
+
+    game_state->request.action = CONTEXT_ACTION_NONE;
+    game_state->request.target = C_NONE;
+
+    return game_state;
 }

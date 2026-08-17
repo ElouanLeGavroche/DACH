@@ -1,18 +1,21 @@
 #include "../../include/src_include/Core/application.h"
 
 int init_application(){
+    int res;
+
     // Stock des informations pour le moteur
-    st_engine engine_state;
+    st_engine engine_state = {0};
     st_window_user_data user_data = {
         .camera = NULL,
         .input = NULL,
-        .window = &engine_state.window
+        .mouse = NULL,
+        .window = &engine_state.window  
     };
 
     // Initialisation des premières variables du moteur
     engine_state.running = true;
     engine_state.stack_context.level_of_depth = 0;
-    engine_state.stack_context.current_state = NULL;
+    engine_state.stack_context.current_context = NULL;
 
     if(init_window(&user_data, &engine_state.window) != RES_DONE)
     {
@@ -20,83 +23,49 @@ int init_application(){
         return RES_ERROR;
     }
     
-    if(link_context(&engine_state.context_tool) != RES_DONE)
+    if(link_context_tools_with_engine(&engine_state.context_tool) != RES_DONE)
     {
         fprintf(stderr, "Erreur lors du linkage avec les outils de context");
         return RES_ERROR;
     }
 
+    // On crée le dictionnaire des context
+    engine_state.all_contexts[C_GAME] = create_game_context;
+    engine_state.all_contexts[C_MAIN_MENU] = create_main_menu_context;
+    engine_state.all_contexts[C_PAUSE_MENU] = create_pause_menu_context;
+
     init_opengl();
-    /* -4- entrer dans les mains loops */
+
+    // On charge le premier context
+
+    st_context *temp = engine_state.all_contexts[C_MAIN_MENU]();
+    if(temp == NULL)
+    {
+        fprintf(stderr, "Erreur lors de la création du context.\n");
+        return RES_ERROR;
+    }
+    res = engine_state.context_tool.create_context(temp);
+    if(res != RES_DONE)
+    {
+        fprintf(stderr, "Echec lors du la création du contexte.\n");
+        return RES_ERROR;
+    }
+
+    res = engine_state.context_tool.push_context(temp, &engine_state.stack_context);
+    if(res != RES_DONE)
+    {
+        fprintf(stderr, "Echec lors du poussage du contexte vers la stack.\n");
+        return RES_ERROR;
+    }
+
+    link_input(engine_state.stack_context.current_context);
+    link_mouse(engine_state.stack_context.current_context);
+
+
     mainloop(&engine_state);
-    
+
     return EXIT_SUCCESS;
     
-}
-
-void input_loop(st_engine *engine_state){
-    // Ce tampon permet de savoir si le jeu est revenu à un etat entérieur
-    // Et donc de recharger les éléments qui lui y étais associé
-    int res = RES_DONE;
-
-    // récupéré les entrées //
-    poll_events();
-    
-    
-    if(engine_state->stack_context.current_state->ev_must_close == true)
-    {
-        engine_state->running = false;
-    }
-    if(engine_state->stack_context.current_state->ev_next_context != C_NONE)
-    {
-        st_context *new_state;
-        atomic_int *who = &engine_state->stack_context.current_state->ev_next_context;
-        
-        // L'on va observer vers quelle context évoluer
-        switch (*who)
-        {
-        case C_BACK:
-
-            unload_data(engine_state);
-            st_context *old_state = engine_state->stack_context.current_state;
-            
-            engine_state->stack_context.current_state = old_state->upper;
-            engine_state->stack_context.level_of_depth --;
-
-            old_state->upper = NULL;
-
-            // On relie le clavier au nouveau context
-            link_input(engine_state->stack_context.current_state);
-
-            break;
-        case C_GAME:
-            new_state = &game_state;
-            break;
-
-        case C_MAIN_MENU:
-            new_state = &main_menu_state;
-            break;
-        
-        default:
-            fprintf(stderr, "Context inconnu\n");
-            break;
-        }
-        
-        // Si le nouveau context est l'ancien, pas la peine d'en crée un nouveau, ce serai con.
-        if(*who != C_BACK)
-        {
-            res = new_context(new_state, engine_state->context_tool, &engine_state->stack_context);
-            if(res == RES_ERROR)
-            {
-                // Gestion de l'erreur
-                engine_state->running = false;
-            }
-
-        }
-        // On reset la valeur, sinon on retourne en boucle sur le context précédent
-        *who = C_NONE;
-    }
-
 }
 
 /**
@@ -105,187 +74,69 @@ void input_loop(st_engine *engine_state){
  */
 void mainloop(st_engine *engine_state){
 
-    // Varibiable pour les erreurs
-    int res;
-
     //Définition des variables pour accorder la clock
     struct timespec ts_start, ts_end;
+    double last = 0;
 
-    // On charge le premier context
-    res = new_context(&main_menu_state, engine_state->context_tool, &engine_state->stack_context);
-    
-    if(res != RES_ERROR)
+        ////////////////////////////////////////////
+        //                                        //
+        //                Boucle                  //
+        //                                        //
+        ////////////////////////////////////////////
+
+    while(engine_state->running && window_should_close() != -1)
     {
-        link_input(engine_state->stack_context.current_state);
-            ////////////////////////////////////////////
-            //                                        //
-            //                Boucle                  //
-            //                                        //
-            ////////////////////////////////////////////
+        // Time au début de la boucle
+        get_time(&ts_start);
 
-        while(engine_state->running && window_should_close() != -1){
-            // Time au début de la boucle
-            get_time(&ts_start);
+        // récupéré les entrées //
+        poll_events();
 
-            view_clear();
-            
-            // Contenu //
-            engine_state->stack_context.current_state->update_logic_context(engine_state->stack_context.current_state);
+        view_clear();
+        
+        /**
+         * Il y a ici une gestion du rendu/log/input du contexte actuel, mais aussi, et surtout, une gestion du rendu/log/input des contextes
+         * parents, en fonction des politique du contexe actuel.
+         */
 
-            //Actual context
-            engine_state->stack_context.current_state->update_render_context(&engine_state->stack_context.current_state->render);
-            input_loop(engine_state);
+        // Mettre à jour le temps du jeu //
+        engine_state->dt_time =  get_glfw_time() - last;
+        last = get_glfw_time();
 
-            view_swap();
+        // Logique //
+        update_logique(engine_state->stack_context, 0, engine_state->dt_time);
+        // Rendu //
+        update_render(engine_state->stack_context, 0, engine_state->dt_time);
 
-            //Time fin de boucle
-            get_time(&ts_end);
+        /* on va regarder s'il y a eu des requête fait pour les contextes */
+        context_request(engine_state);
 
-            //Gestion de des conditions au calcul d'un nouveau tick
-            wait_frame(ts_start, ts_end);
+        view_swap();
 
-        }
-        engine_state->running = false;
-        unload_data(engine_state);
+        //Time fin de boucle
+        get_time(&ts_end);
+
+        //Gestion de des conditions au calcul d'un nouveau tick
+        wait_frame(ts_start, ts_end);
     }
-
     view_close_window();
 }
 
-
-// Cette partie là sera en partie déplacer à l'avenir dans un ressources manager
-void unload_data(st_engine *engine_state)
+void update_logique(st_stack stack, int depth, double dt)
 {
-    // Effacer les données de rendu
-    destroy_render_data(&engine_state->stack_context.current_state->render);
+    if(stack.stack_context[depth]->politicy.update_bellow == true && depth + 1 < stack.level_of_depth)
+    {
+        update_logique(stack, depth + 1, dt);
+    }
+    stack.stack_context[depth]->update_logic_context(stack.stack_context[depth]);
 
 }
 
-void destroy_render_data(st_render_data *render)
+void update_render(st_stack stack, int depth, double dt)
 {
-    if(render == NULL || render->groups == NULL)
-            return;
-    int i, y;
-    int tamp_nb_object;
-    int tamp_nb_group;
-
-    st_mesh_group *mesh_group;
-    st_instanced_mesh_group *instanced_mesh_group;
-    st_render_object *object;
-
-    printf("Début de libération de la mémoire de l'ancien context.\n");
-
-    gl_deletes();
-
-    tamp_nb_group = render->nb_groups;
-    for(i = 0; i < tamp_nb_group; i ++)
+    if(stack.stack_context[depth]->politicy.render_bellow == true && depth + 1 < stack.level_of_depth)
     {
-        
-        // On récupère toujours le premier, car l'ancien premier à été supprimer
-        st_render_group *group = &render->groups[0];
-        
-        switch (group->type)
-        {
-        case RENDER_GROUP_MESH:
-            // On récupère les data avec le type mesh groupe
-            mesh_group = group->data;
-            tamp_nb_object = mesh_group->nb_objects;
-
-            for(y = 0; y < tamp_nb_object; y ++)
-            {
-                // On supprime toujours le premier élément
-                object = &mesh_group->objects[0];
-                printf("Suppresion de l'élément : %d, éléments free : %d/%d.\n", object->id, y, tamp_nb_object - 1);
-
-                references_object_test(object);
-                
-                free(object->material);
-                object->material = NULL;
-
-                free(object->mesh);
-                object->mesh = NULL;
-                
-                group->tables->remove_element(mesh_group, object->id);
-            }
-            
-            // Quelques vérification si toutes les suppression on bien été faite
-            if(mesh_group->nb_objects != 0)
-            {
-                fprintf(stderr, "Attention certain élément n'ont pas été supprimer.\n");
-            }
-            if(mesh_group->objects != NULL)
-            {
-                fprintf(stderr, "Le groupe n'a pas été free correctement.\n");
-            }
-
-            break;
-        case RENDER_GROUP_INSTANCED_MESH:
-            
-            // On récupère les data avec le type mesh groupe
-            instanced_mesh_group = group->data;
-            references_object_test(instanced_mesh_group->shared_render_object);
-            
-            free(instanced_mesh_group->shared_render_object->material);
-            free(instanced_mesh_group->shared_render_object->mesh);
-            
-            free(instanced_mesh_group->shared_render_object);
-            
-            glDeleteBuffers(1, &instanced_mesh_group->st_instanced.vbo);
-            free(instanced_mesh_group->st_instanced.cpu_data);
-            
-            break;
-        
-        default:
-            fprintf(stderr, "Type du groupe inconnu.\n");
-            break;
-        }
-        
-        // On supprime le groupe type
-        free(group->data);
-        // On supprime les tables du groupe
-        free(group->tables);
-        // On supprime le groupe
-        
-        remove_group(render, group->ID);
-        
+        update_render(stack, depth + 1, dt);
     }
-    free(render->groups);
-    render->groups = NULL;
-    render->nb_groups = 0;
-
-    // ça permet de forcer la cg à mettre à jour son utilisation de la mémoire.
-    glFinish();
-    printf("Context supprimer\n");
-
-}
-
-
-void references_object_test(st_render_object *object)
-{
-    object->material->shader->nb_occurences --;
-    object->material->texture->nb_occurences --;
-    object->mesh->nb_occurences --;
-    
-    // On supprime les données OpenGL
-    // Si c'est le dernier object à avoir l'occurence d'un mesh, alors c'est lui qui le supprime
-    if(object->mesh->nb_occurences == 0)
-    {
-        glDeleteVertexArrays(1, &object->mesh->VAO);
-        glDeleteBuffers(1, &object->mesh->VBO);
-        glDeleteBuffers(1, &object->mesh->EBO);
-        object->mesh->index_count = 0;
-        
-    }
-    // Si c'est le dernier object à avoir l'occurence d'une texture alors c'est lui qui le supprime
-    if(object->material->texture->nb_occurences == 0)
-    {
-        glDeleteTextures(1, &object->material->texture->id);
-        free(object->material->texture);
-    }
-    // Si c'est le dernier object à avoir l'occurence d'un shader, alors c'est lui qui le supprime
-    if(object->material->shader->nb_occurences == 0)
-    {
-        glDeleteProgram(object->material->shader->shader);
-        free(object->material->shader);
-    }
+    stack.stack_context[depth]->update_render_context(&stack.stack_context[depth]->render, dt);
 }

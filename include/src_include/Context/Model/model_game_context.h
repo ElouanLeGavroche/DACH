@@ -22,6 +22,15 @@ void update_logic_game(st_context *state);
  */
 mat4* init_map(int amount, st_loaded_tile_map *tiles);
 
+/**
+ * @brief Gère uniquement les déplacements de la caméra
+ */
 void move_camera(st_camera *camera, int dir);
+
+/**
+ * @brief Gère uniquement le zoom de la caméra
+ */
+void zoom_camera(st_camera *camera, st_mouse *mouse);
+
 
 #endif

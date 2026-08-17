@@ -1,61 +1,121 @@
 #include "../../include/src_include/Core/context_stack.h"
 
-int link_context(st_context_tool *tools)
+int link_context_tools_with_engine(vt_context_tool *tools)
 {
     // Initialisation des outils de context
-    tools->put_context = put_context;
-    if(!(tools->put_context))
+    tools->push_context = push_context;
+    if(!(tools->push_context))
     {
-        fprintf(stderr, "Impossible de linker la stack context avec put.\n");
+        fprintf(stderr, "Impossible de linker la stack context avec push.\n");
         return RES_FAILED_ASSIGNEMENT;
     }
-    tools->remove_context = remove_context;
-    if(!(tools->remove_context))
+    tools->exit_context = exit_context;
+    if(!(tools->exit_context))
     {
-        fprintf(stderr, "Impossible de linker la stack context avec put.\n");
+        fprintf(stderr, "Impossible de linker la stack context avec exit.\n");
         return RES_FAILED_ASSIGNEMENT;
+    }
+
+    tools->create_context = create_context;
+    if(!tools->create_context)
+    {
+        fprintf(stderr, "Impossible de linker la stack context avec create.\n");
+        return RES_FAILED_ASSIGNEMENT;
+    }
+
+    tools->replace_context = replace_context;
+    if(!tools->replace_context)
+    {
+        fprintf(stderr, "Impossible de linker la stack context avec replace.\n");
+        return RES_FAILED_ASSIGNEMENT;
+    }
+    
+    return RES_DONE;
+}
+
+int exit_context(st_stack *stack)
+{
+    int return_status = RES_DONE;
+    if(stack->current_context == NULL)
+    {
+        fprintf(stderr, "Le context est null.\n");
+        return_status = RES_NULL_POINTER;
+    }
+    else
+    {
+        if(stack->level_of_depth > 1)
+        {
+            int i;
+            for(i = 0; i < stack->level_of_depth; i ++) stack->stack_context[i] = stack->stack_context[i + 1];
+
+            free(stack->current_context);
+            stack->current_context = NULL;
+
+            stack->current_context = stack->stack_context[0];
+
+            if(stack->current_context == NULL || stack->stack_context[0] == NULL)
+            {
+                fprintf(stderr, "Quelque chose c'est mal passé.\n");
+                return RES_NULL_POINTER;
+            }
+        }
+        else
+        {
+
+            free(stack->current_context);
+            stack->current_context = NULL;
+            stack->stack_context[0] = NULL;
+        }
+
+        stack->level_of_depth --;
+    }
+
+    return return_status;
+}
+int push_context(st_context *new_context, st_stack *stack)
+{
+    if(new_context == NULL)
+    {
+        fprintf(stderr, "Le nouveau context n'est pas prêt à être pousser.\n");
+        return RES_ERROR;
+    }
+
+    if(stack->level_of_depth == MAX_CONTEXT)
+    {
+        fprintf(stderr, "Erreur, limite de context atteint. Si vous voulez en mettre plus, modifier la valeur de MAX_CONTEXT.\n");
+        return RES_ERROR;
+    }
+    else
+    {
+        // Décalage des contextes
+        int i;
+        for(i = stack->level_of_depth; i >= 0; i --) stack->stack_context[i + 1] = stack->stack_context[i];
+        stack->stack_context[0] = new_context;
+        stack->current_context = new_context;
+        
+
+        stack->level_of_depth ++;
     }
     return RES_DONE;
 }
 
-// Essaie de structure file pour les etats
-int remove_context(st_stack *my_stack)
+int replace_context(st_context *new_context, st_stack *stack)
 {
-    int return_status = EXIT_SUCCESS;
+    if(stack == NULL || new_context == NULL)
+    {
+        fprintf(stderr, "La stack ou le context est null, impossible de le remplacer.\n");
+        return RES_ERROR;
+    }
 
-    if(my_stack->current_state->upper != NULL)
-    {
-        my_stack->current_state = my_stack->current_state->upper;
-        // L'on incremente le niveau de profondeur
-        my_stack->level_of_depth --;
-    }
-    else
-    {
-        printf("impossible de retirer cet éléments, il n'a pas de parents\n");
-        return_status = EXIT_FAILURE;
-    }
-    printf("Le niveau de la stack : %d\n", my_stack->level_of_depth);
-    return return_status;
+    free(stack->current_context);
+    stack->current_context = NULL;
+
+    stack->current_context = new_context;
+    stack->stack_context[0] = stack->current_context;
+
+    return RES_DONE;
 }
-
-void put_context(st_stack *my_stack, st_context *my_state){
-    /**
-     * 2 cas : 1 stack vide, ajout simple
-     *         2 stack non vide, remplacement nécéssaire  
-     */    
-    if(my_stack->current_state != NULL)
-    {
-        my_state->upper = my_stack->current_state;
-    }
-    my_stack->current_state = my_state;
-
-    // L'on incremente le niveau de profondeur
-    my_stack->level_of_depth ++;
-    printf("Niveau de la stack : %d\n", my_stack->level_of_depth);
-    printf("context ajouter\n");
-}
-
-int new_context(st_context *new_state, st_context_tool tools, st_stack *stack)
+int create_context(st_context *new_state)
 {
     int res;
     
@@ -63,14 +123,10 @@ int new_context(st_context *new_state, st_context_tool tools, st_stack *stack)
     res = new_state->init_state(new_state);
     if(res == RES_ERROR)
     {
-        printf("Erreur lors de l'initialisation du context\n");
+        printf("Erreur lors de l'initialisation du context.\n");
         return RES_ERROR;
     }
 
-    tools.put_context(stack, new_state);
-    stack->current_state->ev_next_context = C_NONE;
-    // On relie le clavier au nouveau context
-    link_input(new_state);
     return RES_DONE;
 
 }

@@ -55,12 +55,14 @@ $(SAVE_EXEC)$(EXEC):\
 	$(CORE)context_stack.o\
 	$(CORE)context_group.o\
 	$(CORE)context_content.o\
+	$(CORE)context_request.o\
 	$(CORE)context_camera.o\
 	$(CORE)result.o\
 	\
 	$(PLATFORM)glfw_input.o\
 	$(PLATFORM)glfw_window.o\
 	$(PLATFORM)glfw_mouse.o\
+	$(PLATFORM)glfw_time.o\
 	\
 	$(RENDERER)opengl_renderer.o\
 	$(RENDERER)render_group.o\
@@ -73,7 +75,11 @@ $(SAVE_EXEC)$(EXEC):\
 	\
 	$(CONTEXT_CONTROLLER)controller_game_context.o\
 	$(CONTEXT_MODEL)model_game_context.o\
-	$(CONTEXT_VIEW)view_game_context.o
+	$(CONTEXT_VIEW)view_game_context.o\
+	\
+	$(CONTEXT_CONTROLLER)controller_pause_menu_context.o\
+	$(CONTEXT_MODEL)model_pause_menu_context.o\
+	$(CONTEXT_VIEW)view_pause_menu_context.o
 	$(CC) -o $@ $^ $(CPPFLAGS) $(CFLAGS) $(LDLIBS)
 
 

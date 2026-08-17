@@ -6,13 +6,22 @@ void update_logic_game(st_context *state)
     // Géré les inputs
     if(state->inputs.release[KEY_DOWN] == true)
     {
-        state->ev_next_context = C_BACK;   
+        state->request.target = C_BACK;
+        state->request.action = CONTEXT_ACTION_POP;
+
         state->inputs.release[KEY_DOWN] = false;
     }
     if(state->inputs.release[KEY_ESCAPE] == true)
     {
-        state->ev_must_close = true;  
+        state->request.action = CONTEXT_ACTION_PUSH;
+        state->request.target = C_PAUSE_MENU;
+        
         state->inputs.release[KEY_ESCAPE] = false; 
+    }
+    if(state->inputs.release[KEY_ENTER] == true)
+    {
+        state->request.action = CONTEXT_ACTION_REPLACE;
+        state->request.target = C_GAME;
     }
 
     // Déplacement de la caméra
@@ -44,15 +53,12 @@ void update_logic_game(st_context *state)
         state->render.camera.target = (state->render.camera.target >= -0.0f)? -45.0f + state->render.camera.target: state->render.camera.target;
         state->inputs.release[KEY_E] = false;
     }
-    printf("target : %f\n", state->render.camera.target);
     if(state->render.camera.target != 0.0f)
     {
         move_camera(&state->render.camera, (state->render.camera.target > 0.0f) ? ROTATE_L : ROTATE_R);
     }
 
-    /* On préviens l'autre thread que la lecture à bien été faite*/
-    state->inputs.ok = true;
-    
+    zoom_camera(&state->render.camera, &state->mouse);    
 }
 
 
@@ -90,7 +96,22 @@ void move_camera(st_camera *camera, int dir)
     default:
         break;
     }
-    
+}
+
+void zoom_camera(st_camera *camera, st_mouse *mouse)
+{
+    // Gestion du zoom
+    if(mouse->active_scroll_y == true)
+    {
+        if(camera->ortho_size >= 3.0f && camera->ortho_size <= 25.0f)
+            camera->ortho_size -= mouse->scroll_y;
+        if(camera->ortho_size <= 3.0f)
+            camera->ortho_size = 3.0f;
+        if(camera->ortho_size >= 25.0f)
+            camera->ortho_size = 25.0f;
+
+    }
+    mouse->active_scroll_y = false;
 }
 
 mat4* init_map(int amount, st_loaded_tile_map *tiles)

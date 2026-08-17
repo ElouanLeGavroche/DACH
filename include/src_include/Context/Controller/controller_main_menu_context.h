@@ -8,12 +8,15 @@
 
 #include "../../Core/context_group.h"
 #include "../../Core/context_stack.h"
+#include "../../Core/context_camera.h"
 #include "../../Core/context_content.h"
 
 #include "../../../types.h"
 #include "../../../state.h"
 
-void controller_update_render_main_menu(st_render_data *render);
+st_context* create_main_menu_context();
+
+void controller_update_render_main_menu(st_render_data *render, double time);
 int init_menu(st_context *state);
 void controller_update_logic_main_menu(st_context *state);
 

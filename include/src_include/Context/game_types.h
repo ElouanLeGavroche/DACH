@@ -1,20 +1,6 @@
 #ifndef GAME_TYPES
 #define GAME_TYPES
 
-/**
- * @brief ici le développeur doit indiqué TOUT les context de son jeu.
- * En sachant que le premier sera celui qui sera charger... En premier.
- */
-typedef enum e_context_list{
-    C_NONE,
-    C_BACK,
-
-    C_MAIN_MENU,
-    C_GAME,
-
-    C_NUM
-} e_context_list;
-
 
 typedef enum e_render_group_type
 {
@@ -160,7 +146,7 @@ typedef struct st_render_object
  */
 typedef struct st_instance_data
 {
-    mat4 model[16];
+    mat4 model;
 }st_instance_data;
 
 /**
@@ -190,6 +176,12 @@ typedef struct st_mesh_group
     int nb_objects;
 
 }st_mesh_group;
+
+typedef struct st_2d_mesh_group
+{
+    st_render_object *objects;
+    int nb_objects;
+}st_2d_mesh_group;
 
 /**
  * @brief groupe d'objets à instancier

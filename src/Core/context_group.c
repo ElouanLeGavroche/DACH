@@ -6,10 +6,7 @@ bool context_group_is_null(st_render_group *group)
 }
 
 int context_group_init(st_render_group *group, int id, e_render_group_type type)
-{
-
-    // Allouer de la mémoire au group
- 
+{ 
     
     // Création de l'id
     group->ID = id;
@@ -301,7 +298,7 @@ int create_an_instance(int capacity, mat4 *model, st_instanced *dest)
     // Crée les instances
     for(i = 0; i < dest->capacity; i ++)
     {
-        glm_mat4_copy(model[i], *dest->cpu_data[i].model);
+        glm_mat4_copy(model[i], dest->cpu_data[i].model);
     }  
 
     return RES_DONE;
@@ -486,7 +483,7 @@ int remove_render_instenced_mesh_object(void *void_group, int)
     return RES_DONE;
 }
 
-st_render_object* get_render_instenced_mesh_group(void *void_group, int id)
+st_render_object* get_render_instenced_mesh_group(void *void_group, int)
 {
     st_instanced_mesh_group *group = (st_instanced_mesh_group*)void_group;
     
@@ -496,5 +493,5 @@ st_render_object* get_render_instenced_mesh_group(void *void_group, int id)
         return NULL;
     }
 
-    return &group->shared_render_object;
+    return group->shared_render_object;
 }

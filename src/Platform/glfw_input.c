@@ -19,6 +19,8 @@ void pressed_key_callback(GLFWwindow *window, int key, int scancode, int action,
             int glfw_keys[KEY_NUM] = {
                 [KEY_ESCAPE] = GLFW_KEY_ESCAPE,
                 [KEY_DOWN]   = GLFW_KEY_DOWN,
+                [KEY_ENTER] = GLFW_KEY_ENTER,
+
                 [KEY_UP]     = GLFW_KEY_UP,
                 [KEY_D]      = GLFW_KEY_D,
                 [KEY_Q]      = GLFW_KEY_Q,

@@ -10,6 +10,7 @@
 #include <cglm/types.h>
 
 #include "src_include/Context/game_types.h"
+#include "src_include/Config/constantes.h"
 
 typedef struct st_engine st_engine;
 typedef struct st_context st_context;
@@ -23,6 +24,7 @@ typedef enum e_key
     KEY_ESCAPE,
     KEY_UP,
     KEY_DOWN,
+    KEY_ENTER,
 
     // Caméra
     KEY_Z,
@@ -35,6 +37,12 @@ typedef enum e_key
     KEY_NUM
 }e_key;
 
+typedef enum e_mouse
+{
+    MOUSE_SCROLL_Y,
+    MOUSE_NUM
+}e_mouse;
+
 // Savoir quand une touche est pressé ou relacher( permet de géré des entrer du type CTRL+C)
 typedef struct
 {
@@ -44,10 +52,22 @@ typedef struct
     bool pressed[KEY_NUM];
     // Quand une touche est lachée
     bool release[KEY_NUM];
-    // Permet de savoir si l'autre thread a lu les informations
-    atomic_bool ok;
 
 }st_input;
+
+/**
+ * @brief Structure de la souris
+ */
+typedef struct
+{
+    double scroll_y;
+    bool active_scroll_y;
+
+    double scroll_x;
+    bool active_scroll_x;
+
+}st_mouse;
+
 
 /**
  * @brief Structure qui contient les informations de la caméra
@@ -88,6 +108,7 @@ struct st_camera{
 
     void (*look)(st_camera *camera);
     void (*camera_speed)(st_camera *camera, float delta_time);
+    void (*update_ortho)(st_camera *camera);
 };
 
 // Permet de savoir vers quelle direction va la caméra
@@ -116,11 +137,54 @@ typedef struct st_render_data{
 
     st_camera camera;
 
-    // Variables qui me permettront de géré le déplacement de la caméra indépendamment de la clock
-    float delta_time;
-    float last_time;
-
 }st_render_data;
+
+/**
+ * @brief ici le développeur doit indiqué TOUT les context de son jeu.
+ * En sachant que le premier sera celui qui sera charger... En premier.
+ */
+typedef enum e_context_list{
+    C_NONE,
+    C_BACK,
+
+    C_MAIN_MENU,
+    C_GAME,
+    C_PAUSE_MENU,
+
+    C_NUM
+} e_context_list;
+
+typedef enum
+{
+    CONTEXT_ACTION_NONE, // Rien
+    CONTEXT_ACTION_PUSH, // On met en avant
+    CONTEXT_ACTION_POP, // On retire
+    CONTEXT_ACTION_REPLACE, // On remplace
+    CONTEXT_ACTION_QUIT // On quitte
+}e_context_actions;
+
+typedef struct st_context_request
+{
+    e_context_actions action;
+    e_context_list target;
+}st_context_request;
+
+
+/**
+ * @brief Cette structure est TRÈS importante... En effet, elle permet de dire si un context va afficher, actualiser ou géré les inputs
+ * de son parent. Il est d'ailleurs recursrive : La pause affiche simplement son parent, qui est l'UI et lui affiche, gère les input, et actualise
+ * son parent qui est le jeu, mais il ne peux pas l'actualiser, car la pause lui block l'actualisation.
+ * 
+ * @param render_bellow rendre le parent
+ * @param input_bellow prendre en compte les entrées du parent
+ * @param update_bellow met à jour la logique du parent
+ */
+typedef struct st_context_politicy
+{
+    bool render_bellow;
+    bool input_bellow;
+    bool update_bellow;
+}st_context_politicy;
 
 /**
  * @brief Structure (presque class) qui contient deux catégorie d'élément
@@ -134,36 +198,33 @@ typedef struct st_render_data{
  * @param st_context fonction qui initialisera la fenêtre.
  * @param update_logic_context fonction qui déroulera à chaque tick la logique du canva.
  * @param update_render_context fonction qui déroulera le rendu à chaque frame le rendu de la page.
- * @param inputs structure des entrée clavier.
- * @param upper sont parent s'il en à un.
+ * @param inputs structure des entrées clavier.
+ * @param mouse structure des déplacements de la souris
  * @param render données de rendu du context.
- * @param ev_next_context variable qui sera lu par le moteur et qui passera à un état suivant.
- * @param ev_close_close varibale qui sera lu par le moteur et qui quittera le jeu.
- */
+ * @param request gère les requête du context 
+*/
 typedef struct st_context
 {
     // l'id du context
-    atomic_int id;
+    int id;
 
     // L'initialiseur connait tout
     int (*init_state)(st_context *state);
     // La logique ne connaitra que les model
     void (*update_logic_context)(st_context *state);
     // Le rendu ne connait que les données liée au rendu
-    void (*update_render_context)(st_render_data *render);
+    void (*update_render_context)(st_render_data *render, double time);
 
     // Permet de stocker les inputs qui gérerons les actions en conséquent
     st_input inputs;
-
-    struct st_context *upper;
+    // Permet de stocker les mouvement de la souris et de les traiter
+    st_mouse mouse;
+    // Permet de stocker les information de rendu
     st_render_data render;
 
-    // Permet de savoir si un nouvel etat est attendu
-    atomic_int ev_next_context;
-    // Permet de savoir si on doit fermet le jeu
-    atomic_bool ev_must_close;
+    st_context_politicy politicy;
 
-    
+    st_context_request request;
 }st_context;
 
 
@@ -172,30 +233,33 @@ typedef struct st_context
  * 
  * Si on et le jeu en pause, le canva pause prend le dessus sur le jeu, et quand on la quitte, le jeu reprend.
  * 
- * @param st_context Est une structure simple. Pour en savoir plus, cliquer dessus.
+ * @param stack_context La stack au global
+ * @param current_context Le context actuellement en tête de la stack
  * @param level_of_depth Niveau de profondeur de la state.
  */
 typedef struct {
-    st_context *current_state;
-    atomic_int level_of_depth;
+    st_context *stack_context[MAX_CONTEXT];
+    st_context *current_context;
+    int level_of_depth;
 }st_stack;
 
 /**
- * @brief étant un outil très général au moteur et très important, je décide de l'intégré directement en-tant que structure de fonction.
+ * @brief table qui sert à géré les context.
  * 
- * En effet, vu que le changement d'écran peut-avoir lieux à autant d'endroit où l'on à l'écran, il sera plus simple d'y accédé directement
- * via st_engin...
- * 
- * @param put_context fonction pour ajouter à la stack un context donnée.
- * @param remove_context retire le dernier context ajouter (celui affiché) pour le remplacer par le précédent.
- *         : " Il bloque la suppression s'il n'y a pas de context précédent. "
+ * @param push_context Pousse le context dans la stack
+ * @param exit_context Retire le context de la stack
+ * @param pause_context met en pause un context - lorsqu'un context est ajouter par dessus
+ * @param resume_context réveil de ça pause une context - lorsque l'on revient sur lui
+ * @param destroy_context supprime un context - supprime la structure
  */
 typedef struct
 {
-    void (*put_context) (st_stack *my_stack, st_context *my_state);
-    int (*remove_context)(st_stack *my_stack);
+    int (*create_context) (st_context *state);
+    int (*replace_context) (st_context *new_context, st_stack *stack);
+    int (*push_context) (st_context *new_context, st_stack *stack);
+    int (*exit_context)(st_stack *stack);
     
-}st_context_tool;
+}vt_context_tool;
 
 // Structure pour la taille et le frame rate du contexte OpenGL
 typedef struct {
@@ -204,6 +268,8 @@ typedef struct {
 
     float frame_rate;
 }st_loaded_windows_data;
+
+typedef st_context *(*dict_register)(void);
 
 /**
  * @brief Structure du moteur.
@@ -218,6 +284,9 @@ typedef struct {
  * @param running pour savoir si le jeu tourne
  * @param stack_context structure des contexts du moteur
  * @param context_tool petite boite à outil pour géré les contexts
+ * @param st_loaded_windows_data les informations de la fenêtre
+ * @param dict_register la liste des context du jeu sous forme d'un dictionnaire pour avoir accès à leur initialisateur
+ * @param dt_time le temps du jeu
  */
 typedef struct st_engine
 {
@@ -226,9 +295,13 @@ typedef struct st_engine
     
     // élément liées au context et à la stack
     st_stack stack_context;
-    st_context_tool context_tool;
+    vt_context_tool context_tool;
 
     st_loaded_windows_data window;
+
+    dict_register all_contexts[C_NUM];
+
+    double dt_time;
     
 } st_engine;
 
@@ -237,6 +310,8 @@ typedef struct
 {
     st_camera *camera;
     st_input *input;
+    st_mouse *mouse;
+
     st_loaded_windows_data *window;
 }st_window_user_data;
 

@@ -27,4 +27,5 @@ typedef enum
 #define ENGINE_SPEED 60
 #define TIME_PER_TICK 1.0 / ENGINE_SPEED
 
+#define MAX_CONTEXT 3
 #endif 
