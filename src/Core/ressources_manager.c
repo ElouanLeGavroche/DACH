@@ -10,3 +10,8 @@ void *_create_allocation(void *data, size_t size_data)
     }
     return NULL;
 }
+
+int main()
+{
+
+}

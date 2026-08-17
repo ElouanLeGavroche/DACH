@@ -112,7 +112,6 @@ void mainloop(st_engine *engine_state){
         context_request(engine_state);
 
         view_swap();
-
         //Time fin de boucle
         get_time(&ts_end);
 

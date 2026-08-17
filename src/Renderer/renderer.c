@@ -16,11 +16,10 @@ void render_context(st_render_data *render, double time)
     render->camera.update_ortho(&render->camera);
 
     glClearColor(num_to_01(0), num_to_01(0), num_to_01(12), 1.0f);
-    glEnable(GL_DEPTH_TEST);
+    
     for(i = 0; i < render->nb_groups; i ++)
     {
         st_render_group *group = &render->groups[i];
-
         switch (group->type)
         {
         case RENDER_GROUP_MESH:

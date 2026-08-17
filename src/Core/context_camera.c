@@ -125,7 +125,7 @@ void set_actual_speed(st_camera *camera, float speed)
 
 void set_ratio(st_camera *camera)
 {
-    camera->ratio = ((float)SCREEN_WITH_DEFAULT / (float)SCREEN_HEIGHT_DEFAULT) * (4.0f / 3.0f);
+    camera->ratio = ((float)1980 / (float)1080) * (4.0f / 3.0f);
 }
 
 void set_near_z(st_camera *camera, float near)

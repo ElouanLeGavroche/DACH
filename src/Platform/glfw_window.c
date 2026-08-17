@@ -1,6 +1,6 @@
 #include "../../include/src_include/Platform/glfw_window.h"
 
-int init_window(st_window_user_data *user_data, st_loaded_windows_data *window_data)
+int init_window(st_window_user_data *user_data, st_loaded_windows_data **window_data)
 {
     // Charger les informations de la fenêtre dans le Json
     // Fichier    
@@ -75,7 +75,7 @@ int init_window(st_window_user_data *user_data, st_loaded_windows_data *window_d
     global_window->size_y = size_y_value;
     global_window->frame_rate = frame_rate_value;
     
-    window_data = global_window;
+    *window_data = global_window;
 
     // Initialiser les informations récupéré
     if (!glfwInit())
@@ -85,8 +85,7 @@ int init_window(st_window_user_data *user_data, st_loaded_windows_data *window_d
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow *window = glfwCreateWindow(window_data->size_x, window_data->size_y, "Douar ar c'hornôg", NULL, NULL);
-    
+    GLFWwindow *window = glfwCreateWindow((*window_data)->size_x, (*window_data)->size_y, "Douar ar c'hornôg", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -111,26 +110,24 @@ int init_window(st_window_user_data *user_data, st_loaded_windows_data *window_d
 }
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height){
-
     
-  
-        st_window_user_data *data = glfwGetWindowUserPointer(window);
-        if(data != NULL)
+    st_window_user_data *data = glfwGetWindowUserPointer(window);
+    if(data != NULL)
+    {
+        
+        if(data->window != NULL && data->camera != NULL)
         {
-            if(data->window != NULL && data->camera != NULL)
-            {
-                st_loaded_windows_data *window_parametr = data->window;
-                st_camera *camera = data->camera;
+            st_loaded_windows_data *window_parametr = data->window;
+            st_camera *camera = data->camera;
 
-                window_parametr->size_x = width;
-                window_parametr->size_y = height;
+            window_parametr->size_x = width;
+            window_parametr->size_y = height;
 
-                camera->ratio = ((float)window_parametr->size_x / (float)window_parametr->size_y) * (4.0f / 3.0f);
+            camera->ratio = ((float)window_parametr->size_x / (float)window_parametr->size_y) * (4.0f / 3.0f);
 
-                gl_update_view_port(window_parametr->size_x, window_parametr->size_y);
-            }
+            gl_update_view_port(window_parametr->size_x, window_parametr->size_y);
         }
-    
+    }
 
 }
 
