@@ -5,6 +5,11 @@ typedef enum
     MAIN_GROUP
 }e_group_name;
 
+typedef enum
+{
+    BACKGROUND_PLANE
+}e_elt_name;
+
 int init_pause_menu(st_context *state)
 {
     int res;
@@ -17,6 +22,12 @@ int init_pause_menu(st_context *state)
 
     init_render_pause_menu(&state->render);
 
+    st_shader *main_shader = new_shader("src/Shaders/shader_menu.vert", "src/Shaders/main_shader.frag");
+
+    st_mesh *background_plane = new_plane(0.0f, 0.0f, 2.0f, 2.0f);
+    st_transform background_plane_trans = configure_transform((st_vec3){0.5, 0.5, 0.0}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0});
+    
+    st_texture *background_plane_text = new_texture("ressources/images/background.png");
 
     res = add_group(&state->render, RENDER_GROUP_MESH);
     if(res != RES_DONE)
@@ -27,7 +38,15 @@ int init_pause_menu(st_context *state)
 
     st_render_group *group = get_group(state->render.groups, 0, state->render.nb_total_groups);
     
+    res = create_an_object(BACKGROUND_PLANE, background_plane, background_plane_text, main_shader, background_plane_trans, group);
+    if(res != RES_DONE)
+    {
+        fprintf(stderr, "Erreur lors de la création de l'objet.\n");
+        return RES_ERROR;
+    }
+
     printf("Menu pause initier.\n");
+
     return RES_DONE;
 }
 
@@ -43,7 +62,7 @@ void controller_update_render_pause_menu(st_render_data *render, double time)
 
 st_context* create_pause_menu_context()
 {
-    struct st_context *main_menu_state = malloc(sizeof(st_context));
+    struct st_context *main_menu_state = calloc(sizeof(st_context), sizeof(st_context));
 
     main_menu_state->id = C_MAIN_MENU;
     

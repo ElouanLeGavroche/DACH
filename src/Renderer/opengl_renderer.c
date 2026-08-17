@@ -11,7 +11,6 @@ void init_opengl()
  */
 st_mesh init_a_3d_loaded_element(st_mesh_data *elt)
 {
-
     st_mesh mesh;
     unsigned int VAO, VBO, EBO;
     // Tampon où l'on stock les sommets
@@ -51,6 +50,62 @@ st_mesh init_a_3d_loaded_element(st_mesh_data *elt)
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
 
     return mesh;
+}
+
+st_mesh init_a_2d_plane(float x, float y, float size_x, float size_y)
+{
+    st_mesh mesh;
+    unsigned int VAO, VBO, EBO;
+
+    float vertices[] = {
+        x,  y, 0.0f,                   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,
+        x, y + size_y, 0.0f,           0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
+        x + size_x, y + size_y, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
+        x + size_x,  y, 0.0f,           1.0f, 1.0f, 0.0f,   0.0f, 1.0f 
+    };
+    unsigned int indices[] = {  // note that we start from 0!
+        0, 1, 3,  // first Triangle
+        1, 2, 3   // second Triangle
+    };
+
+    // Tampon où l'on stock les sommets
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);  
+    glGenBuffers(1, &EBO);
+    
+    // 1.Attacher le VAO (Vertex Array Object)
+    glBindVertexArray(VAO);
+
+    // 2.Mettre les sommet dans le VBO et EBO
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+
+    mesh.VAO = VAO;
+    mesh.VBO = VBO;
+    mesh.EBO = EBO;
+    mesh.index_count = 6;
+    mesh.nb_occurences = 0;
+    
+    // Positition des polygones
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    // Les couleurs
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3* sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    // Les UVs
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, 0); 
+
+    return mesh;
+
 }
 
 int init_a_loaded_shader(const char vertex_shader_source[], const char fragment_shader_source[])

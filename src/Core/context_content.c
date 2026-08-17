@@ -30,6 +30,25 @@ st_mesh* new_object(char *path)
     return mesh;
 }
 
+st_mesh* new_plane(float x, float y, float size_x, float size_y)
+{
+    st_mesh *plane = malloc(sizeof(st_mesh));
+    if(!plane)
+    {
+        fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
+        return NULL;
+    }
+
+    *plane = init_a_2d_plane(x, y, size_x, size_y);
+    if(plane == NULL)
+    {
+        fprintf(stderr, "Erreur lors de l'initialisation de l'object.\n");
+        return NULL;
+    }
+
+    return plane;
+}
+
 st_texture* new_texture(char *path)
 {
     st_image image = load_texture(path, 736, 552, 0);
