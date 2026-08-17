@@ -24,6 +24,7 @@ typedef enum e_key
     KEY_ESCAPE,
     KEY_UP,
     KEY_DOWN,
+    KEY_ENTER,
 
     // Caméra
     KEY_Z,
@@ -254,7 +255,7 @@ typedef struct {
 typedef struct
 {
     int (*create_context) (st_context *state);
-    
+    int (*replace_context) (st_context *new_context, st_stack *stack);
     int (*push_context) (st_context *new_context, st_stack *stack);
     int (*exit_context)(st_stack *stack);
     

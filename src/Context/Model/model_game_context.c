@@ -18,6 +18,11 @@ void update_logic_game(st_context *state)
         
         state->inputs.release[KEY_ESCAPE] = false; 
     }
+    if(state->inputs.release[KEY_ENTER] == true)
+    {
+        state->request.action = CONTEXT_ACTION_REPLACE;
+        state->request.target = C_GAME;
+    }
 
     // Déplacement de la caméra
     if(state->inputs.down[KEY_Z] || state->inputs.pressed[KEY_Z])

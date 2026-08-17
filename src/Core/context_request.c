@@ -16,7 +16,6 @@ void context_request(st_engine *engine_state){
         res = engine_state->context_tool.create_context(new_state);
         if(res == RES_ERROR)
         {
-            // Gestion de l'err&engine_state->stack_context.current_context->ev_next_contexteur
             engine_state->running = false;
         }
         else
@@ -64,6 +63,31 @@ void context_request(st_engine *engine_state){
         }
         
         engine_state->running = false;
+        break;
+
+    case CONTEXT_ACTION_REPLACE:
+        st_context *replace_state;
+        replace_state = engine_state->all_contexts[request->target](); 
+
+        res = engine_state->context_tool.create_context(replace_state);
+        if(res == RES_ERROR)
+        {
+            engine_state->running = false;
+        }
+        else
+        {
+            destroy_render_data(&engine_state->stack_context.current_context->render);
+            res = engine_state->context_tool.replace_context(replace_state, &engine_state->stack_context);
+            if(res != RES_DONE)
+            {
+                fprintf(stderr, "Erreur lors du poussage du contexte dans la stack.\n");
+            }
+            else
+            {
+                link_input(engine_state->stack_context.current_context);
+                link_mouse(engine_state->stack_context.current_context);
+            }
+        }
         break;
 
     default:
@@ -146,7 +170,8 @@ void destroy_render_data(st_render_data *render)
             
             free(instanced_mesh_group->shared_render_object);
             
-            glDeleteBuffers(1, &instanced_mesh_group->st_instanced.vbo);
+            gl_delete_instanced_mesh(&instanced_mesh_group->st_instanced);
+
             free(instanced_mesh_group->st_instanced.cpu_data);
             
             break;

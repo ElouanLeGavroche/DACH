@@ -17,6 +17,7 @@ int init_a_loaded_texture(st_image *image);
 /* */
 void gl_deletes();
 void gl_delete_mesh(st_render_object *object);
+void gl_delete_instanced_mesh(st_instanced *mesh);
 
 void gl_delete_texture(unsigned int id);
 void gl_delete_shader(unsigned int id);

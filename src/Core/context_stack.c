@@ -22,6 +22,14 @@ int link_context_tools_with_engine(vt_context_tool *tools)
         fprintf(stderr, "Impossible de linker la stack context avec create.\n");
         return RES_FAILED_ASSIGNEMENT;
     }
+
+    tools->replace_context = replace_context;
+    if(!tools->replace_context)
+    {
+        fprintf(stderr, "Impossible de linker la stack context avec replace.\n");
+        return RES_FAILED_ASSIGNEMENT;
+    }
+    
     return RES_DONE;
 }
 
@@ -91,6 +99,22 @@ int push_context(st_context *new_context, st_stack *stack)
     return RES_DONE;
 }
 
+int replace_context(st_context *new_context, st_stack *stack)
+{
+    if(stack == NULL || new_context == NULL)
+    {
+        fprintf(stderr, "La stack ou le context est null, impossible de le remplacer.\n");
+        return RES_ERROR;
+    }
+
+    free(stack->current_context);
+    stack->current_context = NULL;
+
+    stack->current_context = new_context;
+    stack->stack_context[0] = stack->current_context;
+
+    return RES_DONE;
+}
 int create_context(st_context *new_state)
 {
     int res;

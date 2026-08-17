@@ -124,7 +124,7 @@ void mainloop(st_engine *engine_state){
 
 void update_logique(st_stack stack, int depth, double dt)
 {
-    if(stack.stack_context[depth]->politicy.update_bellow == true && depth != stack.level_of_depth)
+    if(stack.stack_context[depth]->politicy.update_bellow == true && depth + 1 < stack.level_of_depth)
     {
         update_logique(stack, depth + 1, dt);
     }
@@ -134,7 +134,7 @@ void update_logique(st_stack stack, int depth, double dt)
 
 void update_render(st_stack stack, int depth, double dt)
 {
-    if(stack.stack_context[depth]->politicy.render_bellow == true)
+    if(stack.stack_context[depth]->politicy.render_bellow == true && depth + 1 < stack.level_of_depth)
     {
         update_render(stack, depth + 1, dt);
     }

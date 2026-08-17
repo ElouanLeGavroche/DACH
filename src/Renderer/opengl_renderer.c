@@ -217,6 +217,11 @@ void gl_delete_mesh(st_render_object *object)
     glDeleteBuffers(1, &object->mesh->EBO);
 }
 
+void gl_delete_instanced_mesh(st_instanced *mesh)
+{
+    glDeleteBuffers(1, &mesh->vbo);
+}
+
 void gl_delete_texture(unsigned int id)
 {
     glDeleteTextures(1, &id);

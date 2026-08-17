@@ -64,7 +64,7 @@ st_context* create_pause_menu_context()
 {
     struct st_context *main_menu_state = calloc(sizeof(st_context), sizeof(st_context));
 
-    main_menu_state->id = C_MAIN_MENU;
+    main_menu_state->id = C_PAUSE_MENU;
     
     main_menu_state->init_state = init_pause_menu;
     main_menu_state->update_logic_context = controller_update_logic_pause_menu;

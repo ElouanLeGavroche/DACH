@@ -181,7 +181,7 @@ typedef struct st_2d_mesh_group
 {
     st_render_object *objects;
     int nb_objects;
-};
+}st_2d_mesh_group;
 
 /**
  * @brief groupe d'objets à instancier
