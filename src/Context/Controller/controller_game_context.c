@@ -18,11 +18,15 @@ int init_game(st_context *state)
     state->render.nb_groups = 0;
     state->render.nb_total_groups = 0;
 
+    // CREATION DU MONDE    --------------------------------------------------------------------------------------------
+    st_loaded_map *map = load_map("ressources/maps/fisel.json");
+    st_game_model *model = state->model;
+
     // On crée le monde logiquement
-    // Rien pour le moment
-    
+    //create_country(map);
+
     // On crée le monde graphiquement
-    controller_create_world(state);
+    create_render_world(state, map);
 
     // On passe la caméra dans la fenêtre pour les callbacks
     GLFWwindow *window = glfwGetCurrentContext();
@@ -45,11 +49,11 @@ void controller_update_render_game(st_render_data *render, double time)
     update_render_game(render, time);
 }
 
-int controller_create_world(st_context *state)
+int create_render_world(st_context *state, st_loaded_map *map)
 {
     // Chargement des éléments propre à la map
     int i;
-    st_loaded_map *map = load_map("ressources/maps/fisel.json");
+    
     if(map == NULL)
     {
         fprintf(stderr, "Erreur lors du chargement de la map.\n");
@@ -125,7 +129,8 @@ int controller_create_world(st_context *state)
 st_context* create_game_context()
 {
     struct st_context *game_state = calloc(sizeof(st_context), sizeof(st_context));
-
+    struct st_game_model *model = calloc(sizeof(st_game_model), sizeof(st_game_model));
+    
     game_state->id = C_GAME;
     
     game_state->init_state = init_game;
@@ -142,6 +147,8 @@ st_context* create_game_context()
 
     game_state->request.action = CONTEXT_ACTION_NONE;
     game_state->request.target = C_NONE;
+
+    game_state->model = model;
 
     return game_state;
 }

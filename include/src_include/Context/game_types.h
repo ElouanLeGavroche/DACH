@@ -290,9 +290,9 @@ typedef struct st_country
     int min_y;
 }st_country;
 
-typedef struct game_model
+typedef struct st_game_model
 {
     st_country country;
-}game_model;
+}st_game_model;
 
 #endif

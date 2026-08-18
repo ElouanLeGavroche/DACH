@@ -38,7 +38,7 @@ st_country_tile create_tile(int angled, int type);
 int delete_tile(st_country_tile **tiles, int x, int y);
 
 // restera dans country_.c
-st_country* create_country();
+st_country* create_country(const st_loaded_map *map);
 int delete_country();
 
 void print_world_int_terminal(st_country country);

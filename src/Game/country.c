@@ -27,7 +27,7 @@ int delete_tile(st_country_tile **tiles, int x, int y)
     return RES_DONE;
 }
 
-st_country* create_country()
+st_country* create_country(const st_loaded_map *map)
 {
     st_country *country = malloc(sizeof(st_country));
     if(!country)
@@ -35,7 +35,6 @@ st_country* create_country()
         fprintf(stderr, "Erreur lors de l'allocation mémoire de country.\n");
         return NULL;
     }
-
     int i, y;
     for(i = 0; i < 10; i ++)
     {
