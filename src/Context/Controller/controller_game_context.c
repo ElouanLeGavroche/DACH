@@ -18,7 +18,10 @@ int init_game(st_context *state)
     state->render.nb_groups = 0;
     state->render.nb_total_groups = 0;
 
-    // On crée le monde
+    // On crée le monde logiquement
+    // Rien pour le moment
+    
+    // On crée le monde graphiquement
     controller_create_world(state);
 
     // On passe la caméra dans la fenêtre pour les callbacks
@@ -46,7 +49,7 @@ int controller_create_world(st_context *state)
 {
     // Chargement des éléments propre à la map
     int i;
-    st_map *map = load_map("ressources/maps/fisel.json");
+    st_loaded_map *map = load_map("ressources/maps/fisel.json");
     if(map == NULL)
     {
         fprintf(stderr, "Erreur lors du chargement de la map.\n");

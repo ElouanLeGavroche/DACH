@@ -21,6 +21,7 @@ VIEW=$(SRC)View/
 CORE=$(SRC)Core/
 PLATFORM=$(SRC)Platform/
 RENDERER=$(SRC)Renderer/
+GAME=$(SRC)Game/
 
 CONTEXT_MODEL=$(SRC_CONTEXT)Model/
 CONTEXT_CONTROLLER=$(SRC_CONTEXT)Controller/
@@ -63,6 +64,8 @@ $(SAVE_EXEC)$(EXEC):\
 	$(PLATFORM)glfw_window.o\
 	$(PLATFORM)glfw_mouse.o\
 	$(PLATFORM)glfw_time.o\
+	\
+	$(GAME)country.o\
 	\
 	$(RENDERER)opengl_renderer.o\
 	$(RENDERER)render_group.o\

@@ -1,6 +1,6 @@
 #include "../../../include/src_include/Shared_tools/Load_tools/load_map.h"
 
-st_map* load_map(const char *path)
+st_loaded_map* load_map(const char *path)
 {
     const char *err;
 
@@ -24,7 +24,7 @@ st_map* load_map(const char *path)
     struct json_object *_y;
     struct json_object *_z;
     
-    st_map *map = malloc(sizeof(st_map));
+    st_loaded_map *map = malloc(sizeof(st_loaded_map));
     if(!map)
     {
         fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));

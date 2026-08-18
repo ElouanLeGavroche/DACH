@@ -11,7 +11,7 @@
 #include "../../Context/game_types.h"
 #include "../../Config/constantes.h"
 
-st_map* load_map(const char *path);
+st_loaded_map* load_map(const char *path);
 
 
 #endif

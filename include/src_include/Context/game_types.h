@@ -248,12 +248,51 @@ typedef struct st_loaded_group_map
 
 }st_loaded_group_map;
 
-typedef struct st_map
+typedef struct st_loaded_map
 {
     char *path;
     int map_size;
     int nb_groups;
     st_loaded_group_map *groups;
 
-}st_map;
+}st_loaded_map;
+
+/**
+ * @brief Vue que l'on peux construir en diag, il faut savoir quelle côté de la tile est déjà utiliser, d'où le NSEW
+ * @param type présice le type : water, grass, fertile...
+ * @param noth
+ * @param south
+ * @param east
+ * @param west
+ * @param angled savoir si la tile est penché (si oui, tout les bâtiments ne peuvent y être installer), il possède la valeur
+ * 0,1,2,3,4 qui correspondent à plat, nord, sud, est west
+ */
+typedef struct st_country_tile
+{
+    int type;
+
+    bool north;
+    bool south;
+    bool east;
+    bool west;
+
+    int angled;
+}st_country_tile;
+
+typedef struct st_country
+{
+    st_country_tile *tiles;
+
+    int size_x;
+    int size_y;
+
+    int min_x;
+    int min_y;
+}st_country;
+
+typedef struct game_model
+{
+    st_country country;
+}game_model;
+
 #endif

@@ -11,6 +11,8 @@
 #include "../../Core/context_camera.h"
 #include "../../Core/context_content.h"
 
+#include "../../Game/country.h"
+
 #include "../../Platform/glfw_mouse.h"
 
 #include "../../Shared_tools/Load_tools/load_map.h"

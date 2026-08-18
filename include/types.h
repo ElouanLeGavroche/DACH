@@ -215,6 +215,9 @@ typedef struct st_context
     // Le rendu ne connait que les données liée au rendu
     void (*update_render_context)(st_render_data *render, double time);
 
+    // Structure sépcifique à un context
+    void *model;
+
     // Permet de stocker les inputs qui gérerons les actions en conséquent
     st_input inputs;
     // Permet de stocker les mouvement de la souris et de les traiter

@@ -1,23 +1,46 @@
 #ifndef COUNTRY
 #define COUNTRY
 
-/**
- * En gros, ce que j'aimerai faire comme ça,
- * C'est charger la map, pouvoir crée un tableau 2D côté CPU de
- * la carte et un côté GPU. Ainsi le côté GPU est simplement envoyé
- * à la Carte graphique (carte la carte en elle même ne change jamais)
- * et garder le côté CPU pour savoir si un bâtiment ajouter est sur une case
- * valide.
- * 
- * Je suis encore un peu pommé sur l'ensemble ici, je verrais ça plus tard.
- */
-typedef struct st_tile_triangle
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "../../types.h"
+#include "../Context/game_types.h"
+
+
+typedef enum
 {
-    
-}st_tile;
+    FLAT,
+    NORTH,
+    SOUTH,
+    EAST,
+    WEST
+}e_type_angle;
+
+typedef enum
+{
+    FREE,
+    OCCUPIED
+}e_cell_status;
+
+typedef enum
+{
+    GRASS,
+    WATER,
+    FETILE
+}e_tile_type;
 
 
-int load_country(const char *path);
-int create_country();
-int delte_country();
+/* À l'avenir, ils auront chacun leur fichier */
+
+// Sera dans tile.c (pour avoir les fonction, add, replace... Je sais pas à quoi ça pourra servir, mais on sait jamais !)
+st_country_tile create_tile(int angled, int type);
+int delete_tile(st_country_tile **tiles, int x, int y);
+
+// restera dans country_.c
+st_country* create_country();
+int delete_country();
+
+void print_world_int_terminal(st_country country);
+
 #endif
