@@ -38,11 +38,12 @@ typedef enum
 
 // Sera dans tile.c (pour avoir les fonction, add, replace... Je sais pas à quoi ça pourra servir, mais on sait jamais !)
 st_country_tile create_tile(int angled, int type);
-int delete_tile(st_country_tile **tiles, int x, int y);
+int delete_tile(st_country_tile *tiles, int x, int y);
 
 // restera dans country_.c
 st_country* create_country(const st_loaded_map *map);
 int delete_country();
+
 int realloc_country_size(st_country *country, size_t n_size);
 st_country* better_load_map(const char *path);
 

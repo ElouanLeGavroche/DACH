@@ -15,14 +15,14 @@ st_country_tile create_tile(int angled, int type)
     return tile;
 }
 
-int delete_tile(st_country_tile **tiles, int x, int y)
+int delete_tile(st_country_tile *tiles, int x, int y)
 {
     int i;
 
-    free(tiles[x + y]);
+    free(&tiles[x + y]);
     for(i = x+ y; i < 100; i ++) {tiles[i] = tiles[i + 1];}
 
-    (*tiles) = realloc((*tiles), sizeof(st_country_tile));
+    tiles = realloc(tiles, sizeof(st_country_tile));
 
     return RES_DONE;
 }
@@ -65,18 +65,17 @@ int get_indice(int x, int y, st_country *country)
         return -1;
     }
 
-    x = (x <= 0 && x > country->size_x)? x : -1;
-    y = (y <= 0 && x > country->size_y)? y : -1;
+    x = (x <= 0 && x > country->size_x)? -1 : x;
+    y = (y <= 0 && x > country->size_y)? -1 : y;
 
     return (x == -1 || y == -1)? -1 : ((y * country->size_y) + x);
 }
 
 int realloc_country_size(st_country *country, size_t n_size)
 {
-    printf("x : %d, y : %d taille : %d \n", country->size_x, country->size_y, n_size);
     if(!country)
     {
-        fprintf(stderr, "Impossible de realloc country : il null.\n");
+        fprintf(stderr, "Impossible de realloc country : il est null.\n");
         return -1;
     }
     
@@ -185,7 +184,6 @@ st_country* better_load_map(const char *path)
         if(x > max_x){ max_x = x; }
         if(y > max_y){ max_y = y; }
     }
-    printf("%d, %d\n", max_x, max_y);
     total = (sizeof(st_country_tile) * max_x) * max_y;
 
     // Alloué à la map de quoi contenir tout les blocks
@@ -262,14 +260,20 @@ st_country* better_load_map(const char *path)
         
         country->tiles[get_indice(x, y, country)].height = z;
         country->tiles[get_indice(x, y, country)].angled = angle;
-        
-        /*
-        for(i = 0; i < max_x * max_y; i ++)
-        {
-            printf("(%d)\n", country->tiles[i].type);
-        }
-            */
 
     }
+
+    printf("%d %d %d\n", country->size_x, country->size_y, country->tiles[get_indice(0, 1, country)].type);
+
+    for(i = 0; i < country->size_x; i ++)
+    {
+        for(y = 0; y < country->size_y; y ++)
+        {
+            printf("%d ", country->tiles[get_indice(i, y, country)].type);
+        }
+        printf("\n");
+        
+    }
+
     return country;
 }
