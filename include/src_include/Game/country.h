@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <json-c/json.h>
 
 #include "../Context/game_types.h"
@@ -43,6 +44,7 @@ int delete_tile(st_country_tile **tiles, int x, int y);
 st_country* create_country(const st_loaded_map *map);
 int delete_country();
 int realloc_country_size(st_country *country, size_t n_size);
+st_country* better_load_map(const char *path);
 
 
 int get_indice(int x, int y, st_country *country);

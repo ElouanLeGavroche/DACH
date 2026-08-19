@@ -73,20 +73,23 @@ int get_indice(int x, int y, st_country *country)
 
 int realloc_country_size(st_country *country, size_t n_size)
 {
+    printf("x : %d, y : %d taille : %d \n", country->size_x, country->size_y, n_size);
     if(!country)
     {
         fprintf(stderr, "Impossible de realloc country : il null.\n");
         return -1;
     }
-
-    st_country *temp = country;
-    temp = realloc(country, n_size);
-
-    if (!temp) {
+    
+    st_country_tile *temp = realloc(country->tiles, n_size);
+    if (!temp) 
+    {
+        free(country->tiles);
         fprintf(stderr, "Allocation échouée : %s\n", strerror(errno));
         return RES_FAILED_MALLOC;
     }
+    country->tiles = temp;
 
+    printf("Avé\n");
     return RES_DONE;
 }
 
@@ -107,6 +110,7 @@ st_country* better_load_map(const char *path)
    const char *err;
 
     int temp_indice, i, res;
+    int max_x = 0, max_y = 0, total = 0;
 
     // Structures des différents éléments stocké dans le JSON
     struct json_object *root;
@@ -121,12 +125,16 @@ st_country* better_load_map(const char *path)
 
     int x, y, z, angle;
     
-    st_country *country = malloc(sizeof(st_loaded_map));
+    st_country *country = malloc(sizeof(st_country));
     if(!country)
     {
-        fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
+        fprintf(stderr, "Allocation de country échouer : %s\n", strerror(errno));
         return NULL;
     }
+    country->size_x = 0;
+    country->size_y = 0;
+    country->min_x = 0;
+    country->min_y = 0;
 
     root = json_object_from_file(path);
     if(!root)
@@ -140,17 +148,51 @@ st_country* better_load_map(const char *path)
     if(!blocks)
     {
         err = json_util_get_last_err();
-        fprintf(stderr, "Erreur lors de l'ouverture de la map : %s\n", err);
+        fprintf(stderr, "Erreur lors de la récupération des datas de la map : %s\n", err);
         return NULL;
     }
 
     temp_indice = json_object_array_length(blocks);
+    
+    for(i = 0; i < temp_indice; i ++)
+    {
+        block = json_object_array_get_idx(blocks, i);
+        if(!block)
+        {
+            err = json_util_get_last_err();
+            fprintf(stderr, "Erreur lors de la récupération du bloc : %s\n", err);
+            return NULL;
+        }
+
+        _x = json_object_object_get(block, "x");
+        if(!_x)
+        {
+            err = json_util_get_last_err();
+            fprintf(stderr, "Erreur lors de la récupération de la pos x : %s\n", err);
+            return NULL;
+        }
+
+        _y = json_object_object_get(block, "y");
+        if(!_x)
+        {
+            err = json_util_get_last_err();
+            fprintf(stderr, "Erreur lors de la récupération de la pos y : %s\n", err);
+            return NULL;
+        }
+        x = json_object_get_int(_x);
+        y = json_object_get_int(_y);
+
+        if(x > max_x){ max_x = x; }
+        if(y > max_y){ max_y = y; }
+    }
+    printf("%d, %d\n", max_x, max_y);
+    total = (sizeof(st_country_tile) * max_x) * max_y;
 
     // Alloué à la map de quoi contenir tout les blocks
-    country->tiles = calloc(sizeof(st_country_tile), sizeof(st_country_tile) * temp_indice);  
+    country->tiles = malloc(sizeof(st_country_tile)* total);  
     if(!country->tiles)
     {
-        fprintf(stderr, "Allocation échouer %s.\n", strerror(errno));
+        fprintf(stderr, "Allocation des tiles échouer %s.\n", strerror(errno));
         return NULL;
     }
 
@@ -209,28 +251,25 @@ st_country* better_load_map(const char *path)
         z = (float)json_object_get_int(_z) / 2.5;
         angle = json_object_get_int(_angle);
 
-        country->min_x = 0;
-        country->min_y = 0;
-
         // Si le block est plus loin que ce qu'il est possible de faire, alors on agrandi la carte
-        if(x > country->size_x || y > country->size_y)
+        if(x >= country->size_x || y >= country->size_y)
         {
         
-            country->size_x = (x > country->size_x)? x : country->size_x; 
-            country->size_y = (y > country->size_y)? y : country->size_y; 
-            res = realloc_country_size(country, sizeof(st_country_tile) * (country->size_x * country->size_y));
-            if(res != RES_DONE)
-            {
-                fprintf(stderr, "Erreur lors de l'allocation mémoire de country.\n");
-                return NULL;
-            }
+            country->size_x = (x >= country->size_x)? x : country->size_x; 
+            country->size_y = (y >= country->size_y)? y : country->size_y; 
+
         }
         
         country->tiles[get_indice(x, y, country)].height = z;
         country->tiles[get_indice(x, y, country)].angled = angle;
         
+        /*
+        for(i = 0; i < max_x * max_y; i ++)
+        {
+            printf("(%d)\n", country->tiles[i].type);
+        }
+            */
 
     }
-    
     return country;
 }
