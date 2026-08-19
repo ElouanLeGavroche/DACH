@@ -38,7 +38,6 @@ st_loaded_map* load_map(const char *path)
         fprintf(stderr, "Erreur lors de l'ouverture de la map : %s\n", err);
         return NULL;
     }
-    
     // Parser la struct dans les sous structures adéquat 
     json_object_object_get_ex(root, "groups", &groups);
     if(!groups)
@@ -169,50 +168,4 @@ st_loaded_map* load_map(const char *path)
 
     json_object_put(root);
     return map;
-}
-
-
-st_country* better_load_map(const char *path)
-{
-   const char *err;
-
-    struct json_object *temp_object;
-    struct json_object *json_group;
-    int temp_indice, blocks_group, i, y;
-
-    // Structures des différents éléments stocké dans le JSON
-    struct json_object *root;
-
-    struct json_object *blocks;
-    struct json_object *block;
-    struct json_object *_x;
-    struct json_object *_y;
-    struct json_object *_z;
-    
-    st_country *country = malloc(sizeof(st_loaded_map));
-    if(!country)
-    {
-        fprintf(stderr, "Allocation échouer : %s\n", strerror(errno));
-        return NULL;
-    }
-
-    root = json_object_from_file(path);
-    if(!root)
-    {
-        err = json_util_get_last_err();
-        fprintf(stderr, "Erreur lors de l'ouverture de la map : %s\n", err);
-        return NULL;
-    }
-
-    // Alloué à la map de quoi contenir tout les blocks
-    map->nb_groups = temp_indice;
-    
-    map->groups = malloc(sizeof(st_loaded_group_map) * map->nb_groups);
-    if(!map->groups)
-    {
-        fprintf(stderr, "Allocation échouer %s.\n", strerror(errno));
-        return NULL;
-    }
-    
-
 }

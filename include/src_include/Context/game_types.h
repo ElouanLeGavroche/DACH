@@ -1,6 +1,9 @@
 #ifndef GAME_TYPES
 #define GAME_TYPES
 
+#include <stdbool.h>
+#include <cglm/cglm.h>
+#include <cglm/types.h>
 
 typedef enum e_render_group_type
 {
@@ -276,6 +279,7 @@ typedef struct st_country_tile
     bool east;
     bool west;
 
+    int height;
     int angled;
 }st_country_tile;
 

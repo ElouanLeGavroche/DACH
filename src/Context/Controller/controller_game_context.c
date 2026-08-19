@@ -20,6 +20,7 @@ int init_game(st_context *state)
 
     // CREATION DU MONDE    --------------------------------------------------------------------------------------------
     st_loaded_map *map = load_map("ressources/maps/fisel.json");
+    st_country *super_map = better_load_map("ressources/maps/fisel_v2.json");
     st_game_model *model = state->model;
 
     // On crée le monde logiquement

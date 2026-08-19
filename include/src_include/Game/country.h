@@ -1,12 +1,14 @@
 #ifndef COUNTRY
 #define COUNTRY
 
+#include <errno.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <json-c/json.h>
 
-#include "../../types.h"
 #include "../Context/game_types.h"
-
+#include "../../types.h"
 
 typedef enum
 {
@@ -40,7 +42,10 @@ int delete_tile(st_country_tile **tiles, int x, int y);
 // restera dans country_.c
 st_country* create_country(const st_loaded_map *map);
 int delete_country();
+int realloc_country_size(st_country *country, size_t n_size);
 
-void print_world_int_terminal(st_country country);
+
+int get_indice(int x, int y, st_country *country);
+st_country_tile* get_tile(int x, int y, st_country *country);
 
 #endif
