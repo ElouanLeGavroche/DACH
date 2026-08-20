@@ -226,7 +226,7 @@ st_country* better_load_map(const char *path)
         Si un monde à des trou, le jeu le remplira avec des cases vide
         qui existe d'un point de vue logique.
     */
-    total = max_x * max_y;
+    total = (max_x + 1)* (max_y + 1);
 
     // Alloué à la map de quoi contenir tout les blocks
     country->tiles = malloc(sizeof(st_country_tile) * total);  
