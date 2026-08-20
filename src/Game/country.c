@@ -134,7 +134,7 @@ st_country* better_load_map(const char *path)
     float z;
 
     /* initialisation de country */
-    st_country *country = calloc(total, sizeof(st_country));
+    st_country *country = malloc(sizeof(st_country));
     if(!country)
     {
         fprintf(stderr, "Allocation de country échouer : %s\n", strerror(errno));
@@ -342,15 +342,17 @@ st_country_map_for_render* parse_country_data_for_gpu(st_country *country)
     
     st_parsed_country *country_render = malloc(sizeof(st_country_map_for_render));
 
-    int x, y,  i, z = 0;
+    int x, y,  i, z;
     typedef int list_int;
-    list_int *list_diff_group = malloc(sizeof(list_int));
-    list_int *nb_ref_per_group = malloc(sizeof(list_int));
+    int max_possible_group = country->size_x * country->size_y;
+    list_int *list_diff_group = calloc(max_possible_group, sizeof(list_int));
+    list_int *nb_ref_per_group = calloc(max_possible_group, sizeof(list_int));
     int diff_group = 0;
 
     /* trouver le nombre de groupe à crée */
     for(i = 0; i < (country->size_x * country->size_y); i ++)
     {
+        z = 0;
         while(z < diff_group && list_diff_group[z] != country->tiles[i].type) { z ++; }
 
         if(list_diff_group[z] != country->tiles[i].type)
@@ -368,22 +370,43 @@ st_country_map_for_render* parse_country_data_for_gpu(st_country *country)
         }
     }
 
-    printf("%d %d\n", list_diff_group[2], nb_ref_per_group[2]);
+    printf("ici %d %d %d\n", list_diff_group[2], nb_ref_per_group[2], diff_group);
 
     /* On donne le nombre de groupe à la structure */
     country_render->nb_group = diff_group;
     country_render->groups = malloc(sizeof(st_better_loaded_group_map) * country_render->nb_group);
-    
-    /* On attribue l'id correspondant à chaque groupe */
+
+    /* On attribue l'id, le nombre et la place correspondant à chaque groupe */
     for(i = 0; i < country_render->nb_group; i ++)
     {
         country_render->groups[i].id = list_diff_group[i];
+        country_render->groups[i].nb_blocks = nb_ref_per_group[i];
+        country_render->groups[i].tiles = malloc(sizeof(st_loaded_tile_map) * nb_ref_per_group[i]);
     }
 
     /* On parse le reste */
-    for(x = 0; x < (country->size_x * country->size_y); x ++)
+    int *current_index = calloc(country_render->nb_group, sizeof(int));
+
+    for(x = 0; x < country->size_x; x++) 
     {
-        st_loaded_tile_map *tile;
+        for(y = 0; y < country->size_y; y++) 
+        {
+            st_country_tile *cpu_tile = get_tile(x, y, country);
+            if(cpu_tile) 
+            {
+                z = 0;
+                while(z < country_render->nb_group && cpu_tile->type != country_render->groups[z].id) z++;
+                
+                if(z < country_render->nb_group) 
+                {
+                    int idx = current_index[z];
+                    country_render->groups[z].tiles[idx].height_value = cpu_tile->height;
+                    country_render->groups[z].tiles[idx].x_indice = x;
+                    country_render->groups[z].tiles[idx].y_indice = y;
+                    current_index[z]++;
+                }
+            }
+        }
     }
 
 }
