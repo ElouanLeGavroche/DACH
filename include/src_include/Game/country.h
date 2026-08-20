@@ -43,7 +43,7 @@ int delete_tile(st_country_tile *tiles, int x, int y);
 
 // restera dans country_.c
 st_country* create_country(const st_loaded_map *map);
-int delete_country();
+int delete_country(st_country **country);
 
 int realloc_country_size(st_country *country, size_t n_size);
 st_country* better_load_map(const char *path);

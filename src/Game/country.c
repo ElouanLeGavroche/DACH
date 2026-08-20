@@ -15,6 +15,12 @@ st_country_tile create_tile(int angled, int type)
     return tile;
 }
 
+int delete_country(st_country **country)
+{
+    free((*country)->tiles);
+    free(*country);
+}
+
 int delete_tile(st_country_tile *tiles, int x, int y)
 {
     int i;
