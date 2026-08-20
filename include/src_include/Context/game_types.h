@@ -251,14 +251,14 @@ typedef struct st_loaded_group_map
 
 }st_loaded_group_map;
 
-typedef struct st_loaded_map
+typedef struct st_country_map_for_render
 {
     char *path;
     int map_size;
     int nb_groups;
     st_loaded_group_map *groups;
 
-}st_loaded_map;
+}st_country_map_for_render;
 
 /**
  * @brief Vue que l'on peux construir en diag, il faut savoir quelle côté de la tile est déjà utiliser, d'où le NSEW
@@ -294,9 +294,10 @@ typedef struct st_country
     int min_y;
 }st_country;
 
+
 typedef struct st_game_model
 {
-    st_country country;
+    st_country *country;
 }st_game_model;
 
 #endif

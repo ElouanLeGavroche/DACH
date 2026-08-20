@@ -25,7 +25,6 @@ int delete_tile(st_country_tile *tiles, int x, int y)
 {
     int i;
 
-    free(&tiles[x + y]);
     for(i = x+ y; i < 100; i ++) {tiles[i] = tiles[i + 1];}
 
     tiles = realloc(tiles, sizeof(st_country_tile));
@@ -33,7 +32,7 @@ int delete_tile(st_country_tile *tiles, int x, int y)
     return RES_DONE;
 }
 
-st_country* create_country(const st_loaded_map *map)
+st_country* create_country(const st_country_map_for_render *map)
 {
     st_country *country = malloc(sizeof(st_country));
     if(!country)
@@ -67,7 +66,7 @@ int get_indice(int x, int y, st_country *country)
 {
     if(!country)
     {
-        fprintf(stderr, "Impossible de travailler sur country : il null.\n");
+        fprintf(stderr, "Impossible de travailler sur country : il est NULL.\n");
         return -1;
     }
 
@@ -125,7 +124,7 @@ st_country* better_load_map(const char *path)
     float z;
 
     /* initialisation de country */
-    st_country *country = malloc(sizeof(st_country));
+    st_country *country = calloc(total, sizeof(st_country));
     if(!country)
     {
         fprintf(stderr, "Allocation de country échouer : %s\n", strerror(errno));
@@ -311,7 +310,7 @@ st_country* better_load_map(const char *path)
     {
         for(j = country->min_y; j <= country->size_y; j ++)
         {
-            printf("x : %d | y : %d | res : %d\n", i, j, country->tiles[get_indice(i, y, country)].type);
+            printf("x : %d | y : %d | res : %d\n", i, j, country->tiles[get_indice(i, j, country)].type);
         }
         printf("\n");
         
@@ -320,4 +319,35 @@ st_country* better_load_map(const char *path)
     /* Libération de la mémoire des éléments qui ne sont plus utiles*/
     json_object_put(root);
     return country;
+}
+
+
+void parse_country_data_for_gpu(st_country *country)
+{
+    int x, y,  i, z = 0;
+    typedef int list_int;
+    list_int *list_diff_group = malloc(sizeof(list_int));
+
+    int diff_group = 0;
+
+    /* trouver le nombre de groupe à crée */
+    for(i = 0; i < (country->size_x * country->size_y); i ++)
+    {
+        while(z < diff_group && list_diff_group[z] != country->tiles[i].type) { z ++; }
+        if(list_diff_group[z] != country->tiles[i].type)
+        {
+            diff_group ++;
+            list_diff_group[diff_group] = country->tiles[i].type; 
+        }
+    }
+    printf("Nombre de groupe trouvé : %d.\n", diff_group);
+    /*
+    for(x = 0; x < country->size_x; x ++)
+    {
+        for(y = 0; y < country->size_y; y ++)
+        {
+
+        }
+    }
+    */
 }
