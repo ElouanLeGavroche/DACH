@@ -108,7 +108,7 @@ st_country* better_load_map(const char *path)
 {
    const char *err;
 
-    int temp_indice, i, res;
+    int temp_indice, i;
     int max_x = 0, max_y = 0, total = 0;
 
     // Structures des différents éléments stocké dans le JSON
@@ -122,8 +122,9 @@ st_country* better_load_map(const char *path)
     struct json_object *_z;
     struct json_object *_angle;
 
-    int x, y, z, angle;
-    
+    int x, y, angle, type;
+    float z;
+
     st_country *country = malloc(sizeof(st_country));
     if(!country)
     {
@@ -172,7 +173,7 @@ st_country* better_load_map(const char *path)
         }
 
         _y = json_object_object_get(block, "y");
-        if(!_x)
+        if(!_y)
         {
             err = json_util_get_last_err();
             fprintf(stderr, "Erreur lors de la récupération de la pos y : %s\n", err);
@@ -184,15 +185,20 @@ st_country* better_load_map(const char *path)
         if(x > max_x){ max_x = x; }
         if(y > max_y){ max_y = y; }
     }
-    total = (sizeof(st_country_tile) * max_x) * max_y;
+    
+    total = max_x * max_y;
+    printf("Max x : %d \nMax y : %d\nTotal : %d\n", max_x, max_y, total);
 
     // Alloué à la map de quoi contenir tout les blocks
-    country->tiles = malloc(sizeof(st_country_tile)* total);  
+    country->tiles = malloc(sizeof(st_country_tile) * total);  
     if(!country->tiles)
     {
         fprintf(stderr, "Allocation des tiles échouer %s.\n", strerror(errno));
         return NULL;
     }
+
+    country->size_x = max_x;
+    country->size_y = max_y;
 
     for(i = 0; i < temp_indice; i ++)
     {
@@ -221,7 +227,7 @@ st_country* better_load_map(const char *path)
         }
 
         _y = json_object_object_get(block, "y");
-        if(!_x)
+        if(!_y)
         {
             err = json_util_get_last_err();
             fprintf(stderr, "Erreur lors de la récupération de la pos y : %s\n", err);
@@ -229,7 +235,7 @@ st_country* better_load_map(const char *path)
         }
 
         _z = json_object_object_get(block, "z");
-        if(!_x)
+        if(!_z)
         {
             err = json_util_get_last_err();
             fprintf(stderr, "Erreur lors de la récupération de la pos z : %s\n", err);
@@ -248,22 +254,13 @@ st_country* better_load_map(const char *path)
         y = json_object_get_int(_y);
         z = (float)json_object_get_int(_z) / 2.5;
         angle = json_object_get_int(_angle);
+        type = json_object_get_int(_type);
 
-        // Si le block est plus loin que ce qu'il est possible de faire, alors on agrandi la carte
-        if(x >= country->size_x || y >= country->size_y)
-        {
-        
-            country->size_x = (x >= country->size_x)? x : country->size_x; 
-            country->size_y = (y >= country->size_y)? y : country->size_y; 
-
-        }
-        
-        country->tiles[get_indice(x, y, country)].height = z;
+        country->tiles[get_indice(x, y, country)].type = type;
         country->tiles[get_indice(x, y, country)].angled = angle;
-
+        country->tiles[get_indice(x, y, country)].height = z;
+        printf("X : %d | Y : %d | Z : %f\n", x, y, z);
     }
-
-    printf("%d %d %d\n", country->size_x, country->size_y, country->tiles[get_indice(0, 1, country)].type);
 
     for(i = 0; i < country->size_x; i ++)
     {
@@ -274,6 +271,6 @@ st_country* better_load_map(const char *path)
         printf("\n");
         
     }
-
+    printf("Fin de func.\n");
     return country;
 }
