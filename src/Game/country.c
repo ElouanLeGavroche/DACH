@@ -65,10 +65,10 @@ int get_indice(int x, int y, st_country *country)
         return -1;
     }
 
-    x = (x <= 0 && x > country->size_x)? -1 : x;
-    y = (y <= 0 && x > country->size_y)? -1 : y;
-
-    return (x == -1 || y == -1)? -1 : ((y * country->size_y) + x);
+    x = (x <= 0 && x >= country->size_x)? -1 : x;
+    y = (y <= 0 && x >= country->size_y)? -1 : y;
+    
+    return (x == -1 || y == -1)? -1 : ((x * country->size_x + 1) * y);
 }
 
 int realloc_country_size(st_country *country, size_t n_size)
@@ -134,7 +134,7 @@ st_country* better_load_map(const char *path)
     country->size_x = 0;
     country->size_y = 0;
     country->min_x = 0;
-    country->min_y = 0;
+    country->min_y = 1;
 
     root = json_object_from_file(path);
     if(!root)
@@ -261,12 +261,12 @@ st_country* better_load_map(const char *path)
         country->tiles[get_indice(x, y, country)].height = z;
         printf("X : %d | Y : %d | Z : %f\n", x, y, z);
     }
-
-    for(i = 0; i < country->size_x; i ++)
+    printf("Taille x et y : %d %d\n", country->size_x, country->size_y);
+    for(i = country->min_x; i <= country->size_x; i ++)
     {
-        for(y = 0; y < country->size_y; y ++)
+        for(y = country->min_y; y <= country->size_y; y ++)
         {
-            printf("%d ", country->tiles[get_indice(i, y, country)].type);
+            printf("x : %d | y : %d | res : %d\n", i, y, country->tiles[get_indice(i, y, country)].type);
         }
         printf("\n");
         
