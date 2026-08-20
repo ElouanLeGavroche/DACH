@@ -72,30 +72,9 @@ int get_indice(int x, int y, st_country *country)
     }
 
     x = (x < country->min_x || x > country->size_x)? -1 : x;
-    y = (y < country->min_y || x > country->size_y)? -1 : y;
+    y = (y < country->min_y || y > country->size_y)? -1 : y;
     
     return (x == -1 || y == -1)? -1 : ((x * country->size_y ) + y);
-}
-
-int realloc_country_size(st_country *country, size_t n_size)
-{
-    if(!country)
-    {
-        fprintf(stderr, "Impossible de realloc country : il est null.\n");
-        return -1;
-    }
-    
-    st_country_tile *temp = realloc(country->tiles, n_size);
-    if (!temp) 
-    {
-        free(country->tiles);
-        fprintf(stderr, "Allocation échouée : %s\n", strerror(errno));
-        return RES_FAILED_MALLOC;
-    }
-    country->tiles = temp;
-
-    printf("Avé\n");
-    return RES_DONE;
 }
 
 st_country_tile* get_tile(int x, int y, st_country *country)
