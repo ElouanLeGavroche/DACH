@@ -68,7 +68,7 @@ int get_indice(int x, int y, st_country *country)
     x = (x < country->min_x || x > country->size_x)? -1 : x;
     y = (y < country->min_y || x > country->size_y)? -1 : y;
     
-    return (x == -1 || y == -1)? -1 : ((x * country->size_x + 1) * y);
+    return (x == -1 || y == -1)? -1 : ((x * country->size_y ) + y);
 }
 
 int realloc_country_size(st_country *country, size_t n_size)
@@ -237,7 +237,18 @@ st_country* better_load_map(const char *path)
     country->min_x = min_x;
     country->min_y = min_y;
 
-    /* à faire : boucle pour définir tout les blocs comme vide */
+    /* boucle pour définir tout les blocs comme vide */
+    for(i = 0; i < total; i ++)
+    {
+        country->tiles[i].angled = 0;
+        country->tiles[i].type = 0;
+        country->tiles[i].height = 0;
+        
+        country->tiles[i].east = NULL;
+        country->tiles[i].west = NULL;
+        country->tiles[i].north = NULL;
+        country->tiles[i].south = NULL;
+    }
 
     /* Seconde boucle pour crée les blocs qui existe */
     for(i = 0; i < temp_indice; i ++)
