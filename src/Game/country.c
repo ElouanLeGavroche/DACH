@@ -1,3 +1,13 @@
+/**
+ * @paragraph Country.h àp plusieurs missions
+ * 1. Crée, détruire, modifier les tiles
+ * 2. Crée un tableau 1D à partir des données charger pour le cpu
+ * 3. Parser le tableau 1D en 2D pour le préparer à être envoyé au graphisme
+ * 
+ * IL NE DOIS PAS SAVOIR PLUS SUR À QUOI CORRESPOND LES TEXTURE, SHADERS...
+ * Ce n'est pas son job. ça c'est au controller d'en juger, il charge ce qu'il voudra
+ */
+
 #include "../../include/src_include/Game/country.h"
 
 st_country_tile create_tile(int angled, int type)
@@ -215,8 +225,8 @@ st_country* better_load_map(const char *path)
     }
 
     /* Enregistrer les données dans la structure */
-    country->size_x = max_x;
-    country->size_y = max_y;
+    country->size_x = max_x + 1;
+    country->size_y = max_y + 1;
 
     country->min_x = min_x;
     country->min_y = min_y;
@@ -306,9 +316,9 @@ st_country* better_load_map(const char *path)
     }
 
     /* Loop pour print le monde (debug)*/
-    for(i = country->min_x; i <= country->size_x; i ++)
+    for(i = country->min_x; i < country->size_x; i ++)
     {
-        for(j = country->min_y; j <= country->size_y; j ++)
+        for(j = country->min_y; j < country->size_y; j ++)
         {
             printf("x : %d | y : %d | res : %d\n", i, j, country->tiles[get_indice(i, j, country)].type);
         }
@@ -322,32 +332,58 @@ st_country* better_load_map(const char *path)
 }
 
 
-void parse_country_data_for_gpu(st_country *country)
+st_country_map_for_render* parse_country_data_for_gpu(st_country *country)
 {
+    if(!country)
+    {
+        fprintf(stderr, "Country est NULL, impossible de le parser.\n");
+        return NULL;
+    }
+    
+    st_parsed_country *country_render = malloc(sizeof(st_country_map_for_render));
+
     int x, y,  i, z = 0;
     typedef int list_int;
     list_int *list_diff_group = malloc(sizeof(list_int));
-
+    list_int *nb_ref_per_group = malloc(sizeof(list_int));
     int diff_group = 0;
 
     /* trouver le nombre de groupe à crée */
     for(i = 0; i < (country->size_x * country->size_y); i ++)
     {
         while(z < diff_group && list_diff_group[z] != country->tiles[i].type) { z ++; }
+
         if(list_diff_group[z] != country->tiles[i].type)
         {
+            list_diff_group[diff_group] = country->tiles[i].type;
+            nb_ref_per_group[diff_group] = 0; 
             diff_group ++;
-            list_diff_group[diff_group] = country->tiles[i].type; 
         }
-    }
-    printf("Nombre de groupe trouvé : %d.\n", diff_group);
-    /*
-    for(x = 0; x < country->size_x; x ++)
-    {
-        for(y = 0; y < country->size_y; y ++)
-        {
 
+        /* On calcule dès maintenant le nombre d'élément de chaque groupe */
+        for(y = 0; y < diff_group; y ++)
+        {
+            if(list_diff_group[y] == country->tiles[i].type)
+                { nb_ref_per_group[y] ++; }
         }
     }
-    */
+
+    printf("%d %d\n", list_diff_group[2], nb_ref_per_group[2]);
+
+    /* On donne le nombre de groupe à la structure */
+    country_render->nb_group = diff_group;
+    country_render->groups = malloc(sizeof(st_better_loaded_group_map) * country_render->nb_group);
+    
+    /* On attribue l'id correspondant à chaque groupe */
+    for(i = 0; i < country_render->nb_group; i ++)
+    {
+        country_render->groups[i].id = list_diff_group[i];
+    }
+
+    /* On parse le reste */
+    for(x = 0; x < (country->size_x * country->size_y); x ++)
+    {
+        st_loaded_tile_map *tile;
+    }
+
 }

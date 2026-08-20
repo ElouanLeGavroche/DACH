@@ -251,6 +251,14 @@ typedef struct st_loaded_group_map
 
 }st_loaded_group_map;
 
+typedef struct st_better_loaded_group_map
+{
+    int id;
+    int nb_blocks;
+    st_loaded_tile_map *tiles;
+
+}st_better_loaded_group_map;
+
 typedef struct st_country_map_for_render
 {
     char *path;
@@ -294,6 +302,12 @@ typedef struct st_country
     int min_y;
 }st_country;
 
+typedef struct st_parsed_country
+{
+    int nb_group;
+    st_better_loaded_group_map *groups;
+
+}st_parsed_country;
 
 typedef struct st_game_model
 {

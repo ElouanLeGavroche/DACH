@@ -43,7 +43,7 @@ int delete_tile(st_country_tile *tiles, int x, int y);
 
 // restera dans country_.c
 st_country* create_country(const st_country_map_for_render *map);
-void parse_country_data_for_gpu(st_country *country);
+st_country_map_for_render* parse_country_data_for_gpu(st_country *country);
 int delete_country(st_country **country);
 
 st_country* better_load_map(const char *path);

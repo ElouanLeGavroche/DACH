@@ -31,7 +31,6 @@ int init_game(st_context *state)
     /* On génère les données nécéssaire pour le GPU */
     create_render_world(state, map);
 
-    
     // On passe la caméra dans la fenêtre pour les callbacks
     GLFWwindow *window = glfwGetCurrentContext();
 
