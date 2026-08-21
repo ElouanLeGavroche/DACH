@@ -2,7 +2,7 @@
  * @paragraph Country.h àp plusieurs missions
  * 1. Crée, détruire, modifier les tiles
  * 2. Crée un tableau 1D à partir des données charger pour le cpu
- * 3. Parser le tableau 1D en 2D pour le préparer à être envoyé au graphisme
+ * 3. Parser le tableau 1D en 1D avec coord pour le préparer à être envoyé au graphisme
  * 
  * IL NE DOIS PAS SAVOIR PLUS SUR À QUOI CORRESPOND LES TEXTURE, SHADERS...
  * Ce n'est pas son job. ça c'est au controller d'en juger, il charge ce qu'il voudra
@@ -405,5 +405,7 @@ st_parsed_country* parse_country_data_for_gpu(st_country *country)
         }
         
     }
+
+    return country_render;
 
 }

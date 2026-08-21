@@ -3,8 +3,7 @@
 
 typedef enum
 {
-    TEST_GROUP,
-    GOOFY_GROUP
+    MAIN_GROUP
 }e_group_name;
 
 typedef enum
@@ -40,7 +39,7 @@ int init_menu(st_context *state)
     st_texture *background_plane_text = new_texture("ressources/images/main_menu_bg.jpg");
 
     // Creation du groupe
-    res = add_group(&state->render, RENDER_GROUP_MESH);
+    res = add_group(&state->render, RENDER_GROUP_MESH, MAIN_GROUP);
     if(res != RES_DONE)
     {
         fprintf(stderr, "Erreur lors de la création du group.\n");

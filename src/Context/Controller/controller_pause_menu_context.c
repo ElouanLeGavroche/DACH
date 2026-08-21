@@ -29,7 +29,7 @@ int init_pause_menu(st_context *state)
     
     st_texture *background_plane_text = new_texture("ressources/images/background.png");
 
-    res = add_group(&state->render, RENDER_GROUP_MESH);
+    res = add_group(&state->render, RENDER_GROUP_MESH, MAIN_GROUP);
     if(res != RES_DONE)
     {
         fprintf(stderr, "Erreur lors de la création du groupe.\n");

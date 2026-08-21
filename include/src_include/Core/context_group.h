@@ -52,7 +52,7 @@ int test_render(st_render_data *render);
  * 
  * @return RES_ERROR si echec | RES_DONE si reussi
  */
-int add_group(st_render_data *render, e_render_group_type type);
+int add_group(st_render_data *render, e_render_group_type type, int id);
 
 /**
  * @brief permet de supprimer un groupe dans la liste

@@ -102,7 +102,7 @@ int test_render(st_render_data *render)
     return RES_DONE;
 }
 
-int add_group(st_render_data *render, e_render_group_type type)
+int add_group(st_render_data *render, e_render_group_type type, int id)
 {
     // Définition des variables
     int res;
@@ -120,7 +120,7 @@ int add_group(st_render_data *render, e_render_group_type type)
         return RES_ERROR;
     
     // On initialise new_group
-    res = context_group_init(new_group, render->nb_total_groups, type); 
+    res = context_group_init(new_group, id, type); 
     if(res != RES_DONE)
     {
         fprintf(stderr, "Echec de l'initiation du group.\n");
