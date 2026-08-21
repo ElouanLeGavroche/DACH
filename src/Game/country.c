@@ -338,9 +338,9 @@ st_parsed_country* parse_country_data_for_gpu(st_country *country)
     // Variable qui contient le nombre maximale de groupe possible
     int max_nb_group = country->size_x * country->size_y;
     // Liste des différent groupes par leur type
-    list_int *list_diff_group = malloc(sizeof(list_int) * max_nb_group);
+    list_int *list_diff_group = calloc(max_nb_group, sizeof(list_int));
     // Nombre d'occurence des blocs par groupe
-    list_int *nb_ref_per_group = malloc(sizeof(list_int)* max_nb_group);
+    list_int *nb_ref_per_group = calloc(max_nb_group, sizeof(list_int));
     // Compteur du nombre de groupe
     int diff_group = 0;
 
@@ -405,6 +405,9 @@ st_parsed_country* parse_country_data_for_gpu(st_country *country)
         }
         
     }
+
+    free(list_diff_group);
+    free(nb_ref_per_group);
 
     return country_render;
 

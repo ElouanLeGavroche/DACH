@@ -173,6 +173,8 @@ int create_render_world(st_context *state, st_parsed_country *country)
     free(country->groups);
     free(country);
     country = NULL;
+
+    return RES_DONE;
 }
 
 st_context* create_game_context()
