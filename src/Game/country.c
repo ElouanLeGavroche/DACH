@@ -42,36 +42,6 @@ int delete_tile(st_country_tile *tiles, int x, int y)
     return RES_DONE;
 }
 
-st_country* create_country(const st_country_map_for_render *map)
-{
-    st_country *country = malloc(sizeof(st_country));
-    if(!country)
-    {
-        fprintf(stderr, "Erreur lors de l'allocation mémoire de country.\n");
-        return NULL;
-    }
-    int i, y;
-    for(i = 0; i < 10; i ++)
-    {
-        for(y = 0; y < 10; y ++)
-        {
-            st_country_tile tile = create_tile(FLAT, GRASS);
-
-            st_country_tile *temp = country->tiles;
-            temp = realloc(country->tiles, sizeof(st_country_tile) * (i + y + 1));
-            if(!temp)
-            {
-                fprintf(stderr, "Erreur lors de l'allocation du pays.\n");
-                return NULL;
-            }
-            temp[i + y] = tile;
-            country->tiles = temp;
-        }
-    }
-    
-    return country;
-}
-
 int get_indice(int x, int y, st_country *country)
 {
     if(!country)

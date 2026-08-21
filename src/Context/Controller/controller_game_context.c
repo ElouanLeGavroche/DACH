@@ -60,8 +60,12 @@ int better_create_render_world(st_context_request *state, st_parsed_country *map
         fprintf(stderr, "La carte est null.\n");
         return RES_NULL_POINTER;
     }
+
     int i;
-    fo
+    for(i = 0; i < map->nb_group; i ++)
+    {
+        
+    }
 }
 
 int create_render_world(st_context *state, st_country_map_for_render *map)
