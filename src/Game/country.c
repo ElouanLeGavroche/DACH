@@ -351,7 +351,7 @@ st_country* better_load_map(const char *path)
 }
 
 
-st_country_map_for_render* parse_country_data_for_gpu(st_country *country)
+st_parsed_country* parse_country_data_for_gpu(st_country *country)
 {
     if(!country)
     {
@@ -359,7 +359,7 @@ st_country_map_for_render* parse_country_data_for_gpu(st_country *country)
         return NULL;
     }
     
-    st_parsed_country *country_render = malloc(sizeof(st_country_map_for_render));
+    st_parsed_country *country_render = malloc(sizeof(st_parsed_country));
 
     // Variable d'indice
     int x, y,  i, z;

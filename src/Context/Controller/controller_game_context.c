@@ -26,7 +26,7 @@ int init_game(st_context *state)
     model->country = better_load_map("ressources/maps/fisel_v2.json");
 
     /* Parser la carte avant de l'envoyer au gpu */
-    parse_country_data_for_gpu(model->country);
+    st_parsed_country *better_map = parse_country_data_for_gpu(model->country);
     
     /* On génère les données nécéssaire pour le GPU */
     create_render_world(state, map);
@@ -50,6 +50,18 @@ void controller_update_logic_game(st_context *state)
 void controller_update_render_game(st_render_data *render, double time)
 {
     update_render_game(render, time);
+}
+
+
+int better_create_render_world(st_context_request *state, st_parsed_country *map)
+{
+    if(!map)
+    {
+        fprintf(stderr, "La carte est null.\n");
+        return RES_NULL_POINTER;
+    }
+    int i;
+    fo
 }
 
 int create_render_world(st_context *state, st_country_map_for_render *map)
