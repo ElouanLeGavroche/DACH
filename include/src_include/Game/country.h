@@ -48,8 +48,15 @@ int delete_country(st_country **country);
 
 st_country* better_load_map(const char *path);
 
-
+/**
+ * @brief Permet de récuperer l'indice d'un elt à partir de ces coords x et y
+ */
 int get_indice(int x, int y, st_country *country);
+/**
+ * @brief Permet de récuperer la position x et y d'un elt à partir de son indice
+ */
+tuple_int_duo get_position(int indice, const st_country coutry);
+
 st_country_tile* get_tile(int x, int y, st_country *country);
 
 #endif

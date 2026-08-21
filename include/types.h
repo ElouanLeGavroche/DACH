@@ -15,7 +15,18 @@
 typedef struct st_engine st_engine;
 typedef struct st_context st_context;
 
-// Gestion des structures pour les inputs
+
+/**
+ * @brief simple structure pour save deux entier dans une seule struct.
+ * Permet de retourner des pos x et y dans un foncion.
+ */
+typedef struct tuple_int_duo
+{
+    int a;
+    int b;
+}tuple_int_duo;
+
+/* Gestion des structures pour les inputs */
 
 // Tableau qui contient tout les touches utilisable par le jeu
 // Note : Si on veux mapper les touchent, ça va être compliqué avec ce système... à voir, à voir...

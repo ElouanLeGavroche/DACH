@@ -86,6 +86,34 @@ int get_indice(int x, int y, st_country *country)
     return (x == -1 || y == -1)? -1 : ((x * country->size_y ) + y);
 }
 
+tuple_int_duo get_position(int indice, const st_country coutry)
+{
+        int i;
+    int x = 0, y = 0;
+    tuple_int_duo my_tuple = {0, 0};
+
+    if(indice >= (coutry.size_x * coutry.size_y))
+    {
+        printf("Hors limite.\n");
+        return (tuple_int_duo){0, 0};
+    }
+    for(i = 0; i < indice; i ++)
+    {
+        if(x == coutry.size_x -1)
+        {
+            y ++;
+            x = -1;
+        }
+        x++;
+    
+    }
+
+    my_tuple.a = x;
+    my_tuple.b = y;
+
+    return my_tuple;
+
+}
 st_country_tile* get_tile(int x, int y, st_country *country)
 {
     if(!country)
@@ -134,7 +162,7 @@ st_country* better_load_map(const char *path)
     float z;
 
     /* initialisation de country */
-    st_country *country = malloc(sizeof(st_country));
+    st_country *country = calloc(total, sizeof(st_country));
     if(!country)
     {
         fprintf(stderr, "Allocation de country échouer : %s\n", strerror(errno));
@@ -342,11 +370,17 @@ st_country_map_for_render* parse_country_data_for_gpu(st_country *country)
     
     st_parsed_country *country_render = malloc(sizeof(st_country_map_for_render));
 
+    // Variable d'indice
     int x, y,  i, z;
+    // Définition d'un type local pour les liste d'entier
     typedef int list_int;
-    int max_possible_group = country->size_x * country->size_y;
-    list_int *list_diff_group = calloc(max_possible_group, sizeof(list_int));
-    list_int *nb_ref_per_group = calloc(max_possible_group, sizeof(list_int));
+    // Variable qui contient le nombre maximale de groupe possible
+    int max_nb_group = country->size_x * country->size_y;
+    // Liste des différent groupes par leur type
+    list_int *list_diff_group = malloc(sizeof(list_int) * max_nb_group);
+    // Nombre d'occurence des blocs par groupe
+    list_int *nb_ref_per_group = malloc(sizeof(list_int)* max_nb_group);
+    // Compteur du nombre de groupe
     int diff_group = 0;
 
     /* trouver le nombre de groupe à crée */
@@ -370,7 +404,7 @@ st_country_map_for_render* parse_country_data_for_gpu(st_country *country)
         }
     }
 
-    printf("ici %d %d %d\n", list_diff_group[2], nb_ref_per_group[2], diff_group);
+    printf("%d %d\n", list_diff_group[2], nb_ref_per_group[2]);
 
     /* On donne le nombre de groupe à la structure */
     country_render->nb_group = diff_group;
@@ -385,28 +419,40 @@ st_country_map_for_render* parse_country_data_for_gpu(st_country *country)
     }
 
     /* On parse le reste */
-    int *current_index = calloc(country_render->nb_group, sizeof(int));
-
-    for(x = 0; x < country->size_x; x++) 
+    for(x = 0; x < country->size_x; x ++)
     {
-        for(y = 0; y < country->size_y; y++) 
+        for(y = 0; y < country->size_y; y ++)
         {
             st_country_tile *cpu_tile = get_tile(x, y, country);
-            if(cpu_tile) 
+            if(cpu_tile)
             {
                 z = 0;
-                while(z < country_render->nb_group && cpu_tile->type != country_render->groups[z].id) z++;
-                
-                if(z < country_render->nb_group) 
+                while(cpu_tile->type != country_render->groups[z].id && z < country_render->nb_group) {z ++;}
+                if(cpu_tile->type == country_render->groups[z].id)
                 {
-                    int idx = current_index[z];
-                    country_render->groups[z].tiles[idx].height_value = cpu_tile->height;
-                    country_render->groups[z].tiles[idx].x_indice = x;
-                    country_render->groups[z].tiles[idx].y_indice = y;
-                    current_index[z]++;
+                    printf("ok\n");
+                    country_render->groups[z].tiles[nb_ref_per_group[z]].height_value = cpu_tile->height;
+                    country_render->groups[z].tiles[nb_ref_per_group[z]].x_indice = x;
+                    country_render->groups[z].tiles[nb_ref_per_group[z]].y_indice = y;
+                    nb_ref_per_group[z] --;
                 }
             }
+            /* 
+            Je dois passer dans tout mes block pour savoir quelle est leur type.
+            
+            à chaque tour je crée un tile, je vais chercher où le mettre grâce à une 
+            autre boucle.
+
+            Cette boucle va trouver une à quelle indice ce trouve son groupe dans la 
+            liste des groupe.
+
+            ensuite grâce à size_x et size_y, je pourrais lui donner une position concrête
+
+            Aled
+            */
+            
         }
+        
     }
 
 }
