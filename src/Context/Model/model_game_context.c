@@ -98,6 +98,8 @@ void move_camera(st_camera *camera, int dir)
     }
 }
 
+void pick_mouse(st_country country, const st_mouse mouse)
+
 void zoom_camera(st_camera *camera, st_mouse *mouse)
 {
     // Gestion du zoom

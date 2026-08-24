@@ -1,50 +1,40 @@
-# Présentation
-Après plusieurs mois sans rien faire, je me relance dans le développement de ce jeu. En effet, je suis las de ne plus coder, et je ressens un certain besoin de profiter à nouveau des bonheurs du debug.
+# Diwar-benn ar raktres
+Goude 1 miz d'ober netra... ar choaz programiñ ur c'hoari video em eus graet. Ar c'hoant mataat adare plijadurioù ar debug zo ganin.
 
-#### Pourquoi ?
+#### Perak ?
 
-Tout simplement car je suis un peu obligé d'utiliser l'IA dans mon travail actuel et que je n'aime pas ça. J'ai donc besoin de me retrouver le soir devant mon PC et aucun agent qui m'aide à faire ce que je veux comprendre par moi-même.
+Peogwir ez eo heñvel an devezhioù. Ezhomm am eus da glouestlañ ma nerzh barzh un dra fetis a plijus vit on me.
 
-#### Où cela va me mener ?
+#### Pelec'h ez in gant ze ?
 
-Je ne sais pas, on verra où me mène ce jeu, je code à mon rythme pour passer mon temps car je me fais chier.
+N'ouzhon ket c'hoazh. Gwellet vo betek pelec'h on kab da vont. En va lusk ezann vit tremen an amzer. Marteze e vo ur gwir raktres ar c'hoari mañ a-benn 6 pe 8 miz ! Piv war ?
 
 #### Hag e brezhonneg ?
 
 Ma on kab da skriva e Brezhoneg.
 
-# Manuel 
+# Dornlevr 
 
-Voici quelques explications nécéssaire pour lancer sans accro le programe.
+Setu penaos kompilañ ha implij ar program.
 
-## Librairies externe à installer
+## Lervdi maez da stalliañ
 
-### - GLFW
+Nevez zo, hoc'h eus ke ken ezhomm stalliañ anezho. Barzh ar raktres int dija.
 
-Vous devez en premier lieux installer GLFW. C'est avec lui que l'on va utiliser OpenGL et communiquer avec la carte graphique.
+## Evit Kompilañ ar raktres
 
-```bash
-sudo apt-get install libglfw3
-sudo apt-get install libglfw3-dev
-```
-
-### - CGLM
-Nous avons aussi besoin de CGLM. Cette librairie nous permet de faire des calculs sur des matrices et des vecteur assez aisémment.
-
-*Rendez vous sur ce dépôt pour l'installer dans votre repertoire de librairie C :*
-https://github.com/recp/cglm
-
-## Puis vous pouvez compilé/executer le code ainsi
-
-make && ./out/DACH && make clean
+- **Kompilañ** : make
+- **Kompilañ ha lañsañ ar c'hoari** : make && ./out/DACH 
+- **Netaad** : make clean
 
 
 ## Commits
 
-Afin d'effectuer des commits clairs et lisibles, je vais essayer de les catégoriser avec les emoji de Gitmoji pour observer immédiatement de quoi les modifications apportées en retournent.
+Gant ar pal kaout komitoù sklaer ha lennus, implij a rin emojioù Gitmoji.com. Mod se, aesoc'h vo da kompren endalc'had pep komit.
 
-## Contribution
+## Skoazell
 
-N'hésitez pas à me faire remonter des problèmes ou des conseils via GitHub. Je prendrais vos demandes au sérieux et m'appliquerais à les mettre en oeuvre. Je vous remercie d'avance de toute aide que vous pourrez m'apporter dans les "Issues".
+Degemeret hoc'h da sikour arc'hanon. Ma vez dijoloet ganoc'h kudennoù hoc'h pedet implijañ ar sistem addegas kinniged gant github. Amzer vo kemeret genin vit klask reizhañ ar buhanañ ar gwellañ o kudenn. Trugare d'ar re hag a kemero an amzer da sikour ar raktres.  
 
-Bien cordialement, Paotr neñvel.
+
+A galon, Paotr neñvel.
