@@ -287,7 +287,7 @@ typedef struct st_country_tile
     bool east;
     bool west;
 
-    int height;
+    float height;
     int angled;
 }st_country_tile;
 

@@ -50,8 +50,8 @@ int get_indice(int x, int y, st_country *country)
         return -1;
     }
 
-    x = (x < 0 || x > country->size_x)? -1 : x;
-    y = (y < 0 || y > country->size_y)? -1 : y;
+    x = (x < 0 || x >= country->size_x)? -1 : x;
+    y = (y < 0 || y >= country->size_y)? -1 : y;
     
     return (x == -1 || y == -1)? -1 : ((y * country->size_x ) + x);
 }
@@ -66,7 +66,7 @@ tuple_int_duo get_position(int indice, const st_country country)
         return (tuple_int_duo){0, 0};
     }
     coords.a = indice % country.size_x;
-    coords.b = indice / country.size_y;
+    coords.b = indice / country.size_x;
 
     return coords;
 

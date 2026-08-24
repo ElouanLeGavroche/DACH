@@ -1,6 +1,6 @@
 #include "../../include/src_include/Platform/glfw_window.h"
 
-int init_window(st_window_user_data *user_data, st_loaded_windows_data **window_data)
+int init_window(st_window_user_data *user_data, st_loaded_windows_data *window_data)
 {
     // Charger les informations de la fenêtre dans le Json
     // Fichier    
@@ -75,7 +75,7 @@ int init_window(st_window_user_data *user_data, st_loaded_windows_data **window_
     global_window->size_y = size_y_value;
     global_window->frame_rate = frame_rate_value;
     
-    *window_data = global_window;
+    window_data = global_window;
 
     // Initialiser les informations récupéré
     if (!glfwInit())
@@ -85,7 +85,7 @@ int init_window(st_window_user_data *user_data, st_loaded_windows_data **window_
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow *window = glfwCreateWindow((*window_data)->size_x, (*window_data)->size_y, "Douar ar c'hornôg", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(window_data->size_x, window_data->size_y, "Douar ar c'hornôg", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
