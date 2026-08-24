@@ -4,11 +4,11 @@
 #include "../Config/constantes.h"
 #include "../../types.h"
 #include "../../../extern_lib/glad/glad.h"
+#include "../../../extern_lib/glfw/glfw3.h"
 
 
 #include "../Renderer/opengl_renderer.h"
 
-#include <GLFW/glfw3.h>
 #include <json-c/json.h>
 #include <errno.h>
 #include <string.h>
