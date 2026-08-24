@@ -5,9 +5,9 @@ Goude 1 miz d'ober netra... ar choaz programiñ ur c'hoari video em eus graet. A
 
 Peogwir ez eo heñvel an devezhioù. Ezhomm am eus da glouestlañ ma nerzh barzh un dra fetis a plijus vit on me.
 
-#### Pelec'h ez in gant ze ?
+#### Pelec'h ez afenn gant se ?
 
-N'ouzhon ket c'hoazh. Gwellet vo betek pelec'h on kab da vont. En va lusk ezann vit tremen an amzer. Marteze e vo ur gwir raktres ar c'hoari mañ a-benn 6 pe 8 miz ! Piv war ?
+N'ouzhon ket c'hoazh. Gwellet vo betek pelec'h on kab da vont. Evit poent, n'eo nemet evit tremen an amzer. Marteze a-benn 6 pe 8 miz e teuio da vezañ ur gwir raktres ar c'hoari mañ ! Piv war ?
 
 #### Hag e brezhonneg ?
 
@@ -19,7 +19,7 @@ Setu penaos kompilañ ha implij ar program.
 
 ## Lervdi maez da stalliañ
 
-Nevez zo, hoc'h eus ke ken ezhomm stalliañ anezho. Barzh ar raktres int dija.
+N'eus ket ezhomm ken da staliañ al levridioù; lakaet int er raktres dija.
 
 ## Evit Kompilañ ar raktres
 
