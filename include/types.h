@@ -77,6 +77,9 @@ typedef struct
     double scroll_x;
     bool active_scroll_x;
 
+    double pos_x;
+    double pos_y;
+
 }st_mouse;
 
 

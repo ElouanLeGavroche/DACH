@@ -24,6 +24,11 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
       
 }
 
+void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+{
+      printf("x : %f y : %f\n", xpos, ypos);
+}
+
 void link_mouse(st_context *state)
 {
     // Liée la strucures des entrée dans la fenêtre pour le callback
@@ -31,5 +36,6 @@ void link_mouse(st_context *state)
     st_window_user_data *data = glfwGetWindowUserPointer(window);
     data->mouse = &state->mouse;
     glfwSetScrollCallback(window, scroll_callback);
+    glfwSetCursorPosCallback(window, cursor_position_callback);
   
 }
