@@ -5,7 +5,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
       st_window_user_data *data = glfwGetWindowUserPointer(window);
       if(data != NULL)
       {
-            if(data->mouse != NULL && data->camera != NULL)
+            if(data->mouse != NULL)
             {
                   st_mouse *mouse = data->mouse;
                   mouse->scroll_x = xoffset;
@@ -26,7 +26,15 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
-      printf("x : %f y : %f\n", xpos, ypos);
+      st_window_user_data *data = glfwGetWindowUserPointer(window);
+      if(data)
+      {
+            if(data->mouse)
+            {
+                  data->mouse->pos_x = xpos;
+                  data->mouse->pos_y = ypos;
+            }
+      }
 }
 
 void link_mouse(st_context *state)
