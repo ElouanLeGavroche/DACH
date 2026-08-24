@@ -1,5 +1,5 @@
 {
-    "blocs" : [
+    "datas" : [
         {"1" : "GRASS", "image" : "ressoucres/images/grass_test.jpg", "vert" : "", "frag" : ""},
         {"2" : "CAT_TANK", "image": "ressoucres/images/tank.jpg", "vert" : "", "frag" : ""}
     ]

@@ -1,13 +1,9 @@
 # roadmap
 **Ici sont décritent les actions à suivre**
 
-### *25 août 2026*
+## *26 août 2026*
 
-Crée un cadriallage de triangle invisible sur toute la surface de la carte de manière automatique.
-
-### *19 août 2026*
-
-Billboard, Il est enfin temps de crée des billboard à mettre sur le monde (manuellement pour l'instant)
+Pouvoir avec la souris, cliquer sur un bloc, cela me donnera alors la position du blocs, sont type, id, et la face toucher (N,S,E,W)
 
 ### *18 août 2026*
 
