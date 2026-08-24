@@ -2,8 +2,8 @@
 #define GAME_TYPES
 
 #include <stdbool.h>
-#include <cglm/cglm.h>
-#include <cglm/types.h>
+#include "../../../extern_lib/cglm/cglm.h"
+#include "../../../extern_lib/cglm/types.h"
 
 typedef enum e_render_group_type
 {

@@ -6,9 +6,8 @@
 #include <stdatomic.h>
 #include <pthread.h>
 
-//#include <cglm/cglm.h>
 #include "../extern_lib/cglm/cglm.h"
-#include <cglm/types.h>
+#include "../extern_lib/cglm/types.h"
 
 #include "src_include/Context/game_types.h"
 #include "src_include/Config/constantes.h"
