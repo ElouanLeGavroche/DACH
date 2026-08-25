@@ -34,7 +34,7 @@ Gant ar pal kaout komitoù sklaer ha lennus, implij a rin emojioù Gitmoji.com. 
 
 ## Skoazell
 
-Degemeret hoc'h da sikour arc'hanon. Ma vez dijoloet ganoc'h kudennoù hoc'h pedet implijañ ar sistem addegas kinniged gant github. Amzer vo kemeret genin vit klask reizhañ ar buhanañ ar gwellañ o kudenn. Trugare d'ar re hag a kemero an amzer da sikour ar raktres.  
+Degemeret hoc'h da sikour arc'hanon. Ma vez dijoloet kudennoù ganoc'h pedet implijañ ar sistem addegas kinniged gant github. Amzer vo kemeret genin vit klask reizhañ ar buhanañ ar gwellañ o kudenn. Trugare d'ar re hag a kemero an amzer da sikour ar raktres.  
 
 
 A galon, Paotr neñvel.
