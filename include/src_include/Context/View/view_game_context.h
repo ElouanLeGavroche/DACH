@@ -23,4 +23,6 @@ void init_render_game(st_render_data *render);
 void create_an_instance_GPU(st_instanced *instance, mat4 *model, int amount);
 void init_game_camera(st_camera *camera);
 
+tuple_float_duo screen_to_word(const tuple_int_duo screen_size, const tuple_float_duo mouse_pos, const st_camera camera);
+
 #endif

@@ -26,6 +26,12 @@ typedef struct tuple_int_duo
     int b;
 }tuple_int_duo;
 
+typedef struct tuple_float_duo
+{
+    float a;
+    float b;
+}tuple_float_duo;
+
 /* Gestion des structures pour les inputs */
 
 // Tableau qui contient tout les touches utilisable par le jeu
