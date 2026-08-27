@@ -15,6 +15,7 @@
 
 #include "../../Platform/glfw_mouse.h"
 
+#include "../../Shared_tools/Math/ray_casting.h"
 
 #include "../../../types.h"
 #include "../../../state.h"

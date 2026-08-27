@@ -241,8 +241,3 @@ void gl_update_view_port(int width, int height)
 {
     glViewport(0, 0, width, height);
 }
-
-gl_ray_casting(float offset_x, float offset_y, st_mouse mouse)
-{
-
-}

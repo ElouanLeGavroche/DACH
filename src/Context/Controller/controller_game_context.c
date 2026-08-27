@@ -49,6 +49,7 @@ int init_game(st_context *state)
 
 void controller_update_logic_game(st_context *state)
 {
+    r
     update_logic_game(state);
 }
 
