@@ -13,7 +13,7 @@
 #include "../../Core/context_content.h"
 
 int init_pause_menu(st_context *state);
-void controller_update_logic_pause_menu(st_context *state);
+void controller_update_logic_pause_menu(st_context *state, int width, int height);
 void controller_update_render_pause_menu(st_render_data *render, double time);
 st_context* create_pause_menu_context();
 

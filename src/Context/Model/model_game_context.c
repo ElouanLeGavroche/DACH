@@ -1,8 +1,8 @@
 #include "../../../include/src_include/Context/Model/model_game_context.h"
 
-void update_logic_game(st_context *state)
+void update_logic_game(st_context *state, int width, int height)
 {
-
+    printf("%d %d\n", width, height);
     // Géré les inputs
     if(state->inputs.release[KEY_DOWN] == true)
     {

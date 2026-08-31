@@ -231,7 +231,7 @@ typedef struct st_context
     // L'initialiseur connait tout
     int (*init_state)(st_context *state);
     // La logique ne connaitra que les model
-    void (*update_logic_context)(st_context *state);
+    void (*update_logic_context)(st_context *state, int width, int height);
     // Le rendu ne connait que les données liée au rendu
     void (*update_render_context)(st_render_data *render, double time);
 

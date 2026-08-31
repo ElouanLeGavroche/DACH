@@ -127,7 +127,8 @@ void update_logique(st_stack stack, int depth, double dt)
     {
         update_logique(stack, depth + 1, dt);
     }
-    stack.stack_context[depth]->update_logic_context(stack.stack_context[depth]);
+    st_loaded_windows_data *data = get_window_information();
+    stack.stack_context[depth]->update_logic_context(stack.stack_context[depth], data->size_x, data->size_y);
 
 }
 

@@ -50,7 +50,7 @@ int init_pause_menu(st_context *state)
     return RES_DONE;
 }
 
-void controller_update_logic_pause_menu(st_context *state)
+void controller_update_logic_pause_menu(st_context *state, int width, int height)
 {
     update_logic_pause_menu(state);
 }

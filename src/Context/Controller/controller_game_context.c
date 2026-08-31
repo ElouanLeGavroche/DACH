@@ -24,7 +24,6 @@ int init_game(st_context *state)
     /* Charger la carte */
     st_game_model *model = state->model;
     model->country = better_load_map("ressources/maps/fisel_v2.json");
-
     /* Parser la carte avant de l'envoyer au gpu */
     st_parsed_country *better_map = parse_country_data_for_gpu(model->country);
 
@@ -47,9 +46,9 @@ int init_game(st_context *state)
     return RES_DONE;
 }
 
-void controller_update_logic_game(st_context *state)
+void controller_update_logic_game(st_context *state, int width, int height)
 {
-    update_logic_game(state);
+    update_logic_game(state, width, height);
 }
 
 void controller_update_render_game(st_render_data *render, double time)

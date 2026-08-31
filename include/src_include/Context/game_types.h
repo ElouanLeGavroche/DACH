@@ -309,6 +309,9 @@ typedef struct st_parsed_country
 
 }st_parsed_country;
 
+/*
+Un peu un fourre tout, met plijus da implij
+*/
 typedef struct st_game_model
 {
     st_country *country;
