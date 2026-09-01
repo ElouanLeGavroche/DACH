@@ -17,8 +17,8 @@ void ray_casting(tuple_int_duo size_window, st_mouse mouse, st_camera camera)
     /* Étant très nul en math, je commente tout pour être sur de comprendre et de ne pas oublié ce que j'ai fait. */
 
     /* Définir les valeurs sur lesquelles seront borner les position x et y de la souris */
-    tuple_float_duo norm_value = {0.0, 1.0};
-    
+    tuple_float_duo norm_x = {-1.0, 1.0};
+    tuple_float_duo norm_y = {1.0, -1.0};
     /* Normaliser la position de la souris en x et en y */
     tuple_float_duo norm_mouse_pos;
     /* Formule de normalisation (valeur - min_valeur) / (max_valeur - min_valeur) * (max_born - min_born) + min_born */
@@ -28,8 +28,10 @@ void ray_casting(tuple_int_duo size_window, st_mouse mouse, st_camera camera)
     /* max_bord & min_bord = la taille min et max défini plus haut avec norm_value */
 
     /* Note : Min sera toujours égal à 0; alors je ne l'écrirait pas */
-    norm_mouse_pos.a = (mouse.pos_x) / (size_window.a) * (norm_value.b - norm_value.a) + norm_value.a;
-    norm_mouse_pos.b = (mouse.pos_y) / (size_window.a) * (norm_value.b - norm_value.a) + norm_value.a;
+    norm_mouse_pos.a = ((mouse.pos_x) / (size_window.a) * (norm_x.b - norm_x.a) + norm_x.a);
+    norm_mouse_pos.b = ((size_window.b - mouse.pos_y)/ (size_window.b) * (norm_y.b - norm_y.a) + norm_y.a);
+
+
 
     printf("%f, %f\n", norm_mouse_pos.a, norm_mouse_pos.b);
 }
