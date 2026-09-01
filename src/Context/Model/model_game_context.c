@@ -56,7 +56,9 @@ void update_logic_game(st_context *state)
     {
         move_camera(&state->render.camera, (state->render.camera.target > 0.0f) ? ROTATE_L : ROTATE_R);
     }
-    ray_casting((tuple_int_duo){state->width, state->height}, state->mouse, state->render.camera);
+
+    st_ray ray = {0};
+    ray_casting((tuple_int_duo){state->width, state->height}, state->mouse, state->render.camera, &ray);
     
     zoom_camera(&state->render.camera, &state->mouse);    
 }
@@ -96,11 +98,6 @@ void move_camera(st_camera *camera, int dir)
     default:
         break;
     }
-}
-
-void pick_mouse(st_country country, const st_mouse mouse)
-{
-    
 }
 
 void zoom_camera(st_camera *camera, st_mouse *mouse)

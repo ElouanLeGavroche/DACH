@@ -342,4 +342,12 @@ typedef struct
     st_loaded_windows_data *window;
 }st_window_user_data;
 
+
+typedef struct st_ray
+{
+    vec3 origin;
+    vec3 direction;
+}st_ray;
+
+
 #endif

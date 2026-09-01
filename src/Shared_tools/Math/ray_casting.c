@@ -12,7 +12,7 @@ Le principe du ray casting pour faire de la détéction de collision avec la sou
 4. Ensuite, une fois le vecteur crée, lister tout les éléments avec lesquels je veux vérifier les collisions afin de faire un test AABB
 */
 
-void ray_casting(tuple_int_duo size_window, st_mouse mouse, st_camera camera)
+void ray_casting(tuple_int_duo size_window, st_mouse mouse, st_camera camera, st_ray *res)
 {
     /* Étant très nul en math, je commente tout pour être sur de comprendre et de ne pas oublié ce que j'ai fait. */
 
@@ -61,11 +61,10 @@ void ray_casting(tuple_int_duo size_window, st_mouse mouse, st_camera camera)
     glm_mat4_mulv(pointed_by_camera, mouse_point, world_point);
 
     // Récupéré les 3 premier float (x, y, z)
-    glm_vec3_copy(world_point, ray_orgin);
-    glm_vec3_copy(camera.front, ray_direction);
+    glm_vec3_copy(world_point, res->origin);
+    glm_vec3_copy(camera.front, res->direction);
+    glm_vec3_normalize(res->direction);
 
-    glm_vec3_normalize(ray_direction);
-    //vec3 ray_direction = {norm_mouse_pos.a, norm_mouse_pos.b, 0.0f};
     float t = camera.far_z;
     printf("%f, %f\n", norm_mouse_pos.a, norm_mouse_pos.b);
 
