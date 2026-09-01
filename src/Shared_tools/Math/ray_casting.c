@@ -16,22 +16,57 @@ void ray_casting(tuple_int_duo size_window, st_mouse mouse, st_camera camera)
 {
     /* Étant très nul en math, je commente tout pour être sur de comprendre et de ne pas oublié ce que j'ai fait. */
 
+      /**********************/
+     /*   Normalisation    */
+    /**********************/
+
     /* Définir les valeurs sur lesquelles seront borner les position x et y de la souris */
-    tuple_float_duo norm_x = {-1.0, 1.0};
-    tuple_float_duo norm_y = {1.0, -1.0};
+    tuple_float_duo norm = {-1.0, 1.0};
     /* Normaliser la position de la souris en x et en y */
     tuple_float_duo norm_mouse_pos;
+
     /* Formule de normalisation (valeur - min_valeur) / (max_valeur - min_valeur) * (max_born - min_born) + min_born */
     /* Les valeurs : */
     /* valeur = pos x ou y de la souris */
     /* min_valeur & max_valeur = la taille min et max d'un axe x ou y de la fenetre : ex x = [0; 1980] */
     /* max_bord & min_bord = la taille min et max défini plus haut avec norm_value */
 
-    /* Note : Min sera toujours égal à 0; alors je ne l'écrirait pas */
-    norm_mouse_pos.a = ((mouse.pos_x) / (size_window.a) * (norm_x.b - norm_x.a) + norm_x.a);
-    norm_mouse_pos.b = ((size_window.b - mouse.pos_y)/ (size_window.b) * (norm_y.b - norm_y.a) + norm_y.a);
+    float amplitude = norm.b - norm.a;
+
+    norm_mouse_pos.a = ((mouse.pos_x) / (size_window.a) * amplitude + norm.a);
+    norm_mouse_pos.b = ((size_window.b - mouse.pos_y)/ (size_window.b) * (norm.a - norm.b) + norm.b);
+
+      /**********************/
+     /*   Viseur camera    */
+    /**********************/
+
+    /* Valeur normaliser du point que vise la caméra */
+    mat4 pointed_by_camera;
+    glm_mat4_identity(pointed_by_camera);
+    
+    vec3 ray_orgin;
+    vec3 ray_direction;
+
+    /* Multiplier les deux matrices pour savoir où vont-elles*/
+    glm_mat4_mul(camera.projection, camera.view, pointed_by_camera);
+
+    /* Inverser la caméra */
+    glm_mat4_inv(pointed_by_camera, pointed_by_camera);
 
 
+    vec2 norm_mouse = {norm_mouse_pos.a, norm_mouse_pos.b};
+    vec4 mouse_point = {norm_mouse[0], norm_mouse[1], -1.0f, 1.0f};
 
+    vec4 world_point;
+    glm_mat4_mulv(pointed_by_camera, mouse_point, world_point);
+
+    // Récupéré les 3 premier float (x, y, z)
+    glm_vec3_copy(world_point, ray_orgin);
+    glm_vec3_copy(camera.front, ray_direction);
+
+    glm_vec3_normalize(ray_direction);
+    //vec3 ray_direction = {norm_mouse_pos.a, norm_mouse_pos.b, 0.0f};
+    float t = camera.far_z;
     printf("%f, %f\n", norm_mouse_pos.a, norm_mouse_pos.b);
+
 }
