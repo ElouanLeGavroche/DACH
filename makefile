@@ -32,6 +32,7 @@ INCLUDE_TOOL=$(SRC)Shared_tools/
 TRANSFORM_TOOL=$(INCLUDE_TOOL)Transform_openGL_values/
 CONTEXT_TOOL=$(INCLUDE_TOOL)Context_tool/
 LOAD_TOOLS=$(INCLUDE_TOOL)Load_tools/
+MATH_TOOL=$(INCLUDE_TOOL)Math/
 
 #Lien vers certain .c externe comme GLAD
 EXTERN_INCLUDE=extern_lib/
@@ -49,6 +50,8 @@ $(SAVE_EXEC)$(EXEC):\
 	$(LOAD_TOOLS)load_shader.o\
 	$(LOAD_TOOLS)load_obj_format.o\
 	$(LOAD_TOOLS)load_image.o\
+	\
+	$(MATH_TOOL)ray_casting.o\
 	\
 	$(CORE)application.o\
 	$(CORE)clock.o\

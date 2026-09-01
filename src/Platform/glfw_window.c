@@ -162,7 +162,12 @@ int window_should_close(){
 }
 
 
-st_loaded_windows_data *get_window_information()
+int get_width_window_size(st_loaded_windows_data window)
 {
-    return global_window;
+    return window.size_x;
+}
+
+int get_height_window_size(st_loaded_windows_data window)
+{
+    return window.size_y;
 }

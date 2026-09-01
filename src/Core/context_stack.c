@@ -29,6 +29,13 @@ int link_context_tools_with_engine(vt_context_tool *tools)
         fprintf(stderr, "Impossible de linker la stack context avec replace.\n");
         return RES_FAILED_ASSIGNEMENT;
     }
+
+    tools->update_resolution_context = update_resolution_context;
+    if(!tools->update_resolution_context)
+    {
+        fprintf(stderr, "Impossible de linker la stack context avec la maj de la resolution.\n");
+        return RES_FAILED_ASSIGNEMENT;
+    }
     
     return RES_DONE;
 }
@@ -129,4 +136,16 @@ int create_context(st_context *new_state)
 
     return RES_DONE;
 
+}
+
+int update_resolution_context(st_context * context, int w, int h)
+{
+    if(!context)
+    {
+        return RES_NULL_POINTER;
+    }
+    context->width = w;
+    context->height = h;
+
+    return RES_DONE;
 }

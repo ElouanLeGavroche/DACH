@@ -46,9 +46,9 @@ int init_game(st_context *state)
     return RES_DONE;
 }
 
-void controller_update_logic_game(st_context *state, int width, int height)
+void controller_update_logic_game(st_context *state)
 {
-    update_logic_game(state, width, height);
+    update_logic_game(state);
 }
 
 void controller_update_render_game(st_render_data *render, double time)

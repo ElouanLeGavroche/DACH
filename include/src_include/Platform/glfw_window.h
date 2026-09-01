@@ -20,7 +20,8 @@ void view_clear();
 void view_swap();
 void view_close_window();
 int window_should_close();
-st_loaded_windows_data *get_window_information();
+int get_width_window_size(st_loaded_windows_data window);
+int get_height_window_size(st_loaded_windows_data window);
 
 static st_loaded_windows_data *global_window;
 

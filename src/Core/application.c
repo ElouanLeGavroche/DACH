@@ -103,6 +103,9 @@ void mainloop(st_engine *engine_state){
         engine_state->dt_time =  get_glfw_time() - last;
         last = get_glfw_time();
 
+        /* Mettre à jour la taille de la fenêtre dans le context */
+        update_context(engine_state);
+
         // Logique //
         update_logique(engine_state->stack_context, 0, engine_state->dt_time);
         // Rendu //
@@ -127,8 +130,7 @@ void update_logique(st_stack stack, int depth, double dt)
     {
         update_logique(stack, depth + 1, dt);
     }
-    st_loaded_windows_data *data = get_window_information();
-    stack.stack_context[depth]->update_logic_context(stack.stack_context[depth], data->size_x, data->size_y);
+    stack.stack_context[depth]->update_logic_context(stack.stack_context[depth]);
 
 }
 
@@ -139,4 +141,15 @@ void update_render(st_stack stack, int depth, double dt)
         update_render(stack, depth + 1, dt);
     }
     stack.stack_context[depth]->update_render_context(&stack.stack_context[depth]->render, dt);
+}
+
+/**
+ * @brief Permet de mettre à jour les dimension du context en x et en y
+ */
+int update_context(st_engine *engine)
+{
+    int width = get_width_window_size(engine->window);
+    int height = get_height_window_size(engine->window);
+    engine->context_tool.update_resolution_context(engine->stack_context.current_context, width, height);
+
 }

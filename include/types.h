@@ -231,7 +231,7 @@ typedef struct st_context
     // L'initialiseur connait tout
     int (*init_state)(st_context *state);
     // La logique ne connaitra que les model
-    void (*update_logic_context)(st_context *state, int width, int height);
+    void (*update_logic_context)(st_context *state);
     // Le rendu ne connait que les données liée au rendu
     void (*update_render_context)(st_render_data *render, double time);
 
@@ -248,6 +248,9 @@ typedef struct st_context
     st_context_politicy politicy;
 
     st_context_request request;
+
+    int width;
+    int height;
 }st_context;
 
 
@@ -281,6 +284,7 @@ typedef struct
     int (*replace_context) (st_context *new_context, st_stack *stack);
     int (*push_context) (st_context *new_context, st_stack *stack);
     int (*exit_context)(st_stack *stack);
+    int (*update_resolution_context) (st_context * context, int w, int h);
     
 }vt_context_tool;
 

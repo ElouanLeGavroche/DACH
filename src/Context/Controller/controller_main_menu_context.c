@@ -62,7 +62,7 @@ int init_menu(st_context *state)
 }
 
 
-void controller_update_logic_main_menu(st_context *state, int width, int height)
+void controller_update_logic_main_menu(st_context *state)
 {
     update_logic_main_menu(state);
 }

@@ -17,5 +17,7 @@ int push_context(st_context *new_context, st_stack *stack);
 int replace_context(st_context *new_context, st_stack *stack);
 int exit_context(st_stack *stack);
 int create_context(st_context *new_state);
+int update_resolution_context(st_context * context, int w, int h);
+
 
 #endif

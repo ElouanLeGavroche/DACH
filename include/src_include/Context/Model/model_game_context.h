@@ -9,7 +9,9 @@
 #include "../../Config/constantes.h"
 #include "../../Core/context_camera.h"
 #include "../../Core/clock.h"
-void update_logic_game(st_context *state, int width, int height);
+#include "../../Shared_tools/Math/ray_casting.h"
+
+void update_logic_game(st_context *state);
 
 /**
  * @brief ici l'on va définir les vecteur de position de l'instance, 

@@ -1,8 +1,7 @@
 #include "../../../include/src_include/Context/Model/model_game_context.h"
 
-void update_logic_game(st_context *state, int width, int height)
+void update_logic_game(st_context *state)
 {
-    printf("%d %d\n", width, height);
     // Géré les inputs
     if(state->inputs.release[KEY_DOWN] == true)
     {
@@ -57,7 +56,8 @@ void update_logic_game(st_context *state, int width, int height)
     {
         move_camera(&state->render.camera, (state->render.camera.target > 0.0f) ? ROTATE_L : ROTATE_R);
     }
-
+    ray_casting((tuple_int_duo){state->width, state->height}, state->mouse, state->render.camera);
+    
     zoom_camera(&state->render.camera, &state->mouse);    
 }
 
