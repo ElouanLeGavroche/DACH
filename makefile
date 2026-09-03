@@ -68,6 +68,7 @@ $(SAVE_EXEC)$(EXEC):\
 	$(PLATFORM)glfw_time.o\
 	\
 	$(GAME)country.o\
+	$(GAME)colision.o\
 	\
 	$(RENDERER)opengl_renderer.o\
 	$(RENDERER)render_group.o\

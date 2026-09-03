@@ -60,6 +60,8 @@ void update_logic_game(st_context *state)
     st_ray ray = {0};
     ray_casting((tuple_int_duo){state->width, state->height}, state->mouse, state->render.camera, &ray);
     
+    st_game_model *model = state->model;
+    mouse_collision(ray, model->country->size_x, model->country->size_y);
     zoom_camera(&state->render.camera, &state->mouse);    
 }
 

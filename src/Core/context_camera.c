@@ -175,7 +175,7 @@ float get_speed(st_camera *camera)
 void look(st_camera *camera)
 {
     vec3 center;
-    glm_vec3_sub(camera->pos, camera->front, center);
+    glm_vec3_add(camera->pos, camera->front, center);
     glm_lookat(
         camera->pos, 
         center, 

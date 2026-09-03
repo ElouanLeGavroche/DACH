@@ -18,7 +18,7 @@ int init_menu(st_context *state)
     printf("début de l'initiation\n");
     int res;
 
-    init_camera(&state->render.camera, 0.0f, 1000.0f, -1000.0f, 2.0f, 0.0f);
+    init_camera(&state->render.camera, 0.0f, -1000.0f, 1000.0f, 2.0f, 0.0f);
     init_camera_vector(&state->render.camera, (vec3){0.0f, 0.0f, 0.0f}, (vec3){0.0f, 0.0f, 1.0f}, (vec3){0.0f, 1.0f, 0.0f});
     init_camera_view(&state->render.camera);
 

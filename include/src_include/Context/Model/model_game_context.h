@@ -10,6 +10,7 @@
 #include "../../Core/context_camera.h"
 #include "../../Core/clock.h"
 #include "../../Shared_tools/Math/ray_casting.h"
+#include "../../Game/colision.h"
 
 void update_logic_game(st_context *state);
 

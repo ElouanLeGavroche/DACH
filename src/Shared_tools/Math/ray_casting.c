@@ -34,7 +34,7 @@ void ray_casting(tuple_int_duo size_window, st_mouse mouse, st_camera camera, st
     float amplitude = norm.b - norm.a;
 
     norm_mouse_pos.a = ((mouse.pos_x) / (size_window.a) * amplitude + norm.a);
-    norm_mouse_pos.b = ((size_window.b - mouse.pos_y)/ (size_window.b) * (norm.a - norm.b) + norm.b);
+    norm_mouse_pos.b = ((size_window.b - mouse.pos_y)/ (size_window.b) * (norm.b - norm.a) + norm.a);
 
       /**********************/
      /*   Viseur camera    */
@@ -64,7 +64,6 @@ void ray_casting(tuple_int_duo size_window, st_mouse mouse, st_camera camera, st
     glm_vec3_copy(world_point, res->origin);
     glm_vec3_copy(camera.front, res->direction);
     glm_vec3_normalize(res->direction);
-
     float t = camera.far_z;
     printf("%f, %f\n", norm_mouse_pos.a, norm_mouse_pos.b);
 
