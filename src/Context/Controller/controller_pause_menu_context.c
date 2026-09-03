@@ -16,7 +16,7 @@ int init_pause_menu(st_context *state)
 
     printf("Initialisation du menu pause.\n");
 
-    init_camera(&state->render.camera, 0.0f, -1000.0f, 1000.0f, 2.0f, 0.0f);
+    init_camera(&state->render.camera, 0.0f, -1.0f, 1.0f, 2.0f, 0.0f);
     init_camera_vector(&state->render.camera, (vec3){0.0f, 0.0f, 0.0f}, (vec3){0.0f, 0.0f, 1.0f}, (vec3){0.0f, 1.0f, 0.0f});
     init_camera_view(&state->render.camera);
 
@@ -24,7 +24,7 @@ int init_pause_menu(st_context *state)
 
     st_shader *main_shader = new_shader("src/Shaders/shader_menu.vert", "src/Shaders/main_shader.frag");
 
-    st_mesh *background_plane = new_plane(-1.0f, -1.0f, 2.0f, 2.0f);
+    st_mesh *background_plane = new_plane(1.0f, -1.0f, 2.0f, 2.0f);
     st_transform background_plane_trans = configure_transform((st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0});
     
     st_texture *background_plane_text = new_texture("ressources/images/background.png");
