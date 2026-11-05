@@ -277,6 +277,7 @@ typedef struct st_country_map_for_render
  * @param west
  * @param angled savoir si la tile est penché (si oui, tout les bâtiments ne peuvent y être installer), il possède la valeur
  * 0,1,2,3,4 qui correspondent à plat, nord, sud, est west
+ * @param occupant renvoie vers l'id de l'objet correspondant, s'il est supprimer, l'id passe à -1
  */
 typedef struct st_country_tile
 {
@@ -289,11 +290,29 @@ typedef struct st_country_tile
 
     float height;
     int angled;
+
+    int *occupant;
 }st_country_tile;
+
+/**
+ * 
+ */
+typedef struct st_object
+{
+    int x;
+    int y;
+    int w;
+    int h;
+
+    int type;
+    int subtype;
+
+}st_object;
 
 typedef struct st_country
 {
     st_country_tile *tiles;
+    st_object *objects;
 
     int size_x;
     int size_y;

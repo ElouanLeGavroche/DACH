@@ -21,7 +21,6 @@ st_country_tile create_tile(int angled, int type)
     tile.south = FREE;
     tile.east = FREE;
     tile.west = FREE;
-
     return tile;
 }
 

@@ -57,7 +57,7 @@ void left(st_camera *camera)
     glm_cross(camera->front, camera->up, res);
 
     glm_vec3_normalize(res);
-    glm_vec3_muladds(res, camera->actual_speed, camera->pos);
+    glm_vec3_mulsubs(res, camera->actual_speed, camera->pos);
 }
 
 void right(st_camera *camera)
@@ -66,7 +66,7 @@ void right(st_camera *camera)
     glm_cross(camera->front, camera->up, res);
 
     glm_vec3_normalize(res);
-    glm_vec3_mulsubs(res, camera->actual_speed, camera->pos);
+    glm_vec3_muladds(res, camera->actual_speed, camera->pos);
 }
 
 void rotate(st_camera *camera, float deg)

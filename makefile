@@ -109,5 +109,6 @@ clean:
 	rm -rf $(CORE)*.o 
 	rm -rf $(PLATFORM)*.o 
 	rm -rf $(RENDERER)*.o
+	rm -rf $(MATH_TOOL)*.o
 	rm -rf *.o
 	rm -rf out/DACH

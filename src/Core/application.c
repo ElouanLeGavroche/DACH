@@ -124,8 +124,10 @@ void mainloop(st_engine *engine_state){
     view_close_window();
 }
 
+
 void update_logique(st_stack stack, int depth, double dt)
 {
+    
     if(stack.stack_context[depth]->politicy.update_bellow == true && depth + 1 < stack.level_of_depth)
     {
         update_logique(stack, depth + 1, dt);
