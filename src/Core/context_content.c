@@ -51,7 +51,7 @@ st_mesh* new_plane(float x, float y, float size_x, float size_y)
 
 st_texture* new_texture(char *path)
 {
-    st_image image = load_texture(path, 736, 552, 0);
+    st_image image = load_texture(path, 0);
     st_texture *texture = malloc(sizeof(st_texture));
     if(!texture)
     {

@@ -7,7 +7,7 @@
 
 #include "../../../types.h"
 
-st_image load_texture(const char *path, int width, int height, int nr_channels);
+st_image load_texture(const char *path, int nr_channels);
 
 
 #endif

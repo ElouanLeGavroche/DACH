@@ -5,13 +5,13 @@
 #include "../../../include/src_include/Shared_tools/Load_tools/load_image.h"
 
 
-st_image load_texture(const char *path, int width, int height, int nr_channels)
+st_image load_texture(const char *path, int nr_channels)
 {
     st_image image;
  
     image.path = path;
-    image.width = width;
-    image.height = height;
+    image.width = 0;
+    image.height = 0;
     image.nr_channels = nr_channels;
 
     image.data = stbi_load(image.path, &image.width, &image.height, &image.nr_channels, 0);
