@@ -19,7 +19,7 @@ int init_menu(st_context *state)
     int res;
 
     init_camera(&state->render.camera, 0.0f, -1000.0f, 1000.0f, 2.0f, 0.0f);
-    init_camera_vector(&state->render.camera, (vec3){0.0f, 0.0f, 0.0f}, (vec3){0.0f, 0.0f, 1.0f}, (vec3){0.0f, 1.0f, 0.0f});
+    init_camera_vector(&state->render.camera, (vec3){0.0f, 0.0f, 0.0f}, (vec3){0.0f, 0.0f, -1.0f}, (vec3){0.0f, 1.0f, 0.0f});
     init_camera_view(&state->render.camera);
 
     init_render_main_menu(&state->render);
@@ -31,9 +31,11 @@ int init_menu(st_context *state)
     st_mesh *house = new_object(BASIC_HOUSE_PATH);
     st_mesh *tile = new_object(BASIC_TILE_PATH);
 
-    st_mesh *background = new_plane(-4.5f, -2.0f, 9.0f, 4.0f);
-    st_transform background_plane_trans = configure_transform((st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0});
-
+    st_mesh *background = new_plane(-0.5f, -0.5f, 2.0f, 1.0f);
+    st_transform background_trans = configure_transform(
+        (st_vec3){ -0.0f, -1.0f, -1.0f },   
+        (st_vec3){ 0.0f, 0.0f, 0.0f },    
+        (st_vec3){ 2.0f, 2.0f, 2.0f } );
     // Charger les textures
     st_texture *grass_texture = new_texture("ressources/images/grass_test.jpg");
     st_texture *background_plane_text = new_texture("ressources/images/main_menu_bg.jpg");
@@ -49,13 +51,13 @@ int init_menu(st_context *state)
     st_render_group *group = get_group(state->render.groups, 0, state->render.nb_groups);
 
     // Définir les transformation
-    st_transform house_transform = configure_transform((st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0});
-    st_transform floor = configure_transform((st_vec3){0.5, 0.5, 0.0}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0});
+    st_transform house_transform = configure_transform((st_vec3){0.5, 0.5, 0.5}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){1.0, 1.0, 1.0});
+    st_transform floor = configure_transform((st_vec3){0.5, 0.5, 0.0}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){1.0, 1.0, 1.0});
 
     // Définir les objets
     create_an_object(HOUSE, house, grass_texture, main_shader, house_transform, group);
     create_an_object(SQUARE, tile, grass_texture, main_shader, floor, group);
-    create_an_object(BACKGROUND_PLANE, background, background_plane_text, main_shader, background_plane_trans, group);
+    create_an_object(BACKGROUND_PLANE, background, background_plane_text, main_shader, background_trans, group);
     
     printf("Context menu initier\n");
     return RES_DONE;

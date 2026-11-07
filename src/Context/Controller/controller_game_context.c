@@ -80,7 +80,7 @@ int init_game(st_context *state)
     }
 
     // CHARGER LES SHADERS ---------------------------------------------------------------------------------------------
-    st_shader *shader = new_shader("src/Shaders/shader_menu.vert", "src/Shaders/shader_menu.frag");
+    st_shader *shader = new_shader("src/Shaders/shader_menu.vert", "src/Shaders/main_shader.frag");
     if(!shader)
     {
         fprintf(stderr, "Erreur lors de la création d'un shader.\n");
@@ -104,7 +104,7 @@ int init_game(st_context *state)
     }
 
     // On crée l'objet qui sera instancier
-    st_transform floor = configure_transform((st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0});
+    st_transform floor = configure_transform((st_vec3){4.0, 0.25, 2.0}, (st_vec3){90.0, 0.0, 0.0}, (st_vec3){1.0, 1.0, 1.0});
     create_an_object(PLANE, bush, grass_texture, shader, floor, objects_group);
     
     printf("Context jeu initier\n");

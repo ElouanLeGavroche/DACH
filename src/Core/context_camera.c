@@ -108,7 +108,7 @@ void model_init_camera_view(st_camera *camera)
 
     // Matrice de vue (view)
     vec3 target;
-    glm_vec3_sub(camera->pos, camera->front, target);
+    glm_vec3_add(camera->pos, camera->front, target);
     glm_lookat(camera->pos, target, camera->up, camera->view);
 }
 

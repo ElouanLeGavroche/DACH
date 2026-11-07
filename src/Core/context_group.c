@@ -217,6 +217,7 @@ int remove_group(st_render_data *render, int id)
 int create_an_object(int name, st_mesh *mesh, st_texture *texture, st_shader *shader, st_transform transform, st_render_group *dest)
 {
     st_render_object obj;
+
     int res;
     obj.material = malloc(sizeof(st_material));
     if(!obj.material)

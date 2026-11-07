@@ -29,7 +29,25 @@ void render_context(st_render_data *render, double time)
             {
                 // Pour le shader
                 glUseProgram(mesh_group->objects[y].material->shader->shader);
-                
+
+                glm_translate(model, (vec3){
+                    mesh_group->objects[y].transform.position.x,
+                    mesh_group->objects[y].transform.position.y,
+                    mesh_group->objects[y].transform.position.z
+                    }
+                );
+
+                glm_rotate_x(model, glm_rad(mesh_group->objects[y].transform.rotation.x), model);
+                glm_rotate_y(model, glm_rad(mesh_group->objects[y].transform.rotation.y), model);
+                glm_rotate_z(model, glm_rad(mesh_group->objects[y].transform.rotation.z), model);
+
+                glm_scale(model, (vec3){
+                    mesh_group->objects[y].transform.transformation.x,
+                    mesh_group->objects[y].transform.transformation.y,
+                    mesh_group->objects[y].transform.transformation.z
+                    }
+                );
+
                 int model_loc = glGetUniformLocation(mesh_group->objects[y].material->shader->shader, "model");
                 glUniformMatrix4fv(model_loc, 1, GL_FALSE, *model);
 
