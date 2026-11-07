@@ -35,5 +35,5 @@ void move_camera(st_camera *camera, int dir);
  */
 void zoom_camera(st_camera *camera, st_mouse *mouse);
 
-
+void model_add_building();
 #endif

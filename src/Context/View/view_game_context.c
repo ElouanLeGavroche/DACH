@@ -24,7 +24,7 @@ void create_an_instance_GPU(st_instanced *instance, mat4 *model, int amount)
     glGenBuffers(1, &instance_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, instance_vbo);
     glBufferData(GL_ARRAY_BUFFER, amount * sizeof(mat4), &model[0], GL_STATIC_DRAW);
-
+    
     // On va diviser le model en 4 partie pour l'envoier au GPU
     // via les in layout, et c'est lui qui s'occupera de les reformer
 

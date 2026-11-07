@@ -291,7 +291,7 @@ typedef struct st_country_tile
     float height;
     int angled;
 
-    int *occupant;
+    int occupant;
 }st_country_tile;
 
 /**
@@ -299,20 +299,45 @@ typedef struct st_country_tile
  */
 typedef struct st_object
 {
-    int x;
-    int y;
-    int w;
-    int h;
+    float x;
+    float y;
+    float w;
+    float h;
+
+    int id;
 
     int type;
     int subtype;
 
+    int settlement_id;
+
 }st_object;
 
+/**
+ * @param id unique de la zone habité
+ * @param parent_id -1 si c'est une ville, sinon l'id de la ville auquel est relier le hameaux
+ * @param name nom de la zone habité
+ */
+typedef struct st_settlement
+{
+    int id;
+    int parent_id;
+    char *name;
+    
+}st_settlement;
+
+/**
+ * @param tiles la forme du monde
+ * @param objects les objects du monde, dans ce contexte cela peut-être des éléments naturelles.
+ * @param cityes les villes du monde
+ * @param size_x taille de la carte en x
+ * @param size_y taille de la carte en y
+ * @param min_x la position minimum de la carte en x
+ * @param min_y la position minimum de la carte en y
+ */
 typedef struct st_country
 {
     st_country_tile *tiles;
-    st_object *objects;
 
     int size_x;
     int size_y;
@@ -320,6 +345,7 @@ typedef struct st_country
     int min_x;
     int min_y;
 }st_country;
+
 
 typedef struct st_parsed_country
 {
@@ -334,6 +360,12 @@ Un peu un fourre tout, met plijus da implij
 typedef struct st_game_model
 {
     st_country *country;
+    
+    st_object *objects;
+    int nb_objects;
+
+    st_settlement *settlements
+
 }st_game_model;
 
 #endif

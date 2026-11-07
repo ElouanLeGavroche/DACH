@@ -139,3 +139,8 @@ mat4* init_map(int amount, st_loaded_tile_map *tiles)
 
     return positions;
 }
+
+void model_add_building()
+{
+    
+}

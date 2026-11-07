@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 
+#include "../building_dict.h"
+
 #include "../Model/model_game_context.h"
 #include "../View/view_game_context.h"
 
@@ -22,10 +24,11 @@
 
 st_context* create_game_context();
 
-void controller_update_render_game(st_render_data *render, double time);
 int init_game(st_context *state);
 int create_render_world(st_context *state, st_parsed_country *country);
+
 void controller_update_logic_game(st_context *state);
+void controller_update_render_game(st_render_data *render, double time);
 
 st_country_tile* model_get_tile_at_world_pos(float iso_x, float iso_y, st_country *country, float tile_width, float tile_height, float tile_z_scale) ;
 

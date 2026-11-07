@@ -2,7 +2,8 @@
 
 typedef enum
 {
-    TILE
+    TILE,
+    PLANE
 }e_elt_name;
 
 int init_game(st_context *state)
@@ -40,6 +41,71 @@ int init_game(st_context *state)
 
     st_window_user_data *data = glfwGetWindowUserPointer(window);
     data->camera = &state->render.camera;
+    
+
+    /* Essaie d'ajout d'un élément à la carte */
+
+    // Step 1, crée la ville
+    model->settlements = malloc(sizeof(st_settlement));
+    model->settlements[0].id = 0;
+    model->settlements[0].name = malloc(sizeof("Rostren"));
+    model->settlements[0].parent_id = -1;
+
+    // Step 2, Crée un object lié à cette ville
+    model->objects = malloc(sizeof(st_object));
+    model->objects[0].id = 1;
+    model->objects[0].settlement_id = 0;
+    model->objects[0].type = HOUSE;
+    model->objects[0].subtype = LONG_ROCK_HOUSE;
+    
+    model->objects[0].x = -1.0f;
+    model->objects[0].y = -1.0f;
+    model->objects[0].w = 2.0f;
+    model->objects[0].h = 2.0f;
+
+    // On crée sont groupe
+    res = add_group(&state->render, RENDER_GROUP_MESH, state->render.nb_groups + 1);
+    if(res != RES_DONE)
+    {
+        fprintf(stderr, "Erreur lors de la création du groupe.\n");
+        return RES_ERROR;
+    }
+
+    // On récuperer le groupebetter_load_map
+    st_render_group *objects_group = get_group(state->render.groups, state->render.nb_groups, state->render.nb_groups);
+    if(!objects_group)
+    {
+        fprintf(stderr, "Groupe non trouvé.\n");
+        return RES_ERROR;
+    }
+
+    // CHARGER LES SHADERS ---------------------------------------------------------------------------------------------
+    st_shader *shader = new_shader("src/Shaders/main_shader.vert", "src/Shaders/main_shader.frag");
+    if(!shader)
+    {
+        fprintf(stderr, "Erreur lors de la création d'un shader.\n");
+        return RES_ERROR;
+    }
+
+    // On crée graphiquement l'objet
+    st_mesh *bush = new_plane(model->objects[0].x, model->objects[0].y, model->objects[0].w, model->objects[0].h);
+    if(!bush)
+    {
+        fprintf(stderr, "Erreur lors de la création d'une tile.\n");
+        return RES_ERROR;
+    }
+
+    // CHARGER LES TEXTURES --------------------------------------------------------------------------------------------
+    st_texture *grass_texture = new_texture("ressources/images/bushtest.png");
+    if(!grass_texture)
+    {
+        fprintf(stderr, "Erreur lors de la création d'une texture.\n");
+        return RES_ERROR;
+    }
+
+    // On crée l'objet qui sera instancier
+    st_transform floor = configure_transform((st_vec3){1.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0}, (st_vec3){0.0, 0.0, 0.0});
+    create_an_object(PLANE, bush, grass_texture, shader, floor, objects_group);
     
     printf("Context jeu initier\n");
 
@@ -154,7 +220,7 @@ int create_render_world(st_context *state, st_parsed_country *country)
 
             // Initialisation du monde
             create_an_instance_GPU(instenced_data, world_tile, world_size);
-
+        
             // On attribue la valeur tampon à la structure
             st_instanced_mesh_group *instaced_group = (st_instanced_mesh_group *)world_group->data;
             instaced_group->st_instanced = *instenced_data;
